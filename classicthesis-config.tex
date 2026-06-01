@@ -80,16 +80,10 @@
 
 \usepackage{csquotes}
 \PassOptionsToPackage{%
-    %backend=biber, %instead of bibtex
-	backend=bibtex8,bibencoding=ascii,%
-	language=auto,%
-	style=numeric-comp,%
-    %style=authoryear-comp, % Author 1999, 2010
-    %bibstyle=authoryear,dashed=false, % dashed: substitute rep. author with ---
-    sorting=nyt, % name, year, title
-    maxbibnames=10, % default: 3, et al.
-    %backref=true,%
-    natbib=true % natbib compatibility mode (\citep and \citet still work)
+    backend=biber,%
+    style=apa,%
+    natbib=true,%
+    sorting=nyt%
 }{biblatex}
     \usepackage{biblatex}
 
@@ -105,6 +99,7 @@
 \usepackage{scrhack} % fix warnings when using KOMA with listings package          
 \usepackage{xspace} % to get the spacing after macros right  
 \usepackage{mparhack} % get marginpar right
+\usepackage[pass]{geometry} % to allow changing page geometry for specific pages (like Dedication)
 \usepackage{fixltx2e} % fixes some LaTeX stuff --> since 2015 in the LaTeX kernel (see below)
 %\usepackage[latest]{latexrelease} % will be used once available in more distributions (ISSUE #107)
 \PassOptionsToPackage{printonlyused,smaller}{acronym} 
