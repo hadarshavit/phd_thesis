@@ -18,6 +18,8 @@
 % ****************************************************************************************************
 \PassOptionsToPackage{utf8}{inputenc}
 	\usepackage{inputenc}
+\PassOptionsToPackage{dvipsnames}{xcolor}
+\usepackage{xcolor}
 
 % ****************************************************************************************************
 % 1. Configure classicthesis for your needs here, e.g., remove "drafting" below 
@@ -25,7 +27,7 @@
 % ****************************************************************************************************
 \PassOptionsToPackage{eulerchapternumbers,listings,%
 					 pdfspacing,%floatperchapter,%linedheaders,%
-					 subfig,beramono,eulermath,parts}{classicthesis}                                        
+					 beramono,eulermath,parts}{classicthesis}                                        
 % ********************************************************************
 % Available options for classicthesis.sty 
 % (see ClassicThesis.pdf for more information):
@@ -64,6 +66,7 @@
 \newcommand{\Ie}{I.\,e.}
 \newcommand{\eg}{e.\,g.}
 \newcommand{\Eg}{E.\,g.} 
+\newcommand{\changed}[1]{#1} 
 % ****************************************************************************************************
 
 
@@ -89,6 +92,20 @@
 
 \PassOptionsToPackage{fleqn}{amsmath}       % math environments and more by the AMS 
     \usepackage{amsmath}
+\usepackage{amssymb}
+\providecommand{\R}{\mathbb{R}}
+\providecommand{\X}{\mathcal{X}}
+\providecommand{\Y}{\mathcal{Y}}
+\providecommand{\D}{\mathcal{D}}
+\providecommand{\T}{\mathcal{T}}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\usepackage{dsfont}
+\usepackage{amsthm}
+\newtheorem{theorem}{Theorem}[chapter]
+\providecommand{\sR}{\mathbb{R}}
+\providecommand{\train}{\mathcal{D}_{\text{train}}}
+\providecommand{\test}{\mathcal{D}_{\text{test}}}
 
 % ******************************************************************** 
 % General useful packages
@@ -107,6 +124,16 @@
     %\renewcommand{\bflabel}[1]{{#1}\hfill} % fix the list of acronyms --> no longer working
     %\renewcommand*{\acsfont}[1]{\textsc{#1}} 
     \renewcommand*{\aclabelfont}[1]{\acsfont{#1}}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric,arrows,arrows.meta,positioning,fit,backgrounds}
+\definecolor{myyellow}{RGB}{251,210,87}
+\definecolor{mypink}{RGB}{229,122,122}
+\definecolor{mygray}{RGB}{96,96,96}
+\definecolor{mypinkbg}{RGB}{240,195,195}
+\definecolor{mypurple}{RGB}{155,142,246}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{placeins}
 % ****************************************************************************************************
 
 
@@ -114,6 +141,7 @@
 % 4. Setup floats: tables, (sub)figures, and captions
 % ****************************************************************************************************
 \usepackage{tabularx} % better tables
+\usepackage{multirow}
     \setlength{\extrarowheight}{3pt} % increase table row height
 \newcommand{\tableheadline}[1]{\multicolumn{1}{c}{\spacedlowsmallcaps{#1}}}
 \newcommand{\myfloatalign}{\centering} % to be used with each float for alignment
@@ -124,7 +152,8 @@
 %\DeclareCaptionLabelFormat{smallcaps}{\bothIfFirst{#1}{~}\MakeTextLowercase{\textsc{#2}}}
 %\captionsetup{font=small,labelformat=smallcaps} % format=hang,
 \captionsetup{font=small} % format=hang,
-\usepackage{subfig}  
+\usepackage{subcaption}  
+\usepackage{wrapfig}
 % ****************************************************************************************************
 
 
@@ -151,6 +180,15 @@
     belowcaptionskip=.75\baselineskip
     %frame=L
 } 
+\lstdefinestyle{asfpython}{
+    language=Python,
+    basicstyle=\small\ttfamily,
+    keywordstyle=\color{RoyalBlue},
+    commentstyle=\color{Green}\ttfamily,
+    stringstyle=\color{black},
+    showstringspaces=false,
+    breaklines=true
+}
 % ****************************************************************************************************             
 
 
@@ -180,7 +218,7 @@
     plainpages=false, bookmarksnumbered, bookmarksopen=true, bookmarksopenlevel=1,%
     hypertexnames=true, pdfhighlight=/O,%nesting=true,%frenchlinks,%
     %urlcolor=webbrown, linkcolor=RoyalBlue, citecolor=webgreen, %pagecolor=RoyalBlue,%
-    urlcolor=Black, linkcolor=Black, citecolor=Black, %pagecolor=Black,%
+    urlcolor=black, linkcolor=black, citecolor=black, %pagecolor=black,%
     pdftitle={\myTitle},%
     pdfauthor={\textcopyright\ \myName, \myUni, \myFaculty},%
     pdfsubject={},%
