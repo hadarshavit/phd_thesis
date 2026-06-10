@@ -12,7 +12,7 @@ In this section, we introduce the algorithm selection problem and its components
 Given a set of problem instances $\mathcal{I}$ (which can be, for example, datasets), instance features $\mathcal{F}$, a set of algorithms $\mathcal{A}$ and a performance metric $m:\mathcal{A} \times \mathcal{I} \rightarrow \mathbb{R}$ (for example, predictive accuracy or running time), the algorithm selection problem~\citep{Rice76} seeks to find a selector $S:\mathcal{F}\rightarrow\mathcal{A}$ such that the performance of $S$ on the instances $\mathcal{I}$ is optimal according to $m$~\citep{KetEtAl19}. 
 % \hh{give a reference to a seminal paper?}
 Extensions include the use of \textit{algorithm features}, which are combined with the instance features to predict the best algorithm for each problem instance. For simplicity, for the remainder of the section, we assume that the goal is to minimise $m$.
-In algorithm selection, the ideal goal is to reach the performance of the virtual best solver (VBS) (\emph{i.e.}, perfect selector). Furthermore, the selection must be better than the single best solver (SBS) in order to make the use of algorithm selection worthwhile.
+In algorithm selection, the ideal goal is to reach the performance of the virtual best solver (\gls{vbs}) (\emph{i.e.}, perfect selector). Furthermore, the selection must be better than the single best solver (\gls{sbs}) in order to make the use of algorithm selection worthwhile.
 % \hd{(VBS)}
 % \hd{(SBS)}
 % \hh{slightly modified:}
@@ -108,7 +108,7 @@ Further details are provided in~\autoref{sec:add_background}.
 
 Algorithm selection methods are integrated into \textit{algorithm selection pipelines}, which include several components:
 \begin{itemize}
-    \item \textbf{Pre-selection:} A subset of algorithms is selected from a larger candidate set. In most real-world scenarios, only a few algorithms contribute substantially to VBS performance, yet having many candidates to choose from makes accurate selection harder and increases the risk of poor predictions. Pre-selection constructs a small, complementary portfolio. A prominent method for pre-selection is greedy selection based on marginal contributions~\citep{XuEtAl08}, where algorithms are iteratively added to the portfolio if they yield the largest improvement to the VBS performance.
+    \item \textbf{Pre-selection:} A subset of algorithms is selected from a larger candidate set. In most real-world scenarios, only a few algorithms contribute substantially to \gls{vbs} performance, yet having many candidates to choose from makes accurate selection harder and increases the risk of poor predictions. Pre-selection constructs a small, complementary portfolio. A prominent method for pre-selection is greedy selection based on marginal contributions~\citep{XuEtAl08}, where algorithms are iteratively added to the portfolio if they yield the largest improvement to the \gls{vbs} performance.
     % \hd{contributions}
     % \hd{Once you have introduced the abbreviation VBS, you should stick to using it.}
     \item \textbf{Pre-solving schedules:} For problems where the metric of interest is running time (e.g., $\mathcal{NP}$-complete problem solving), it is beneficial to first run a short schedule (\emph{i.e.}, a sequence of solvers, each executed with a specific cut-off time) of solvers to solve easy instances quickly, thereby avoiding unnecessary feature computation. Such methods use, for example, a greedy method to decide which algorithms to run~\citep{XuEtAl08}, or use an optimisation problem to find the optimal pre-solving schedule~\citep{HooEtAl12,KadEtAl11}.
@@ -118,9 +118,9 @@ Algorithm selection methods are integrated into \textit{algorithm selection pipe
 \end{itemize}
 Additionally, for algorithm selection, there is a need for two additional, problem specific components:
 \begin{itemize}
-    \item \textbf{Feature computation:} Representative features of the problem instance are computed and used as input to the learned selector. These features can be hand-crafted or learned from the data. The choice of features is crucial for the performance of the algorithm selector. For example, the SATzilla features are well-known to be a good representation of SAT instances~\citep{HutEtAl14,ShaHoo24}, while for machine learning datasets, there exists many features, such as the basic descriptors of~\citet{OztEtAl22} to more complicated features, that include advanced statistics, such as the ones implemented in PyMFE~\citep{AlcEtAl20}.
+    \item \textbf{Feature computation:} Representative features of the problem instance are computed and used as input to the learned selector. These features can be hand-crafted or learned from the data. The choice of features is crucial for the performance of the algorithm selector. For example, the SATzilla features are well-known to be a good representation of \gls{sat} instances~\citep{HutEtAl14,ShaHoo24}, while for machine learning datasets, there exists many features, such as the basic descriptors of~\citet{OztEtAl22} to more complicated features, that include advanced statistics, such as the ones implemented in PyMFE~\citep{AlcEtAl20}.
     % \hd{change \citep{OztEtAl22} to \citet{OztEtAl22}}
-    \item \textbf{Evaluation metric:} This is an important component of algorithm selection, as it is used to evaluate the performance of the algorithm selector. While there exist broadly applicable metrics such as the performance of the VBS and SBS, their definition depends on the specific problem.
+    \item \textbf{Evaluation metric:} This is an important component of algorithm selection, as it is used to evaluate the performance of the algorithm selector. While there exist broadly applicable metrics such as the performance of the \gls{vbs} and \gls{sbs}, their definition depends on the specific problem.
 % \hh{the performance of the}
     % \hd{Again, I would use SBS and VBS here.}
     Therefore, a problem-specific evaluation metric must be chosen that represents the performance of the algorithm. This can be, for example, accuracy, precision, recall, F1-score, AUC, running time and more, depending on the use-case.
@@ -145,12 +145,12 @@ As we show in our ASlib experiments (\autoref{sec:aslib_appendix}), multi-class 
 \section{Bayesian optimisation}
 
 
-In this section, we define the HPO problem and describe the working mechanisms of the BO framework. 
-We also cover related work on dynamic design choices related to the components of BO, as well as using ensembles in BO.
+In this section, we define the \gls{hpo} problem and describe the working mechanisms of the \gls{bo} framework. 
+We also cover related work on dynamic design choices related to the components of \gls{bo}, as well as using ensembles in \gls{bo}.
 
 \subsection{Hyperparameter optimisation} Let $\mathcal{A}$ be a learning algorithm with $n$ hyperparameters, $\Lambda_{i}$ the domain of the $i$-th hyperparameter, and $\mathbf{\Lambda} = \Lambda_{1} \times \Lambda_{2} \times \dots \Lambda_{n}$ the overall hyperparameter configuration space. 
 We denote a hyperparameter configuration by $\mathbf{\lambda} \in \mathbf{\Lambda}$, and the algorithm $\mathcal{A}$ with its hyperparameters instantiated to $\mathbf{\lambda}$ by $\mathcal{A}_{\mathbf{\lambda}}$.
-Given a dataset $D$, the objective of HPO is to find a hyperparameter configuration $\mathbf{\lambda}^{*}$ that minimises the loss $\mathcal{L}$ of a model fitted by algorithm $\mathcal{A}$ with hyperparameters $\mathbf{\lambda}$ on training data ${D}_{train}$, and evaluated on validation data ${D}_{validate}$, for a given loss function $\mathcal{L}$, \emph{i.e.},
+Given a dataset $D$, the objective of \gls{hpo} is to find a hyperparameter configuration $\mathbf{\lambda}^{*}$ that minimises the loss $\mathcal{L}$ of a model fitted by algorithm $\mathcal{A}$ with hyperparameters $\mathbf{\lambda}$ on training data ${D}_{train}$, and evaluated on validation data ${D}_{validate}$, for a given loss function $\mathcal{L}$, \emph{i.e.},
 \begin{equation}
 \label{eq:def-hpo}
 \mathbf{\lambda}^{*} \in \argmin_{\mathbf{\lambda} \in \mathbf{\Lambda}} 
@@ -161,14 +161,14 @@ Note that $c(\mathbf{\lambda})$ is a black-box function, without a closed-form e
 
 \subsection{Bayesian optimisation} 
 \label{sec:bac_bo}
-Bayesian optimisation (BO)~\citep{Mockus2012,Garnett2023,Frazier2018,Harold62,KusEtAl64} is a family of surrogate-based algorithms for efficient global optimisation of black-box problems.
-\changed{Typically,} BO consists of three main modules: an \emph{initial design}, \emph{i.e.}, in HPO, a set of hyperparameter configuration candidates $\boldsymbol{\lambda} = (\lambda^{(1)},\ldots, \lambda^{(r)})$ and their evaluations 
+Bayesian optimisation (\gls{bo})~\citep{Mockus2012,Garnett2023,Frazier2018,Harold62,KusEtAl64} is a family of surrogate-based algorithms for efficient global optimisation of black-box problems.
+\changed{Typically,} \gls{bo} consists of three main modules: an \emph{initial design}, \emph{i.e.}, in \gls{hpo}, a set of hyperparameter configuration candidates $\boldsymbol{\lambda} = (\lambda^{(1)},\ldots, \lambda^{(r)})$ and their evaluations 
 $c(\boldsymbol{\lambda}) = (c(\lambda^{(1)}),\ldots, c(\lambda^{(r)}))$; a \emph{surrogate model} (fitted to the 
 % initial 
 observations) that returns an approximation $\hat{c}(\mathbf{\lambda})$ of the unknown loss function $c(\mathbf{\lambda})$ while capturing the uncertainty in the prediction $\hat{\sigma}(\mathbf{\lambda})$ on unobserved points in the search space; and an \emph{acquisition function}, which is optimised to suggest solution candidates to be evaluated next, usually balancing exploration and exploitation of the search space.
-\changed{BO then evaluates the most promising candidates.} 
+\changed{\gls{bo} then evaluates the most promising candidates.} 
 % \er{``interesting'' doesn't seem like a technical term. I would replace with ``promising'', ``valuable''...}
-To approximate the expensive objective function, BO typically employs a Gaussian process (GP) model as the surrogate. The GP model defines a distribution over functions on the configuration space $c(\lambda)\sim\mathcal{GP}_c(\mu(\lambda),k(\lambda,\lambda'))$, where 
+To approximate the expensive objective function, \gls{bo} typically employs a Gaussian process (GP) model as the surrogate. The GP model defines a distribution over functions on the configuration space $c(\lambda)\sim\mathcal{GP}_c(\mu(\lambda),k(\lambda,\lambda'))$, where 
 $\mu(\cdot)$ 
 is a mean function and 
 $k(\cdot,\cdot)$
@@ -183,7 +183,7 @@ where $\boldsymbol{y}=(y_1,\ldots,y_r)$ is the vector of observations, $K_{\bold
 % \aj{FIXED, please check: inconsistent use of bold for the lambda subscripts in the kernel K}
 GPs as a surrogate model inherently provide both the mean and the variance vector.
 
-However, GPs are not the only surrogate model used in BO. Another common choice for a surrogate model are tree-based models, 
+However, GPs are not the only surrogate model used in \gls{bo}. Another common choice for a surrogate model are tree-based models, 
 such as random forests (RFs). 
 Tree-based models traditionally predict only the mean of the given data (\emph{e.g.}, in a regression setting). 
 In this case, the variance is defined based on the variance of the predictions of the leaves~\citep{HutEtAl11}. 
@@ -205,18 +205,18 @@ We adopt this approach to estimate uncertainty for another tree-based model, gra
 % }
 % \hh{this sounds as if the scikit-optimize implementation was the first to define GB ... surely not true?? please reword to properly reflect (a) the original concept of gradient boosting and (b) its implementation in the package. I'd also consider writing something like `Alternatively, uncertainty can be estimated as is done in gradient boosting, using two ... Footnote signs at the end of sentences follow the full stop.}
 
-BO proceeds iteratively until a termination criterion is met. In each iteration, it optimises the acquisition function %to suggest high-potential solutions by
+\Gls{bo} proceeds iteratively until a termination criterion is met. In each iteration, it optimises the acquisition function %to suggest high-potential solutions by
 by repeatedly querying the surrogate model to generate a pool of solution candidates. It then evaluates the most high-potential solutions (\emph{i.e.}, the solutions that maximise the acquisition function) from this pool,
 refines the surrogate model based on the new observations, and updates the optimum if the new point improves upon the true function value of the best observation so far.
 
-Among the many variants of BO from the literature, in this work, we focus on the state-of-the-art method for HPO to empirically evaluate our ensembling method: HEBO~\citep{CowEtAl2022}.
-HEBO (Heteroscedastic and Evolutionary Bayesian optimisation) is a BO-based optimiser with several advancements 
+Among the many variants of \gls{bo} from the literature, in this work, we focus on the state-of-the-art method for \gls{hpo} to empirically evaluate our ensembling method: HEBO~\citep{CowEtAl2022}.
+HEBO (Heteroscedastic and Evolutionary Bayesian optimisation) is a \gls{bo}-based optimiser with several advancements 
 \changed{
-targeting each of the core BO modules described above.
+targeting each of the core \gls{bo} modules described above.
 For the surrogate model, HEBO uses GP with two key transformations: a power transformation applied to the output observations $\boldsymbol{y}$ and a Kumaraswamy transformation applied to the input configurations $\boldsymbol{\lambda}$; 
 % \hh{minor change:}
 jointly, these address heteroscedasticity in the noise $\epsilon$ and non-stationarity in the covariance matrix $K_{\boldsymbol{\lambda},\boldsymbol{\lambda}}$.
-\citet{CowEtAl2022} showed that these transformations enhance the ability of GPs to accurately approximate the mapping between configurations and corresponding performances, which is crucial for HPO.
+\citet{CowEtAl2022} showed that these transformations enhance the ability of GPs to accurately approximate the mapping between configurations and corresponding performances, which is crucial for \gls{hpo}.
 % on performance data. 
 % \er{``performance'' used twice with different meanings, could be confusing. What do we exactly mean with ``performance data'' and, earlier, with ``performance observations''? Is it another phrasing for solution quality, specific for HPO?}
 For the acquisition function, rather than optimising a single criterion, HEBO samples new candidate configurations by maximising MACE~\citep{LyuEtAl18}, a multi-objective acquisition function that simultaneously considers expected improvement (EI)~\citep{Mockus1978}, probability of improvement (PI)~\citep{KusEtAl64}, and upper confidence bound (UCB)~\citep{Forrester2008}, providing a more robust balance between exploration and exploitation of the search space than any single acquisition function alone.

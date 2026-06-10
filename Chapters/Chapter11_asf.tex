@@ -2,7 +2,7 @@
 
 \section{Introduction}
 % \hh{slightly modified:}
-AI algorithms have shown impressive performance, enabling   continuous improvements to the state of the art in solving problems from computer vision~\citep{KriEtAl12,TsiEtAl21}, natural language processing~\citep{Gemini}, SAT solving~\citep{ShaHoo24} and other domains.
+\Gls{ai} algorithms have shown impressive performance, enabling   continuous improvements to the state of the art in solving problems from computer vision~\citep{KriEtAl12,TsiEtAl21}, natural language processing~\citep{Gemini}, \gls{sat} solving~\citep{ShaHoo24} and other domains.
 However, performance complementarity between algorithms remains in most, if not all cases: no single algorithm dominates over all problem instances.
 This is a well-known phenomenon that can be exploited using \textit{automated algorithm selection} (or, in short, algorithm selection; \citealp{Rice76}).
 
@@ -25,9 +25,9 @@ This is a well-known phenomenon that can be exploited using \textit{automated al
 ]
 
     % --- 1. The Inputs (Disparate Domains with Subtext & Unique Colours) ---
-    \node[bbo-box] (bbo) at (0, 0) {\textbf{BBO}\\ \scriptsize Function};
-    \node[automl-box] (automl) [above=0.5cm of bbo] {\textbf{AutoML}\\ \scriptsize Dataset};
-    \node[sat-box] (sat) [below=0.5cm of bbo] {\textbf{SAT}\\ \scriptsize Boolean Formula};
+    \node[bbo-box] (bbo) at (0, 0) {\textbf{\gls{bbo}}\\ \scriptsize Function};
+    \node[automl-box] (automl) [above=0.5cm of bbo] {\textbf{\gls{automl}}\\ \scriptsize Dataset};
+    \node[sat-box] (sat) [below=0.5cm of bbo] {\textbf{\gls{sat}}\\ \scriptsize Boolean Formula};
 
     % --- 2. The ASF Machine (Internals) ---
     \node[asf-internal] (presel) at (5.0, 0) {\textbf{Pre-selection}};
@@ -36,7 +36,7 @@ This is a well-known phenomenon that can be exploited using \textit{automated al
     \node[asf-internal] (tune) [below=0.12cm of sel] {\textbf{Tuning}};
 
     % Title Node for the ASF block
-    \node[align=center, above=0.3cm of presol] (title) {\large\textbf{ASF}\\ \footnotesize Domain Independent};
+    \node[align=center, above=0.3cm of presol] (title) {\large\textbf{\gls{asf}}\\ \footnotesize Domain Independent};
 
     % --- 3. ASF Bounding Box (Solid Green Background) ---
     \begin{scope}[on background layer]
@@ -50,9 +50,9 @@ This is a well-known phenomenon that can be exploited using \textit{automated al
     \draw[ultra thick, draw=red!80!black, ->] (sat.east) -- (asf-core.west |- sat.east) node[midway, above, font=\tiny, text=black!80] {Feature Extraction};
 
     % --- 5. The Outputs ---
-    \node[automl-out, right=1.8cm of asf-core.east |- automl] (out-automl) {\textbf{Accuracy}\\ \scriptsize(AutoML)};
-    \node[bbo-out, right=1.8cm of asf-core.east |- bbo] (out-bbo) {\textbf{Regret}\\ \scriptsize(BBO)};
-    \node[sat-out, right=1.8cm of asf-core.east |- sat] (out-sat) {\textbf{Running Time}\\ \scriptsize(SAT)};
+    \node[automl-out, right=1.8cm of asf-core.east |- automl] (out-automl) {\textbf{Accuracy}\\ \scriptsize(\gls{automl})};
+    \node[bbo-out, right=1.8cm of asf-core.east |- bbo] (out-bbo) {\textbf{Regret}\\ \scriptsize(\gls{bbo})};
+    \node[sat-out, right=1.8cm of asf-core.east |- sat] (out-sat) {\textbf{Running Time}\\ \scriptsize(\gls{sat})};
 
     % --- 6. Output Connections (Colour-coded parallel lines with Assessment text) ---
     \draw[->, ultra thick, draw=red!80!black] (asf-core.east |- out-sat.west) -- (out-sat.west) node[midway, above, font=\tiny, text=black!80] {Assessment};
@@ -60,7 +60,7 @@ This is a well-known phenomenon that can be exploited using \textit{automated al
     \draw[->, ultra thick, draw=orange!80!black] (asf-core.east |- out-bbo.west) -- (out-bbo.west) node[midway, above, font=\tiny, text=black!80] {Assessment};
 
 \end{tikzpicture}
-  \caption{Overview of the ASF library which provides problem-agnostic implementations of algorithm selection methods, which can be used for various domains, such as AutoML, BBO, SAT, and others.
+  \caption{Overview of the \gls{asf} library which provides problem-agnostic implementations of algorithm selection methods, which can be used for various domains, such as \gls{automl}, \gls{bbo}, \gls{sat}, and others.
   % \hd{It is a bit odd that we have ``feature extraction'' and ``assessment'' three times.}
   }
 \end{figure}
@@ -68,11 +68,11 @@ This is a well-known phenomenon that can be exploited using \textit{automated al
 
 Traditionally, algorithm selection methods use instance features as input to one or more machine learning models to decide which algorithm is likely to perform best.
 % \hh{slightly modified:}
-Such methods have shown exceptional performance in many sub-fields of AI.
+Such methods have shown exceptional performance in many sub-fields of \gls{ai}.
 For example, in machine learning, algorithm selection has been a cornerstone in hands-free automated machine learning methods (see, e.g., \citealp{FeuEtAl15}), which create a full machine learning pipeline given an input dataset.
-Portfolio-based algorithm selectors have also shown exceptional performance for many $\mathcal{NP}$-complete problems. A well-known example is in the SAT domain, where SATzilla~\citep{XuEtAl08} won multiple SAT competitions and consistently outperformed single-solver baselines~\citep{XuEtAl12,ShaHoo24}. Additionally, such approaches have been applied for automated planning, where they outperformed state-of-the-art solvers~\citep{ValEtAl14}.
+Portfolio-based algorithm selectors have also shown exceptional performance for many $\mathcal{NP}$-complete problems. A well-known example is in the \gls{sat} domain, where SATzilla~\citep{XuEtAl08} won multiple \gls{sat} competitions and consistently outperformed single-solver baselines~\citep{XuEtAl12,ShaHoo24}. Additionally, such approaches have been applied for automated planning, where they outperformed state-of-the-art solvers~\citep{ValEtAl14}.
 % \hh{might it be better to make this about portfolio-based algorithm selectors for SAT and mention a few of them, not just SATzilla?}
-Algorithm selection has also been applied in various other areas of AI, such as out-of-distribution generalisation for neural networks~\citep{JiaEtAl25}, black-box optimisation~\citep{JonEtAl98} and others.
+Algorithm selection has also been applied in various other areas of \gls{ai}, such as out-of-distribution generalisation for neural networks~\citep{JiaEtAl25}, black-box optimisation~\citep{JonEtAl98} and others.
 % \hh{of what?}
 
 % \hh{the following sounds repetitive:}
@@ -84,16 +84,16 @@ Firstly, every research area might develop its own methods, unaware of advances 
 Secondly, since every method is implemented for a specific use case, it can be hard to apply it directly in other areas.
 Thirdly, the absence of a central framework negatively affects reproducibility and the ability of researchers to fairly compare new methods to existing ones.
 
-To address these challenges, we introduce the algorithm selection framework (ASF), the first Python library for problem-agnostic algorithm selection.
-ASF provides instance-feature and performance-matrix based algorithm selectors through a unified, scikit-learn-like API, allowing methods developed in one domain to be reused in another.
+To address these challenges, we introduce the algorithm selection framework (\gls{asf}), the first Python library for problem-agnostic algorithm selection.
+\Gls{asf} provides instance-feature and performance-matrix based algorithm selectors through a unified, scikit-learn-like \gls{api}, allowing methods developed in one domain to be reused in another.
 The framework implements the main components of algorithm selection pipelines, including pre-selection, pre-solving, selection, tuning and evaluation.
 % \hh{the order does not match that in Figure 1 -- why? I'd also think about putting AutoML first, then BBO, then SAT (likely order of interest within the NeurIPS community).}
-To showcase the advantage of using ASF, we evaluate it in the context of three important use cases in machine learning: 
+To showcase the advantage of using \gls{asf}, we evaluate it in the context of three important use cases in machine learning: 
 % \hd{You might want to defend why these three use cases are the most important to evaluate ASF.}
 zero-shot portfolio selection~\citep{OztEtAl22}, out-of-distribution generalisation~\citep{JiaEtAl25}, and portfolio construction for hyperparameter optimisation~\citep{EggEtAl21}.
-Our empirical results demonstrate that well-known algorithm selection methods, made easily accessible through ASF, can match or surpass domain-specific implementations, sometimes at a fraction of the training cost. Ultimately, ASF makes it easier to assess performance complementarity that can be exploited using automated algorithm selection, thereby providing a more systematic foundation for empirical claims in AI.
+Our empirical results demonstrate that well-known algorithm selection methods, made easily accessible through \gls{asf}, can match or surpass domain-specific implementations, sometimes at a fraction of the training cost. Ultimately, \gls{asf} makes it easier to assess performance complementarity that can be exploited using automated algorithm selection, thereby providing a more systematic foundation for empirical claims in \gls{ai}.
 
-The remainder of the paper is structured as follows: we begin by covering the background of algorithm selection and related methods in \autoref{sec:background}, continuing with a presentation of ASF and its components in \autoref{sec:asf_overview}, followed by our empirical results and discussion in \autoref{sec:experiments}, and concluding in \autoref{sec:conclusion}. Additional benchmarks and details are available in the appendix, and we provide the source code for ASF at \url{https://anonymous.4open.science/r/asf-660A/}.
+The remainder of the paper is structured as follows: we begin by covering the background of algorithm selection and related methods in \autoref{sec:background}, continuing with a presentation of \gls{asf} and its components in \autoref{sec:asf_overview}, followed by our empirical results and discussion in \autoref{sec:experiments}, and concluding in \autoref{sec:conclusion}. Additional benchmarks and details are available in the appendix, and we provide the source code for \gls{asf} at \url{https://anonymous.4open.science/r/asf-660A/}.
 % \hd{Generally, this reads well. 
 % I got a good impression of your work from your introduction.
 % If any empirical results support ASF, you might want to think about mentioning them.}
@@ -106,49 +106,49 @@ The remainder of the paper is structured as follows: we begin by covering the ba
 
 
 \subsection{Empirical performance prediction}
-A closely related problem to algorithm selection is empirical performance prediction, where given an instance $I\in\mathcal{I}$ and a feature vector $\mathbf{f}\in\mathcal{F}$, the goal is to create an empirical performance model (EPM) $P_A:\mathcal{F}\rightarrow \mathbb{R}$ that predicts $m(A, I)$ as accurately as possible.
-EPMs can be used for algorithm selection~\citep{NudEtAl04,XuEtAl08}, algorithm configuration~\citep{HutEtAl11,LinEtAl22}, explainability~\citep{HutEtAl13}, and data centre scheduling~\citep{LeeEtAl25}.
-To model performance, one should account for the distribution of the performance, which can require preprocessing of the labels, such as log-transformation~\citep{HutEtAl14}. However, EPM-based algorithm selection is often not the practically best approach, essentially because accurately predicting exact performance values is generally a harder task than determining the relative ranking of algorithms.
+A closely related problem to algorithm selection is empirical performance prediction, where given an instance $I\in\mathcal{I}$ and a feature vector $\mathbf{f}\in\mathcal{F}$, the goal is to create an empirical performance model (\gls{epm}) $P_A:\mathcal{F}\rightarrow \mathbb{R}$ that predicts $m(A, I)$ as accurately as possible.
+\Glspl{epm} can be used for algorithm selection~\citep{NudEtAl04,XuEtAl08}, algorithm configuration~\citep{HutEtAl11,LinEtAl22}, explainability~\citep{HutEtAl13}, and data centre scheduling~\citep{LeeEtAl25}.
+To model performance, one should account for the distribution of the performance, which can require preprocessing of the labels, such as log-transformation~\citep{HutEtAl14}. However, \gls{epm}-based algorithm selection is often not the practically best approach, essentially because accurately predicting exact performance values is generally a harder task than determining the relative ranking of algorithms.
 % \hh{I would have expected some remarks on why EPM-based algorithm selection often isn't the practically best approach (essentially, because performance prediction is harder than algorithm selection).
 % }
 
 \section{Overview of ASF}
 \label{sec:asf_overview}
-ASF is a modular, \emph{problem-agnostic} Python library for algorithm selection.
-At its core, the framework expects instance features together with a performance matrix over candidate algorithms and does not assume a specific application domain such as SAT solving, automated planning, AutoML, or numerical optimisation.
-Any problem that can be described through descriptive features and a measurable target metric can be addressed with ASF.
+\Gls{asf} is a modular, \emph{problem-agnostic} Python library for algorithm selection.
+At its core, the framework expects instance features together with a performance matrix over candidate algorithms and does not assume a specific application domain such as \gls{sat} solving, automated planning, \gls{automl}, or numerical optimisation.
+Any problem that can be described through descriptive features and a measurable target metric can be addressed with \gls{asf}.
 This design allows non-experts to apply algorithm selection effectively to new problems.
-ASF follows a scikit-learn-like API~\citep{PedEtAl11}, making it easily accessible to machine learning practitioners.
+\Gls{asf} follows a scikit-learn-like \gls{api}~\citep{PedEtAl11}, making it easily accessible to machine learning practitioners.
 % \hd{Maybe the reference after ``API''? Also, you mentioned scikit-learn already two times before but you put the reference here.}
 
 \textbf{Selectors.}
-ASF implements a wide variety of algorithm selection methods, including multi-class classification~\citep{Kotthoff13}, pairwise classification~\citep{XuEtAl12} and regression~\citep{KerEtAl18}, empirical-performance-model-based selection~\citep{XuEtAl08}, ranking-based methods, neighbourhood-based methods such as ISAC~\citep{KadEtAl10} and SUNNY~\citep{AmaEtAl14}, and ensemble-based approaches~\citep{TorEtAl23}. Additionally, while looking at algorithm selection as a recommendation system is a known technique~\citep{MisEtAl17}, ASF furthermore implements it using the standard LambdaMART~\citep{Burges10} algorithm with XGBoost~\citep{CheGue16}.
-A complete list of the selectors implemented in ASF is provided in \autoref{sec:methods_implemented}.
+\Gls{asf} implements a wide variety of algorithm selection methods, including multi-class classification~\citep{Kotthoff13}, pairwise classification~\citep{XuEtAl12} and regression~\citep{KerEtAl18}, empirical-performance-model-based selection~\citep{XuEtAl08}, ranking-based methods, neighbourhood-based methods such as ISAC~\citep{KadEtAl10} and SUNNY~\citep{AmaEtAl14}, and ensemble-based approaches~\citep{TorEtAl23}. Additionally, while looking at algorithm selection as a recommendation system is a known technique~\citep{MisEtAl17}, \gls{asf} furthermore implements it using the standard LambdaMART~\citep{Burges10} algorithm with XGBoost~\citep{CheGue16}.
+A complete list of the selectors implemented in \gls{asf} is provided in \autoref{sec:methods_implemented}.
 
 
 \textbf{Pre-selection.}
-Before fitting the final selector, ASF can apply \emph{pre-selectors} to reduce a large candidate set to a compact, complementary portfolio.
-The library provides marginal-contribution-based~\citep{XuEtAl08}, beam-search~\citep{BacEtAl22}. Additionally, ASF implements general optimisation algorithms that, to the best of our knowledge, have not been applied to this task yet, such as random-local-search~\citep{HutEtAl11}, a genetic algorithm~\citep{FraBur70}, differential evolution~\citep{PriEtAl05}, and other pre-selection strategies that operate on the performance matrix alone and return a restricted portfolio (see \autoref{sec:methods_implemented} for a full list).
+Before fitting the final selector, \gls{asf} can apply \emph{pre-selectors} to reduce a large candidate set to a compact, complementary portfolio.
+The library provides marginal-contribution-based~\citep{XuEtAl08}, beam-search~\citep{BacEtAl22}. Additionally, \gls{asf} implements general optimisation algorithms that, to the best of our knowledge, have not been applied to this task yet, such as random-local-search~\citep{HutEtAl11}, a genetic algorithm~\citep{FraBur70}, differential evolution~\citep{PriEtAl05}, and other pre-selection strategies that operate on the performance matrix alone and return a restricted portfolio (see \autoref{sec:methods_implemented} for a full list).
 % \hh{point to an appendix to a full list?}
 This is particularly useful when many candidate algorithms are available, as removing redundant or weak alternatives improves statistical efficiency, reduces training time, and lowers the chance of severe prediction errors.
 
 \textbf{Pre-solving.}
-ASF also supports pre-solving schedules for running time scenarios, such as greedy scheduling~\citep{XuEtAl08}, Aspeed~\citep{HooEtAl12} and 3S~\citep{KadEtAl11}.
+\Gls{asf} also supports pre-solving schedules for running time scenarios, such as greedy scheduling~\citep{XuEtAl08}, Aspeed~\citep{HooEtAl12} and 3S~\citep{KadEtAl11}.
 
-\textbf{Pipelines.} ASF supports creating pipelines of components, such as pre-selection, pre-solving, selection, and data preprocessing (for which, any feature preprocessing that follows \textsc{scikit-learn}~\citep{PedEtAl11} conventions is supported) into a single tunable unit.
+\textbf{Pipelines.} \gls{asf} supports creating pipelines of components, such as pre-selection, pre-solving, selection, and data preprocessing (for which, any feature preprocessing that follows \textsc{scikit-learn}~\citep{PedEtAl11} conventions is supported) into a single tunable unit.
 
 \textbf{Hyperparameter optimisation.}
-Pipelines and selectors can be automatically tuned using SMAC3~\citep{HutEtAl11,LinEtAl22}, a well known model-based hyperparameter optimisation library, optionally selecting among multiple selector types (similarly to AutoFolio~\citep{LinEtAl15}). ASF includes configuration spaces for all implemented methods, in addition to configuration spaces for the underlying machine learning models.
+Pipelines and selectors can be automatically tuned using SMAC3~\citep{HutEtAl11,LinEtAl22}, a well known model-based hyperparameter optimisation library, optionally selecting among multiple selector types (similarly to AutoFolio~\citep{LinEtAl15}). \Gls{asf} includes configuration spaces for all implemented methods, in addition to configuration spaces for the underlying machine learning models.
 % \hh{all?}
 
-For every method component (selection, pre-selection, etc.), ASF provides an abstract class responsible for handling data preprocessing and more. For algorithm selection, there exists an additional abstract class responsible for handling the models used by the selectors (if applicable). We provide an example of how to use ASF for algorithm selection in \autoref{sec:asf_usage_appendix}.
+For every method component (selection, pre-selection, etc.), \gls{asf} provides an abstract class responsible for handling data preprocessing and more. For algorithm selection, there exists an additional abstract class responsible for handling the models used by the selectors (if applicable). We provide an example of how to use \gls{asf} for algorithm selection in \autoref{sec:asf_usage_appendix}.
 % \hh{better: component?}
 
 
 
 \section{Case studies for algorithm selection in ML}
 \label{sec:experiments}
-In this section, we demonstrate the application of ASF to three machine learning tasks: zero-shot hyperparameter optimisation in deep learning, selection of out-of-distribution generalisation (OOD) algorithms, and pre-selection of algorithm portfolios of traditional machine learning algorithms. 
+In this section, we demonstrate the application of \gls{asf} to three machine learning tasks: zero-shot hyperparameter optimisation in deep learning, selection of out-of-distribution generalisation (\gls{ood}) algorithms, and pre-selection of algorithm portfolios of traditional machine learning algorithms. 
 Additional experiments on the well-known ASlib~\citep{BisEtAl16} are available in~\autoref{sec:aslib_appendix}.
 
 \subsection{Zero-shot portfolio selection for AutoML}
@@ -165,17 +165,17 @@ While \citet{OztEtAl22} reported good performance, they trained their selector t
 Additionally, allowing the selector to choose from so many configurations increases the chance of selecting a poor-performing one.
 Finally, many methods (including that of \citet{OztEtAl22}) have training and inference time that scales with the number of candidate algorithms, so omitting pre-selection can significantly increase training cost.
 
-Our goal in this experiment is to use the pre-selection and selector pipeline of ASF to test whether pre-selection can improve downstream selection quality while reducing the training resources required. 
+Our goal in this experiment is to use the pre-selection and selector pipeline of \gls{asf} to test whether pre-selection can improve downstream selection quality while reducing the training resources required. 
 % \hh{I'd mention ASF and the way it enables this analysis in the previous sentence.}
 Concretely, we first reduce the candidate configuration set to a compact portfolio and then train selectors on this reduced space. This uses less data per training run and decreases the chance of severe selection errors caused by many weak or redundant candidates.
 
 \subsubsection{Setup of experiments}
 We used the scenario and meta-data supplied by~\citet{OztEtAl22}, preserving the original dataset meta-features, candidate configurations, and five-fold cross-validation protocol. For every cross-validation fold, marginal-contribution pre-selection~\citep{XuEtAl08} was fitted only on the training fold before the selector was trained on the reduced portfolio.
 
-\textbf{Compared selectors.} We compared the joint-ranking model of~\citet{OztEtAl22}, the same model after pre-selection, and ASF selectors based on pairwise classification~\citep{XuEtAl12}, pairwise regression~\citep{KerEtAl18}, empirical performance models, and simple ranking. The ASF selectors used XGBoost as the underlying tabular model. For the ASF models, we always used pre-selection. Each model was trained on a single H100 GPU with the settings reported in the experiment setup appendix, \autoref{sec:additional_experiment_details}. 
+\textbf{Compared selectors.} We compared the joint-ranking model of~\citet{OztEtAl22}, the same model after pre-selection, and \gls{asf} selectors based on pairwise classification~\citep{XuEtAl12}, pairwise regression~\citep{KerEtAl18}, empirical performance models, and simple ranking. The \gls{asf} selectors used XGBoost as the underlying tabular model. For the \gls{asf} models, we always used pre-selection. Each model was trained on a single H100 GPU with the settings reported in the experiment setup appendix, \autoref{sec:additional_experiment_details}. 
 % \hd{which section in the appendix?}
 
-\textbf{Performance metric.} We report per-dataset selector accuracy and per-fold training time. Higher accuracy is better, while lower training time is better. We also report the fold-local VBS accuracy of marginal-contribution portfolios as the number of pre-selected configurations changes.
+\textbf{Performance metric.} We report per-dataset selector accuracy and per-fold training time. Higher accuracy is better, while lower training time is better. We also report the fold-local \gls{vbs} accuracy of marginal-contribution portfolios as the number of pre-selected configurations changes.
 
 % \newpage
 \subsubsection{Results}
@@ -185,20 +185,20 @@ We used the scenario and meta-data supplied by~\citet{OztEtAl22}, preserving the
   \includegraphics{figures/11/figures/analysis/zap_preselection_vbs_box.pdf}
   \caption{ZAP pre-selection quality. 
   % \hd{What is ``ZAP fold-local pre-selection quality''?}
-  Each box reports held-out VBS accuracy, after marginal-contribution pre-selection was fitted on the corresponding training fold; higher is better.}
+  Each box reports held-out \gls{vbs} accuracy, after marginal-contribution pre-selection was fitted on the corresponding training fold; higher is better.}
   \label{fig:zap_preselection_vbs}
     \end{center}
 
 \end{wrapfigure}
 
-Figure~\ref{fig:zap_preselection_vbs} shows the VBS accuracy achieved using different portfolio sizes, compared to using all 525 configurations. Much of the VBS performance is retained even by small portfolios.
+Figure~\ref{fig:zap_preselection_vbs} shows the \gls{vbs} accuracy achieved using different portfolio sizes, compared to using all 525 configurations. Much of the \gls{vbs} performance is retained even by small portfolios.
 
 
 % \hd{New line after ``join'' not ``joint'' looks weird:}
 \autoref{fig:zap_accuracy_runtime} compares selector quality and training cost. JointRankingSubsample achieves the highest mean accuracy, while SimpleRanking is very close in accuracy while being the fastest, requiring only 0.28 seconds per fold on average. PairwiseClassifier, PairwiseRegressor, and PerformanceModel also achieve competitive accuracy with training times of only a few seconds per fold. The full JointRanking model from~\citet{OztEtAl22} is slower in this experiment, requiring about 1246 GPU seconds per fold while reaching 0.869 mean accuracy. 
 % \hd{maybe: ``very close in accuracy while being the fastest, requiring only...''?}
 
-We can see that selector-based pre-selection turns the original large configuration space into a compact portfolio on which simple ASF selectors are competitive and substantially cheaper to train.
+We can see that selector-based pre-selection turns the original large configuration space into a compact portfolio on which simple \gls{asf} selectors are competitive and substantially cheaper to train.
 % \hd{We can see that }
 
 Notably, pre-selection not only reduces training cost but also \emph{improves} selector accuracy: JointRankingSubsample achieves 0.912 mean accuracy compared to 0.869 for the full-set JointRanking model, suggesting that the large candidate space introduces noise that hampers learning. The finding that SimpleRanking matches the accuracy of the neural JointRankingSubsample model at a fraction of the cost indicates that, for this meta-feature space, simple tabular methods with proper pre-selection suffice.
@@ -230,37 +230,37 @@ Notably, pre-selection not only reduces training cost but also \emph{improves} s
 \subsection{Algorithm selection for OOD generalisation}
 \label{sec:ood}
 
-Deep learning models are prone to failure when the distribution of the test data differs from the training data (known as distribution shift; see, \emph{e.g.}, \citet{WilEtAl22}). OOD generalisation aims to train models that are robust to such shifts.
+Deep learning models are prone to failure when the distribution of the test data differs from the training data (known as distribution shift; see, \emph{e.g.}, \citet{WilEtAl22}). \Gls{ood} generalisation aims to train models that are robust to such shifts.
 % \hd{You have already introduced OOD as an abbreviation before.}
 However, there exist numerous methods for the task, each specialising in different types of distribution-shift settings.
-The OOD-Chameleon framework~\citep{JiaEtAl25} introduced algorithm selection for OOD generalisation in vision and language tasks, proposing a novel feature set that captures properties such as training-label imbalance.
+The \gls{ood}-Chameleon framework~\citep{JiaEtAl25} introduced algorithm selection for \gls{ood} generalisation in vision and language tasks, proposing a novel feature set that captures properties such as training-label imbalance.
 The authors showed that algorithm selection can achieve state-of-the-art results, surpassing all single algorithms.
 
-While \citet{JiaEtAl25} introduced algorithm selection to OOD generalisation, they did not compare against well-known algorithm selection methods and instead used an MLP-based multi-label classifier.
+While \citet{JiaEtAl25} introduced algorithm selection to \gls{ood} generalisation, they did not compare against well-known algorithm selection methods and instead used an \gls{mlp}-based multi-label classifier.
 % \hd{MLP not introduced before. Also, I think it should be ``a'', right?}
-We therefore investigate whether established algorithm selection methods, as implemented in ASF, can improve upon their results.
+We therefore investigate whether established algorithm selection methods, as implemented in \gls{asf}, can improve upon their results.
 
 
 \subsubsection{Setup of experiments}
-We used the OOD-Chameleon meta-dataset~\citep{JiaEtAl25}, which provides dataset features and algorithm performance values. We followed the original evaluation protocol for the cross-domain and in-domain transfer settings: CelebA~\citep{LiuEtAl15}/MetaShift~\citep{LiaEtAl22} for vision and CivilComments~\citep{BorEtAl19}/MultiNLI~\citep{WilEtAl18} for language. The base model backbones, which are the architectures to which OOD generalisation was applied, were pre-trained CLIP~\citep{RadEtAl21}/ResNet~\citep{HeEtAl16}, BERT, and fine-tuned BERT (BERT-FT)~\citep{DevEtAl19}. Cross-domain transfer means that the meta-learning tasks are sampled from different source datasets, whereas in-domain transfer means that the training and evaluation tasks are disjoint tasks sampled from the same source dataset.
+We used the \gls{ood}-Chameleon meta-dataset~\citep{JiaEtAl25}, which provides dataset features and algorithm performance values. We followed the original evaluation protocol for the cross-domain and in-domain transfer settings: CelebA~\citep{LiuEtAl15}/MetaShift~\citep{LiaEtAl22} for vision and CivilComments~\citep{BorEtAl19}/MultiNLI~\citep{WilEtAl18} for language. The base model backbones, which are the architectures to which \gls{ood} generalisation was applied, were pre-trained \gls{clip}~\citep{RadEtAl21}/ResNet~\citep{HeEtAl16}, \gls{bert}, and fine-tuned \gls{bert} (\gls{bertft})~\citep{DevEtAl19}. Cross-domain transfer means that the meta-learning tasks are sampled from different source datasets, whereas in-domain transfer means that the training and evaluation tasks are disjoint tasks sampled from the same source dataset.
 % \hh{ref?}
 % \hd{``across the cross-domain'' sounds odd, how about ``for the cross-domain..''? Also, what are cross-domain transfer settings?}
 % \hd{What are the base model backbones used for?}
 
-\textbf{Compared selectors.} We compared the MLP multi-label classifier from OOD-Chameleon with PairwiseClassifier, PairwiseRegressor, and PerformanceModel selectors from ASF, using random forests as the underlying machine learning models for the ASF selectors. 
+\textbf{Compared selectors.} We compared the \gls{mlp} multi-label classifier from \gls{ood}-Chameleon with PairwiseClassifier, PairwiseRegressor, and PerformanceModel selectors from \gls{asf}, using random forests as the underlying machine learning models for the \gls{asf} selectors. 
 % \hd{forests} 
 
-\textbf{Performance metric.} As a target metric we used worst-group test error, which measures the largest error over predefined subgroups. This metric, where lower values indicate better performance, is standard in OOD generalisation, because a model can have strong average performance while still failing on minority or shifted groups. All reported results are averages over five pseudo-random number seeds.
+\textbf{Performance metric.} As a target metric we used worst-group test error, which measures the largest error over predefined subgroups. This metric, where lower values indicate better performance, is standard in \gls{ood} generalisation, because a model can have strong average performance while still failing on minority or shifted groups. All reported results are averages over five pseudo-random number seeds.
 % \hd{Maybe change a bit the writing here, the sentences ``Lower values are better'' and ``Results are averaged over five random seeds'' are a bit short.}
 
 \subsubsection{Results}
-\autoref{tab:ood_selector_by_scenario} reports the mean worst-group error for each training/evaluation/model combination. PairwiseRegressor turned out to be the best selector overall, with PairwiseClassifier and PerformanceModel often close. The MLP baseline from OOD-Chameleon remains competitive, especially on several cross-dataset transfer settings, indicating that selector behaviour depends strongly on the distribution-shift structure.
+\autoref{tab:ood_selector_by_scenario} reports the mean worst-group error for each training/evaluation/model combination. PairwiseRegressor turned out to be the best selector overall, with PairwiseClassifier and PerformanceModel often close. The \gls{mlp} baseline from \gls{ood}-Chameleon remains competitive, especially on several cross-dataset transfer settings, indicating that selector behaviour depends strongly on the distribution-shift structure.
 % \hd{the}
 % \hd{I would write ``the MLP baseline from OOD-Chameleon'', since I was searching for the keyword ``chameleon'' now in the table.}
 
-The results show that pairwise regression and classification perform best in in-domain settings (same train and evaluation dataset), where the algorithm performance landscape is well-captured by the training features, while their advantage narrows in cross-domain transfer settings, where the feature distribution shifts between training and evaluation. This suggests that future work on transfer-robust features could further improve algorithm selection for OOD generalisation. 
+The results show that pairwise regression and classification perform best in in-domain settings (same train and evaluation dataset), where the algorithm performance landscape is well-captured by the training features, while their advantage narrows in cross-domain transfer settings, where the feature distribution shifts between training and evaluation. This suggests that future work on transfer-robust features could further improve algorithm selection for \gls{ood} generalisation. 
 
-Importantly, ASF enables this systematic comparison with minimal implementation effort: the same selector classes used for the ZAP experiment above are applied here with a different performance metric and feature set. At least one ASF selector improved over the OOD-Chameleon MLP baseline in six of the eight training/evaluation/model combinations, including all four in-domain settings. For the other two settings, ASF selectors are on-par with the MLP baseline. 
+Importantly, \gls{asf} enables this systematic comparison with minimal implementation effort: the same selector classes used for the ZAP experiment above are applied here with a different performance metric and feature set. At least one \gls{asf} selector improved over the \gls{ood}-Chameleon \gls{mlp} baseline in six of the eight training/evaluation/model combinations, including all four in-domain settings. For the other two settings, \gls{asf} selectors are on-par with the \gls{mlp} baseline. 
 
 % \hh{can we be more precise? in how many out of how many?}
 % \hd{Section 4.2 is up until the hardest section to read. You see that I left some comments, but for this section you might want to go through }
@@ -268,7 +268,7 @@ Importantly, ASF enables this systematic comparison with minimal implementation 
 
 \begin{table*}[t]
   \centering
-    \caption{OOD-Chameleon selector matrix. Rows represent training/evaluation/model combinations, columns correspond to selectors, and cells report mean worst-group error $\pm$ standard deviation over the five seeds, in percentage points. Lower is better; bold entries mark the lowest value in a row or values within 0.5 percentage points of it.
+    \caption{\gls{ood}-Chameleon selector matrix. Rows represent training/evaluation/model combinations, columns correspond to selectors, and cells report mean worst-group error $\pm$ standard deviation over the five seeds, in percentage points. Lower is better; bold entries mark the lowest value in a row or values within 0.5 percentage points of it.
     % \hd{In the text, you write ``BERT-FT'', here you write ``bert-ft'', etc.}
     }
   \label{tab:ood_selector_by_scenario}
@@ -282,12 +282,12 @@ Importantly, ASF enables this systematic comparison with minimal implementation 
 For a given task, multiple machine learning algorithms exist, each with its own hyperparameters that must be tuned.
 Pre-selecting a small set of algorithm--configuration pairs that perform well across many datasets has two important use cases.
 First, such portfolios can initialise hyperparameter optimisation procedures, letting the optimiser exploit known good regions instead of exploring from scratch.
-Second, AutoML systems such as AutoGluon~\citep{EriEtAl20} rely on pre-selected portfolios to build ensemble predictions without performing hyperparameter optimisation on the fly; selecting these portfolios well is therefore an impactful task.
+Second, \gls{automl} systems such as AutoGluon~\citep{EriEtAl20} rely on pre-selected portfolios to build ensemble predictions without performing hyperparameter optimisation on the fly; selecting these portfolios well is therefore an impactful task.
 
 However, brute-force enumeration is infeasible as the candidate set grows: there are $\binom{n}{k}$ possible subsets for $n$ candidates and portfolio size $k$ 
 % (e.g., more than $e^{55}$ for $n{=}5{,}000$ and $k{=}20$). 
 Therefore, efficient search algorithms are required to solve the problem.
-In this section, we benchmark several such methods implemented in ASF.
+In this section, we benchmark several such methods implemented in \gls{asf}.
 
 
 \subsubsection{Setup of experiments}
@@ -295,9 +295,9 @@ In this section, we benchmark several such methods implemented in ASF.
 We use HPOBench~\citep{EggEtAl21}, which provides performance data for traditional machine learning algorithms on OpenML datasets~\citep{BisEtAl21}. Each candidate algorithm is an algorithm-hyperparameter-configuration pair, and each pre-selector constructs a compact portfolio before being evaluated on the held-out dataset.
 % \hh{being evaluated using?}
 
-\textbf{Evaluation protocol.} We used leave-one-dataset-out evaluation. For each held-out dataset and portfolio size $k\in\{5,10,25\}$, the pre-selector was fitted only on the remaining datasets, and the selected portfolio was evaluated on the held-out dataset. We compared SBS pre-selection, marginal-contribution pre-selection, beam search, random local search, genetic search, and differential-evolution-based optimisation.
+\textbf{Evaluation protocol.} We used leave-one-dataset-out evaluation. For each held-out dataset and portfolio size $k\in\{5,10,25\}$, the pre-selector was fitted only on the remaining datasets, and the selected portfolio was evaluated on the held-out dataset. We compared \gls{sbs} pre-selection, marginal-contribution pre-selection, beam search, random local search, genetic search, and differential-evolution-based optimisation.
 
-\textbf{Performance metric.} Portfolio error is the minimum loss achieved by any configuration in the selected portfolio; lower is better. For visualisation, we report the normalised pre-selection SBS-VBS gap closed by the selected portfolio, where the performance of a portfolio on a dataset is defined by the lowest loss on the dataset of any configuration in the portfolio (\emph{i.e.}, we measure how good the selected portfolio compared to the portfolio consisting of all configurations). In this metric, 0 corresponds to SBS and 1 corresponds to VBS; higher is better. We also report pre-selector running time in seconds.
+\textbf{Performance metric.} Portfolio error is the minimum loss achieved by any configuration in the selected portfolio; lower is better. For visualisation, we report the normalised pre-selection \gls{sbs}-\gls{vbs} gap closed by the selected portfolio, where the performance of a portfolio on a dataset is defined by the lowest loss on the dataset of any configuration in the portfolio (\emph{i.e.}, we measure how good the selected portfolio compared to the portfolio consisting of all configurations). In this metric, 0 corresponds to \gls{sbs} and 1 corresponds to \gls{vbs}; higher is better. We also report pre-selector running time in seconds.
 
 
 \subsubsection{Results}
@@ -336,35 +336,35 @@ We use HPOBench~\citep{EggEtAl21}, which provides performance data for tradition
     \includegraphics{figures/11/figures/analysis/hpobench_runtime_box_k25.pdf}
     \caption{$k=25$}
   \end{subfigure}
-  \caption{HPOBench portfolio pre-selection by portfolio size. The top row reports normalised pre-selection score over held-out datasets, where 0 corresponds to SBS and 1 corresponds to VBS; higher is better. The bottom row reports pre-selector running time in seconds on a logarithmic scale; lower is better.}
+  \caption{HPOBench portfolio pre-selection by portfolio size. The top row reports normalised pre-selection score over held-out datasets, where 0 corresponds to \gls{sbs} and 1 corresponds to \gls{vbs}; higher is better. The bottom row reports pre-selector running time in seconds on a logarithmic scale; lower is better.}
   \label{fig:hpobench_normalized_score_box}
 \end{figure*}
 
 
-\autoref{fig:hpobench_normalized_score_box} reports normalised pre-selection score in the top row and pre-selector running time in the bottom row. Overall, marginal contribution with forward selection, beam search, and random local search are the strongest methods. Their median scores are close across all portfolio sizes: random local search is strongest for $k=5$ and $k=25$, while beam search and forward marginal contribution are tied for the highest median at $k=10$. Genetic algorithm improves with larger portfolios but remains slightly behind these methods. Backward marginal contribution is much weaker and exhibits large negative outliers, while SBS-based pre-selection perform closely to the SBS (gap closed close to 0) for $k=5,10$. The overall score distributions also improve from $k=5$ to $k=25$, indicating that larger complementary portfolios close more of the gap to the VBS. We note that differential evolution resulted in out-of-memory errors.
+\autoref{fig:hpobench_normalized_score_box} reports normalised pre-selection score in the top row and pre-selector running time in the bottom row. Overall, marginal contribution with forward selection, beam search, and random local search are the strongest methods. Their median scores are close across all portfolio sizes: random local search is strongest for $k=5$ and $k=25$, while beam search and forward marginal contribution are tied for the highest median at $k=10$. Genetic algorithm improves with larger portfolios but remains slightly behind these methods. Backward marginal contribution is much weaker and exhibits large negative outliers, while \gls{sbs}-based pre-selection perform closely to the \gls{sbs} (gap closed close to 0) for $k=5,10$. The overall score distributions also improve from $k=5$ to $k=25$, indicating that larger complementary portfolios close more of the gap to the \gls{vbs}. We note that differential evolution resulted in out-of-memory errors.
 
-The methods with similar portfolio quality have different computational costs. SBS and marginal-contribution methods are very fast, BeamSearch is moderately more expensive, and random local search is the most expensive method. All evaluated pre-selectors run within about 1\,700 seconds on a single CPU core.
+The methods with similar portfolio quality have different computational costs. \Gls{sbs} and marginal-contribution methods are very fast, BeamSearch is moderately more expensive, and random local search is the most expensive method. All evaluated pre-selectors run within about 1\,700 seconds on a single CPU core.
 
 
 
 
 \section{Conclusions}
 \label{sec:conclusion}
-We presented ASF, a Python framework for automated algorithm selection that brings together methods from different research communities, such as classical selectors, pairwise and ranking-based approaches, empirical performance models, pre-selection, pre-solving, and tunable end-to-end pipelines, under a single, problem-agnostic API.
+We presented \gls{asf}, a Python framework for automated algorithm selection that brings together methods from different research communities, such as classical selectors, pairwise and ranking-based approaches, empirical performance models, pre-selection, pre-solving, and tunable end-to-end pipelines, under a single, problem-agnostic \gls{api}.
 
 Our experiments demonstrate the practical value of this unification and reveal several cross-cutting insights.
-Firstly, \emph{pre-selection is beneficial beyond reducing computational cost}: in the ZAP experiment, reducing 525 configurations to 10 cuts training time from about 1,246 GPU seconds per fold for the full JointRanking model to 0.28--9.9 seconds per fold for the fastest pre-selected ASF selectors, an improvement of up to roughly four orders of magnitude, while also improving selector accuracy by over four percentage points because the smaller candidate set reduces noise and the chance of severe selection errors.
+Firstly, \emph{pre-selection is beneficial beyond reducing computational cost}: in the ZAP experiment, reducing 525 configurations to 10 cuts training time from about 1,246 GPU seconds per fold for the full JointRanking model to 0.28--9.9 seconds per fold for the fastest pre-selected \gls{asf} selectors, an improvement of up to roughly four orders of magnitude, while also improving selector accuracy by over four percentage points because the smaller candidate set reduces noise and the chance of severe selection errors.
 % \hh{very good, but perhaps we could be more specific here? up to a factor of ... this might also be a good thing to mention earlier (abstract?) very important: mention the new insights in the abstract + intro; these will be at least as valuable as ASF in the eyes of many readers ...}
 Secondly, \emph{pairwise and ranking methods are consistently strong}: across the use cases we studied, methods that exploit the relative ordering of algorithm performance, rather than treating selection as multi-class classification, are the best-performing selectors.
 % \hh{just the most robust? or also to perform best (over the use cases we studied?}
-Thirdly, \emph{no single method dominates everywhere}: the best selector varies across ZAP, OOD, and ASlib, and the best pre-selection method varies with portfolio size on HPOBench, highlighting the need for a unified framework that makes it easy to evaluate multiple approaches.
+Thirdly, \emph{no single method dominates everywhere}: the best selector varies across ZAP, \gls{ood}, and ASlib, and the best pre-selection method varies with portfolio size on HPOBench, highlighting the need for a unified framework that makes it easy to evaluate multiple approaches.
 
 These findings suggest that algorithm selection should be treated as a generic problem of designing reusable pipelines rather than as a set of loosely related tasks for specific application domains.
 % \hh{perhaps better: as a generic problem of designing reusable pipelines}
 % \hh{better: rather than a set of loosely related tasks for specific application domains.}
-ASF does not remove the need for careful scenario design: selector quality depends on informative instance features, representative performance data, and an evaluation protocol that matches the intended deployment setting. However, by standardising the algorithm selection pipeline, ASF makes it substantially easier to assess and exploit the performance complementarity between different algorithms, providing a reliable framework for empirical analysis.
+\Gls{asf} does not remove the need for careful scenario design: selector quality depends on informative instance features, representative performance data, and an evaluation protocol that matches the intended deployment setting. However, by standardising the algorithm selection pipeline, \gls{asf} makes it substantially easier to assess and exploit the performance complementarity between different algorithms, providing a reliable framework for empirical analysis.
 % \hh{very good!}
-In the future, we plan to extend the framework with online algorithm selection, warm-starting, and tighter integration with AutoML systems, with the goal of making algorithm selection even easier to apply, compare, and reproduce across machine learning and AI.
+In the future, we plan to extend the framework with online algorithm selection, warm-starting, and tighter integration with \gls{automl} systems, with the goal of making algorithm selection even easier to apply, compare, and reproduce across machine learning and \gls{ai}.
 % \hh{added:}
 
 
@@ -385,42 +385,42 @@ In the future, we plan to extend the framework with online algorithm selection, 
 
 
 \section{Licensing, availability and maintenance}
-ASF is open source and is available on (deleted for anonymous submission) with MIT licence.
-The authors will continue to maintain the package with newly introduced methods. Additionally, we encourage authors of newly created algorithm selection methods to implement them initially within ASF, and to submit a pull request to contribute their implementation to ASF. The authors of ASF hereby undertake the responsibility to approve any such pull request within 3 months, as long as it adheres to the ASF code standards and structure. The authors of ASF will support authors of new algorithm selection methods in implementing their methods within ASF.
+\Gls{asf} is open source and is available on (deleted for anonymous submission) with \gls{mit} licence.
+The authors will continue to maintain the package with newly introduced methods. Additionally, we encourage authors of newly created algorithm selection methods to implement them initially within \gls{asf}, and to submit a pull request to contribute their implementation to \gls{asf}. The authors of \gls{asf} hereby undertake the responsibility to approve any such pull request within 3 months, as long as it adheres to the \gls{asf} code standards and structure. The authors of \gls{asf} will support authors of new algorithm selection methods in implementing their methods within \gls{asf}.
 
-ASF includes a CI to ensure that all new code pushed to the library is formatted according to the PEP8 guidelines using the Ruff linter. Additionally, ASF includes comprehensive PyTests, which are also required to pass for every new code added. Furthermore, there are code coverage checks, which are used to ensure that every new code is accompanied with proper tests.
+\Gls{asf} includes a \gls{ci} to ensure that all new code pushed to the library is formatted according to the \gls{pep8} guidelines using the Ruff linter. Additionally, \gls{asf} includes comprehensive PyTests, which are also required to pass for every new code added. Furthermore, there are code coverage checks, which are used to ensure that every new code is accompanied with proper tests.
 
-The anonymous code of ASF is available at \url{https://anonymous.4open.science/r/asf-660A/README.md} and of the experiments in the paper at
+The anonymous code of \gls{asf} is available at \url{https://anonymous.4open.science/r/asf-660A/README.md} and of the experiments in the paper at
 \url{https://anonymous.4open.science/r/asf_paper-2A6C/}.
 
 \section{Additional background}\label{sec:add_background}
 Here, we provide additional background on algorithm selection.
 \subsection{Algorithm Selection Baselines}
-A basic, widely used baseline for algorithm selection is the single-best-solver (SBS), which is the algorithm that works best for the instances $\mathcal{I}$. The performance of the SBS is defined as 
+A basic, widely used baseline for algorithm selection is the single-best-solver (\gls{sbs}), which is the algorithm that works best for the instances $\mathcal{I}$. The performance of the \gls{sbs} is defined as 
 $$m(SBS_\mathcal{A}, \mathcal{I})=\min_{A\in\mathcal{A}} \sum_{I\in\mathcal{I}} m(A, I)$$
-Another prominent baseline is the virtual-best-solver (VBS), also known as an oracle selector. This baseline represents an idealised, optimal selector, \emph{i.e.}, always selecting the best algorithm, which has the performance of
+Another prominent baseline is the virtual-best-solver (\gls{vbs}), also known as an oracle selector. This baseline represents an idealised, optimal selector, \emph{i.e.}, always selecting the best algorithm, which has the performance of
 $$m(VBS_\mathcal{A}, \mathcal{I})= \sum_{I\in\mathcal{I}} \min_{A\in\mathcal{A}} m(A, I)$$
-We note that while in machine learning (and many other fields) the algorithms are not called ``solvers'', the algorithm selection literature adopted this terminology, because the first major successes of algorithm selection came from SAT solving. Nevertheless, the definitions above apply to any domain.
+We note that while in machine learning (and many other fields) the algorithms are not called ``solvers'', the algorithm selection literature adopted this terminology, because the first major successes of algorithm selection came from \gls{sat} solving. Nevertheless, the definitions above apply to any domain.
 
 \subsection{Assessment of Algorithm Selection Methods}
 For algorithm selection to be feasible, there needs to be \textit{performance complementarity}, \emph{i.e.,} a single algorithm should not dominate over all problem instances.
 This is a common phenomenon for many challenging computational problems, which has been thoroughly explored for $\mathcal{NP}$-complete problems~\citep{Kotthoff16,KetEtAl19}.
-A simple measure for performance complementarity is the SBS-VBS ratio:
+A simple measure for performance complementarity is the \gls{sbs}-\gls{vbs} ratio:
 $$\frac{m(SBS_\mathcal{A}, \mathcal{I})}{m(VBS_\mathcal{A}, \mathcal{I})}$$
 which needs to be large enough to enable viable algorithm selection.
 
 % In the field of machine learning, algorithm selection is often regarded as part of \textit{automated machine learning}~\citep{HutEtAl19} and \textit{metalearning}~\citep{BraEtAl22}, and has been applied in AutoML systems~\citep{FeuEtAl15,FeuEtAl22}, hyperparameter optimisation~\citep{FeuEtAl15}, and other areas.
 
-As algorithms commonly exhibit performance complementarity, the absolute marginal contribution quantifies the contribution of an algorithm to VBS performance:
+As algorithms commonly exhibit performance complementarity, the absolute marginal contribution quantifies the contribution of an algorithm to \gls{vbs} performance:
 $$\text{amc}(A, \mathcal{I}) =  m(VBS_{\mathcal{A} \backslash A}, \mathcal{I})-m(VBS_\mathcal{A}, \mathcal{I})$$
 The relative marginal contribution is then defined as:
 $$\text{rmc}(A, \mathcal{I})=\frac{\text{amc}(A, \mathcal{I})}{\sum_{A\in \mathcal{A}}\text{amc}(A, \mathcal{I})}$$
 The marginal contribution metric is important both for analysing algorithm selection scenarios and for constructing complementary portfolios in pre-selection methods.
 % \hh{the following doesn't make sense to me:}
 
-To measure how much of the performance difference between the SBS and VBS is recovered by an algorithm selector, we use the closed-gap metric:
+To measure how much of the performance difference between the \gls{sbs} and \gls{vbs} is recovered by an algorithm selector, we use the closed-gap metric:
 $$\frac{m(SBS_\mathcal{A}, \mathcal{I}) - m(S, \mathcal{I})}{m(SBS_\mathcal{A}, \mathcal{I}) - m(VBS_\mathcal{A}, \mathcal{I})}$$
-Where $m(S, \mathcal{I})$ is the performance of the selector. A value of 0 corresponds to SBS performance, a value of 1 corresponds to VBS performance, and negative values indicate performance worse than the SBS.
+Where $m(S, \mathcal{I})$ is the performance of the selector. A value of 0 corresponds to \gls{sbs} performance, a value of 1 corresponds to \gls{vbs} performance, and negative values indicate performance worse than the \gls{sbs}.
 
 \paragraph{ASlib. } \citet{BisEtAl16} have introduced a unified benchmark for algorithm selection, which includes a unified format for algorithm runs, feature values, and all other necessary information for creating an algorithm selection pipeline. The benchmark contains more than 20 algorithm selection scenarios, most of them based on running time minimisation.
 ASlib has become a standard benchmark for evaluating algorithm selection systems for such use cases; however, it is less commonly used when dealing with other performance metrics.
@@ -428,29 +428,29 @@ ASlib has become a standard benchmark for evaluating algorithm selection systems
 
 \section{Additional discussion}
 
-Here, we provide additional discussion related to ASF. First, we cover the differences between ASF and LLAMA~\citep{Kotthoff13}, then we cover how ASF relates to methods submitted to the algorithm selection competitions.
+Here, we provide additional discussion related to \gls{asf}. First, we cover the differences between \gls{asf} and LLAMA~\citep{Kotthoff13}, then we cover how \gls{asf} relates to methods submitted to the algorithm selection competitions.
 % \hh{find a way to say something a little more flattering about LLAMA (in case Lars or one of his students reads/reviews our paper)}
 \subsection{LLAMA}
 \label{sec:llama}
 We note that LLAMA~\citep{Kotthoff13} is an established R library that helped make algorithm selection workflows more accessible and reusable. Its design anticipated several needs that remain important today, including standardised interfaces for algorithm selection experiments. However, LLAMA implements only a few basic methods, and its dependency on R limits accessibility for machine learning practitioners, where Python is the dominant language.
-Additionally, while ASF supports a wide variety of methods and pipelines, LLAMA does not support, for instance, pre-selection, which we showed can significantly improve the performance of algorithm selection methods. LLAMA focuses on relatively basic selection methods, such as pairwise classification and performance prediction, while ASF covers many more approaches, including ranking-based and neural-network-based methods.
+Additionally, while \gls{asf} supports a wide variety of methods and pipelines, LLAMA does not support, for instance, pre-selection, which we showed can significantly improve the performance of algorithm selection methods. LLAMA focuses on relatively basic selection methods, such as pairwise classification and performance prediction, while \gls{asf} covers many more approaches, including ranking-based and neural-network-based methods.
 
 \subsection{AutoFolio and FlexFolio}
-AutoFolio~\citep{LinEtAl15} is an automatic configuration system for algorithm-selection pipelines, originally designed to configure FlexFolio, a collection of algorithm-selection methods. FlexFolio was an important tool for benchmarking algorithm selectors, but it appears to be no longer actively maintained, as its implementation targets the deprecated Python 2 ecosystem. Moreover, FlexFolio focuses primarily on the selector stage and does not provide the same modular support for preprocessing, pre-solving, pre-selection, and end-to-end pipeline construction as ASF.
-A newer Python 3 version of AutoFolio exists, but it supports only a restricted set of selector types, such as pairwise regression, pairwise classification, and multi-class classification. These selectors are not exposed as independently reusable Python components in the same way as in ASF. AutoFolio also supports pre-solving through Aspeed, but does not support portfolio pre-selection. Finally, AutoFolio and FlexFolio are primarily used through command-line interfaces based on the ASlib format, whereas ASF exposes a Python API that directly accepts feature and performance matrices, while also supporting command-line usage.
+AutoFolio~\citep{LinEtAl15} is an automatic configuration system for algorithm-selection pipelines, originally designed to configure FlexFolio, a collection of algorithm-selection methods. FlexFolio was an important tool for benchmarking algorithm selectors, but it appears to be no longer actively maintained, as its implementation targets the deprecated Python 2 ecosystem. Moreover, FlexFolio focuses primarily on the selector stage and does not provide the same modular support for preprocessing, pre-solving, pre-selection, and end-to-end pipeline construction as \gls{asf}.
+A newer Python 3 version of AutoFolio exists, but it supports only a restricted set of selector types, such as pairwise regression, pairwise classification, and multi-class classification. These selectors are not exposed as independently reusable Python components in the same way as in \gls{asf}. AutoFolio also supports pre-solving through Aspeed, but does not support portfolio pre-selection. Finally, AutoFolio and FlexFolio are primarily used through command-line interfaces based on the ASlib format, whereas \gls{asf} exposes a Python \gls{api} that directly accepts feature and performance matrices, while also supporting command-line usage.
 \subsection{Methods from the algorithm selection competitions}
 In the past, there have been two algorithm selection competitions~\citep{LinEtAl19b}. These competitions were heavily focussed on algorithm selection problems in $\mathcal{NP}$-complete 
 % \hh{inconsistent typesetting; see NP earlier.}
-domains, such as SAT, MIP, and TSP, while there was only a single machine learning selection scenario.
-We note that the methods evaluated in these competitions are full algorithm selection pipelines, which can be easily constructed using ASF components. In the future, we plan to add pre-defined selection pipelines to ASF, which will allow users to easily use these methods. However, as these methods were developed for $\mathcal{NP}$-complete problems, they are not directly applicable to machine learning or other types of problems. As our priority is to provide a flexible framework for algorithm selection, which is applicable to any problem domain, we focussed on implementing as many components as possible, rather than implementing a small number of narrowly focussed full pipelines.
+domains, such as \gls{sat}, MIP, and TSP, while there was only a single machine learning selection scenario.
+We note that the methods evaluated in these competitions are full algorithm selection pipelines, which can be easily constructed using \gls{asf} components. In the future, we plan to add pre-defined selection pipelines to \gls{asf}, which will allow users to easily use these methods. However, as these methods were developed for $\mathcal{NP}$-complete problems, they are not directly applicable to machine learning or other types of problems. As our priority is to provide a flexible framework for algorithm selection, which is applicable to any problem domain, we focussed on implementing as many components as possible, rather than implementing a small number of narrowly focussed full pipelines.
 
 \subsection{Broader impact}
 \label{sec:imapct}
-Our work introduces a problem-agnostic framework for algorithm selection, with the goal of advancing research related to automated algorithm selection. In the experiments we performed and the current use cases of algorithm selection, there exist no negative societal impacts, as they are all related to foundational solutions to problems from machine learning and AI.
+Our work introduces a problem-agnostic framework for algorithm selection, with the goal of advancing research related to automated algorithm selection. In the experiments we performed and the current use cases of algorithm selection, there exist no negative societal impacts, as they are all related to foundational solutions to problems from machine learning and \gls{ai}.
 
 \section{Example usage of ASF}
 \label{sec:asf_usage_appendix}
-In \autoref{listing:asf_usage} we show a simple example of how to use ASF to construct a pipeline for algorithm selection. In a few lines of code, it is possible to construct a complex algorithm selection pipeline, which can be used to solve algorithm selection problems. The example shows the structure used in the experiments above: a marginal-contribution pre-selector first reduces the candidate algorithm set, and a pairwise classifier then learns to choose among the remaining candidates from instance features.
+In \autoref{listing:asf_usage} we show a simple example of how to use \gls{asf} to construct a pipeline for algorithm selection. In a few lines of code, it is possible to construct a complex algorithm selection pipeline, which can be used to solve algorithm selection problems. The example shows the structure used in the experiments above: a marginal-contribution pre-selector first reduces the candidate algorithm set, and a pairwise classifier then learns to choose among the remaining candidates from instance features.
 % \hh{say a little more about this specific example? how is it related to any of the experiments described earlier?}
 
 \begin{figure*}[]
@@ -485,22 +485,22 @@ pipeline.fit(features, performance)
 predictions = pipeline.predict(features)
 \end{lstlisting}
 \end{minipage}
-\caption{Pseudocode illustrating the usage of ASF. A pipeline is instantiated with a pre-selector and a base model, fitted on instance features and a performance matrix, and used to predict the best algorithm for new instances.}
+\caption{Pseudocode illustrating the usage of \gls{asf}. A pipeline is instantiated with a pre-selector and a base model, fitted on instance features and a performance matrix, and used to predict the best algorithm for new instances.}
 \label{listing:asf_usage}
 \end{figure*}
 
 \section{Methods implemented in ASF}
 \label{sec:methods_implemented}
 
-ASF covers a wide variety of algorithm selection methods. Some return a single solver, while others produce a portfolio or schedule, allowing ASF to support both classical per-instance selection and richer budget-aware decision rules.
+\Gls{asf} covers a wide variety of algorithm selection methods. Some return a single solver, while others produce a portfolio or schedule, allowing \gls{asf} to support both classical per-instance selection and richer budget-aware decision rules.
 
 \subsection{Selection}
 \begin{itemize}
     \item \textbf{Multi-class classifier}~\citep{Kotthoff13}: Treats algorithm selection as a standard classification problem where each instance is labelled by its best algorithm. This provides a simple model-based baseline, but ignores the magnitude of performance differences between algorithms.
     \item \textbf{Pairwise classifier}~\citep{XuEtAl12}: Reduces algorithm selection to binary classification tasks, one for each pair of algorithms. Pairwise predictions are aggregated in a tournament-style vote to select the final algorithm.
     \item \textbf{Pairwise regressor}~\citep{KerEtAl18}: Trains one regressor per algorithm pair to predict performance differences. The predicted pairwise margins are aggregated into a ranking, preserving information about how large the performance gaps are.
-    \item \textbf{Performance model selector}~\citep{NudEtAl04,XuEtAl08}: Fits performance prediction models and selects the algorithm with the best predicted performance. ASF supports per-algorithm models, multi-target prediction, and joint instance-algorithm models when algorithm features are available.
-    \item \textbf{Simple ranking}: Creates instance-algorithm examples by combining instance features with algorithm features or one-hot algorithm encodings. A learning-to-rank (by default, XGBoost model that uses LambdaMART~\citep{Burges10}) predicts algorithm ranks for each instance and selects the top-ranked algorithm. This is a new method implemented in ASF.
+    \item \textbf{Performance model selector}~\citep{NudEtAl04,XuEtAl08}: Fits performance prediction models and selects the algorithm with the best predicted performance. \Gls{asf} supports per-algorithm models, multi-target prediction, and joint instance-algorithm models when algorithm features are available.
+    \item \textbf{Simple ranking}: Creates instance-algorithm examples by combining instance features with algorithm features or one-hot algorithm encodings. A learning-to-rank (by default, XGBoost model that uses LambdaMART~\citep{Burges10}) predicts algorithm ranks for each instance and selects the top-ranked algorithm. This is a new method implemented in \gls{asf}.
     \item \textbf{Joint ranking}~\citep{OztEtAl22}: Uses a ranking neural network over concatenated instance and algorithm representations. It scores every algorithm for a query instance and selects the algorithm with the best predicted rank.
     \item \textbf{Dyad ranking}~\citep{TorEtAl19}: A \emph{dyad} is the joint representation of an instance--algorithm pair, formed by concatenating instance features with algorithm features. The method learns pairwise rankings over these dyads, so that preferences between algorithms are informed by the combined instance and algorithm description. This is especially useful when meaningful algorithm features are available.
     \item \textbf{Survival analysis selector}~\citep{TorEtAl20,MarEtAl25}: Models time-to-completion with random survival forests, an ensemble of decision trees that estimate the survival function, \emph{i.e.}, the probability that an algorithm's running time exceeds a given threshold. This naturally handles timeouts as censored observations, since survival analysis does not require knowing the true running time of timed-out runs. The selector can choose a single algorithm or optimise a schedule that maximises completion probability under a budget.
@@ -513,7 +513,7 @@ ASF covers a wide variety of algorithm selection methods. Some return a single s
     \item \textbf{SNNAP}~\citep{ColEtAl13}: Trains per-algorithm regressors on row-wise normalised performance and compares instances by Jaccard distance over predicted top algorithms. The selected algorithm is chosen from the best algorithms of the most similar neighbours.
     \item \textbf{Optimistic superset loss linear selector (OSLlinear)}~\citep{HanEtAl21b}: Learns per-algorithm linear running time models with an optimistic superset loss for censored observations. It is intended for running time settings where timeouts provide partial rather than exact performance information.
     \item \textbf{CSHC}~\citep{MalEtAl13}: Uses a primary selector together with guardian models that estimate whether the primary choice is reliable. If confidence is too low, the method switches to a backup selector.
-    \item \textbf{Cosine selector}~\citep{WuEtAl24}: Learns neural embeddings for instances and algorithms and uses cosine similarity as part of the matching model. The implementation is algorithm-feature-aware and follows the AS-LLM-style idea of fusing learned and provided algorithm representations.
+    \item \textbf{Cosine selector}~\citep{WuEtAl24}: Learns neural embeddings for instances and algorithms and uses cosine similarity as part of the matching model. The implementation is algorithm-feature-aware and follows the \gls{as}-LLM-style idea of fusing learned and provided algorithm representations.
     \item \textbf{Automatic parallel portfolio selector (APPS)}~\citep{KasEtAl23}: Trains ensembles of performance models to estimate running time distributions and uncertainty. It selects a parallel portfolio by including algorithms whose predicted distributions sufficiently overlap with the predicted best algorithm.
     \item \textbf{HARRIS}~\citep{FehEtAl22}: Builds hybrid decision-tree ensembles that combine regression loss with ranking loss based on Spearman correlation. The hybrid objective aims to predict useful performance values while preserving the relative ordering of algorithms.
     \item \textbf{Ranking by pairwise comparison (RPC)}~\citep{HulEtAl19}: Decomposes label ranking into binary pairwise preference problems and aggregates wins using Copeland-style scores. It can return a single algorithm or a top-$n$ parallel portfolio.
@@ -525,20 +525,20 @@ ASF covers a wide variety of algorithm selection methods. Some return a single s
 
 \subsection{Pre-selection}
 \begin{itemize}
-    \item \textbf{Marginal-contribution pre-selection}~\citep{XuEtAl08}: Selects algorithms according to their contribution to the portfolio objective. ASF supports both backward removal from the full set and greedy forward construction.
-    \item \textbf{Optimization-based pre-selection}: Treats portfolio construction as a continuous or combinatorial optimisation problem over algorithm subsets. The implementation can use differential evolution or other SciPy optimisers. This is a new method implemented in ASF.
-    \item \textbf{SBS pre-selection}: Selects the top algorithms by single-algorithm aggregate performance. This is a fast baseline that does not explicitly model complementarity.
+    \item \textbf{Marginal-contribution pre-selection}~\citep{XuEtAl08}: Selects algorithms according to their contribution to the portfolio objective. \Gls{asf} supports both backward removal from the full set and greedy forward construction.
+    \item \textbf{Optimization-based pre-selection}: Treats portfolio construction as a continuous or combinatorial optimisation problem over algorithm subsets. The implementation can use differential evolution or other SciPy optimisers. This is a new method implemented in \gls{asf}.
+    \item \textbf{\gls{sbs} pre-selection}: Selects the top algorithms by single-algorithm aggregate performance. This is a fast baseline that does not explicitly model complementarity.
     \item \textbf{Brute-force pre-selection}: Enumerates candidate subsets and returns the subset with the best objective value. It is exact for small candidate sets, but becomes infeasible as the number of algorithms grows.
     \item \textbf{Beam-search pre-selection}~\citep{BacEtAl22}: Builds portfolios incrementally while retaining only the best partial subsets at each step. This trades exactness for a controllable search width.
-    \item \textbf{Knee-of-the-curve pre-selection}: Evaluates portfolios of different sizes and chooses the point where additional algorithms provide diminishing returns. It is useful when the desired portfolio size is not known in advance. This is a new method implemented in ASF.
-    \item \textbf{Random-local-search pre-selection}: Starts from random portfolios and iteratively improves them through local changes. It provides a scalable heuristic for large algorithm sets. This is a new method implemented in ASF.
-    \item \textbf{Genetic-algorithm pre-selection}: Evolves a population of candidate portfolios using mutation, crossover, and selection. This gives a flexible global-search heuristic for portfolio construction. This is a new method implemented in ASF.
+    \item \textbf{Knee-of-the-curve pre-selection}: Evaluates portfolios of different sizes and chooses the point where additional algorithms provide diminishing returns. It is useful when the desired portfolio size is not known in advance. This is a new method implemented in \gls{asf}.
+    \item \textbf{Random-local-search pre-selection}: Starts from random portfolios and iteratively improves them through local changes. It provides a scalable heuristic for large algorithm sets. This is a new method implemented in \gls{asf}.
+    \item \textbf{Genetic-algorithm pre-selection}: Evolves a population of candidate portfolios using mutation, crossover, and selection. This gives a flexible global-search heuristic for portfolio construction. This is a new method implemented in \gls{asf}.
 \end{itemize}
 
 \subsection{Pre-solving}
 \begin{itemize}
     \item \textbf{Aspeed}~\citep{HooEtAl12}: Computes a pre-solving schedule using answer-set programming. The schedule allocates a fixed pre-solving budget across algorithms to solve easy instances before full selection.
-    \item \textbf{ASAPv2}~\citep{GonEtAl17}: Optimises a preschedule over selected algorithms and time allocations. ASF implements this as a differential-evolution-based presolver.
+    \item \textbf{ASAPv2}~\citep{GonEtAl17}: Optimises a preschedule over selected algorithms and time allocations. \Gls{asf} implements this as a differential-evolution-based presolver.
     \item \textbf{3S}~\citep{KadEtAl11}: Constructs a static pre-solving schedule inspired by the 3S approach. It is designed to solve many easy instances before invoking more expensive feature-based selection.
     \item \textbf{Greedy presolver}~\citep{XuEtAl08}: Builds a pre-solving schedule greedily by adding algorithm-time choices that improve the schedule objective. This is a simple and fast schedule-construction heuristic.
     \item \textbf{Configurable pre-solver}: Represents the pre-solving schedule as a configurable set of algorithm-use and time-allocation decisions. This makes pre-solving schedules amenable to external hyperparameter optimisation.
@@ -547,8 +547,8 @@ ASF covers a wide variety of algorithm selection methods. Some return a single s
 
 \subsection{Performance prediction}
 \begin{itemize}
-    \item \textbf{Empirical performance model (EPM)}: Wraps a regression model with feature preprocessing, target normalization, optional imputation, and inverse transformation. It is used directly for performance prediction and internally by several selectors.
-    \item \textbf{EPM tuning}: Tunes empirical-performance-model hyperparameters and target transformations by validation performance. This supports scenario-specific performance predictors for selectors such as SATzilla and performance-model selection.
+    \item \textbf{Empirical performance model (\gls{epm})}: Wraps a regression model with feature preprocessing, target normalization, optional imputation, and inverse transformation. It is used directly for performance prediction and internally by several selectors.
+    \item \textbf{\gls{epm} tuning}: Tunes empirical-performance-model hyperparameters and target transformations by validation performance. This supports scenario-specific performance predictors for selectors such as SATzilla and performance-model selection.
 \end{itemize}
 
 
@@ -568,7 +568,7 @@ We evaluated portfolio pre-selectors on each ASlib scenario using the pre-define
 \textbf{Performance metric.} We report the normalised held-out pre-selection score. A score of 0 corresponds to selecting the scenario single-best solver, and a score of 1 corresponds to the full virtual-best solver over all solvers. Higher values indicate that the selected portfolio preserves more of the scenario-level oracle performance.
 
 \paragraph{Results.}
-\autoref{fig:aslib_preselection_a} show the distribution of normalised held-out scores across scenarios and folds for each portfolio size. The spread is largest for small portfolios, where selecting complementary solvers is a hard task, and there is a risk of the search process getting stuck in a locally optimal portfolio. By $k=10$, several search-based methods already recover most of the full VBS performance, and increasing $k$ further mainly reduces the differences between methods. Forward marginal contribution, beam search, random local search, and genetic algorithms are consistently competitive, whereas selecting using SBS-based pre-selection or backward marginal contribution is less robust at small and medium portfolio sizes.
+\autoref{fig:aslib_preselection_a} show the distribution of normalised held-out scores across scenarios and folds for each portfolio size. The spread is largest for small portfolios, where selecting complementary solvers is a hard task, and there is a risk of the search process getting stuck in a locally optimal portfolio. By $k=10$, several search-based methods already recover most of the full \gls{vbs} performance, and increasing $k$ further mainly reduces the differences between methods. Forward marginal contribution, beam search, random local search, and genetic algorithms are consistently competitive, whereas selecting using \gls{sbs}-based pre-selection or backward marginal contribution is less robust at small and medium portfolio sizes.
 
 \begin{figure*}[!htbp]
   \centering
@@ -657,7 +657,7 @@ We evaluated schedule-based presolvers on the same ASlib running time scenarios 
 \paragraph{Setup of experiments. }
 We evaluated learned per-instance selectors on the ASlib scenarios with predefined folds. Every learned selector first received the same fold-local forward marginal-contribution pre-selection step, retaining at most 10 solvers from the training fold. The selector was then tuned using SMAC for 50 trials using 10-fold cross-validation on the training fold and evaluated once on the held-out ASlib fold. The selector set consists of PerformanceModel~\citep{XuEtAl08}, MultiClassClassifier, PairwiseClassifier~\citep{XuEtAl12}, PairwiseRegressor, SimpleRanking, HARRIS, ISAC~\citep{KadEtAl10}, SNNAP, SUNNY, and OSLLinearSelector.
 
-\paragraph{Performance metric.} We report the percentage of the SBS--VBS gap closed. A value of 0 matches SBS and 100 matches VBS. Negative displayed values were clipped at $-100\%$ for readability.
+\paragraph{Performance metric.} We report the percentage of the \gls{sbs}--\gls{vbs} gap closed. A value of 0 matches \gls{sbs} and 100 matches \gls{vbs}. Negative displayed values were clipped at $-100\%$ for readability.
 
 \paragraph{Results.}
 Figures~\ref{fig:aslib_selection_gap_a}, \ref{fig:aslib_selection_gap_b}, and~\ref{fig:aslib_selection_gap_c} show that for each scenario, a different selector works well. PairwiseClassifier, PairwiseRegressor, SimpleRanking, and SNNAP are frequently among the stronger selectors, but the best method varies by scenario. For BNSL-2016 and TSP-LION2015 several selectors close a large fraction of the gap, while MIP-2016 and SAT20-MAIN remain more difficult, with all selectors solving only small fractions of the gap. MultiClassClassifier is competitive on some scenarios but less stable overall, supporting the observation made in \autoref{sec:experiments} that methods exploiting pairwise or ranking information are often better suited for selection than plain multi-class classification.
@@ -685,7 +685,7 @@ Figures~\ref{fig:aslib_selection_gap_a}, \ref{fig:aslib_selection_gap_b}, and~\r
     \includegraphics{figures/11/figures/analysis/selection_closed_gap_ipc2018.pdf}
     \caption{IPC2018}
   \end{subfigure}
-  \caption{ASlib algorithm-selection closed gap by scenario and selector, part 1. Bars show the percentage of the SBS--VBS gap closed by each selector; higher is better. Negative displayed values are clipped at $-100\%$.}
+  \caption{ASlib algorithm-selection closed gap by scenario and selector, part 1. Bars show the percentage of the \gls{sbs}--\gls{vbs} gap closed by each selector; higher is better. Negative displayed values are clipped at $-100\%$.}
   \label{fig:aslib_selection_gap_a}
 \end{figure*}
 
@@ -711,7 +711,7 @@ Figures~\ref{fig:aslib_selection_gap_a}, \ref{fig:aslib_selection_gap_b}, and~\r
     \includegraphics{figures/11/figures/analysis/selection_closed_gap_sat12_indu.pdf}
     \caption{SAT12-INDU}
   \end{subfigure}
-  \caption{ASlib algorithm-selection closed gap by scenario and selector, part 2. Bars show the percentage of the SBS--VBS gap closed by each selector; higher is better. Negative displayed values are clipped at $-100\%$.}
+  \caption{ASlib algorithm-selection closed gap by scenario and selector, part 2. Bars show the percentage of the \gls{sbs}--\gls{vbs} gap closed by each selector; higher is better. Negative displayed values are clipped at $-100\%$.}
   \label{fig:aslib_selection_gap_b}
 \end{figure*}
 
@@ -727,7 +727,7 @@ Figures~\ref{fig:aslib_selection_gap_a}, \ref{fig:aslib_selection_gap_b}, and~\r
     \includegraphics{figures/11/figures/analysis/selection_closed_gap_tsp_lion2015.pdf}
     \caption{TSP-LION2015}
   \end{subfigure}
-  \caption{ASlib algorithm-selection closed gap by scenario and selector, part 3. Bars show the percentage of the SBS--VBS gap closed by each selector; higher is better. Negative displayed values are clipped at $-100\%$.}
+  \caption{ASlib algorithm-selection closed gap by scenario and selector, part 3. Bars show the percentage of the \gls{sbs}--\gls{vbs} gap closed by each selector; higher is better. Negative displayed values are clipped at $-100\%$.}
   \label{fig:aslib_selection_gap_c}
 \end{figure*}
 
@@ -752,7 +752,7 @@ We used Python version 3.10.8, clingo version 5.8.0, SMAC3 version 2.3.1, scikit
     ASlib pre-solving & 1 & 2540 MB \\
     ASlib selectors & 1 & 2540 MB \\
     HPOBench & 1 & 2540 MB \\
-    OOD-Chameleon & 1 & 5210 MB  \\
+    \Gls{ood}-Chameleon & 1 & 5210 MB  \\
     AMLB selectors &  1 & 5210 MB \\
     ZAP selectors  & 24 & 124800 MB \\
     \bottomrule
@@ -842,11 +842,11 @@ The ASlib selector benchmark tunes learned selectors with SMAC for 50 trials usi
 
 \begin{table*}[!htbp]
   \centering
-  \caption{Hyperparameters used in the OOD-Chameleon selector experiment. Each subtable gives the settings for one selector. The ASF selectors (PairwiseClassifier, PairwiseRegressor and PerformanceModel) are based on random forest.}
+  \caption{Hyperparameters used in the \gls{ood}-Chameleon selector experiment. Each subtable gives the settings for one selector. The \gls{asf} selectors (PairwiseClassifier, PairwiseRegressor and PerformanceModel) are based on random forest.}
   \label{tab:ood_hyperparameters}
   \begin{subtable}[t]{0.48\textwidth}
     \centering
-    \caption{MLP}
+    \caption{\gls{mlp}}
     \begin{tabular}{ll}
       \toprule
       Hyperparameter & Value \\
@@ -882,7 +882,7 @@ The ASlib selector benchmark tunes learned selectors with SMAC for 50 trials usi
 
 \begin{table*}[!htbp]
   \centering
-  \caption{Parameters used in the HPOBench and ASlib pre-selection experiments. Each pre-selector is shown in a separate subtable. Both benchmarks use the VBS objective on the training matrix. MarginalContribution, SBS and beam search has no parameters}
+  \caption{Parameters used in the HPOBench and ASlib pre-selection experiments. Each pre-selector is shown in a separate subtable. Both benchmarks use the \gls{vbs} objective on the training matrix. MarginalContribution, \gls{sbs} and beam search has no parameters}
   \label{tab:aslib_preselection_hyperparameters}
 
   \begin{subtable}[t]{0.48\textwidth}
@@ -1107,7 +1107,7 @@ The ASlib selector benchmark tunes learned selectors with SMAC for 50 trials usi
       Hyperparameter & Search space \\
       \midrule
       Regularisation & $[0,10]$;  \\
-      optimizer & [L-BFGS-B, CG, BFGS, TNC, SLSQP] \\
+      optimizer & [L-BFGS-B, \gls{cg}, BFGS, TNC, SLSQP] \\
       max iterations & $[100,5000]$\\
       tolerance & $[10^{-6},10^{-2}]$ \\
       \bottomrule

@@ -67,6 +67,12 @@
 \newcommand{\eg}{e.\,g.}
 \newcommand{\Eg}{E.\,g.} 
 \newcommand{\changed}[1]{#1} 
+\newcommand{\new}[1]{#1}
+\newcommand{\gb}{\textsf{GraphBench}\xspace}
+\newcommand{\solver}[1]{\textsf{#1}}
+\newcommand{\meanstd}[2]{\ensuremath{#1 \pm #2}}
+\newcommand{\dataset}[1]{\textsf{#1}}
+\newcommand{\tabledefaults}{\small\centering}
 % ****************************************************************************************************
 
 
@@ -119,11 +125,9 @@
 \usepackage[pass]{geometry} % to allow changing page geometry for specific pages (like Dedication)
 \usepackage{fixltx2e} % fixes some LaTeX stuff --> since 2015 in the LaTeX kernel (see below)
 %\usepackage[latest]{latexrelease} % will be used once available in more distributions (ISSUE #107)
-\PassOptionsToPackage{printonlyused,smaller}{acronym} 
-    \usepackage{acronym} % nice macros for handling all acronyms in the thesis
-    %\renewcommand{\bflabel}[1]{{#1}\hfill} % fix the list of acronyms --> no longer working
-    %\renewcommand*{\acsfont}[1]{\textsc{#1}} 
-    \renewcommand*{\aclabelfont}[1]{\acsfont{#1}}
+\usepackage[acronym,toc]{glossaries}
+\makeglossaries
+\loadglsentries{FrontBackmatter/AcronymsDefinitions}
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric,arrows,arrows.meta,positioning,fit,backgrounds}
 \definecolor{myyellow}{RGB}{251,210,87}
@@ -200,6 +204,7 @@
 % ********************************************************************
 \PassOptionsToPackage{pdftex,hyperfootnotes=false,pdfpagelabels}{hyperref}
     \usepackage{hyperref}  % backref linktocpage pagebackref
+    \usepackage{cleveref}
 \pdfcompresslevel=9
 \pdfadjustspacing=1 
 \PassOptionsToPackage{pdftex}{graphicx}
