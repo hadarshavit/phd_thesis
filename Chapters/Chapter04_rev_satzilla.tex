@@ -1,9 +1,9 @@
-\chapter{Revisiting SATzilla Features in 2024}\label{ch:rev_satzilla}
+\chapter{Revisiting SATzilla Features in 2024}\label{ch:rev_SATzilla}
 
 
 % \aj{TODO 1: properly introduce all 3 downstream tasks. Where??? Either we say in the intro that they will be properly defined in respective Sections 4.2, 4.3, 4.4, or we introduce them in related work but this will require further restructuring of the abovementioned subsections.}
 
-% \aj{TODO 2: check names (SATZilla 2024 is used all of a sudden at some point)}
+% \aj{TODO 2: check names (SATzilla 2024 is used all of a sudden at some point)}
 
 The Boolean satisfiability problem (\gls{sat}) is an important problem in computer science from both theoretical and practical viewpoints.
 Common usages of \gls{sat} include hardware and software verification, cryptography, and more. 
@@ -12,29 +12,29 @@ However, as \gls{sat} is $\mathcal{NP}$-complete, it takes substantial time and 
 % \aj{Here I would add a sentence: `That is why solving SAT has been tackled in this or that way, alternative to the exact methods.' Something like that, more polished.}
 In order to deepen our understanding of \gls{sat} itself and develop better \gls{sat} solvers, it is of crucial importance to be able to describe \gls{sat} instances via an informative set of features.
 
-% \aj{I agree with you that the intro should be split into intro and related work -- I went ahead and did it. Here I would say that `the most well-known and most widely used such features are the SATZilla features. They have been successfully used in various domains, such as EPMs and algorithm selection (add references), algorithm configuration (add references), benchmark generation (add references). However, ...' and then it logically continues into the motivation for the current paper (they are old) and the contributions (you revisit them).}
+% \aj{I agree with you that the intro should be split into intro and related work -- I went ahead and did it. Here I would say that `the most well-known and most widely used such features are the SATzilla features. They have been successfully used in various domains, such as EPMs and algorithm selection (add references), algorithm configuration (add references), benchmark generation (add references). However, ...' and then it logically continues into the motivation for the current paper (they are old) and the contributions (you revisit them).}
 
-Some of the most widely adopted such features are the SATZilla features~\cite{NudEtAl2004,HutEtAl2014}. 
+Some of the most widely adopted such features are the SATzilla features~\cite{NudEtAl2004,HutEtAl2014}. 
 % \hh{slightly modified -- please check:}
-These are a fixed set of features that are calculated from the DIMACS \gls{cnf} representation of a \gls{sat} instance. The SATZilla features consist of multiple groups, ranging from basic syntactic features describing the formula, such as its number of variables and clauses, to more complicated features, such as probing features derived from short runs of \gls{sat} solvers. Another type of features are based on statistics of graph representations of a given formula.
+These are a fixed set of features that are calculated from the DIMACS \gls{cnf} representation of a \gls{sat} instance. The SATzilla features consist of multiple groups, ranging from basic syntactic features describing the formula, such as its number of variables and clauses, to more complicated features, such as probing features derived from short runs of \gls{sat} solvers. Another type of features are based on statistics of graph representations of a given formula.
 
-The SATZilla features have been successfully used in various domains, such as empirical performance models (\glspl{epm}; also known as performance or running time prediction) and algorithm selection~\cite{XuEtAl2008,XuEtAl2012}, algorithm configuration~\cite{HutEtAl2011}, and benchmark generation~\cite{LeyEtAl2009}. 
+The SATzilla features have been successfully used in various domains, such as empirical performance models (\glspl{epm}; also known as performance or running time prediction) and algorithm selection~\cite{XuEtAl2008,XuEtAl2012}, algorithm configuration~\cite{HutEtAl2011}, and benchmark generation~\cite{LeyEtAl2009}. 
 % \hh{minor modifications:}
 The features are also used for caching in CDCL-based model counting solvers~\cite{RooEtAl2022} and in a variety of \gls{sat} solvers that incorporate machine learning techniques~\cite{GuoEtAl2023}
-However, the SATZilla features in their latest version date back to 2012. 
+However, the SATzilla features in their latest version date back to 2012. 
 % Since then, various changes have happened in the SAT community. 
 Since then, the \gls{sat} community has undergone various changes.
-Most notably, \gls{sat} instances that we typically encounter today have a larger number of variables and clauses, thus taking significantly more time and memory to preprocess. Currently, the existing SATZilla feature extraction tool is unable to compute many of these features because of time and memory limitations.
-% \aj{Recent efforts have attempted to port the SATZilla implementation into Python and propose additional features~\cite{paper1, paper2, paper3, paper4}. However, Python is not an optimal language choice for the purpose of SAT solving, as it is substantially slower to execute than C++.}
+Most notably, \gls{sat} instances that we typically encounter today have a larger number of variables and clauses, thus taking significantly more time and memory to preprocess. Currently, the existing SATzilla feature extraction tool is unable to compute many of these features because of time and memory limitations.
+% \aj{Recent efforts have attempted to port the SATzilla implementation into Python and propose additional features~\cite{paper1, paper2, paper3, paper4}. However, Python is not an optimal language choice for the purpose of SAT solving, as it is substantially slower to execute than C++.}
 
-In this paper, we revisit the SATZilla features and introduce a new version of the feature extraction tool. First, we replace the underlying solvers and the preprocessor with their most up-to-date versions. We then fix compilation errors and other memory errors related to dealing with larger formulas. Finally, we allow the user to set the time limits for feature computation. 
+In this paper, we revisit the SATzilla features and introduce a new version of the feature extraction tool. First, we replace the underlying solvers and the preprocessor with their most up-to-date versions. We then fix compilation errors and other memory errors related to dealing with larger formulas. Finally, we allow the user to set the time limits for feature computation. 
 We compare the performance of our new tool with the old one in two \gls{sat} competitions. We measure the running times and the number of extracted features to check for performance gains of our new tool. We then evaluate the extracted features on three downstream tasks: satisfiability prediction, performance prediction and algorithm selection. We show that our new tool yields an important advantage in performance compared to the old tool across all three tasks.
 
-The rest of the paper is organised as follows. We give a historical overview of the development and applications of the SATZilla features in~\autoref{sec:related-work}. We then introduce the technical definitions, as well as the standard methodological pipeline in~\autoref{sec:satzilla-features}, wrapping it up with the contributions of this study. The results are presented in~\autoref{sec:experiments}, and conclusions drawn in~\autoref{sec:conclusions}.
+The rest of the paper is organised as follows. We give a historical overview of the development and applications of the SATzilla features in~\autoref{sec:related-work}. We then introduce the technical definitions, as well as the standard methodological pipeline in~\autoref{sec:SATzilla-features}, wrapping it up with the contributions of this study. The results are presented in~\autoref{sec:experiments}, and conclusions drawn in~\autoref{sec:conclusions}.
 
 \section{Related work}
 \label{sec:related-work}
-% Features of SAT have numerous usage, including explainability, performance prediction, algorithm, selection and satisfiability prediction. In this section, we describe previous usages of the SATZilla features.
+% Features of SAT have numerous usage, including explainability, performance prediction, algorithm, selection and satisfiability prediction. In this section, we describe previous usages of the SATzilla features.
 
 
 % \textbf{Performalknce prediction}
@@ -46,22 +46,22 @@ The rest of the paper is organised as follows. We give a historical overview of 
 % \textbf{Explainability}
 
 
-The SATZilla features were first introduced by Nudelman~et~al.~\cite{NudEtAl2004} to construct \glspl{epm}, \emph{i.e.}, machine learning models that predict the running time of various \gls{sat} solvers given the features representing \gls{sat} instances. The authors identified key features that contribute the most towards having a good \gls{epm} prediction.
+The SATzilla features were first introduced by Nudelman~et~al.~\cite{NudEtAl2004} to construct \glspl{epm}, \emph{i.e.}, machine learning models that predict the running time of various \gls{sat} solvers given the features representing \gls{sat} instances. The authors identified key features that contribute the most towards having a good \gls{epm} prediction.
 % They then used those models to identify key features that are most useful for the prediction. 
 Consequently, they used the \glspl{epm} as a basis for algorithm selection, in which the algorithm that is selected corresponds to the one with the lowest predicted running time. 
 % they used the instance features to construct an algorithm portfolio (also known as algorithm selection which). 
 They leveraged the \textit{performance complementarity} phenomenon of \gls{sat} solvers, where no \gls{sat} solver dominates all others over all instances. 
 Therefore, selecting the best solver for each instance results in substantially better performance compared to choosing any standalone solver for all instances.
-The SATZilla features were also successfully used for the satisfiability prediction task for \gls{sat} instances from various distributions~\cite{DevOsu2008}. 
+The SATzilla features were also successfully used for the satisfiability prediction task for \gls{sat} instances from various distributions~\cite{DevOsu2008}. 
 
 % \aj{Ok, I will stop reading this section at this stage, since I believe that it can be overall improved in terms of flow and storyline, but the contents itself is good, i.e., it will need restructuring only, which might be easier to do in your presence when you are back from Leiden. Key points: EPMs and algo selection, algo configuration and benchmark generation are all introduced earlier, and I think this entire section can be subsplit into those 3 corresponding paragraphs (or with 3 `noindent textbf' to save space)}
 
-Further developments in algorithm selection led to the 2007 version of the SATZilla algorithm selector~\cite{XuEtAl2008}, which combined running time and satisfiability prediction with other improvements. It won multiple medals in the \gls{sat} competition. This shows that extracting features from \gls{sat} instances can also speed up the solving process, and not only help understanding \gls{sat}. A newer version of the SATZilla algorithm selector was introduced in 2012~\cite{XuEtAl2012}, winning multiple awards as well. It used a random forest as a predictor, and introduced an ensemble of pairwise classifiers to establish a ranking of the solvers, instead of predicting the running times directly. Additional features were introduced thereafter, revealing further important information about \gls{sat} instances. 
-% Again, the SATZilla 2012 selector was awarded with several medals in the SAT competition.
+Further developments in algorithm selection led to the 2007 version of the SATzilla algorithm selector~\cite{XuEtAl2008}, which combined running time and satisfiability prediction with other improvements. It won multiple medals in the \gls{sat} competition. This shows that extracting features from \gls{sat} instances can also speed up the solving process, and not only help understanding \gls{sat}. A newer version of the SATzilla algorithm selector was introduced in 2012~\cite{XuEtAl2012}, winning multiple awards as well. It used a random forest as a predictor, and introduced an ensemble of pairwise classifiers to establish a ranking of the solvers, instead of predicting the running times directly. Additional features were introduced thereafter, revealing further important information about \gls{sat} instances. 
+% Again, the SATzilla 2012 selector was awarded with several medals in the SAT competition.
 
-% In 2012, additional features were introduced \cite{HutEtAl2014}. These features include more computationally expensive features, as well as solver-based features, obtained by running SAT solvers for short durations. The newly introduced features further improved the prediction performance. The 2012 version of SATZilla won additional medals in the SAT competition.
+% In 2012, additional features were introduced \cite{HutEtAl2014}. These features include more computationally expensive features, as well as solver-based features, obtained by running SAT solvers for short durations. The newly introduced features further improved the prediction performance. The 2012 version of SATzilla won additional medals in the SAT competition.
 
-Another common usage of the SATZilla features is (model-based) algorithm configuration. To this end, the hyperparameters of \gls{sat} solvers are optimised such that their performance is as good as possible on all instances. As running \gls{sat} solvers is computationally expensive, a surrogate model is employed; it takes as an input a configuration of hyperparameters and instance features and predicts the performance of the \gls{sat} solver using a given configuration on a given instance. The instance features boost the accuracy of the surrogate model. An example of that is SMAC~\cite{HutEtAl2011}, which successfully used the SATZilla features to optimise the performance of a wide range of \gls{sat} solvers on various benchmarks.
+Another common usage of the SATzilla features is (model-based) algorithm configuration. To this end, the hyperparameters of \gls{sat} solvers are optimised such that their performance is as good as possible on all instances. As running \gls{sat} solvers is computationally expensive, a surrogate model is employed; it takes as an input a configuration of hyperparameters and instance features and predicts the performance of the \gls{sat} solver using a given configuration on a given instance. The instance features boost the accuracy of the surrogate model. An example of that is SMAC~\cite{HutEtAl2011}, which successfully used the SATzilla features to optimise the performance of a wide range of \gls{sat} solvers on various benchmarks.
 
 
 Last but not least, feature-based \glspl{epm} are proven to be useful for benchmark generation~\cite{LeyEtAl2009}. In this context, given a new instance, we compute the features, which is usually cheaper than running a \gls{sat} solver, and use the \gls{epm} to predict whether the instance is hard (or not) for the solvers at hand.
@@ -70,13 +70,13 @@ Last but not least, feature-based \glspl{epm} are proven to be useful for benchm
 % Using features to describe SAT instance it is possible to make SAT solving faster. Examples for usages of SAT features include:
 % \begin{itemize}
 %     \item Understanding SAT by analysing the relation between features and the satisfiablitiy of the formulas or the connection between running times and the features.
-%     \item Algorithm selection which exploits the performance complimentarity between SAT solvers to build a meta-solver that given a new instance, chooses a solver that should work optimally for the instance. In algorithm selection, instance features are used as an input for a machine learning model(s) in order to select the solver. Furthermore, there is currently no feature-free method for algorithm selection of SAT solvers, hence the importance of good feature extractor. Known algorithm selector are SATZilla \cite{} and 3S \cite{}.
+%     \item Algorithm selection which exploits the performance complimentarity between SAT solvers to build a meta-solver that given a new instance, chooses a solver that should work optimally for the instance. In algorithm selection, instance features are used as an input for a machine learning model(s) in order to select the solver. Furthermore, there is currently no feature-free method for algorithm selection of SAT solvers, hence the importance of good feature extractor. Known algorithm selector are SATzilla \cite{} and 3S \cite{}.
 %     \item Algorithm configuration, which aims to find a good performing configuration of hyperparameters for a given algorithm (such as SAT solver), that works the best over a set of instances. In algorithm configuration, instance features are used to better predict the performance of each configuration on different instances, thus predicting the performance more accurately.
 %     \item Benchmark generation where empirical performance models (EPMs) can be constructed to predict the performance of SAT solvers based on the instances features. Then, given a new instance, computing the features, which are usually chepaer than running a SAT solver, and using the EMPs to predict whether the instances are hard for the given solvers.
 % \end{itemize}
 
-% A well-known set of features for SAT is the SATZilla features, a set of long-studied SAT features. The SATZilla features were successfully used for various downstream tasks. Most notably, they were used as the input for the SATZilla algorithm selector that won multiple medals in many SAT competitions. The SATZilla features consists of a few feature groups, ranging from basic description of the formula, like the number of clauses and variables, to features based running SAT solvers for short period and analysing the runs statistics.
-% In the next sections we describe the SATZilla features and the changes we made
+% A well-known set of features for SAT is the SATzilla features, a set of long-studied SAT features. The SATzilla features were successfully used for various downstream tasks. Most notably, they were used as the input for the SATzilla algorithm selector that won multiple medals in many SAT competitions. The SATzilla features consists of a few feature groups, ranging from basic description of the formula, like the number of clauses and variables, to features based running SAT solvers for short period and analysing the runs statistics.
+% In the next sections we describe the SATzilla features and the changes we made
 % \begin{itemize}
 %     \item UI improvements (allowing to save assignment and preprocessed formula), fine-grained timeouts (also allowing them as CLI arguments)
 %     \item More features extracted even for large formulas (preprocessing takes more time)
@@ -87,13 +87,13 @@ Last but not least, feature-based \glspl{epm} are proven to be useful for benchm
 
 % \section{Preliminaries}
 
-\section{SATZilla features}
-\label{sec:satzilla-features}
-% \aj{It is important to more clearly distinguish between the related work section, which talks about what SATZilla features have been historically used for, and this section, which 1) defines them on a lower level and explains the mechanism of feature computation, thus being more technical, and 2) introduces your contributions, i.e., explains the new methodology. Whether this is best done via changing the section titles and restructuring, or in another way, I am not sure right now. Key point: some of the things that you mention here for the absolute first time should actually be placed in the introduction, such that this section only builds upon that. And the contributions of the paper should be more highlighted, so it is clear what is old and what is new. We can discuss how to do this when you are back.}
+\section{SATzilla features}
+\label{sec:SATzilla-features}
+% \aj{It is important to more clearly distinguish between the related work section, which talks about what SATzilla features have been historically used for, and this section, which 1) defines them on a lower level and explains the mechanism of feature computation, thus being more technical, and 2) introduces your contributions, i.e., explains the new methodology. Whether this is best done via changing the section titles and restructuring, or in another way, I am not sure right now. Key point: some of the things that you mention here for the absolute first time should actually be placed in the introduction, such that this section only builds upon that. And the contributions of the paper should be more highlighted, so it is clear what is old and what is new. We can discuss how to do this when you are back.}
 
-The SATZilla features describe the \gls{sat} formula using various representations and statistics. We briefly introduce three graph representations of a \gls{sat} formula, as undirected graphs are a meaningful representation of \gls{sat}, maintaining the permutation invariance: a) variable graph: nodes are variables, an edge exists if variables appear in the same clause; b) clause graph: nodes are clauses, an edge exists when two clauses share a negated literal; and c) variable-clause graph: nodes are variables and clauses, an edge exists between a variable node and a clause node if the variable appears in the clause.
+The SATzilla features describe the \gls{sat} formula using various representations and statistics. We briefly introduce three graph representations of a \gls{sat} formula, as undirected graphs are a meaningful representation of \gls{sat}, maintaining the permutation invariance: a) variable graph: nodes are variables, an edge exists if variables appear in the same clause; b) clause graph: nodes are clauses, an edge exists when two clauses share a negated literal; and c) variable-clause graph: nodes are variables and clauses, an edge exists between a variable node and a clause node if the variable appears in the clause.
 % For reasons of space, we do not formally define the low-level components of each feature. We refer the reader to~\cite{}
-% We first introduce three graph representations of a SAT formula which are extensively used in the SATZilla features, as graphs are a meaningful representation of SAT, maintaining the permutation invariance. A variable graph is an undirected graph in which each node corresponds to a variable and an edge between two variables exist if the variables appear in the same clause. A clause graph is an undirected graph that contains a node for each clause and an edge when two clauses share a negated literal. A variable-clause graph is an undirected graph that has a node for every variable and clause. A variable node is connected to a clause node if the variable appears in the clause.
+% We first introduce three graph representations of a SAT formula which are extensively used in the SATzilla features, as graphs are a meaningful representation of SAT, maintaining the permutation invariance. A variable graph is an undirected graph in which each node corresponds to a variable and an edge between two variables exist if the variables appear in the same clause. A clause graph is an undirected graph that contains a node for each clause and an edge when two clauses share a negated literal. A variable-clause graph is an undirected graph that has a node for every variable and clause. A variable node is connected to a clause node if the variable appears in the clause.
 
 Feature computation starts with the \emph{preprocessing} of the formula. This step, performed before solving an instance, renders the formula more accessible for \gls{sat} solvers. This means that the features are also computed on the version of the formula that is close to the one seen by the solvers. We believe that all these aspects can be boosted by using a modern preprocessor.
 Features are classically computed using the \textsc{SATElite} preprocessor. We instead use the SBVA preprocessor, suggested by the winning solver from the 2023 \gls{sat} Competition. SBVA is also able to terminate after a set cutoff time, allowing for partial preprocessing, while \textsc{SATElite} does not include this functionality.
@@ -105,7 +105,7 @@ The preprocessed formula can then be directly used by a \gls{sat} solver without
 % which originally uses the \textsc{SATElite} preprocessor. We instead use the SBVA preprocessor, suggested by the winning solver from the 2023 SAT competition. SBVA is also able to stop the preprocessing after a set cutoff time, allowing for partial preprocessing, while \textsc{SATElite} does not include this functionality.
 % By using a modern preprocessor we can achieve this goal better. Furthermore, the preprocessed formula can be used by a SAT solver afterwards, which can improve the performance of algorithm selection by not requiring additional preprocessing.
 
-Following the preprocessing, the \emph{feature extraction} begins. There are ten feature groups that can be extracted. We note that we describe the feature groups according to their implementation in the SATZilla feature extraction tool, not according to their definitions from the corresponding paper~\cite{HutEtAl2014}. We point out that all feature groups include the time required to compute the features in the group.
+Following the preprocessing, the \emph{feature extraction} begins. There are ten feature groups that can be extracted. We note that we describe the feature groups according to their implementation in the SATzilla feature extraction tool, not according to their definitions from the corresponding paper~\cite{HutEtAl2014}. We point out that all feature groups include the time required to compute the features in the group.
 
 % \begin{itemize}
 \noindent\textbf{Preliminary} features include the number of variables and clauses before/after preprocessing. The running time of this feature group includes the preprocessing time and the time required to read the formula. \changed{This group contains 7 features.}
@@ -151,7 +151,7 @@ Another change we applied to the feature extraction tool is allowing a more prec
 
 \section{Experiments}
 \label{sec:experiments}
-We evaluate our new SATZilla feature extraction tool on the formulas stemming from two latest (2022 and 2023) \gls{sat} Competitions. We first look at the feature extraction times and then evaluate the features on three downstream tasks: satisfiability prediction, running time prediction, and algorithm selection.
+We evaluate our new SATzilla feature extraction tool on the formulas stemming from two latest (2022 and 2023) \gls{sat} Competitions. We first look at the feature extraction times and then evaluate the features on three downstream tasks: satisfiability prediction, running time prediction, and algorithm selection.
 % In our experiments, we use the formulas from the 2022 and 2023 SAT competitions. 
 To assess the advantage of using the new version of the extraction tool, we extract the features using both our new version and the 2012 version of the tool, with a time limit of 180 seconds per feature group. 
 
@@ -161,7 +161,7 @@ We use a cluster of 18 nodes, each equipped with 2 AMD EPYC 7543 32-core CPUs wi
 \label{ssec:feature-computation-time}
 
 \begin{figure*}[h]
-    \caption[Percentage of computed features (2022 SAT Competition)]{Percentage of features computed by the old tool (SATZilla 2012; in red) and the new tool (SATZilla 2024; in blue) over the available time budget for each feature group on the 2022 \gls{sat} Competition. For most feature groups, the new tool extracts features from more instances than the old one.}
+    \caption[Percentage of computed features (2022 SAT Competition)]{Percentage of features computed by the old tool (SATzilla 2012; in red) and the new tool (SATzilla 2024; in blue) over the available time budget for each feature group on the 2022 \gls{sat} Competition. For most feature groups, the new tool extracts features from more instances than the old one.}
     \centering
     \begin{subfigure}[b]{0.24\textwidth}
         \centering
@@ -242,7 +242,7 @@ We use a cluster of 18 nodes, each equipped with 2 AMD EPYC 7543 32-core CPUs wi
 \end{figure*}
 
 \begin{figure*}[h]
-    \caption[Percentage of computed features (2023 SAT Competition)]{Percentage of features computed by the old tool (SATZilla 2012; in red) and the new tool (SATZilla 2024; in blue) over the available time budget for each feature group on the 2023 \gls{sat} Competition. For most feature groups, the new tool extracts features from more instances than the old one.}
+    \caption[Percentage of computed features (2023 SAT Competition)]{Percentage of features computed by the old tool (SATzilla 2012; in red) and the new tool (SATzilla 2024; in blue) over the available time budget for each feature group on the 2023 \gls{sat} Competition. For most feature groups, the new tool extracts features from more instances than the old one.}
 
     \begin{subfigure}[b]{0.24\textwidth}
         \centering
@@ -322,7 +322,7 @@ We use a cluster of 18 nodes, each equipped with 2 AMD EPYC 7543 32-core CPUs wi
     \label{fig:feat_comtimes_2023}
 \end{figure*}
 
-\autoref{fig:feat_comtimes_2022} and \autoref{fig:feat_comtimes_2023} show the percentage of features computed over the available time budget using the old (depicted in red) and new (depicted in blue) SATZilla tool on the 2022 and 2023 \gls{sat} Competition data, respectively. For simplicity, due to the similarity of the overall results between the two competitions, we draw more detailed insights based on plots from the 2023 edition (\autoref{fig:feat_comtimes_2023}). 
+\autoref{fig:feat_comtimes_2022} and \autoref{fig:feat_comtimes_2023} show the percentage of features computed over the available time budget using the old (depicted in red) and new (depicted in blue) SATzilla tool on the 2022 and 2023 \gls{sat} Competition data, respectively. For simplicity, due to the similarity of the overall results between the two competitions, we draw more detailed insights based on plots from the 2023 edition (\autoref{fig:feat_comtimes_2023}). 
 
 We first observe that the new tool is able to extract more features than the old one for most feature groups. In particular, we highlight the performance gains on the preliminary feature group (\autoref{fig:satcomp23_pre}), for which the new tool can extract the features for all formulas, compared to less than $80\%$ of the formulas when using the the old tool. We note that for some feature groups, like graph learning (\autoref{fig:satcomp23_cg}), the old tool is able to extract more features compared to the preliminary feature group. This is due to the fact that the old tool extracts the preliminary, basic, KLB and \gls{clg} feature groups together. Therefore, in case computing one of those groups takes a long time, the whole feature extraction fails.
 
@@ -337,7 +337,7 @@ We also note that for KLB and \gls{clg} features there is an advantage for the o
 \label{ssec:satisfiability-prediction}
 
 The first downstream task is satisfiability prediction, for which we measure the performance when using features extracted by our tool. 
-% Previously, SATZilla features were successfully used on this task for SAT instances from various distributions~\cite{DevOsu2008}. 
+% Previously, SATzilla features were successfully used on this task for SAT instances from various distributions~\cite{DevOsu2008}. 
 We use the random forest (RF) classifier from the scikit-learn package to learn the mapping between features (representing \gls{sat} instances) and outputs (satisfiable or unsatisfiable). We optimise the hyperparameters of the RF for one hour using SMAC3~\cite{LinEtAl2022} on 10-fold cross-validation of the training data.
 We consider instances from the 2022 and 2023 \gls{sat} Competitions for which we know the satisfiability result (put differently, we omit instances for which the solution is unknown). On each competition, we evaluate the performance of the RF model using 10-fold cross-validation. This results in having outer cross-validation (for evaluation) and inner cross-validation (for training). Such techniques have been previously used by AutoFolio~\cite{LinEtAl2015}.
 
@@ -345,7 +345,7 @@ We present the satisfiability prediction accuracy scores in \autoref{fig:sat_pre
 
 
 \begin{figure*}[h]
-    \caption[Satisfiability prediction accuracy]{Accuracy of the satisfiability prediction task using a random forest with features extracted by the old (SATZilla 2012) and the new tool (SATZilla 2024). We see an overall higher accuracy for the new tool, which results from higher accuracy on satisfiable instances. On unsatisfiable ones, the accuracy remains the same.}
+    \caption[Satisfiability prediction accuracy]{Accuracy of the satisfiability prediction task using a random forest with features extracted by the old (SATzilla 2012) and the new tool (SATzilla 2024). We see an overall higher accuracy for the new tool, which results from higher accuracy on satisfiable instances. On unsatisfiable ones, the accuracy remains the same.}
     \label{fig:sat_prediction}
     \begin{subfigure}[b]{0.49\textwidth}
         \centering
@@ -375,7 +375,7 @@ In line with the previous task, we perform inner and outer cross-validation and 
 We look into the performance of the \gls{epm} for running time prediction on all solvers from the 2022 and 2023 \gls{sat} Competitions. Here, we do not actually run solvers on instances to record their running times, but rather use the running times reported by the competitions. We display the results for the 10 best solvers from each competition in \autoref{fig:rt_pred} (the results for all solvers can be found in the supplementary material). We see that using the features extracted by the new tool leads to the lower \gls{rmse} for all solvers, compared to using those extracted by the old tool. For some solvers, we observe a significantly lower \gls{rmse}, like Kissat{\_}MAB{\_}prop-no{\_}sym, where using the new tool decreases the \gls{rmse} from 0.84 to 0.69. \autoref{fig:rmse_hists} shows the histogram of the error percentage for all solvers in the 2022 and 2023 \gls{sat} Competitions. We see that for the 2022 competition, the new tool has more instances with error rate lower than $10\%$ compared to the old version. For the 2023 competition, using the features extracted with the new version, more instances are predicted with less than $1\%$ error. Histograms per solver are available in \autoref{sec:rts_hists_per_solver}.
 
 \begin{figure*}[h]
-    \caption[RMSE of running time prediction]{Root mean square error (\gls{rmse}) of (log-transformed) running time prediction using a random forest with features extracted by the old (SATZilla 2012; in red) and the new tool (SATZilla 2024; in blue), on \gls{sat} solvers from the 2022 and 2023 \gls{sat} Competitions. The new tool achieves lower \gls{rmse} for all solvers.}
+    \caption[RMSE of running time prediction]{Root mean square error (\gls{rmse}) of (log-transformed) running time prediction using a random forest with features extracted by the old (SATzilla 2012; in red) and the new tool (SATzilla 2024; in blue), on \gls{sat} solvers from the 2022 and 2023 \gls{sat} Competitions. The new tool achieves lower \gls{rmse} for all solvers.}
     \label{fig:rt_pred}
     \begin{subfigure}[b]{0.99\textwidth}
         \centering
@@ -396,7 +396,7 @@ We look into the performance of the \gls{epm} for running time prediction on all
 
 
 \begin{figure*}[h]
-    \caption[Error percentage histogram of running time prediction]{Histogram of the error percentage of the root mean square error (\gls{rmse}) of (log-transformed) running time prediction using a random forest with features extracted by the old (SATZilla 2012; in red) and the new tool (SATZilla 2024; in blue), on \gls{sat} solvers from the 2022 and 2023 \gls{sat} Competitions. The new tool achieves lower error percentages.}
+    \caption[Error percentage histogram of running time prediction]{Histogram of the error percentage of the root mean square error (\gls{rmse}) of (log-transformed) running time prediction using a random forest with features extracted by the old (SATzilla 2012; in red) and the new tool (SATzilla 2024; in blue), on \gls{sat} solvers from the 2022 and 2023 \gls{sat} Competitions. The new tool achieves lower error percentages.}
     \label{fig:rmse_hists}
     \begin{subfigure}[b]{0.49\textwidth}
         \centering
@@ -419,9 +419,9 @@ We look into the performance of the \gls{epm} for running time prediction on all
 % \begin{table}[h]
 %     \setlength{\tabcolsep}{4pt}
 %     \centering
-%     \caption{Root mean square error (RMSE) of (log-transformed) running time prediction using a random forest with features extracted by the old (SATZilla 2012) and the new tool (SATZilla 2024), on SAT solvers from the 2022 and 2023 SAT competitions. The new tool achieves lower RMSE for all solvers.}
+%     \caption{Root mean square error (RMSE) of (log-transformed) running time prediction using a random forest with features extracted by the old (SATzilla 2012) and the new tool (SATzilla 2024), on SAT solvers from the 2022 and 2023 SAT competitions. The new tool achieves lower RMSE for all solvers.}
 %     \begin{tabular}{ccc}
-%         Solver & SATZilla 2012 & SATZilla 2024 \\
+%         Solver & SATzilla 2012 & SATzilla 2024 \\
 %         \hline
 %         Kissat{\_}MAB-HyWalk & 0.78 & \textbf{0.69} \\
 %         kissat{\_}inc & 0.76 & \textbf{0.70} \\
@@ -459,11 +459,11 @@ We then use AutoFolio~\cite{LinEtAl2015} as an algorithm selector, which consist
 % Then, autofolio uses algorithm configuration to find the best algorithm selector. 
 As algorithm portfolio for the selection, we use the 10 best solvers from each \gls{sat} competition. We train the selector for 8 hours.
 
-\autoref{fig:closed_gap} shows the closed gap results on the 2022 and 2023 \gls{sat} Competitions. Positive closed gap values on both scenarios using both the old and the new tool indicate that, in general, SATZilla features are useful for the algorithm selection task. 
+\autoref{fig:closed_gap} shows the closed gap results on the 2022 and 2023 \gls{sat} Competitions. Positive closed gap values on both scenarios using both the old and the new tool indicate that, in general, SATzilla features are useful for the algorithm selection task. 
 % First, we see that using both feature groups, on both scenarios there are positive closed gap values, which indicates that the features are useful for algorithm selection. 
 Importantly, features extracted with the new tool lead to better closed gap values on both scenarios.
 % \hh{slightly reworded (for language):}
-In \autoref{fig:ecdf_as}, we provide ECDF plots showing the fraction of instances solved over time. In the 2022 \gls{sat} Competition scenario, the old version of the tool performs worse than the \gls{sbs} until a budget of approximately 1000 seconds, while the new version of the tool performs similarly to the \gls{sbs}. After 1000 seconds, both versions of the SATZilla features perform similarly. In the 2023 \gls{sat} Competition scenario, the new tool performs better than the old one for budgets between 100 and 1000 seconds. With a budget of less than 10 seconds, the old tool solves more instances. 
+In \autoref{fig:ecdf_as}, we provide ECDF plots showing the fraction of instances solved over time. In the 2022 \gls{sat} Competition scenario, the old version of the tool performs worse than the \gls{sbs} until a budget of approximately 1000 seconds, while the new version of the tool performs similarly to the \gls{sbs}. After 1000 seconds, both versions of the SATzilla features perform similarly. In the 2023 \gls{sat} Competition scenario, the new tool performs better than the old one for budgets between 100 and 1000 seconds. With a budget of less than 10 seconds, the old tool solves more instances. 
 % \hh{The following sentence doesn't make sense to me -- please reword:}
 Overall, the ECDF plots reflect well what is shown in \autoref{fig:closed_gap}, where we see that the new tool exhibits a few percents higher closed gap value.
 
@@ -472,13 +472,13 @@ Overall, the ECDF plots reflect well what is shown in \autoref{fig:closed_gap}, 
 
 \begin{figure}[h]
     \centering
-    \caption[Closed gap values for algorithm selection]{Closed gap values for the algorithm selection task using the old (SATZilla 2012; in red) and the new tool (SATZilla 2024; in blue) on the 2022 and 2023 \gls{sat} Competitions; higher is better.}
+    \caption[Closed gap values for algorithm selection]{Closed gap values for the algorithm selection task using the old (SATzilla 2012; in red) and the new tool (SATzilla 2024; in blue) on the 2022 and 2023 \gls{sat} Competitions; higher is better.}
     \includegraphics{figures/04/figs/as_bar_2023.pdf}
     \label{fig:closed_gap}
 \end{figure}
 
 \begin{figure*}[h]
-    \caption[ECDF plots for algorithm selection]{ECDF plots for the algorithm selection task using the old (SATZilla 2012) and the new tool (SATZilla 2024) on the 2022 and 2023 \gls{sat} Competitions.}
+    \caption[ECDF plots for algorithm selection]{ECDF plots for the algorithm selection task using the old (SATzilla 2012) and the new tool (SATzilla 2024) on the 2022 and 2023 \gls{sat} Competitions.}
     \label{fig:ecdf_as}
     \begin{subfigure}[b]{0.49\textwidth}
         \centering
@@ -497,9 +497,9 @@ Overall, the ECDF plots reflect well what is shown in \autoref{fig:closed_gap}, 
 
 % \begin{table}[h]
 %     \centering
-%     \caption{Closed gap values for the algorithm selection task using the old (SATZilla 2012) and the new tool (SATZilla 2024) on the 2022 and 2023 SAT competitions; higher is better.}
+%     \caption{Closed gap values for the algorithm selection task using the old (SATzilla 2012) and the new tool (SATzilla 2024) on the 2022 and 2023 SAT competitions; higher is better.}
 %     \begin{tabular}{lcc}
-%     Scenario & SATZilla 2012 & SATZilla 2024 \\
+%     Scenario & SATzilla 2012 & SATzilla 2024 \\
 %     \hline
 %     SAT2022-MAIN & 0.11 & \textbf{0.18} \\
 %     SAT2023-MAIN & 0.55 & \textbf{0.60} \\
@@ -513,7 +513,7 @@ Overall, the ECDF plots reflect well what is shown in \autoref{fig:closed_gap}, 
 %     \caption{Log RMSE of running times for SC2023 with 10 folds CV}
 
 %     \begin{tabular}{c c c}
-%         Solver & SATZilla 2012 & SATZilla 2024 \\
+%         Solver & SATzilla 2012 & SATzilla 2024 \\
 %         \hline
 %         SBVA-sbva{\_}cadical & 0.75 & \textbf{0.56} \\
 %         Kissat{\_}MAB{\_}prop{\_}pr-no{\_}sym & 0.84 & \textbf{0.69} \\
@@ -533,6 +533,6 @@ Overall, the ECDF plots reflect well what is shown in \autoref{fig:closed_gap}, 
 \section{Conclusions}
 \label{sec:conclusions}
 
-In this paper, we introduced an improved version of the well-known SATZilla feature extraction tool, motivated by the need to facilitate the feature extraction process by incorporating better user infrastructure and bug fixing. Our new version uses most up-to-date preprocessing techniques and \gls{sat} solvers, which allow for better representation of \gls{sat} formulas. Our experiments showed that, by using the new tool, we achieve a more accurate satisfiability prediction, a lower error for running time prediction, and a better closed gap for algorithm selection.
+In this paper, we introduced an improved version of the well-known SATzilla feature extraction tool, motivated by the need to facilitate the feature extraction process by incorporating better user infrastructure and bug fixing. Our new version uses most up-to-date preprocessing techniques and \gls{sat} solvers, which allow for better representation of \gls{sat} formulas. Our experiments showed that, by using the new tool, we achieve a more accurate satisfiability prediction, a lower error for running time prediction, and a better closed gap for algorithm selection.
 
-Our new SATZilla 2024 extraction tool aims to facilitate and promote the usage of \gls{sat} features even beyond their current scope. It is easily extensible and thus encourages building atop, \emph{e.g.}, by looking into features based on the recent developments in the explainability of \gls{sat} solvers \cite{ElfEtAl2018}, or other advancements in \gls{sat}.
+Our new SATzilla 2024 extraction tool aims to facilitate and promote the usage of \gls{sat} features even beyond their current scope. It is easily extensible and thus encourages building atop, \emph{e.g.}, by looking into features based on the recent developments in the explainability of \gls{sat} solvers \cite{ElfEtAl2018}, or other advancements in \gls{sat}.
