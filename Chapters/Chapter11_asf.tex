@@ -60,7 +60,7 @@ This is a well-known phenomenon that can be exploited using \textit{automated al
     \draw[->, ultra thick, draw=orange!80!black] (asf-core.east |- out-bbo.west) -- (out-bbo.west) node[midway, above, font=\tiny, text=black!80] {Assessment};
 
 \end{tikzpicture}
-  \caption{Overview of the \gls{asf} library which provides problem-agnostic implementations of algorithm selection methods, which can be used for various domains, such as \gls{automl}, \gls{bbo}, \gls{sat}, and others.
+  \caption[ASF library overview]{Overview of the \gls{asf} library which provides problem-agnostic implementations of algorithm selection methods, which can be used for various domains, such as \gls{automl}, \gls{bbo}, \gls{sat}, and others.
   % \hd{It is a bit odd that we have ``feature extraction'' and ``assessment'' three times.}
   }
 \end{figure}
@@ -183,7 +183,7 @@ We used the scenario and meta-data supplied by~\citet{OztEtAl22}, preserving the
   \begin{center}
       
   \includegraphics{figures/11/figures/analysis/zap_preselection_vbs_box.pdf}
-  \caption{ZAP pre-selection quality. 
+  \caption[ZAP pre-selection quality]{ZAP pre-selection quality. 
   % \hd{What is ``ZAP fold-local pre-selection quality''?}
   Each box reports held-out \gls{vbs} accuracy, after marginal-contribution pre-selection was fitted on the corresponding training fold; higher is better.}
   \label{fig:zap_preselection_vbs}
@@ -217,7 +217,7 @@ Notably, pre-selection not only reduces training cost but also \emph{improves} s
     \includegraphics{figures/11/figures/analysis/zap_runtime_box.pdf}
     \caption{Running time}
   \end{subfigure}
-  \caption{ZAP selector comparison. The left panel reports per-dataset accuracy distributions and the right panel reports per-fold training time in seconds on a logarithmic scale. Higher accuracy and lower running time are better.
+  \caption[ZAP selector comparison]{ZAP selector comparison. The left panel reports per-dataset accuracy distributions and the right panel reports per-fold training time in seconds on a logarithmic scale. Higher accuracy and lower running time are better.
   % \hd{The label of the y-axis of 4b is closer to 4a than to 4b.
   % Also, is it possible that we can still see the whisker of Cosine in 4a or is it too low?
   % }
@@ -268,7 +268,7 @@ Importantly, \gls{asf} enables this systematic comparison with minimal implement
 
 \begin{table*}[t]
   \centering
-    \caption{\gls{ood}-Chameleon selector matrix. Rows represent training/evaluation/model combinations, columns correspond to selectors, and cells report mean worst-group error $\pm$ standard deviation over the five seeds, in percentage points. Lower is better; bold entries mark the lowest value in a row or values within 0.5 percentage points of it.
+    \caption[OOD-Chameleon selector matrix]{\gls{ood}-Chameleon selector matrix. Rows represent training/evaluation/model combinations, columns correspond to selectors, and cells report mean worst-group error $\pm$ standard deviation over the five seeds, in percentage points. Lower is better; bold entries mark the lowest value in a row or values within 0.5 percentage points of it.
     % \hd{In the text, you write ``BERT-FT'', here you write ``bert-ft'', etc.}
     }
   \label{tab:ood_selector_by_scenario}
@@ -336,7 +336,7 @@ We use HPOBench~\citep{EggEtAl21}, which provides performance data for tradition
     \includegraphics{figures/11/figures/analysis/hpobench_runtime_box_k25.pdf}
     \caption{$k=25$}
   \end{subfigure}
-  \caption{HPOBench portfolio pre-selection by portfolio size. The top row reports normalised pre-selection score over held-out datasets, where 0 corresponds to \gls{sbs} and 1 corresponds to \gls{vbs}; higher is better. The bottom row reports pre-selector running time in seconds on a logarithmic scale; lower is better.}
+  \caption[HPOBench portfolio pre-selection by size]{HPOBench portfolio pre-selection by portfolio size. The top row reports normalised pre-selection score over held-out datasets, where 0 corresponds to \gls{sbs} and 1 corresponds to \gls{vbs}; higher is better. The bottom row reports pre-selector running time in seconds on a logarithmic scale; lower is better.}
   \label{fig:hpobench_normalized_score_box}
 \end{figure*}
 
@@ -485,7 +485,7 @@ pipeline.fit(features, performance)
 predictions = pipeline.predict(features)
 \end{lstlisting}
 \end{minipage}
-\caption{Pseudocode illustrating the usage of \gls{asf}. A pipeline is instantiated with a pre-selector and a base model, fitted on instance features and a performance matrix, and used to predict the best algorithm for new instances.}
+\caption[ASF usage pseudocode]{Pseudocode illustrating the usage of \gls{asf}. A pipeline is instantiated with a pre-selector and a base model, fitted on instance features and a performance matrix, and used to predict the best algorithm for new instances.}
 \label{listing:asf_usage}
 \end{figure*}
 
@@ -627,7 +627,7 @@ We evaluated portfolio pre-selectors on each ASlib scenario using the pre-define
     \includegraphics{figures/11/figures/analysis/preselection_normalized_score_k50.pdf}
     \caption{$k=50$}
   \end{subfigure}
-  \caption{ASlib pre-selection quality by portfolio size. Each box summarizes normalised held-out pre-selection score over folds and scenarios; higher is better.}
+  \caption[ASlib pre-selection quality by portfolio size]{ASlib pre-selection quality by portfolio size. Each box summarizes normalised held-out pre-selection score over folds and scenarios; higher is better.}
   \label{fig:aslib_preselection_a}
 \end{figure*}
 
@@ -645,7 +645,7 @@ We evaluated schedule-based presolvers on the same ASlib running time scenarios 
 
 \begin{table*}[!htbp]
   \centering
-  \caption{ASlib pre-solving solved-instance counts. Rows are grouped by pre-solving budget and ASlib scenario; columns are pre-solving methods. Higher is better, and bold entries mark the highest count in each row.}
+  \caption[ASlib pre-solving solved-instance counts]{ASlib pre-solving solved-instance counts. Rows are grouped by pre-solving budget and ASlib scenario; columns are pre-solving methods. Higher is better, and bold entries mark the highest count in each row.}
   % \resizebox{\textwidth}{!}
   {\input{figures/11/figures/tables/presolving_solved_counts_by_budget.tex}}
   \label{tab:aslib_presolving_counts}
@@ -685,7 +685,7 @@ Figures~\ref{fig:aslib_selection_gap_a}, \ref{fig:aslib_selection_gap_b}, and~\r
     \includegraphics{figures/11/figures/analysis/selection_closed_gap_ipc2018.pdf}
     \caption{IPC2018}
   \end{subfigure}
-  \caption{ASlib algorithm-selection closed gap by scenario and selector, part 1. Bars show the percentage of the \gls{sbs}--\gls{vbs} gap closed by each selector; higher is better. Negative displayed values are clipped at $-100\%$.}
+  \caption[ASlib closed gap by scenario, part 1]{ASlib algorithm-selection closed gap by scenario and selector, part 1. Bars show the percentage of the \gls{sbs}--\gls{vbs} gap closed by each selector; higher is better. Negative displayed values are clipped at $-100\%$.}
   \label{fig:aslib_selection_gap_a}
 \end{figure*}
 
@@ -711,7 +711,7 @@ Figures~\ref{fig:aslib_selection_gap_a}, \ref{fig:aslib_selection_gap_b}, and~\r
     \includegraphics{figures/11/figures/analysis/selection_closed_gap_sat12_indu.pdf}
     \caption{SAT12-INDU}
   \end{subfigure}
-  \caption{ASlib algorithm-selection closed gap by scenario and selector, part 2. Bars show the percentage of the \gls{sbs}--\gls{vbs} gap closed by each selector; higher is better. Negative displayed values are clipped at $-100\%$.}
+  \caption[ASlib closed gap by scenario, part 2]{ASlib algorithm-selection closed gap by scenario and selector, part 2. Bars show the percentage of the \gls{sbs}--\gls{vbs} gap closed by each selector; higher is better. Negative displayed values are clipped at $-100\%$.}
   \label{fig:aslib_selection_gap_b}
 \end{figure*}
 
@@ -727,7 +727,7 @@ Figures~\ref{fig:aslib_selection_gap_a}, \ref{fig:aslib_selection_gap_b}, and~\r
     \includegraphics{figures/11/figures/analysis/selection_closed_gap_tsp_lion2015.pdf}
     \caption{TSP-LION2015}
   \end{subfigure}
-  \caption{ASlib algorithm-selection closed gap by scenario and selector, part 3. Bars show the percentage of the \gls{sbs}--\gls{vbs} gap closed by each selector; higher is better. Negative displayed values are clipped at $-100\%$.}
+  \caption[ASlib closed gap by scenario, part 3]{ASlib algorithm-selection closed gap by scenario and selector, part 3. Bars show the percentage of the \gls{sbs}--\gls{vbs} gap closed by each selector; higher is better. Negative displayed values are clipped at $-100\%$.}
   \label{fig:aslib_selection_gap_c}
 \end{figure*}
 
@@ -742,7 +742,7 @@ We used Python version 3.10.8, clingo version 5.8.0, SMAC3 version 2.3.1, scikit
 
 \begin{table*}[!htbp]
   \centering
-  \caption{Compute resources used for the experiments}
+  \caption[Compute resources]{Compute resources used for the experiments}
   \label{tab:experiment_hardware}
   \begin{tabular}{lll}
     \toprule
@@ -765,7 +765,7 @@ The ASlib selector benchmark tunes learned selectors with SMAC for 50 trials usi
 
 \begin{table*}[!htbp]
   \centering
-  \caption{Hyperparameters used in the ZAP selector experiment. For JointRanking, these are the hyperparameters used by~\citep{OztEtAl22} in their code base. Since PairwiseClassifier, PairwiseRegressor, PerformanceModel and SimpleRanking have only the hyperparameters of XGBoost, we listed only them.}
+  \caption[ZAP experiment hyperparameters]{Hyperparameters used in the ZAP selector experiment. For JointRanking, these are the hyperparameters used by~\citep{OztEtAl22} in their code base. Since PairwiseClassifier, PairwiseRegressor, PerformanceModel and SimpleRanking have only the hyperparameters of XGBoost, we listed only them.}
   \label{tab:zap_hyperparameters}
   \scriptsize
   \begin{subtable}[t]{0.48\textwidth}
@@ -842,7 +842,7 @@ The ASlib selector benchmark tunes learned selectors with SMAC for 50 trials usi
 
 \begin{table*}[!htbp]
   \centering
-  \caption{Hyperparameters used in the \gls{ood}-Chameleon selector experiment. Each subtable gives the settings for one selector. The \gls{asf} selectors (PairwiseClassifier, PairwiseRegressor and PerformanceModel) are based on random forest.}
+  \caption[OOD-Chameleon experiment hyperparameters]{Hyperparameters used in the \gls{ood}-Chameleon selector experiment. Each subtable gives the settings for one selector. The \gls{asf} selectors (PairwiseClassifier, PairwiseRegressor and PerformanceModel) are based on random forest.}
   \label{tab:ood_hyperparameters}
   \begin{subtable}[t]{0.48\textwidth}
     \centering
@@ -882,7 +882,7 @@ The ASlib selector benchmark tunes learned selectors with SMAC for 50 trials usi
 
 \begin{table*}[!htbp]
   \centering
-  \caption{Parameters used in the HPOBench and ASlib pre-selection experiments. Each pre-selector is shown in a separate subtable. Both benchmarks use the \gls{vbs} objective on the training matrix. MarginalContribution, \gls{sbs} and beam search has no parameters}
+  \caption[Pre-selection experiment parameters]{Parameters used in the HPOBench and ASlib pre-selection experiments. Each pre-selector is shown in a separate subtable. Both benchmarks use the \gls{vbs} objective on the training matrix. MarginalContribution, \gls{sbs} and beam search has no parameters}
   \label{tab:aslib_preselection_hyperparameters}
 
   \begin{subtable}[t]{0.48\textwidth}
@@ -931,7 +931,7 @@ The ASlib selector benchmark tunes learned selectors with SMAC for 50 trials usi
 
 \begin{table*}[!htbp]
   \centering
-  \caption{Parameters used in the ASlib pre-solving experiment. Greedy presolver has no parameters.}
+  \caption[Pre-solving experiment parameters]{Parameters used in the ASlib pre-solving experiment. Greedy presolver has no parameters.}
   \label{tab:aslib_presolving_hyperparameters}
     \begin{subtable}[t]{0.48\textwidth}
     \centering
@@ -988,7 +988,7 @@ The ASlib selector benchmark tunes learned selectors with SMAC for 50 trials usi
 
 \begin{table*}[!htbp]
   \centering
-  \caption{Shared configuration-space components used by selector tuning. These subspaces are reused by the selector-specific spaces in \autoref{tab:selector_configuration_spaces}.}
+  \caption[Shared selector configuration spaces]{Shared configuration-space components used by selector tuning. These subspaces are reused by the selector-specific spaces in \autoref{tab:selector_configuration_spaces}.}
   \label{tab:shared_configuration_spaces}
   \scriptsize
   \begin{subtable}[t]{0.48\textwidth}
@@ -1059,7 +1059,7 @@ The ASlib selector benchmark tunes learned selectors with SMAC for 50 trials usi
 
 \begin{table*}[!htbp]
   \centering
-  \caption{Selector-specific configuration spaces. Each selector is shown in a separate subtable; model-class choices recurse into the shared model spaces in \autoref{tab:shared_configuration_spaces}.}
+  \caption[Selector-specific configuration spaces]{Selector-specific configuration spaces. Each selector is shown in a separate subtable; model-class choices recurse into the shared model spaces in \autoref{tab:shared_configuration_spaces}.}
   \label{tab:selector_configuration_spaces}
   \begin{subtable}[t]{0.48\textwidth}
     \centering
@@ -1107,7 +1107,7 @@ The ASlib selector benchmark tunes learned selectors with SMAC for 50 trials usi
       Hyperparameter & Search space \\
       \midrule
       Regularisation & $[0,10]$;  \\
-      optimizer & [L-BFGS-B, \gls{cg}, BFGS, TNC, SLSQP] \\
+      optimizer & [L-BFGS-B, CG, BFGS, TNC, SLSQP] \\
       max iterations & $[100,5000]$\\
       tolerance & $[10^{-6},10^{-2}]$ \\
       \bottomrule

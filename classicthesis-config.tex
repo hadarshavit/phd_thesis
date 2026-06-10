@@ -130,6 +130,45 @@
     %\renewcommand{\bflabel}[1]{{#1}\hfill} % fix the list of acronyms --> no longer working
     %\renewcommand*{\acsfont}[1]{\textsc{#1}} 
     \renewcommand*{\aclabelfont}[1]{\acsfont{#1}}
+
+% Acronym wrapper macros translating glossaries (\gls) to acronym (\ac) commands
+\newcommand{\gls}[1]{\ac{#1}}
+\newcommand{\Gls}[1]{\Ac{#1}}
+\newcommand{\glspl}[1]{\acp{#1}}
+\newcommand{\Glspl}[1]{\Acp{#1}}
+
+% Global acronym definitions using acrodef to ensure they are globally available
+\acrodef{ai}[AI]{Artificial Intelligence}
+\acrodef{api}[API]{Application Programming Interface}
+\acrodef{as}[AS]{Algorithm Selection}
+\acrodef{asf}[ASF]{Algorithm Selection Framework}
+\acrodef{automl}[AutoML]{Automated Machine Learning}
+\acrodef{bbo}[BBO]{Black-Box Optimisation}
+\acrodef{bert}[BERT]{Bidirectional Encoder Representations from Transformers}
+\acrodef{bertft}[BERT-FT]{fine-tuned BERT}
+\acrodef{bo}[BO]{Bayesian Optimisation}
+\acrodef{cg}[CG]{Closed Gap}
+\acrodef{clg}[CG]{Clause Graph}
+\acrodef{ci}[CI]{Continuous Integration}
+\acrodef{clip}[CLIP]{Contrastive Language-Image Pre-training}
+\acrodef{cnf}[CNF]{Conjunctive Normal Form}
+\acrodef{dag}[DAG]{Directed Acyclic Graph}
+\acrodef{dpll}[DPLL]{Davis-Putnam-Logemann-Loveland}
+\acrodef{epm}[EPM]{Empirical Performance Model}
+\acrodef{gnn}[GNN]{Graph Neural Network}
+\acrodef{hpo}[HPO]{Hyperparameter Optimisation}
+\acrodef{ice}[ICE]{Individual Conditional Expectation}
+\acrodef{mit}[MIT]{Massachusetts Institute of Technology}
+\acrodef{mlp}[MLP]{Multi-Layer Perceptron}
+\acrodef{ood}[OOD]{Out-of-Distribution}
+\acrodef{par}[PAR]{Penalised Average Runtime}
+\acrodef{pddl}[PDDL]{Planning Domain Definition Language}
+\acrodef{pep8}[PEP 8]{Python Enhancement Proposal 8}
+\acrodef{rmse}[RMSE]{Root Mean Squared Error}
+\acrodef{saps}[SAPS]{Scaling and Parameter Search}
+\acrodef{sat}[SAT]{Propositional Satisfiability}
+\acrodef{sbs}[SBS]{Single Best Solver}
+\acrodef{vbs}[VBS]{Virtual Best Solver}
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric,arrows,arrows.meta,positioning,fit,backgrounds}
 \definecolor{myyellow}{RGB}{251,210,87}

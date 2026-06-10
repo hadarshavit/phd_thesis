@@ -352,7 +352,7 @@ At the same time, they emphasise the importance dimensionality reduction methods
 
 \begin{table*}
     \centering
-    \caption{Dimensionality reduction methods assessed in this work. All methods are based on feature extraction.
+    \caption[Dimensionality reduction methods assessed]{Dimensionality reduction methods assessed in this work. All methods are based on feature extraction.
     % \aj{Isomap and Sparse PCA are now removed. Lollipop is renamed to LoLP for consistency with the figures}
     % \hh{How were these ordered? I recommend some sort of rational sorting of the rows in this table ...}
     }
@@ -1016,7 +1016,7 @@ thereby retaining the same assignment of elements to clusters both in the origin
 %         \centering
 %         \includegraphics[width=1.0\textwidth,trim={1.5cm 4cm 3.7cm 0.0cm},clip]{figures/05/legend.pdf}
 %     \end{subfigure}
-\caption{
+\caption[Clustering homogeneity and completeness on ML task 1]{
 % \changed{
 Performance of different dimensionality reduction methods aggregated across all OpenML~CC-18 datasets, for different target dimensionalities $k$, in terms of (a-d) cluster homogeneity and (e-h) cluster completeness on \textbf{machine learning task 1: clustering ability}; higher is better. Homogeneity measures whether each cluster contains samples from the same true class; we observe very small homogeneity differences between dimensionality reduction methods for different target dimensionalities. Completeness quantifies whether all samples belonging to the same true class are in the same cluster; we observe a slight improvement in performance measured by completeness as the target dimensionality increases.
 % }
@@ -1078,7 +1078,7 @@ Furthermore, dense Gaussian random projections handle large feature spaces bette
 %         \centering
 %         \includegraphics[width=1.0\textwidth,trim={1.5cm 4cm 3.7cm 0.0cm},clip]{figures/05/legend.pdf}
 %     \end{subfigure}
-\caption{
+\caption[Clustering on ML task 1 by dataset category]{
 % \changed{
 Performance of different dimensionality reduction methods on low-, medium- and high-dimensional OpenML~CC-18 datasets, all reduced to target dimensionality $k = 5$, in terms of (a-c) cluster homogeneity and (d-f) cluster completeness on \textbf{machine learning task 1: clustering ability}; higher is better. We observe a slightly larger improvement in completeness than in homogeneity as the dataset dimensionality increases.
 % }
@@ -1163,7 +1163,7 @@ Overall, while most methods achieve comparable accuracy, LoLP consistently perfo
 %         \centering
 %         \includegraphics[width=1.0\textwidth,trim={1.5cm 4cm 3.7cm 0.0cm},clip]{figures/05/legend.pdf}
 %     \end{subfigure}
-\caption{
+\caption[Classification accuracy on ML task 2]{
 % \changed{
 Performance of different dimensionality reduction methods aggregated across all OpenML~CC-18 datasets, for different target dimensionalities $k$ and for different machine learning models used for classification (random forest, gradient boosting, \gls{mlp}), in terms of accuracy on \textbf{machine learning task 2: tabular classification accuracy}; higher is better. Bernoulli RBM performs consistently bad across all settings, followed by Gaussian and sparse random projections, while LoLP exhibits a consistent slight performance edge over other methods.
 % }
@@ -1219,7 +1219,7 @@ In contrast, PCA (Linear) and PCA (Polynomial) perform better than other PCA var
 %         \centering
 %         \includegraphics[width=1.0\textwidth,trim={1.5cm 4cm 3.7cm 0.0cm},clip]{figures/05/legend.pdf}
 %     \end{subfigure}
-\caption{
+\caption[Classification accuracy on ML task 2 by dataset category]{
 % \changed{
 Performance of different dimensionality reduction methods on low-, medium- and high-dimensional OpenML~CC-18 datasets, all reduced to target dimensionality $k = 5$, in terms of accuracy on \textbf{machine learning task 2: tabular classification accuracy}, where classification is done using different machine learning models (random forest, gradient boosting, \gls{mlp}); higher is better. The performance of Bernoulli RBM and Gaussian and sparse random projection degrades even further as the dataset dimensionality increases, regardless of the machine learning model used for classification. The differences induced by the choice of the machine learning model are generally negligible for low-, medium- and high-dimensional datasets alike.
 % }
@@ -1260,7 +1260,7 @@ Performance of different dimensionality reduction methods on low-, medium- and h
         \includegraphics[width=\textwidth]{figures/05/epm/agg_sample_red_inpt_100_120_40.pdf}
         \caption{$k=40$}
     \end{subfigure}
-    \caption{
+    \caption[Target function approximation on BBO task 1]{
     % \changed{
     Performance of different dimensionality reduction methods aggregated across synthetic benchmark problems for different target dimensionalities $k$, with input dimensionality $D = 120$ and initial sample size $N = 100$, in terms of min-max normalised mean \gls{rmse} on \textbf{black-box optimisation task 1: target function approximation}; lower is better. 
     PLS regression consistently performs best across different target dimensionalities, and is closely followed by PCA (RBF) for the highest target dimensionality.
@@ -1320,7 +1320,7 @@ As the target dimensionality increases, PCA (RBF) gradually catches up and event
         \centering
         \includegraphics[width=1.0\textwidth,trim={1.5cm 4cm 3.7cm 0.0cm},clip]{figures/05/legend.pdf}
     \end{subfigure}
-    \caption{
+    \caption[Target function approximation on BBO task 1 for real-world benchmarks]{
     % \changed{
     Performance of different dimensionality reduction methods aggregated across synthetic benchmark problems for different input dimensionalities $D$, with target dimensionality $k = 20$ and initial sample size $N = 100$, in terms of min-max normalised mean \gls{rmse} on \textbf{black-box optimisation task 1: target function approximation}; lower is better. 
     The variance increases with input dimensionality; PLS regression is a dominant method for lower-dimensional inputs (a-c), but is outperformed by PCA (RBF) for higher-dimensional inputs (d-f).
@@ -1386,7 +1386,7 @@ As expected, the variance of all methods decreases with lower input dimensionali
         \centering
         \includegraphics[width=1.0\textwidth,trim={1.5cm 4cm 3.7cm 0.0cm},clip]{figures/05/legend.pdf}
     \end{subfigure}
-    \caption{
+    \caption[Target function approximation quality by dimensionality]{
     % \changed{
     Performance of different dimensionality reduction methods aggregated across synthetic benchmark problems for different initial sample sizes $N$ in two settings: (a-d) with input dimensionality $D = 40$ and target dimensionality $k = 5$, and (e-h) with input dimensionality $D = 1000$ and target dimensionality $k = 40$, in terms of min-max normalised mean \gls{rmse} on \textbf{black-box optimisation task 1: target function approximation}; lower is better.
     Initial sample size has almost no effect when the dimensionality reduction is performed from an already low-dimensional space into an even lower-dimensional one. On the other hand, for a more drastic dimensionality reduction from a very high-dimensional space into a relatively low-dimensional one, a large initial sample size is necessary for accurate target function approximation. 
@@ -1450,7 +1450,7 @@ In contrast, for high-dimensional inputs ($D = 1000$), variance decreases notice
     %     \centering
     %     \includegraphics[width=1.0\textwidth,trim={1.5cm 4cm 3.7cm 0.0cm},clip]{figures/05/legend.pdf}
     % \end{subfigure}
-    \caption{
+    \caption[Target function approximation on BBO task 1 for low- and high-dimensional benchmarks]{
     % \changed{
     Performance of different dimensionality reduction methods aggregated across real-world benchmark problems in two settings: (a-d) for different target dimensionalities $k$ with initial sample size $N = 100$, and (e-h) for different initial sample sizes $N$ with target dimensionality $k = 5$, in terms of min-max normalised mean \gls{rmse} on \textbf{black-box optimisation task 1: target function approximation}; lower is better.
     Note that the input dimensionality is determined by the benchmark and cannot be controlled.
@@ -1502,7 +1502,7 @@ In contrast to relatively good performance of LLE in the machine learning task 1
         \centering
         \includegraphics[width=1.0\textwidth,trim={1.5cm 4cm 3.7cm 0.0cm},clip]{figures/05/legend.pdf}
     \end{subfigure}
-    \caption{
+    \caption[Optimiser performance ranks on BBO task 2]{
     % \changed{
     Performance of different dimensionality reduction methods aggregated across synthetic benchmark problems for different target dimensionalities $k$ with input dimensionality $D = 120$ and initial sample size $N = 100$, in terms of mean rank trajectories over the optimisation process on \textbf{black-box optimisation task 2: optimiser performance}; lower rank is better. 
     PCA (RBF) strongly outperforms all other methods across all target dimensionalities, followed by PLS regression and PCA (Cosine) for low target dimensionalities.
@@ -1556,7 +1556,7 @@ Last, LLE exhibits consistent poor performance, in line with the previous findin
         \centering
         \includegraphics[width=1.0\textwidth,trim={1.5cm 4cm 3.7cm 0.0cm},clip]{figures/05/legend.pdf}
     \end{subfigure}
-    \caption{
+    \caption[Optimiser performance ranks on BBO task 2 by dimensionality]{
     % \changed{
     Performance of different dimensionality reduction methods aggregated across synthetic benchmark problems for different input dimensionalities $D$ with target dimensionality $k = 20$ and initial sample size $N = 100$, in terms of mean rank trajectories over the optimisation process on \textbf{black-box optimisation task 2: optimiser performance}; lower rank is better. 
     PCA (RBF) strongly dominates all other methods across all input dimensionalities, followed by PLS regression for high input dimensionalities.
@@ -1617,7 +1617,7 @@ Figures (e–h) show the results for high-dimensional inputs ($D = 1000$) with t
         \centering
         \includegraphics[width=1.0\textwidth,trim={1.5cm 4cm 3.7cm 0.0cm},clip]{figures/05/legend.pdf}
     \end{subfigure}
-    \caption{
+    \caption[Optimiser performance ranks on BBO task 2 for low- and high-dimensional benchmarks]{
     % \changed{
     Performance of different dimensionality reduction methods aggregated across synthetic benchmark problems for different initial sample sizes $N$ in two settings: (a-d) with input dimensionality $D = 40$ and target dimensionality $k = 5$, and (e-h) with input dimensionality $D = 1000$ and target dimensionality $k = 40$, in terms of mean rank trajectories over the optimisation process on \textbf{black-box optimisation task 2: optimiser performance}; lower rank is better.
     PCA (RBF) is the top-ranked method across both settings, while PLS regression exhibits stronger performance for high-dimensional inputs than for low-dimensional ones.
@@ -1702,7 +1702,7 @@ Finally, through high variability of observed behaviours across all settings, we
         \centering
         \includegraphics[width=1.0\textwidth,trim={1.5cm 4cm 3.7cm 0.0cm},clip]{figures/05/legend.pdf}
     \end{subfigure}
-    \caption{
+    \caption[Optimiser performance ranks on BBO task 2 for real-world benchmarks]{
     % \changed{
     Performance of different dimensionality reduction methods aggregated across real-world benchmark problems in two settings: (a-d) for different target dimensionalities $k$ with initial sample size $N = 100$, and (e-h) for different initial sample sizes $N$ with target dimensionality $k = 5$, in terms of mean rank trajectories over the optimisation process on \textbf{black-box optimisation task 2: optimiser performance}; lower rank is better. Note that (i) the input dimensionality is determined by the benchmark and cannot be controlled, and (ii) figures (a) and (e) correspond to the same scenario.
     In the first setting, there is no single top-ranked method; LLE stands out as the worst performing method for higher target dimensionalities.
@@ -1769,7 +1769,7 @@ We observe that Gaussian and sparse random projections consistently incur low ru
         \includegraphics[width=\textwidth]{figures/05/time/9981_transform_time.pdf}
         \caption{Transform on dataset 9981}
     \end{subfigure}
-    \caption{
+    \caption[CPU hours for training and transformation]{
     % \changed{
     Running times in terms of CPU hours for dimensionality reduction training (a, c) and transformation (b, d) of OpenML datasets 9985 (51 features and 6618 elements) and 9981 (856 features and 1080 elements).
     % }

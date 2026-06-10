@@ -114,7 +114,7 @@ Following the preprocessing, the \emph{feature extraction} begins. There are ten
 
 \noindent\textbf{KLB} are expensive features that include the node degree statistics of the variable nodes in the variable-clause graph, and the ratio of positive to negative occurrences of each variable. They also include measures for the proximity to Horn formula, such as the fraction of Horn clauses and statistics on the number of times each variable appears in a Horn clause. \changed{This group contains 21 features.}
 
-\noindent\textbf{Clause graph} (\gls{cg}) features are expensive features that contain statistics on the degree of the nodes in the clause graph, as well as the clustering coefficient. \changed{This group contains 11 features.}
+\noindent\textbf{Clause graph} (\gls{clg}) features are expensive features that contain statistics on the degree of the nodes in the clause graph, as well as the clustering coefficient. \changed{This group contains 11 features.}
 
 \noindent\textbf{Diameter} features contain information on the diameter of the variable graph, which is the shortest path between each pair of nodes in the graph. \changed{This group contains 6 features.}
 
@@ -161,7 +161,7 @@ We use a cluster of 18 nodes, each equipped with 2 AMD EPYC 7543 32-core CPUs wi
 \label{ssec:feature-computation-time}
 
 \begin{figure*}[h]
-    \caption{Percentage of features computed by the old tool (SATZilla 2012; in red) and the new tool (SATZilla 2024; in blue) over the available time budget for each feature group on the 2022 \gls{sat} Competition. For most feature groups, the new tool extracts features from more instances than the old one.}
+    \caption[Percentage of computed features (2022 SAT Competition)]{Percentage of features computed by the old tool (SATZilla 2012; in red) and the new tool (SATZilla 2024; in blue) over the available time budget for each feature group on the 2022 \gls{sat} Competition. For most feature groups, the new tool extracts features from more instances than the old one.}
     \centering
     \begin{subfigure}[b]{0.24\textwidth}
         \centering
@@ -242,7 +242,7 @@ We use a cluster of 18 nodes, each equipped with 2 AMD EPYC 7543 32-core CPUs wi
 \end{figure*}
 
 \begin{figure*}[h]
-    \caption{Percentage of features computed by the old tool (SATZilla 2012; in red) and the new tool (SATZilla 2024; in blue) over the available time budget for each feature group on the 2023 \gls{sat} Competition. For most feature groups, the new tool extracts features from more instances than the old one.}
+    \caption[Percentage of computed features (2023 SAT Competition)]{Percentage of features computed by the old tool (SATZilla 2012; in red) and the new tool (SATZilla 2024; in blue) over the available time budget for each feature group on the 2023 \gls{sat} Competition. For most feature groups, the new tool extracts features from more instances than the old one.}
 
     \begin{subfigure}[b]{0.24\textwidth}
         \centering
@@ -324,9 +324,9 @@ We use a cluster of 18 nodes, each equipped with 2 AMD EPYC 7543 32-core CPUs wi
 
 \autoref{fig:feat_comtimes_2022} and \autoref{fig:feat_comtimes_2023} show the percentage of features computed over the available time budget using the old (depicted in red) and new (depicted in blue) SATZilla tool on the 2022 and 2023 \gls{sat} Competition data, respectively. For simplicity, due to the similarity of the overall results between the two competitions, we draw more detailed insights based on plots from the 2023 edition (\autoref{fig:feat_comtimes_2023}). 
 
-We first observe that the new tool is able to extract more features than the old one for most feature groups. In particular, we highlight the performance gains on the preliminary feature group (\autoref{fig:satcomp23_pre}), for which the new tool can extract the features for all formulas, compared to less than $80\%$ of the formulas when using the the old tool. We note that for some feature groups, like graph learning (\autoref{fig:satcomp23_cg}), the old tool is able to extract more features compared to the preliminary feature group. This is due to the fact that the old tool extracts the preliminary, basic, KLB and \gls{cg} feature groups together. Therefore, in case computing one of those groups takes a long time, the whole feature extraction fails.
+We first observe that the new tool is able to extract more features than the old one for most feature groups. In particular, we highlight the performance gains on the preliminary feature group (\autoref{fig:satcomp23_pre}), for which the new tool can extract the features for all formulas, compared to less than $80\%$ of the formulas when using the the old tool. We note that for some feature groups, like graph learning (\autoref{fig:satcomp23_cg}), the old tool is able to extract more features compared to the preliminary feature group. This is due to the fact that the old tool extracts the preliminary, basic, KLB and \gls{clg} feature groups together. Therefore, in case computing one of those groups takes a long time, the whole feature extraction fails.
 
-We also note that for KLB and \gls{cg} features there is an advantage for the old version, due to the new SBVA preprocessing method yielding larger formulas than its predecessor \textsc{SATElite} (as in many cases smaller formulas are not always easier to solve). Similarly, the expensive graph-based features (\emph{e.g.}, \autoref{fig:satcomp23_cg} and \autoref{fig:satcomp23_dia}) require more time to extract than smaller formulas. 
+We also note that for KLB and \gls{clg} features there is an advantage for the old version, due to the new SBVA preprocessing method yielding larger formulas than its predecessor \textsc{SATElite} (as in many cases smaller formulas are not always easier to solve). Similarly, the expensive graph-based features (\emph{e.g.}, \autoref{fig:satcomp23_cg} and \autoref{fig:satcomp23_dia}) require more time to extract than smaller formulas. 
 % \hh{modified:}
 \changed{This is more apparent in the 2022 \gls{sat} Competition, where larger instances were used than in the 2023 \gls{sat} Competition.}
 
@@ -345,7 +345,7 @@ We present the satisfiability prediction accuracy scores in \autoref{fig:sat_pre
 
 
 \begin{figure*}[h]
-    \caption{Accuracy of the satisfiability prediction task using a random forest with features extracted by the old (SATZilla 2012) and the new tool (SATZilla 2024). We see an overall higher accuracy for the new tool, which results from higher accuracy on satisfiable instances. On unsatisfiable ones, the accuracy remains the same.}
+    \caption[Satisfiability prediction accuracy]{Accuracy of the satisfiability prediction task using a random forest with features extracted by the old (SATZilla 2012) and the new tool (SATZilla 2024). We see an overall higher accuracy for the new tool, which results from higher accuracy on satisfiable instances. On unsatisfiable ones, the accuracy remains the same.}
     \label{fig:sat_prediction}
     \begin{subfigure}[b]{0.49\textwidth}
         \centering
@@ -375,7 +375,7 @@ In line with the previous task, we perform inner and outer cross-validation and 
 We look into the performance of the \gls{epm} for running time prediction on all solvers from the 2022 and 2023 \gls{sat} Competitions. Here, we do not actually run solvers on instances to record their running times, but rather use the running times reported by the competitions. We display the results for the 10 best solvers from each competition in \autoref{fig:rt_pred} (the results for all solvers can be found in the supplementary material). We see that using the features extracted by the new tool leads to the lower \gls{rmse} for all solvers, compared to using those extracted by the old tool. For some solvers, we observe a significantly lower \gls{rmse}, like Kissat{\_}MAB{\_}prop-no{\_}sym, where using the new tool decreases the \gls{rmse} from 0.84 to 0.69. \autoref{fig:rmse_hists} shows the histogram of the error percentage for all solvers in the 2022 and 2023 \gls{sat} Competitions. We see that for the 2022 competition, the new tool has more instances with error rate lower than $10\%$ compared to the old version. For the 2023 competition, using the features extracted with the new version, more instances are predicted with less than $1\%$ error. Histograms per solver are available in \autoref{sec:rts_hists_per_solver}.
 
 \begin{figure*}[h]
-    \caption{Root mean square error (\gls{rmse}) of (log-transformed) running time prediction using a random forest with features extracted by the old (SATZilla 2012; in red) and the new tool (SATZilla 2024; in blue), on \gls{sat} solvers from the 2022 and 2023 \gls{sat} Competitions. The new tool achieves lower \gls{rmse} for all solvers.}
+    \caption[RMSE of running time prediction]{Root mean square error (\gls{rmse}) of (log-transformed) running time prediction using a random forest with features extracted by the old (SATZilla 2012; in red) and the new tool (SATZilla 2024; in blue), on \gls{sat} solvers from the 2022 and 2023 \gls{sat} Competitions. The new tool achieves lower \gls{rmse} for all solvers.}
     \label{fig:rt_pred}
     \begin{subfigure}[b]{0.99\textwidth}
         \centering
@@ -396,7 +396,7 @@ We look into the performance of the \gls{epm} for running time prediction on all
 
 
 \begin{figure*}[h]
-    \caption{Histogram of the error percentage of the root mean square error (\gls{rmse}) of (log-transformed) running time prediction using a random forest with features extracted by the old (SATZilla 2012; in red) and the new tool (SATZilla 2024; in blue), on \gls{sat} solvers from the 2022 and 2023 \gls{sat} Competitions. The new tool achieves lower error percentages.}
+    \caption[Error percentage histogram of running time prediction]{Histogram of the error percentage of the root mean square error (\gls{rmse}) of (log-transformed) running time prediction using a random forest with features extracted by the old (SATZilla 2012; in red) and the new tool (SATZilla 2024; in blue), on \gls{sat} solvers from the 2022 and 2023 \gls{sat} Competitions. The new tool achieves lower error percentages.}
     \label{fig:rmse_hists}
     \begin{subfigure}[b]{0.49\textwidth}
         \centering
@@ -472,13 +472,13 @@ Overall, the ECDF plots reflect well what is shown in \autoref{fig:closed_gap}, 
 
 \begin{figure}[h]
     \centering
-    \caption{Closed gap values for the algorithm selection task using the old (SATZilla 2012; in red) and the new tool (SATZilla 2024; in blue) on the 2022 and 2023 \gls{sat} Competitions; higher is better.}
+    \caption[Closed gap values for algorithm selection]{Closed gap values for the algorithm selection task using the old (SATZilla 2012; in red) and the new tool (SATZilla 2024; in blue) on the 2022 and 2023 \gls{sat} Competitions; higher is better.}
     \includegraphics{figures/04/figs/as_bar_2023.pdf}
     \label{fig:closed_gap}
 \end{figure}
 
 \begin{figure*}[h]
-    \caption{ECDF plots for the algorithm selection task using the old (SATZilla 2012) and the new tool (SATZilla 2024) on the 2022 and 2023 \gls{sat} Competitions.}
+    \caption[ECDF plots for algorithm selection]{ECDF plots for the algorithm selection task using the old (SATZilla 2012) and the new tool (SATZilla 2024) on the 2022 and 2023 \gls{sat} Competitions.}
     \label{fig:ecdf_as}
     \begin{subfigure}[b]{0.49\textwidth}
         \centering

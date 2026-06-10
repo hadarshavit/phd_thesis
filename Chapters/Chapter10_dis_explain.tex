@@ -465,7 +465,7 @@ To verify the robustness of our approach across different distributional assumpt
         \includegraphics[trim={6.2cm 4.3cm 0cm 0.0cm},clip]{figures/10/figures/performances/legend.pdf}
         % \caption{Caption}
     \end{subfigure}
-    \caption{Prediction quality and training efficiency of XGBoost \emph{vs} DistNet. (a--g) KS distance between predicted and observed running time distributions as a function of the number of training observations per instance, across seven scenarios, predicting the parameters of a \emph{log-normal} distribution; lower is better. XGBoost (blue) performs on par with DistNet (red) across all scenarios, with notable exceptions in the low-data regime, where DistNet retains a performance edge. Both methods improve with more observations added. (h--i) CPU training time comparison on one \gls{sat} and one automated planning scenario. XGBoost requires orders of magnitude less 
+    \caption[XGBoost vs DistNet prediction quality]{Prediction quality and training efficiency of XGBoost \emph{vs} DistNet. (a--g) KS distance between predicted and observed running time distributions as a function of the number of training observations per instance, across seven scenarios, predicting the parameters of a \emph{log-normal} distribution; lower is better. XGBoost (blue) performs on par with DistNet (red) across all scenarios, with notable exceptions in the low-data regime, where DistNet retains a performance edge. Both methods improve with more observations added. (h--i) CPU training time comparison on one \gls{sat} and one automated planning scenario. XGBoost requires orders of magnitude less 
     % \hh{slightly modified:}
     computation (running time) than DistNet while achieving competitive prediction quality. 
     % \hh{I would swap subfigures h and i, for consistency with the order in which they appear earlier.}
@@ -514,7 +514,7 @@ The results reveal a clear structure: the most influential features for the scal
         \caption{Kurtosis}
         \label{fig:spear_swgcp_kurtosis_permutation_importance}
     \end{subfigure}
-    \caption{Permutation importance rankings for the predicted running time distribution statistics of Spear on SWGCP. Mean and IQR are dominated by \gls{saps} local-search probing features, variance by the variability of the same probing signal, and skewness and kurtosis by the number of variables remaining after depth-16 unit-propagation probing.}
+    \caption[Permutation importance for Spear on SWGCP]{Permutation importance rankings for the predicted running time distribution statistics of Spear on SWGCP. Mean and IQR are dominated by \gls{saps} local-search probing features, variance by the variability of the same probing signal, and skewness and kurtosis by the number of variables remaining after depth-16 unit-propagation probing.}
     \label{fig:spear_swgcp_permut}
 \end{figure}
 
@@ -558,7 +558,7 @@ Skewness is highest for intermediate fractions of remaining variables, whereas k
         \caption{Kurtosis}
         \label{fig:spear_swgcp_kurtosis_ice}
     \end{subfigure}
-    \caption{Centred \gls{ice} curves for the most important feature of each predicted statistic for Spear on SWGCP. Green curves show individual instances and red curves show partial dependence. The scale statistics change mostly through \gls{saps} first-local-minimum features, while the shape statistics are more heterogeneous and depend on the residual formula size after unit propagation.}
+    \caption[ICE curves for Spear on SWGCP]{Centred \gls{ice} curves for the most important feature of each predicted statistic for Spear on SWGCP. Green curves show individual instances and red curves show partial dependence. The scale statistics change mostly through \gls{saps} first-local-minimum features, while the shape statistics are more heterogeneous and depend on the residual formula size after unit propagation.}
     \label{fig:spear_swgcp_ice}
 \end{figure}
 \FloatBarrier
@@ -622,7 +622,7 @@ In this scenario, the scale statistics (mean, variance, IQR) are driven mainly b
         \label{fig:lpg_zeno_kurtosis_permutation_importance}
     \end{subfigure}
 
-    \caption{Permutation importance rankings for the predicted running time distribution statistics of LPG on Zenotravel. The scale statistics are mainly driven by \gls{sat}-encoding features extracted from the planning task, while skewness and kurtosis are dominated by the size of the planning domain-transition graph.}
+    \caption[Permutation importance for LPG on Zenotravel]{Permutation importance rankings for the predicted running time distribution statistics of LPG on Zenotravel. The scale statistics are mainly driven by \gls{sat}-encoding features extracted from the planning task, while skewness and kurtosis are dominated by the size of the planning domain-transition graph.}
     \label{fig:lpg_zeno_permut}
 \end{figure}
 
@@ -674,7 +674,7 @@ This suggests that tail behaviour for LPG-Zenotravel is tied to the size of the 
     \end{subfigure}
 
 
-    \caption{Centred \gls{ice} curves for the most important feature of each predicted statistic for LPG on Zenotravel. Green curves show individual instances and red curves show partial dependence. Horn-variable entropy in the \gls{sat} encoding affect mean running time, the \gls{sat} variable-to-clause ratio governs variance and IQR, and the number of domain-transition-graph vertices affect skewness and kurtosis.}
+    \caption[ICE curves for LPG on Zenotravel]{Centred \gls{ice} curves for the most important feature of each predicted statistic for LPG on Zenotravel. Green curves show individual instances and red curves show partial dependence. Horn-variable entropy in the \gls{sat} encoding affect mean running time, the \gls{sat} variable-to-clause ratio governs variance and IQR, and the number of domain-transition-graph vertices affect skewness and kurtosis.}
     \label{fig:lpg_zeno_ice}
 \end{figure}
 \FloatBarrier

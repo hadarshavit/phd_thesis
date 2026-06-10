@@ -5,7 +5,7 @@
 \begin{figure}[t]
 	\centering
 	\includegraphics[width=0.75\textwidth]{figures/sat.pdf}
-	\caption{Overview of the three graph types generated from a given \gls{sat} formula.
+	\caption[Overview of SAT graph types]{Overview of the three graph types generated from a given \gls{sat} formula.
 		\label{fig:sat}}
 \end{figure}
 
@@ -32,7 +32,7 @@ We add node features to provide the \gls{gnn} with additional information about 
 
 \begin{table}[htbp]
 	\centering
-	\caption{Node features for the variable-clause graph (VCG). Variable nodes carry 12 features, and clause nodes carry 22 features. Edges between variables and clauses are attributed with the literal polarity ($+1$/$-1$); reverse edges are included.}
+	\caption[VCG node features]{Node features for the variable-clause graph (VCG). Variable nodes carry 12 features, and clause nodes carry 22 features. Edges between variables and clauses are attributed with the literal polarity ($+1$/$-1$); reverse edges are included.}
 	\label{tab:vcg_features}
 	\renewcommand{\arraystretch}{1.2}
 	\resizebox{\columnwidth}{!}{%
@@ -73,7 +73,7 @@ We add node features to provide the \gls{gnn} with additional information about 
 
 \begin{table}[htbp]
 	\centering
-	\caption{Node features for the literal-clause graph (LCG). Literal nodes carry 12 features, and clause nodes carry 22 features. Literal-to-clause edges carry a polarity attribute ($+1$/$-1$); reverse and complement edges (linking each literal to its negation) are also included.}
+	\caption[LCG node features]{Node features for the literal-clause graph (LCG). Literal nodes carry 12 features, and clause nodes carry 22 features. Literal-to-clause edges carry a polarity attribute ($+1$/$-1$); reverse and complement edges (linking each literal to its negation) are also included.}
 	\label{tab:lcg_features}
 	\renewcommand{\arraystretch}{1.2}
 	\resizebox{\columnwidth}{!}{%
@@ -115,7 +115,7 @@ We add node features to provide the \gls{gnn} with additional information about 
 
 \begin{table}[htbp]
 	\centering
-	\caption{Node features for the variable graph (VG). Each variable node carries 12 features. Edges connect co-occurring variables and carry no attributes.}
+	\caption[VG node features]{Node features for the variable graph (VG). Each variable node carries 12 features. Edges connect co-occurring variables and carry no attributes.}
 	\label{tab:vg_features}
 	\renewcommand{\arraystretch}{1.2}
 	\resizebox{\columnwidth}{!}{%
@@ -192,7 +192,7 @@ In total, our dataset includes the following solvers. From the 2024 \gls{sat} Co
 
 \begin{table}
 	\centering
-	\caption{Overview of the instances for the \gls{sat} solving benchmark.}
+	\caption[SAT solving benchmark instances]{Overview of the instances for the \gls{sat} solving benchmark.}
 	\resizebox{\columnwidth}{!}{
 		\begin{tabular}{ll@{\hskip 0.5in}llll@{\hskip 0.5in}llll}
 			\toprule
@@ -230,7 +230,7 @@ winner of the ICON challenge on algorithm selection~\citep{LinEtAl19}%}
 \begin{table}[htbp]
 	\tabledefaults
 	\centering
-	\caption{\textbf{\gls{sat} Solving.} \gls{rmse} (log\textsubscript{10} time) for performance prediction on \dataset{small} \gls{sat} instances. We report results on three different graph representations (\dataset{VG}, \dataset{VCG}, \dataset{LCG}) and using the hand-crafted SATzilla features. Lower is better.}
+	\caption[SAT solving RMSE on small instances]{\textbf{\gls{sat} Solving.} \gls{rmse} (log\textsubscript{10} time) for performance prediction on \dataset{small} \gls{sat} instances. We report results on three different graph representations (\dataset{VG}, \dataset{VCG}, \dataset{LCG}) and using the hand-crafted SATzilla features. Lower is better.}
 	\label{table:sat_epm_res_small}
 	\resizebox{0.6\textwidth}{!}{%
 		\begin{tabular}{llcccc}
@@ -279,7 +279,7 @@ winner of the ICON challenge on algorithm selection~\citep{LinEtAl19}%}
 \begin{table}[htbp]
 	\tabledefaults
 	\centering
-	\caption{\textbf{\gls{sat} Solving.} \gls{rmse} (log\textsubscript{10} time) for performance prediction on \dataset{medium} and \dataset{large} \gls{sat} instances. Lower is better.}
+	\caption[SAT solving RMSE on medium and large instances]{\textbf{\gls{sat} Solving.} \gls{rmse} (log\textsubscript{10} time) for performance prediction on \dataset{medium} and \dataset{large} \gls{sat} instances. Lower is better.}
 	\label{table:sat_epm_res_med_large}
 	\begin{minipage}{0.48\textwidth}
 		\centering
@@ -354,7 +354,7 @@ Finally, we find more gaps closed for the large dataset across all three baselin
 \begin{table}[htbp]
 	\tabledefaults
 	\centering
-	\caption{\textbf{\gls{sat} Solving.} Algorithm selection results (gap closed; higher is better).}
+	\caption[SAT solving algorithm selection results]{\textbf{\gls{sat} Solving.} Algorithm selection results (gap closed; higher is better).}
 	\label{table:sat_as_res}
 	\resizebox{0.6\textwidth}{!}{%
 		\begin{tabular}{llcccc}

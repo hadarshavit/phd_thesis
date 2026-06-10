@@ -128,7 +128,7 @@ However, they are not in scope of our work presented here, as they are conceptua
     \draw[->, thick] (sampup.west) -| (4.1, -1.6); 
     \end{tikzpicture}%
     }
-    \caption{Bayesian optimisation pipeline with dynamic ensembling of surrogate models (\texttt{DyMBO}). In red, the blocks for the ensembling strategy that have been plugged into the standard \gls{bo} \changed{procedure}. We start by sampling an initial set of hyperparameter configurations and initialising the weights for surrogate models used to construct the ensemble. Within the \gls{bo} loop, all surrogates are separately fitted to the past observations and then combined in the weighted ensemble. The acquisition function is derived from the model ensemble and optimised to determine the next points to sample. \changed{The target function is evaluated on the points identified through the acquisition function optimisation.} The accuracy of the surrogate models is then evaluated on all sampled points, and surrogates are assigned new weights. Finally, the weighting scheme for the next iteration is obtained via an exponential moving average between the old and new weights, which is parametrised by a smoothing factor in order to determine how much historical information is retained. 
+    \caption[DyMBO pipeline overview]{Bayesian optimisation pipeline with dynamic ensembling of surrogate models (\texttt{DyMBO}). In red, the blocks for the ensembling strategy that have been plugged into the standard \gls{bo} \changed{procedure}. We start by sampling an initial set of hyperparameter configurations and initialising the weights for surrogate models used to construct the ensemble. Within the \gls{bo} loop, all surrogates are separately fitted to the past observations and then combined in the weighted ensemble. The acquisition function is derived from the model ensemble and optimised to determine the next points to sample. \changed{The target function is evaluated on the points identified through the acquisition function optimisation.} The accuracy of the surrogate models is then evaluated on all sampled points, and surrogates are assigned new weights. Finally, the weighting scheme for the next iteration is obtained via an exponential moving average between the old and new weights, which is parametrised by a smoothing factor in order to determine how much historical information is retained. 
     % \todo{mark explicitly where sample evaluation is happening}
     }
     
@@ -148,7 +148,7 @@ We provide the code, instructions for reproducibility, as well as all figures in
 \begin{figure}
     \centering
     \includegraphics[width=0.5\linewidth]{figures/06/figs/figs/ranks/main_ranks_intro_box_plot_rank.pdf}
-    \caption{
+    \caption[Rank box plot of methods on YAHPO and JAHS]{
     % \changed{
     Box plot showing the ranks of various methods across 859 benchmark functions from YAHPO Gym and JAHS-Bench-201. \texttt{DyMBO} outperforms all baselines.
     % }
@@ -357,7 +357,7 @@ We provide more details on these choices in~\autoref{sec:imp_det}.
 % \todo{add info on initial design from the response letter here}
 
 \begin{algorithm}
-  \caption{\texttt{DyMBO:} Dynamic Mixture of Surrogate Models in \gls{bo}}
+  \caption[DyMBO algorithm pseudocode]{\texttt{DyMBO:} Dynamic Mixture of Surrogate Models in \gls{bo}}
   
   \begin{algorithmic}[1]
         \STATE {\bfseries Input:} total budget $b$, size of newly sampled batch $k$, initial sample size $r$, loss function $c$, portfolio of surrogate models $M$, acquisition function $AF$, smoothing factor $\alpha$
@@ -563,7 +563,7 @@ We first present the rank results on different benchmarks for various budgets in
         \centering
         \includegraphics[scale=0.33]{figures/06/figs/figs/ranks/main_ranks_expensive_legend.pdf}
     \end{subfigure}
-    \caption{
+    \caption[Mean ranks by target function cost]{
     Mean ranks of \texttt{DyMBO} \changed{(with different values of $\alpha$)}, HEBO with different surrogate models, and other \gls{hpo} methods on YAHPO Gym and JAHS-Bench-201, split according to different budgets: (a) all target functions, (b) cheap target functions with a budget of up to 10 minutes, (c) medium-cost target functions with a budget between 10 minutes and up to 1 hour, (d) expensive target functions with a budget of more than 1 hour. %\hh{slightly modified:}
     % \changed{
     Although different methods ranked differently with different target functions costs, \texttt{DyMBO} achieves the top rank across all target functions.%}
@@ -600,7 +600,7 @@ We also present an analysis of the statistical significance of our results.
         % \caption{}
     \end{subfigure}
     % \includegraphics[scale=0.33]{figures/06/figs/figs/ranks/main_ranks_all_val.pdf}
-    \caption{%\changed{
+    \caption[Mean normalised regret across benchmarks]{%\changed{
     (a)
     Mean normalised regret \changed{of \texttt{DyMBO} (for different values of $\alpha$), HEBO with different surrogate models, and other \gls{hpo} methods} across all target functions from YAHPO Gym and JAHS-Bench-201. \texttt{DyMBO} achieves lower mean regret than the other methods. 
     (b) 
@@ -640,7 +640,7 @@ We therefore conclude that \texttt{DyMBO} significantly outperforms any other ba
 
 \begin{table}[h]
     \centering
-        \caption{
+        \caption[Win/tie counts per function category]{
         Win/tie counts of different \gls{bo}-based approaches, including \texttt{DyMBO}, single-surrogate HEBO baselines, and other \gls{hpo} methods, per function category (\emph{i.e.}, all, cheap, medium-cost, and expensive functions).
         \changed{We report the number of benchmark instances (out of the total across all seeds and functions) for which the method is statistically indistinguishable from the best-performing method under a permutation test with $\alpha = 0.05$. All \texttt{DyMBO} variants are significantly better than any other baseline. }
         % \aj{Table 1 conspicuously lacks a static ensemble baseline or an explicitly greedy ensemble baseline.}
@@ -739,7 +739,7 @@ We provide convergence plots in~\autoref{fig:full_res} and~\autoref{fig:full_res
         \centering
         \includegraphics[scale=0.33]{figures/06/figs/figs/co/co_8_init_srbv2\_xgboosti40499_time_legend.pdf}
     \end{subfigure}
-    \caption{Convergence plots of \changed{\texttt{DyMBO} (for different values of $\alpha$), HEBO with different surrogate models, and other \gls{hpo} methods} for the YAHPO-SO subset.
+    \caption[Convergence plots on YAHPO Gym]{Convergence plots of \changed{\texttt{DyMBO} (for different values of $\alpha$), HEBO with different surrogate models, and other \gls{hpo} methods} for the YAHPO-SO subset.
     }
     % \todo{}\er{What's happening in subfigure (t) for HEBO?}}
     \label{fig:full_res}
@@ -799,7 +799,7 @@ We provide convergence plots in~\autoref{fig:full_res} and~\autoref{fig:full_res
         \centering
         \includegraphics[scale=0.33]{figures/06/figs/figs/co/co_8_init_srbv2\_xgboosti40499_time_legend.pdf}
     \end{subfigure}
-    \caption{Convergence plots of \changed{\texttt{DyMBO} (for different values of $\alpha$), HEBO with different surrogate models, and other \gls{hpo} methods} for the YAHPO-SO subset (continued from~\autoref{fig:full_res}).
+    \caption[Convergence plots on JAHS-Bench-201]{Convergence plots of \changed{\texttt{DyMBO} (for different values of $\alpha$), HEBO with different surrogate models, and other \gls{hpo} methods} for the YAHPO-SO subset (continued from~\autoref{fig:full_res}).
     }
     % \todo{}\er{What's happening in subfigure (t) for HEBO?}}
     \label{fig:full_res2}
@@ -834,7 +834,7 @@ We see that dynamic ensembling outranks the single-surrogate baselines \changed{
     % \end{subfigure}
     \includegraphics
     [scale=0.33]{figures/06/figs/figs/ranks/main_ranks_all_fixed_legend.pdf}
-    \caption{Mean ranks of the different methods on YAHPO Gym and JAHS-Bench-201 with a total budget of 512 evaluations. \texttt{DyMBO} exhibits the best performance.
+    \caption[Mean ranks with budget of 512 evaluations]{Mean ranks of the different methods on YAHPO Gym and JAHS-Bench-201 with a total budget of 512 evaluations. \texttt{DyMBO} exhibits the best performance.
     }
     \label{fig:ranks512}
 \end{figure}
@@ -862,7 +862,7 @@ We evaluated the performance of our method with different numbers of initial ran
         % \caption{32 initial samples}
     \end{subfigure}
     
-    \caption{Mean ranks with different numbers of initial samples on YAHPO Gym and JAHS-Bench-201. \texttt{DyMBO} achieves the highest mean rank in both cases.
+    \caption[Mean ranks with different initial samples]{Mean ranks with different numbers of initial samples on YAHPO Gym and JAHS-Bench-201. \texttt{DyMBO} achieves the highest mean rank in both cases.
     % \todo{string "HEBO" can be dropped from the legends and explained in the caption, same for Fig.8 and Fig.9}
     }
     \label{fig:diff_init_samp}
@@ -886,7 +886,7 @@ We evaluated the performance of our method with different batch sizes. We used b
         \caption{Batch size 4}
     \end{subfigure}
     \includegraphics[scale=0.33]{figures/06/figs/figs/ranks/main_ranks_4_8_all_legend.pdf}
-    \caption{Mean ranks with different batch sizes on YAHPO Gym and JAHS-Bench-201. \texttt{DyMBO} has the highest mean rank in both cases.
+    \caption[Mean ranks with different batch sizes]{Mean ranks with different batch sizes on YAHPO Gym and JAHS-Bench-201. \texttt{DyMBO} has the highest mean rank in both cases.
     % \todo{legend?}
     }
     \label{fig:diff_batch_sizer}
@@ -924,7 +924,7 @@ We \changed{ran} the dynamic ensembling method with EI, PI and UCB \changed{sepa
         % \caption{32}
     % \end{subfigure}
     \includegraphics[scale=0.33]{figures/06/figs/figs/ranks/act_all_legend.pdf}
-    \caption{Mean ranks of \texttt{DyMBO} with different acquisition functions on YAHPO Gym and JAHS-Bench-201. Using MACE yields the best performance.}
+    \caption[DyMBO with different acquisition functions]{Mean ranks of \texttt{DyMBO} with different acquisition functions on YAHPO Gym and JAHS-Bench-201. Using MACE yields the best performance.}
     \label{fig:acqs}
 \end{figure}
 
@@ -992,7 +992,7 @@ We see in~\autoref{fig:diff_var_w} that using different weights for variance ran
         \includegraphics[width=\textwidth]{figures/06/figs/variance/ens_var_error_4.pdf}
         \caption{)}
     \end{subfigure}
-    \caption{Illustration of the calculation of the variance error. The white dot is the predicted mean, and the blue dot is the actual value of the target function.
+    \caption[Variance error calculation illustration]{Illustration of the calculation of the variance error. The white dot is the predicted mean, and the blue dot is the actual value of the target function.
     \changed{
     We distinguish between four cases, depending on whether the actual value of the target function lies within or outside of the uncertainty bounds around the predicted mean, and whether it is smaller or bigger than the value of the predicted mean.
     }

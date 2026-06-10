@@ -131,7 +131,7 @@ While other metrics to quantify surrogate models exist, such as log-likelihood a
         % \vfill % No longer needed
     \end{subfigure}
     \hfill
-    \caption{(a) Original noise functions. Note that different noise functions have different areas under the curve; hence, we normalise the different functions by dividing by their integral. (b) Normalised noise functions with equal area under the curve.}
+    \caption[Original noise functions and schedules]{(a) Original noise functions. Note that different noise functions have different areas under the curve; hence, we normalise the different functions by dividing by their integral. (b) Normalised noise functions with equal area under the curve.}
     \label{fig:sched_funcs}
 \end{figure}
 We construct a noisy oracle surrogate model to assess where surrogate models need to be accurate. The noisy oracle is parameterised by a noise function $s:\sR\rightarrow\sR$ and a base noise level $N_\text{base}$. Like other surrogate models in Bayesian optimisation, the noisy oracle produces a predictive mean and variance for each candidate. The predictive mean returned for a candidate solution $x$ is
@@ -275,7 +275,7 @@ We performed our experiments on a compute cluster with 19 nodes; each node is eq
         \centering
         \includegraphics[scale=0.33]{figures/09/figures/noise_types_levels/rs_BBOBValueBased_2_0.3_ei_rank_legend.pdf}
     \end{subfigure}
-    \caption{Mean ranks of regret resulting from running Bayesian optimisation with different value-based noise functions over different noise levels on the BBOB functions. For noise levels up to $0.1$, noise functions that give an advantage to larger areas around the optimum, at the expense of being more inaccurate far from it perform best. For higher noise levels, constant noise performs better.}
+    \caption[Value-based noise ranks on BBOB]{Mean ranks of regret resulting from running Bayesian optimisation with different value-based noise functions over different noise levels on the BBOB functions. For noise levels up to $0.1$, noise functions that give an advantage to larger areas around the optimum, at the expense of being more inaccurate far from it perform best. For higher noise levels, constant noise performs better.}
     \label{fig:value_based}
 \end{figure}
 
@@ -319,7 +319,7 @@ As the noise level increases ($0.2$--$0.5$), constant noise becomes the best noi
         \centering
         \includegraphics[scale=0.33]{figures/09/figures/noise_types_levels/rs_BBOBValueBased_0.3_ei_rank_pd1_legend.pdf}
     \end{subfigure}
-    \caption{Mean ranks of regret resulting from running Bayesian optimisation with different value-based noise functions over different noise levels on the real-world PD1 benchmark. Similar to the synthetic benchmark results, polynomial noise functions perform well at lower noise levels, whereas constant noise struggles significantly.}
+    \caption[Value-based noise ranks on PD1]{Mean ranks of regret resulting from running Bayesian optimisation with different value-based noise functions over different noise levels on the real-world PD1 benchmark. Similar to the synthetic benchmark results, polynomial noise functions perform well at lower noise levels, whereas constant noise struggles significantly.}
     \label{fig:value_based_pd1}
 \end{figure}
 
@@ -359,7 +359,7 @@ The PD1 results in \autoref{fig:value_based_pd1} show a similar transition. At l
         \centering
         \includegraphics[scale=0.33]{figures/09/figures/noise_types_levels/rs_BBOBDistanceToOptimum_2_0.5_ei_rank_legend.pdf}
     \end{subfigure}
-    \caption{Mean ranks of regret resulting from running Bayesian optimisation with different distance-based noise functions over different noise levels. For all noise levels, constant noise 
+    \caption[Distance-based noise ranks on BBOB]{Mean ranks of regret resulting from running Bayesian optimisation with different distance-based noise functions over different noise levels. For all noise levels, constant noise 
     gives the best performance, with the margin increasing with the noise level.}
     \label{fig:dist_opt}
 \end{figure}
@@ -394,7 +394,7 @@ The PD1 results in \autoref{fig:value_based_pd1} show a similar transition. At l
         \centering
         \includegraphics[scale=0.33]{figures/09/figures/noise_types_levels/rs_BBOBDistanceToOptimum_0.5_ei_rank_pd1_legend.pdf}
     \end{subfigure}
-    \caption{Mean ranks of regret resulting from running Bayesian optimisation with different distance-based noise functions over different noise levels on the PD1 benchmark. Constant noise achieves best performance, unless the noise level is minimal.}
+    \caption[Distance-based noise ranks on PD1]{Mean ranks of regret resulting from running Bayesian optimisation with different distance-based noise functions over different noise levels on the PD1 benchmark. Constant noise achieves best performance, unless the noise level is minimal.}
     \label{fig:dist_opt_pd1}
 \end{figure}
 Next, we evaluate noise functions based on the distance from the optimum. The results are presented in Figure~\ref{fig:dist_opt}. Similarly to the value-based noise functions, we look at all BBOB functions and use the optimisation with the EI acquisition function. Compared with value-based noise, distance-based noise exhibits markedly different behaviour with the noise schedules. Constant noise is consistently the strongest schedule; the performance gap widens with each increase in noise level. The exponential noise schedules follow the constant noise.
@@ -437,7 +437,7 @@ Taken together with the results from the previous sub-section, these results ind
         % \caption{}
         % \vfill % No longer needed
     \end{subfigure}
-    \caption{Convergence plots of BBOB functions 1 (a-c) and 20 (d-f) with noise levels ($0.01, 0.05, 0.1$), different noise schedules using distance-based noise. On function 1 and lower noise levels, it is better to be accurate around the optimum. For function 20, constant noise dominates, followed by more benign noise functions that give only modest advantage to solutions around the optimum.}
+    \caption[Convergence plots with distance-based noise]{Convergence plots of BBOB functions 1 (a-c) and 20 (d-f) with noise levels ($0.01, 0.05, 0.1$), different noise schedules using distance-based noise. On function 1 and lower noise levels, it is better to be accurate around the optimum. For function 20, constant noise dominates, followed by more benign noise functions that give only modest advantage to solutions around the optimum.}
     \label{fig:conv_sample}
 \end{figure}
 
@@ -493,7 +493,7 @@ These results challenge the common assumption that being accurate around the opt
         \includegraphics[scale=0.33]{figures/09/figures/noise_type_comp/rs_tanh_2_ei_rank_legend.pdf}
         % \caption{}
     \end{subfigure}
-    \caption{Mean ranks of the regret resulting from running Bayesian optimisation with different noise types and levels. Each plot represents one noise function. For polynomial noise functions, value-based noise is superior to distance-based noise.}
+    \caption[Noise type and level comparison on BBOB]{Mean ranks of the regret resulting from running Bayesian optimisation with different noise types and levels. Each plot represents one noise function. For polynomial noise functions, value-based noise is superior to distance-based noise.}
     \label{fig:function_types}
 \end{figure}
 
@@ -542,7 +542,7 @@ We compare value-based and distance-based noise within each schedule family. In 
         \includegraphics[scale=0.33]{figures/09/figures/noise_type_comp/rs_tanh_ei_rank_pd1_legend.pdf}
         % \caption{}
     \end{subfigure}
-    \caption{Mean ranks of regret resulting from evaluating different noise types and levels on the PD1 benchmark. Each plot represents a specific noise function, comparing its value-based and distance-based variants across noise levels.}
+    \caption[Noise type and level comparison on PD1]{Mean ranks of regret resulting from evaluating different noise types and levels on the PD1 benchmark. Each plot represents a specific noise function, comparing its value-based and distance-based variants across noise levels.}
     \label{fig:function_types_pd1}
 \end{figure}
 
@@ -569,7 +569,7 @@ The results are shown in Figure~\ref{fig:diff_acqs}.
         \centering
         \includegraphics[scale=0.33]{figures/09/figures/noise_types_levels/rs_BBOBValueBased_2_0.1_lcb_rank_legend.pdf}
     \end{subfigure}
-    \caption{Mean ranks of regret resulting from running Bayesian optimisation with value-based noise functions with different acquisition functions and noise level of $0.1$. (a) PI. (b) LCB. The best performing noise functions remain similar to using EI as an acquisition.}
+    \caption[Acquisition function comparison on BBOB]{Mean ranks of regret resulting from running Bayesian optimisation with value-based noise functions with different acquisition functions and noise level of $0.1$. (a) PI. (b) LCB. The best performing noise functions remain similar to using EI as an acquisition.}
     \label{fig:diff_acqs}
 \end{figure}
 
@@ -588,7 +588,7 @@ The results are shown in Figure~\ref{fig:diff_acqs}.
         \centering
         \includegraphics[scale=0.33]{figures/09/figures/noise_types_levels/rs_BBOBValueBased_0.1_lcb_rank_pd1_legend.pdf}
     \end{subfigure}
-    \caption{Mean ranks of regret on the PD1 benchmark using value-based noise with (a) PI and (b) LCB acquisition functions at a noise level of $0.1$. The relative performance of the noise functions remains consistent with EI.}
+    \caption[Acquisition function comparison on PD1]{Mean ranks of regret on the PD1 benchmark using value-based noise with (a) PI and (b) LCB acquisition functions at a noise level of $0.1$. The relative performance of the noise functions remains consistent with EI.}
     \label{fig:diff_acqs_pd1}
 \end{figure}
 
@@ -610,7 +610,7 @@ In the next step, we also check whether different acquisition function optimiser
         % \caption{}
         % \vfill % No longer needed
     \end{subfigure}
-    \caption{Mean ranks of regret resulting from running Bayesian optimisation with value-based noise functions using different acquisition function optimisers: local search and random search, at a noise level of $0.1$. The best-performing noise functions remain similar to the random search case.}
+    \caption[Local search optimisation comparison on BBOB]{Mean ranks of regret resulting from running Bayesian optimisation with value-based noise functions using different acquisition function optimisers: local search and random search, at a noise level of $0.1$. The best-performing noise functions remain similar to the random search case.}
     \label{fig:acq_opts}
 \end{figure}
 
@@ -624,7 +624,7 @@ In the next step, we also check whether different acquisition function optimiser
         \centering
         \includegraphics[scale=0.33]{figures/09/figures/noise_types_levels/default_BBOBValueBased_0.1_ei_rank_pd1_legend.pdf}
     \end{subfigure}
-    \caption{Mean ranks of regret on the PD1 benchmark using value-based noise and local search for acquisition function optimisation at a noise level of $0.1$.}
+    \caption[Local search optimisation comparison on PD1]{Mean ranks of regret on the PD1 benchmark using value-based noise and local search for acquisition function optimisation at a noise level of $0.1$.}
     \label{fig:acq_opts_pd1}
 \end{figure}
 
@@ -647,7 +647,7 @@ We check whether our results hold across different dimensionalities of the BBOB 
         \centering 
         \includegraphics[scale=0.33]{figures/09/figures/noise_types_levels/rs_BBOBValueBased_8_0.1_ei_rank_legend.pdf}
     \end{subfigure}
-    \caption{Mean ranks of resulting regrets of running Bayesian optimisation with EI as an acquisition function with different value-based noise functions over different noise levels. With a noise level of $0.1$ on dimensions 4 and 8. With higher dimensions, more noise functions perform well. However, constant noise performs worse than other noise levels for both cases.}
+    \caption[Combined noise analysis on BBOB]{Mean ranks of resulting regrets of running Bayesian optimisation with EI as an acquisition function with different value-based noise functions over different noise levels. With a noise level of $0.1$ on dimensions 4 and 8. With higher dimensions, more noise functions perform well. However, constant noise performs worse than other noise levels for both cases.}
     \label{fig:dims}
 \end{figure}
 
@@ -683,7 +683,7 @@ The convergence comparison on F1 versus F20 further suggests that landscape stru
         \includegraphics[]{figures/09/figures/contours/ground_truth.pdf}
         \caption{Ground truth}
     \end{subfigure}
-    \caption{Error of GP trained on different subsets of solutions from a trajectory of \gls{bo} on BBOB F3 (a-d). (e) ground truth values of the function. When the optimisation progresses, better predictions are made in high-performance regions, at the expense of low-performance regions.}
+    \caption[GP error analysis on BBOB F3]{Error of GP trained on different subsets of solutions from a trajectory of \gls{bo} on BBOB F3 (a-d). (e) ground truth values of the function. When the optimisation progresses, better predictions are made in high-performance regions, at the expense of low-performance regions.}
     \label{fig:gps_accs}
 \end{figure}
 
@@ -716,7 +716,7 @@ The convergence comparison on F1 versus F20 further suggests that landscape stru
         \includegraphics[]{figures/09/figures/contours/ground_truth.pdf}
         \caption{Ground truth}
     \end{subfigure}
-    \caption{Error of random forest trained on different subsets of solutions from a trajectory of \gls{bo} on BBOB F3 (a-d). (e) ground truth values of the function. When the optimisation progresses, better predictions are made in high-performance regions, at the expense of low-performance regions.}
+    \caption[Random forest error analysis on BBOB F3]{Error of random forest trained on different subsets of solutions from a trajectory of \gls{bo} on BBOB F3 (a-d). (e) ground truth values of the function. When the optimisation progresses, better predictions are made in high-performance regions, at the expense of low-performance regions.}
     \label{fig:rfs_accs}
 \end{figure}
 
