@@ -87,20 +87,37 @@
 
 \part{Better Features}
 
-\include{Chapters/Chapter04_rev_satzilla}
-\include{Chapters/Chapter05_dim_red}
-\include{Chapters/Chapter06_dymbo}
+\noindent
+This part begins with the objects on which empirical performance models operate: the representations of instances, data sets, and search spaces.
+The chapters show that predictive performance is constrained not only by the learning algorithm, but also by whether the relevant information is available in a form that can be computed, compared, and used reliably.
+The part starts with modernising hand-crafted \gls{sat} features, then studies dimensionality reduction as a task-dependent representation problem, and finally considers how surrogate-model suitability itself can be represented dynamically during optimisation.
+
+\include{Chapters/Chapter03_rev_satzilla}
+\include{Chapters/Chapter04_dim_red}
+\include{Chapters/Chapter05_dymbo}
 
 
 \part{Better Models}
-\include{Chapters/Chapter07_graphbench}
 
-\include{Chapters/Chapter08_automl}
-\include{Chapters/Chapter09_noisy_oracle}
+\noindent
+Once useful representations are available, the next question is how to build models that make better decisions from them.
+This part studies empirical performance models and surrogate models from complementary perspectives: learning directly from graph-structured instances, applying performance prediction ideas in automated machine learning, and analysing where surrogate accuracy matters in Bayesian optimisation.
+Together, these chapters move from improving the inputs to improving the predictive mechanisms themselves.
+
+\include{Chapters/Chapter06_graphbench}
+
+\include{Chapters/Chapter07_automl}
+\include{Chapters/Chapter08_noisy_oracle}
 
 \part{Better Insights}
-\include{Chapters/Chapter10_dis_explain}
-\include{Chapters/Chapter11_asf}
+
+\noindent
+The final technical part asks how empirical performance prediction can be made more interpretable, reusable, and broadly applicable.
+Accurate predictions are valuable, but they are more useful when they explain which instance properties matter, expose uncertainty in algorithm behaviour, and can be deployed through common software interfaces.
+The chapters in this part therefore study distribution-level explanations of randomised algorithm performance and a general-purpose library for algorithm selection workflows.
+
+\include{Chapters/Chapter09_dis_explain}
+\include{Chapters/Chapter10_asf}
 
 
 \part{Conclusions}

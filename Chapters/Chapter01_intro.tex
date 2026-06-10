@@ -2,118 +2,139 @@
 \chapter{Introduction}\label{ch:introduction}
 %************************************************
 
-Artificial intelligence (AI) has made significant progress in recent decades, both in research and practice. The ability of AI methods to solve various problems across a growing number of domains has led to their wide adoption in a variety of applications.
-For example, deep learning methods are now able to classify images and to process natural language in a way that could not be imagined a few years ago. 
-However, AI is much more than deep learning and image processing.
-AI can be used for automated reasoning, where problems are modeled as logical statements and decisions are made through deduction. Also, AI is used to esnure that sytems, such as software and harware systems are functioning correctly and do not have security vulnerabilties.
-Additional problems include optimisation problems, where AI methods are used to find well-performing solutions for given problems.
+Artificial intelligence (\gls{ai}) has made substantial progress in recent decades, both in research and in practice.
+Modern \gls{ai} methods solve problems across a growing range of domains: they classify images, process natural language, support automated reasoning, verify hardware and software systems, and search for high-quality solutions to difficult optimisation problems.
+This diversity is important for the perspective taken in this dissertation.
+\Gls{ai} is not a single algorithmic technology, but a broad collection of methods whose behaviour depends strongly on the problem instances, data sets, configurations, and computational budgets to which they are applied.
 
-A common ground for all of the problems is that many algorithms exist to solve each of them, and each has many (hyper)parameters that control their behaviour. 
-Furthermore, there exists many problem instances, where each algorithm with each hyperparameter configuration can perform differently, which in many cases can depend on the run, as the algorithms are stochastic.
 
-Empirical performance prediction predicts the performance of (AI) algorithms on unseen problem instances, configurations or combinations of both, without running them. Such methods have various use cases, such as:
-\begin{itemize}
-    \item Automated algorithm selection (AS): choosing the best algorithm for a given problem instance
-    \item Automated algorithm configuration (AC): choosing the best parameters for a given algorithm and problem instance
-    \item Explaining algorithm behaviour: understanding why an algorithm performs well or poorly on a given problem instance
-\end{itemize}
+A common feature of these settings is that there are usually many candidate algorithms, and each algorithm often has many hyperparameters that control its behaviour.
+Moreover, the performance of these algorithms can vary significantly across different instances and configurations.
+An algorithm that is performs well on one instance may be weak on another, a configuration that works well for one data set may fail on a different one, and stochastic algorithms may behave differently across repeated runs on the same input.
+These performance variabilities are challenging to model and predict, however, they provide an opportunity to select and configure the best algorithm for a given task.
 
-There exists additional use-cases of empirical performance prediction, however, they are not used in this dissertation. The field of empirical performance prediction is important for the advancement of AI, as it enables the development of more efficient and effective AI methods.
+Empirical performance prediction is predicting the performance of algorithms on unseen problem instances, configurations, or combinations of both.
+In automated algorithm selection, such predictions support choosing an algorithm for a given instance.
+In automated algorithm configuration and hyperparameter optimisation, they support searching for high-performing configurations.
+In explainability-oriented settings, they support understanding which instance properties, configuration choices, or regions of the search space drive algorithm behaviour.
+Although these uses differ in detail, they share the same underlying question: how can we learn useful models of algorithm performance from empirical observations?
 
-However, despite the great success of such methods, they are not commonly used in practice, or even, by researchers in other sub-fields of AI. This is partly because using the methods is hard, the performance is not good enough.
-In this dissertation, we look at emprical performance prediction from a number of viewpoints, and propose methods to overcome some of the current limitations.
+Despite the success of empirical performance prediction, these methods are still difficult to use robustly in many settings.
+High-quality instance features may be expensive to compute or unavailable, predictive models may not be accurate enough in the parts of the space that matter for decision making and even when predictions are accurate, they may be hard to interpret or deploy in real-world applications.
+This dissertation studies empirical performance prediction through these connected limitations and develops methods, benchmarks, and tools that make performance prediction more useful in practice.
 
 \section{Challenges in the field}
 
 \subsection{Features are hard to extract, expensive and not always available}
 
-When applying empirical performance prediction across instances, for example in automated algorithm selection and configuration techniques, a crucial first step is representing problem instances using descriptive numerical features. However, extracting high-quality features in practice faces several severe challenges, such as speed, instances size, and availability. Early in the work, we realised that for the famous SAT problem, where empirical performance prediction has long been applied, there are numerous difficulties extracting such features. These result from the advancement of computing systems, higher capabilities of SAT solvers, and more generally, the ever increased sizes of problem instances. Therefore, a better feature extraction mechanism is required to allow better features, which will in turn allow better performance prediction.
+When empirical performance prediction is applied across problem instances, as in automated algorithm selection and many configuration techniques, a crucial first step is to represent each instance through descriptive numerical features.
+However, extracting high-quality features in practice can be slow, brittle, or impossible for large modern instances.
+Early in this work, we observed this problem in the Boolean satisfiability problem (\gls{sat}), a domain in which empirical performance prediction has been used for many years.
+The widely used SATzilla feature extraction pipeline had become difficult to apply to contemporary \gls{sat} instances because solvers, preprocessors, instance sizes, and computing systems had changed substantially since the original implementation.
+This creates a direct bottleneck: if the features cannot be computed reliably, downstream performance prediction, algorithm selection, and explainability cannot be used reliably either.
 
-Additionally, many real-world problems are high-dimensional, which can cause severe scalability and performance degradation, often referred to as the curse of dimensionality, where the volume of the search space grows exponentially, making data points extremely sparse and search landscapes highly intractable. In black-box optimisation, this means that locating optimal solutions requires significantly more function evaluations, which can be prohibitively expensive. To solve such problems, empirical performance prediction is used in model-based optimisation. Additionally, estimating the performance of algorithms on unseen problem instances can provide be then used for algorithm selection and explainability. One approach to alleviate the issue of high dimensionality is to use dimensionality reduction techniques to project the high-dimensional search space onto a lower-dimensional subspace. However, while many dimensionality reduction methods exist, most of them have been developed and evaluated for classical machine learning tasks like clustering and classification, and it is not always clear how they perform on optimisation problems. Optimisation landscapes possess distinct properties where preserving target values and navigating the geometry of the search space are critical, unlike standard unsupervised tasks that focus solely on preserving global data variance. Consequently, there is a strong performance complementarity among different reduction methods across tasks, sample sizes, and dimensionalities, necessitating a systematic, task-driven assessment to guide the choice of the reduction technique.
+Feature representation also matters in high-dimensional optimisation and machine learning settings.
+Many real-world problems are high-dimensional, which can lead to severe scalability and performance degradation.
+In black-box optimisation, the volume of the search space grows quickly with dimensionality, making useful observations sparse and locating high-performing solutions expensive.
+Dimensionality reduction is one way to alleviate this problem by projecting high-dimensional spaces onto lower-dimensional representations.
+However, many dimensionality reduction methods were originally designed and evaluated for classical machine learning tasks, such as clustering or classification.
+It is therefore not obvious whether they preserve the aspects of the search space that matter for optimisation, where target values and landscape geometry can be more important than global variance.
+This motivates a task-driven view of representation quality.
 
 \subsection{Models are not accurate enough}
 
-Even with informative features, the predictive models and surrogate models used in algorithm selection, configuration, and Bayesian optimizsation must achieve high accuracy to guide decisions effectively. Standard modeling approaches face significant hurdles related to representation, target distribution, and optimisation dynamics. Traditional tabular models rely heavily on hand-crafted features, which may fail to capture the underlying topology and global structural properties of complex instances, such as Boolean formulas or planning graphs. In addition, algorithmic performance, especially for randomized heuristic solvers, is inherently stochastic, resulting in noisy target variables that are difficult to model. Performance data is also frequently right-censored because solvers are terminated at a predefined cutoff time, meaning the true execution time for unsolved instances is unknown, and standard regression models struggle to handle this censoring without yielding biased predictions. In the context of Bayesian optimisation, different surrogate models, such as Gaussian processes and tree-based ensembles, exhibit complementary strengths depending on the search space properties. Statically choosing a single surrogate model or using a fixed ensemble throughout the optimisation run often yields suboptimal results, as the model's suitability changes during different phases of the search trajectory. 
-Finally, in optimisation contexts, traditional machine learning metrics like global mean squared error do not necessarily correlate with optimisation success. A surrogate model does not need to be uniformly accurate across the entire search space, yet it is poorly understood where accuracy is most critical, whether geometric proximity to the optimum or objective value quality is what prevents the acquisition function from being misled into suboptimal regions.
+Even with informative features, the predictive models and surrogate models used in algorithm selection, configuration, and Bayesian optimisation must be accurate enough to guide decisions effectively.
+Standard modelling approaches face several difficulties.
+Tabular empirical performance models depend heavily on hand-crafted features, which may fail to capture the global structure of complex objects such as Boolean formulae.
+Algorithmic performance, especially for randomised solvers, is often stochastic, so a single scalar target can hide important variation between runs.
+Performance data can also be right-censored when solvers are stopped at a cutoff time, which makes the true runtime of unsolved instances unknown.
+
+In Bayesian optimisation, the role of accuracy is even more subtle.
+Different surrogate models, such as Gaussian processes, random forests, and gradient-boosted trees, have complementary strengths depending on the search space and the phase of the optimisation trajectory.
+Choosing one surrogate model statically can therefore be limiting.
+Moreover, traditional machine learning metrics such as global mean squared error do not necessarily explain optimisation success.
+A surrogate model does not need to be uniformly accurate everywhere; rather, it needs to be accurate in the regions where prediction errors can mislead the acquisition function.
+Understanding where accuracy matters is therefore central to designing better model-based optimisation methods.
 
 \subsection{Hard to use existing methods and to gain insights}
 
-Finally, even when features can be successfully extracted and models are sufficiently accurate, deploying these methods in practical workflows and extracting scientific insights from them remains exceptionally difficult due to usability and explainability barriers. The algorithm selection and configuration communities have historically developed domain-specific tools in isolation, leading to separate pipelines for SAT solving, automated planning, or hyperparameter optimization. The absence of a unified, problem-agnostic library with a standardized API makes it difficult to apply methods developed in one domain to another, leading to redundant implementations and hindering fair benchmarking and reproducibility. Another major challenge is that most standard performance models predict a single scalar statistic, such as the mean running time, treating algorithm performance as a deterministic outcome. This ignores the run-to-run variation of randomized algorithms, making such models unsuitable for risk-sensitive applications where variance, skewness, and tail risks are critical. While probabilistic distribution predictors can capture run-to-run variance, explaining their predictions is difficult. Standard explainability techniques, such as partial dependence plots or individual conditional expectation curves, are designed for scalar-valued targets and cannot be applied directly to parametric distribution outputs. Explaining the raw parameters of a distribution is mathematically uninterpretable, necessitating methods that decompose predictions into interpretable statistics, such as mean, variance, or skewness, and map them back to instance features.
+Finally, even when features can be computed and models are accurate, using empirical performance prediction in practical workflows and extracting scientific insight from it remain difficult.
+The algorithm selection and configuration communities have historically developed domain-specific tools in isolation, leading to separate pipelines for \gls{sat} solving, automated planning, machine learning, and black-box optimisation.
+The lack of a unified, problem-agnostic software interface makes it harder to apply methods across domains, compare them fairly, and reproduce results.
+
+There is also an explainability barrier.
+Most empirical performance models predict a single statistic, such as mean runtime, and therefore treat algorithm performance as if it were deterministic.
+For randomised algorithms, this misses run-to-run variation that may be crucial in risk-sensitive settings.
+Distributional performance models can capture this variation, but explaining their predictions is not straightforward.
+Standard explainability techniques are designed for scalar-valued predictions and cannot be applied directly to raw distribution parameters in a way that is immediately meaningful.
+To gain insight, distribution predictions need to be connected to interpretable statistics such as mean, variance, skewness, and tail behaviour.
 
 \section{Contributions of this thesis}
 
-\noindent\textcolor{webgreen}{Hadar Shavit} and Holger H. Hoos (2024). ``Revisiting SATzilla Features in 2024.'' In: \textit{Proceedings of the International Conference on Theory and Applications of Satisfiability Testing (SAT 2024)}, pages 27:1--27:26.
+This dissertation is organised around three connected questions.
+First, how can we obtain better representations of problem instances and search spaces?
+Second, how can we build better predictive models and surrogate models once those representations are available?
+Third, how can we make the resulting methods easier to understand, compare, and use?
+The chapters answer these questions in sequence.
 
-Here, we revisit and modernize the feature extraction tool of the widely adopted SATzilla algorithm selector, which had not been updated since 2012. We replace the outdated preprocessors and solvers with contemporary versions, resolve compilation and memory errors encountered with modern, larger SAT instances, and introduce a user-configurable feature computation timeout.
-Specifically, our contributions are:
-\begin{itemize}
-    \item[(a)] updating and modernizing the SATzilla feature extraction pipeline with contemporary preprocessors and solvers,
-    \item[(b)] resolving compilation and memory limitations to allow feature extraction on modern, large-scale SAT instances, and
-    \item[(c)] demonstrating significant performance improvements on satisfiability prediction, runtime prediction, and automated algorithm selection downstream tasks.
-\end{itemize}
+\subsection{Contributions by thesis part}
 
-\vspace{1.5em}
-\noindent\textcolor{webgreen}{Hadar Shavit}, Anja Jankovic, Elena Raponi, Thomas B\"ack, and Holger H. Hoos (2025). ``Task-driven Assessment of Dimensionality Reduction Methods for Machine Learning and Black-Box Optimisation.'' \textit{Under revision}.
+\subsubsection{Better Features}
 
-Here, we present a systematic, task-driven benchmarking of 16 linear and non-linear, supervised and unsupervised dimensionality reduction techniques across diverse machine learning and black-box optimization tasks. We assess how well these techniques project search spaces while preserving critical target and landscape geometries, rather than just data variance.
-Specifically, our contributions are:
-\begin{itemize}
-    \item[(a)] providing a comprehensive benchmark of 16 dimensionality reduction methods on both classical machine learning and black-box optimization tasks,
-    \item[(b)] demonstrating that traditional unsupervised methods which focus on data variance can perform poorly when optimization target values and geometry are critical, and
-    \item[(c)] revealing a strong performance complementarity among reduction methods, highlighting the necessity of a task-driven selection process.
-\end{itemize}
+The first part of the dissertation focuses on the representations that make empirical performance prediction possible.
+In Chapter~\ref{ch:rev_SATzilla}, based on the publication by \textcolor{webgreen}{Hadar Shavit} and Holger H. Hoos (2024), ``Revisiting SATzilla Features in 2024,'' we revisit the feature extraction pipeline of the SATzilla algorithm selector.
+The main contribution of this chapter is a modernised feature extraction tool that replaces outdated preprocessors and solvers, resolves compilation and memory issues encountered on contemporary \gls{sat} instances, and introduces a configurable feature computation timeout.
+The chapter shows that this infrastructure work is not merely engineering maintenance: updating the feature extractor leads to better downstream performance in satisfiability prediction, runtime prediction, and automated algorithm selection.
+In this sense, the chapter establishes a central theme of the dissertation: better empirical performance prediction often begins with making the inputs to the model reliable and informative.
 
-\vspace{1.5em}
-\noindent\textcolor{webgreen}{Hadar Shavit}, Anja Jankovic, Elena Raponi, Thomas B\"ack, and Holger H. Hoos (2025). ``DyMBO: Dynamic Mixture of Surrogate Models for Hyperparameter Optimisation.'' \textit{Under review at the Journal of Machine Learning Research (JMLR)}.
+Chapter~\ref{ch:dim_red}, based on work by \textcolor{webgreen}{Hadar Shavit}, Anja Jankovic, Elena Raponi, Thomas B\"ack, and Holger H. Hoos (2025), ``Task-driven Assessment of Dimensionality Reduction Methods for Machine Learning and Black-Box Optimisation,'' broadens the representation question from \gls{sat} features to high-dimensional spaces.
+The chapter contributes a systematic benchmark of dimensionality reduction methods across machine learning and black-box optimisation tasks.
+Rather than judging dimensionality reduction only by generic reconstruction or variance-preservation criteria, the chapter evaluates whether reduced representations preserve the information needed for specific downstream tasks.
+The results show strong performance complementarity: methods that work well for one task, dimensionality, or data regime may be poor choices for another.
+This makes dimensionality reduction itself an algorithm selection problem and motivates task-aware representation choices.
 
-Here, we introduce DyMBO, a plug-in ensembling strategy for Bayesian optimization that dynamically selects and weights heterogeneous surrogate models. DyMBO evaluates the predictive ranking quality of candidate surrogates at each step and updates their weights using a memory-aware exponential moving average of their ranking losses.
-Specifically, our contributions are:
-\begin{itemize}
-    \item[(a)] proposing a dynamic ensembling approach that weights surrogate models based on their recent ranking performance rather than global error,
-    \item[(b)] introducing a memory-aware exponential moving average formulation to smoothly transition weights during the optimization trajectory, and
-    \item[(c)] showing that DyMBO dynamically adapts to different search phases and consistently outperforms traditional static surrogate and ensemble baselines.
-\end{itemize}
+Chapter~\ref{ch:dymbo}, based on work by \textcolor{webgreen}{Hadar Shavit}, Anja Jankovic, Elena Raponi, Thomas B\"ack, and Holger H. Hoos (2025), ``DyMBO: Dynamic Mixture of Surrogate Models for Hyperparameter Optimisation,'' connects representation quality to model-based optimisation.
+Although the chapter primarily develops a modelling method, it appears in this part because its central mechanism depends on representing the changing suitability of surrogate models during an optimisation run.
+DyMBO contributes a dynamic ensembling strategy that evaluates the recent ranking quality of candidate surrogate models and uses a memory-aware exponential moving average to update their weights.
+The resulting optimiser adapts to different search phases and improves over static surrogate choices and competing hyperparameter optimisation frameworks.
+Together with the preceding chapters, this shows that empirical performance prediction benefits not only from better instance features, but also from better representations of which modelling assumptions are appropriate at a given moment.
 
-\vspace{1.5em}
-\noindent\textcolor{webgreen}{Hadar Shavit} and Holger H. Hoos (2025). ``Graph Neural Networks as Empirical Performance Models.'' \textit{Manuscript in preparation}.
+\subsubsection{Better Models}
 
-Here, we explore the use of Graph Neural Networks (GNNs) as empirical performance models (EPMs) to predict solver runtimes and select algorithms directly from graph representations of SAT instances. We construct a large-scale benchmark and evaluate multiple GNN architectures against standard tabular models trained on hand-crafted SATzilla features.
-Specifically, our contributions are:
-\begin{itemize}
-    \item[(a)] building a large-scale benchmark scenario for graph-based SAT algorithm selection, covering multiple graph representations and solver portfolios,
-    \item[(b)] evaluating the capability of GNNs to learn representation features directly from the topological structure of Boolean formulas, and
-    \item[(c)] showing that GNNs achieve competitive prediction and selection performance without requiring expensive hand-crafted features.
-\end{itemize}
+The second part turns from representation to predictive modelling.
+Chapter~\ref{ch:gnns_epms}, based on \textcolor{webgreen}{Hadar Shavit} and Holger H. Hoos (2025), ``Graph Neural Networks as Empirical Performance Models,'' studies whether graph neural networks can predict \gls{sat} solver performance directly from graph representations of Boolean formulae.
+The chapter contributes a benchmark for graph-based \gls{sat} empirical performance prediction and compares multiple graph representations and neural architectures against standard tabular models trained on hand-crafted SATzilla features.
+Its main contribution is to show that learned graph representations can be competitive for performance prediction and algorithm selection, and can in some settings outperform hand-crafted features.
+This provides a complementary answer to the feature-engineering work in Chapter~\ref{ch:rev_SATzilla}: instead of only improving hand-crafted features, we can also learn representations from the structure of the instance itself.
 
-\vspace{1.5em}
-\noindent\textcolor{webgreen}{Hadar Shavit} and Holger H. Hoos (2025). ``Understanding Surrogate Model Accuracy in Bayesian Optimisation.'' \textit{Under revision}.
+The automated machine learning chapter studies empirical performance prediction in automated machine learning.
+Its role in the thesis is to connect the algorithm selection and optimisation themes to machine learning pipelines, where the objects being selected are not solvers for a single combinatorial problem but learning algorithms and their configurations.
+This chapter strengthens the cross-domain argument of the dissertation: the same core difficulties of representation, prediction, and decision making appear in \gls{sat}, black-box optimisation, and automated machine learning, even though the data structures and performance measures differ.
 
-Here, we study how surrogate model prediction accuracy affects the performance of Bayesian optimization by formulating a ``noisy oracle'' surrogate framework. By systematically controlling prediction noise across different regions of the search space, we isolate the impact of accuracy from other confounding factors.
-Specifically, our contributions are:
-\begin{itemize}
-    \item[(a)] introducing the noisy oracle framework to systematically study the impact of localized surrogate model accuracy,
-    \item[(b)] proving theoretically and empirically that value-based accuracy near promising regions is much more critical than distance-to-optimum accuracy, and
-    \item[(c)] showing that standard surrogates like Gaussian processes and random forests naturally exhibit this beneficial value-based accuracy pattern.
-\end{itemize}
+Chapter~\ref{ch:noisy_oracle}, based on \textcolor{webgreen}{Hadar Shavit} and Holger H. Hoos (2025), ``Understanding Surrogate Model Accuracy in Bayesian Optimisation,'' asks where surrogate-model accuracy matters for optimisation.
+The chapter contributes a noisy-oracle framework that systematically controls prediction error across the search space, making it possible to isolate the effect of localised surrogate accuracy from other modelling confounders.
+The empirical and theoretical results show that accuracy in regions with good objective values is more important than accuracy defined purely by distance to the optimum.
+This gives a more precise design principle for surrogate modelling: models should not simply minimise global error, but should avoid errors that make poor or merely competitive regions appear better than they are.
 
-\vspace{1.5em}
-\noindent\textcolor{webgreen}{Hadar Shavit} and Holger H. Hoos (2025). ``Explaining Algorithm Performance Distributions Through Interpretable Statistics.'' \textit{Manuscript in preparation}.
+\subsubsection{Better Insights}
 
-Here, we present a framework to predict and explain full running time distributions of randomized algorithms, addressing the limitations of traditional EPMs that only predict mean execution times. We introduce a tree-based XGBoost model for parametric distribution regression and extend explainability techniques to distribution predictors.
-Specifically, our contributions are:
-\begin{itemize}
-    \item[(a)] proposing a tree-based XGBoost approach for parametric distribution prediction that matches neural-network accuracy at a lower computational cost,
-    \item[(b)] developing explainability measures by decomposing predicted distributions into interpretable summary statistics like mean, variance, skewness, and kurtosis, and
-    \item[(c)] demonstrating empirically that different instance features govern the scale versus the shape of algorithm performance distributions.
-\end{itemize}
+The third part addresses the interpretability and usability of empirical performance prediction.
+Chapter~\ref{sec:dist_explain}, based on \textcolor{webgreen}{Hadar Shavit} and Holger H. Hoos (2025), ``Explaining Algorithm Performance Distributions Through Interpretable Statistics,'' moves beyond scalar performance prediction.
+The chapter contributes a framework for predicting and explaining full runtime distributions of randomised algorithms.
+It introduces a tree-based XGBoost approach for parametric distribution prediction and explains the resulting distributions through interpretable statistics such as mean, variance, interquartile range, skewness, and kurtosis.
+This makes it possible to identify which instance features affect the scale of algorithm performance and which affect the shape and tail behaviour of the distribution.
+The chapter therefore extends empirical performance prediction from asking only how long an algorithm is expected to run to asking how uncertain, variable, and risky its behaviour may be.
 
-\vspace{1.5em}
-\noindent\textcolor{webgreen}{Hadar Shavit} and Holger H. Hoos (2025). ``ASF: A Library for Automated Algorithm Selection in Machine Learning and Artificial Intelligence.'' \textit{Manuscript in preparation}.
+Chapter~\ref{ch:asf}, based on \textcolor{webgreen}{Hadar Shavit} and Holger H. Hoos (2025), ``ASF: A Library for Automated Algorithm Selection in Machine Learning and Artificial Intelligence,'' addresses the software and reproducibility side of the same problem.
+The chapter contributes a unified, problem-agnostic Python library for building, benchmarking, and deploying algorithm selection pipelines.
+ASF provides modular components for selection, pre-selection, pre-solving, feature processing, and automated configuration, and validates these components through case studies in machine learning and artificial intelligence.
+This final contribution turns the methodological work of the thesis into reusable infrastructure: empirical performance prediction becomes easier to apply outside the narrow domain in which a method was originally developed.
 
-Here, we introduce the Algorithm Selection Framework (ASF), a unified, problem-agnostic Python library designed to build, benchmark, and deploy automated algorithm selection pipelines. ASF bridges the gap between isolated, domain-specific algorithm selectors by offering a standardized, modular API.
-Specifically, our contributions are:
-\begin{itemize}
-    \item[(a)] designing and implementing the first unified, problem-agnostic Python library for algorithm selection pipelines,
-    \item[(b)] providing modular components for pre-selection, pre-solving, feature processing, and automated pipeline configuration, and
-    \item[(c)] validating the library's versatility through diverse case studies in black-box optimization, AutoML, and out-of-distribution generalization.
-\end{itemize}
+\section{Structure of the dissertation}
+
+The order of the dissertation follows the dependency structure of empirical performance prediction.
+Part~I introduces the necessary background on algorithm selection, Bayesian optimisation, and related concepts.
+Part~II, \emph{Better Features}, starts with the inputs to performance models: reliable hand-crafted features, task-aware dimensionality reduction, and adaptive information about which surrogate models are appropriate during optimisation.
+Part~III, \emph{Better Models}, then studies how to improve the models themselves, from graph neural empirical performance models to surrogate models whose accuracy is aligned with optimisation performance.
+Part~IV, \emph{Better Insights}, asks how these methods can be explained and used more broadly, through distribution-level explanations and reusable algorithm selection software.
+Finally, Part~V synthesises the results and discusses how the contributions fit together into a broader view of empirical performance prediction as a practical tool for building more adaptive \gls{ai} systems.
