@@ -82,18 +82,28 @@ The chapters answer these questions in sequence.
 \subsubsection{Better Features}
 
 The first part of the dissertation focuses on the representations that make empirical performance prediction possible.
-In Chapter~\ref{ch:rev_SATzilla}, based on the publication by \textcolor{webgreen}{Hadar Shavit} and Holger H. Hoos (2024), ``Revisiting SATzilla Features in 2024,'' we revisit the feature extraction pipeline of the SATzilla algorithm selector.
-The main contribution of this chapter is a modernised feature extraction tool that replaces outdated preprocessors and solvers, resolves compilation and memory issues encountered on contemporary \gls{sat} instances, and introduces a configurable feature computation timeout.
+Chapter~\ref{ch:rev_SATzilla}, based on
+\begin{itemize}
+    \item \fullcite{ShaHoo24}
+\end{itemize}
+contributes a modernised feature extraction tool that replaces outdated preprocessors and solvers, resolves compilation and memory issues encountered on contemporary \gls{sat} instances, and introduces a configurable feature computation timeout.
 The chapter shows that this infrastructure work is not merely engineering maintenance: updating the feature extractor leads to better downstream performance in satisfiability prediction, runtime prediction, and automated algorithm selection.
 In this sense, the chapter establishes a central theme of the dissertation: better empirical performance prediction often begins with making the inputs to the model reliable and informative.
 
-Chapter~\ref{ch:dim_red}, based on work by \textcolor{webgreen}{Hadar Shavit}, Anja Jankovic, Elena Raponi, Thomas B\"ack, and Holger H. Hoos (2025), ``Task-driven Assessment of Dimensionality Reduction Methods for Machine Learning and Black-Box Optimisation,'' broadens the representation question from \gls{sat} features to high-dimensional spaces.
-The chapter contributes a systematic benchmark of dimensionality reduction methods across machine learning and black-box optimisation tasks.
+Chapter~\ref{ch:dim_red}, based on
+\begin{itemize}
+    \item \fullcite{ShaEtAl25}
+\end{itemize}
+contributes a systematic benchmark of dimensionality reduction methods across machine learning and black-box optimisation tasks.
 Rather than judging dimensionality reduction only by generic reconstruction or variance-preservation criteria, the chapter evaluates whether reduced representations preserve the information needed for specific downstream tasks.
 The results show strong performance complementarity: methods that work well for one task, dimensionality, or data regime may be poor choices for another.
 This makes dimensionality reduction itself an algorithm selection problem and motivates task-aware representation choices.
 
-Chapter~\ref{ch:dymbo}, based on work by \textcolor{webgreen}{Hadar Shavit}, Anja Jankovic, Elena Raponi, Thomas B\"ack, and Holger H. Hoos (2025), ``DyMBO: Dynamic Mixture of Surrogate Models for Hyperparameter Optimisation,'' connects representation quality to model-based optimisation.
+Chapter~\ref{ch:dymbo}, based on
+\begin{itemize}
+    \item \fullcite{ShaEtAl25b}
+\end{itemize}
+connects representation quality to model-based optimisation.
 Although the chapter primarily develops a modelling method, it appears in this part because its central mechanism depends on representing the changing suitability of surrogate models during an optimisation run.
 DyMBO contributes a dynamic ensembling strategy that evaluates the recent ranking quality of candidate surrogate models and uses a memory-aware exponential moving average to update their weights.
 The resulting optimiser adapts to different search phases and improves over static surrogate choices and competing hyperparameter optimisation frameworks.
@@ -102,8 +112,11 @@ Together with the preceding chapters, this shows that empirical performance pred
 \subsubsection{Better Models}
 
 The second part turns from representation to predictive modelling.
-Chapter~\ref{ch:gnns_epms}, based on \textcolor{webgreen}{Hadar Shavit} and Holger H. Hoos (2025), ``Graph Neural Networks as Empirical Performance Models,'' studies whether graph neural networks can predict \gls{sat} solver performance directly from graph representations of Boolean formulae.
-The chapter contributes a benchmark for graph-based \gls{sat} empirical performance prediction and compares multiple graph representations and neural architectures against standard tabular models trained on hand-crafted SATzilla features.
+Chapter~\ref{ch:gnns_epms}, based on
+\begin{itemize}
+    \item \fullcite{ShaHooGraph25}
+\end{itemize}
+contributes a benchmark for graph-based \gls{sat} empirical performance prediction and compares multiple graph representations and neural architectures against standard tabular models trained on hand-crafted SATzilla features.
 Its main contribution is to show that learned graph representations can be competitive for performance prediction and algorithm selection, and can in some settings outperform hand-crafted features.
 This provides a complementary answer to the feature-engineering work in Chapter~\ref{ch:rev_SATzilla}: instead of only improving hand-crafted features, we can also learn representations from the structure of the instance itself.
 
@@ -111,22 +124,31 @@ The automated machine learning chapter studies empirical performance prediction 
 Its role in the thesis is to connect the algorithm selection and optimisation themes to machine learning pipelines, where the objects being selected are not solvers for a single combinatorial problem but learning algorithms and their configurations.
 This chapter strengthens the cross-domain argument of the dissertation: the same core difficulties of representation, prediction, and decision making appear in \gls{sat}, black-box optimisation, and automated machine learning, even though the data structures and performance measures differ.
 
-Chapter~\ref{ch:noisy_oracle}, based on \textcolor{webgreen}{Hadar Shavit} and Holger H. Hoos (2025), ``Understanding Surrogate Model Accuracy in Bayesian Optimisation,'' asks where surrogate-model accuracy matters for optimisation.
-The chapter contributes a noisy-oracle framework that systematically controls prediction error across the search space, making it possible to isolate the effect of localised surrogate accuracy from other modelling confounders.
+Chapter~\ref{ch:noisy_oracle}, based on
+\begin{itemize}
+    \item \fullcite{ShaHoo25}
+\end{itemize}
+contributes a noisy-oracle framework that systematically controls prediction error across the search space, making it possible to isolate the effect of localised surrogate accuracy from other modelling confounders.
 The empirical and theoretical results show that accuracy in regions with good objective values is more important than accuracy defined purely by distance to the optimum.
 This gives a more precise design principle for surrogate modelling: models should not simply minimise global error, but should avoid errors that make poor or merely competitive regions appear better than they are.
 
 \subsubsection{Better Insights}
 
 The third part addresses the interpretability and usability of empirical performance prediction.
-Chapter~\ref{sec:dist_explain}, based on \textcolor{webgreen}{Hadar Shavit} and Holger H. Hoos (2025), ``Explaining Algorithm Performance Distributions Through Interpretable Statistics,'' moves beyond scalar performance prediction.
-The chapter contributes a framework for predicting and explaining full runtime distributions of randomised algorithms.
+Chapter~\ref{sec:dist_explain}, based on
+\begin{itemize}
+    \item \fullcite{ShaHooDist25}
+\end{itemize}
+contributes a framework for predicting and explaining full runtime distributions of randomised algorithms.
 It introduces a tree-based XGBoost approach for parametric distribution prediction and explains the resulting distributions through interpretable statistics such as mean, variance, interquartile range, skewness, and kurtosis.
 This makes it possible to identify which instance features affect the scale of algorithm performance and which affect the shape and tail behaviour of the distribution.
 The chapter therefore extends empirical performance prediction from asking only how long an algorithm is expected to run to asking how uncertain, variable, and risky its behaviour may be.
 
-Chapter~\ref{ch:asf}, based on \textcolor{webgreen}{Hadar Shavit} and Holger H. Hoos (2025), ``ASF: A Library for Automated Algorithm Selection in Machine Learning and Artificial Intelligence,'' addresses the software and reproducibility side of the same problem.
-The chapter contributes a unified, problem-agnostic Python library for building, benchmarking, and deploying algorithm selection pipelines.
+Chapter~\ref{ch:asf}, based on
+\begin{itemize}
+    \item \fullcite{ShaHooASF25}
+\end{itemize}
+contributes a unified, problem-agnostic Python library for building, benchmarking, and deploying algorithm selection pipelines.
 ASF provides modular components for selection, pre-selection, pre-solving, feature processing, and automated configuration, and validates these components through case studies in machine learning and artificial intelligence.
 This final contribution turns the methodological work of the thesis into reusable infrastructure: empirical performance prediction becomes easier to apply outside the narrow domain in which a method was originally developed.
 
