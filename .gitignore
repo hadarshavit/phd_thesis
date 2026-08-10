@@ -19,3 +19,5 @@
 *.synctex.gz(busy).gz
 
 publications/**
+.dblp_cache/**
+biber_cache/**

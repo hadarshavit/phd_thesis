@@ -1,8 +1,8 @@
-%************************************************
-\chapter{Introduction}\label{ch:introduction}
-%************************************************
 
-Artificial intelligence (\gls{ai}) has made substantial progress in recent decades, both in research and in practice.
+\chapter{Introduction}\label{ch:introduction}
+
+
+\Gls{ai} has made substantial progress in recent decades, both in research and in practice.
 Modern \gls{ai} methods solve problems across a growing range of domains: they classify images, process natural language, support automated reasoning, verify hardware and software systems, and search for high-quality solutions to difficult optimisation problems.
 This diversity is important for the perspective taken in this dissertation.
 \Gls{ai} is not a single algorithmic technology, but a broad collection of methods whose behaviour depends strongly on the problem instances, data sets, configurations, and computational budgets to which they are applied.
@@ -77,9 +77,9 @@ Second, how can we build better predictive models and surrogate models once thos
 Third, how can we make the resulting methods easier to understand, compare, and use?
 The chapters answer these questions in sequence.
 
-\subsection{Contributions by thesis part}
+% \subsection{Contributions by thesis part}
 
-\subsubsection{Better Features}
+\subsection{Better Features}
 
 The first part of the dissertation focuses on the representations that make empirical performance prediction possible.
 Chapter~\ref{ch:rev_SATzilla}, based on
@@ -109,12 +109,12 @@ DyMBO contributes a dynamic ensembling strategy that evaluates the recent rankin
 The resulting optimiser adapts to different search phases and improves over static surrogate choices and competing hyperparameter optimisation frameworks.
 Together with the preceding chapters, this shows that empirical performance prediction benefits not only from better instance features, but also from better representations of which modelling assumptions are appropriate at a given moment.
 
-\subsubsection{Better Models}
+\subsection{Better Models}
 
 The second part turns from representation to predictive modelling.
 Chapter~\ref{ch:gnns_epms}, based on
 \begin{itemize}
-    \item \fullcite{ShaHooGraph25}
+    \item \fullcite{ShaHoo25b}
 \end{itemize}
 contributes a benchmark for graph-based \gls{sat} empirical performance prediction and compares multiple graph representations and neural architectures against standard tabular models trained on hand-crafted SATzilla features.
 Its main contribution is to show that learned graph representations can be competitive for performance prediction and algorithm selection, and can in some settings outperform hand-crafted features.
@@ -132,12 +132,12 @@ contributes a noisy-oracle framework that systematically controls prediction err
 The empirical and theoretical results show that accuracy in regions with good objective values is more important than accuracy defined purely by distance to the optimum.
 This gives a more precise design principle for surrogate modelling: models should not simply minimise global error, but should avoid errors that make poor or merely competitive regions appear better than they are.
 
-\subsubsection{Better Insights}
+\subsection{Better Insights}
 
 The third part addresses the interpretability and usability of empirical performance prediction.
 Chapter~\ref{sec:dist_explain}, based on
 \begin{itemize}
-    \item \fullcite{ShaHooDist25}
+    \item \fullcite{ShaHoo25c}
 \end{itemize}
 contributes a framework for predicting and explaining full runtime distributions of randomised algorithms.
 It introduces a tree-based XGBoost approach for parametric distribution prediction and explains the resulting distributions through interpretable statistics such as mean, variance, interquartile range, skewness, and kurtosis.
@@ -146,7 +146,7 @@ The chapter therefore extends empirical performance prediction from asking only 
 
 Chapter~\ref{ch:asf}, based on
 \begin{itemize}
-    \item \fullcite{ShaHooASF25}
+    \item \fullcite{ShaHoo25d}
 \end{itemize}
 contributes a unified, problem-agnostic Python library for building, benchmarking, and deploying algorithm selection pipelines.
 ASF provides modular components for selection, pre-selection, pre-solving, feature processing, and automated configuration, and validates these components through case studies in machine learning and artificial intelligence.
