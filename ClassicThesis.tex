@@ -65,6 +65,30 @@
 \include{FrontBackmatter/Titlepage}
 % \include{FrontBackmatter/Titleback}
 \include{FrontBackmatter/Dedication}
+\usetikzlibrary{shapes.geometric}
+\usetikzlibrary{positioning}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning, fit, backgrounds, calc}
+\lstdefinestyle{asfpython}{%
+  language=Python,
+  basicstyle=\ttfamily\footnotesize,
+  columns=fullflexible,
+  keepspaces=true,
+  upquote=true,
+  breaklines=true,
+  breakatwhitespace=true,
+  showstringspaces=false,
+  numbers=left,
+  numberstyle=\scriptsize\color{gray},
+  numbersep=6pt,
+  frame=single,
+  framerule=0.3pt,
+  rulecolor=\color{black!20},
+  backgroundcolor=\color{black!2},
+  keywordstyle=\bfseries\color{blue!60!black},
+  commentstyle=\itshape\color{green!45!black},
+  stringstyle=\color{orange!60!black},
+}
+\lstset{style=asfpython}
 %\cleardoublepage\include{FrontBackmatter/Foreword}
 \cleardoublepage\include{FrontBackmatter/Abstract}
 \cleardoublepage\include{FrontBackmatter/Publications}
