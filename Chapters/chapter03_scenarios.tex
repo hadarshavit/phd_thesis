@@ -1,1 +1,10 @@
 \chapter{Scenarios and Algorithms}
+
+\section{SAT}
+
+The \new{Boolean satisfiability problem} (\gls{sat}) is a central and longstanding \textsf{NP}-complete problem~\citep{Karp72,BieEtAl21b}. It asks whether there exists a truth assignment that satisfies a Boolean formula $\varphi$ over variables $v_1,\ldots,v_r$, typically expressed in \new{conjunctive normal form} (\gls{cnf}):
+\begin{equation*}
+	\varphi = \bigwedge_{i=1}^n c_i, \quad \text{where each } c_i = \bigvee_{j=1}^{m_i} l_{i, j}.
+\end{equation*}
+Here, each $l_{i,j}$ is a literal, i.e., either a variable $v_p$ or its negation $\lnot v_p$. The task is to decide whether there exists an assignment $a$ such that $\varphi(a) = \text{true}$. \Gls{sat} is of significant theoretical importance as one of the first problems proven \textsf{NP}-complete~\citep{Cook71}, and it underpins numerous practical applications in hardware and software verification~\citep{BieEtAl09}, automated planning~\citep{KauSel96}, and operations research~\citep{GomEtAl08}. Its significance has led to the development of a wide range of solvers, systematically benchmarked in annual \gls{sat} competitions (e.g.,~\citep{FroEtAl21,BalEtAl17,HeuEtAl19}).
+
