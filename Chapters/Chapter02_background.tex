@@ -148,16 +148,16 @@ As we show in our ASlib experiments (\cref{sec:ch10:aslib_appendix}), multi-clas
 In this section, we define the \gls{hpo} problem and describe the working mechanisms of the \gls{bo} framework. 
 We also cover related work on dynamic design choices related to the components of \gls{bo}, as well as using ensembles in \gls{bo}.
 
-\subsection{Hyperparameter optimisation} Let $\mathcal{A}$ be a learning algorithm with $n$ hyperparameters, $\Lambda_{i}$ the domain of the $i$-th hyperparameter, and $\mathbf{\Lambda} = \Lambda_{1} \times \Lambda_{2} \times \dots \Lambda_{n}$ the overall hyperparameter configuration space. 
-We denote a hyperparameter configuration by $\mathbf{\lambda} \in \mathbf{\Lambda}$, and the algorithm $\mathcal{A}$ with its hyperparameters instantiated to $\mathbf{\lambda}$ by $\mathcal{A}_{\mathbf{\lambda}}$.
-Given a dataset $D$, the objective of \gls{hpo} is to find a hyperparameter configuration $\mathbf{\lambda}^{*}$ that minimises the loss $\mathcal{L}$ of a model fitted by algorithm $\mathcal{A}$ with hyperparameters $\mathbf{\lambda}$ on training data ${D}_{train}$, and evaluated on validation data ${D}_{validate}$, for a given loss function $\mathcal{L}$, \emph{i.e.},
+\subsection{Hyperparameter optimisation} Let $\mathcal{A}$ be a learning algorithm with $n$ hyperparameters, $\Lambda_{i}$ the domain of the $i$-th hyperparameter, and $\boldsymbol{\Lambda} = \Lambda_{1} \times \Lambda_{2} \times \dots \Lambda_{n}$ the overall hyperparameter configuration space. 
+We denote a hyperparameter configuration by $\boldsymbol{\lambda} \in \boldsymbol{\Lambda}$, and the algorithm $\mathcal{A}$ with its hyperparameters instantiated to $\boldsymbol{\lambda}$ by $\mathcal{A}_{\boldsymbol{\lambda}}$.
+Given a dataset $D$, the objective of \gls{hpo} is to find a hyperparameter configuration $\boldsymbol{\lambda}^{*}$ that minimises the loss $\mathcal{L}$ of a model fitted by algorithm $\mathcal{A}$ with hyperparameters $\boldsymbol{\lambda}$ on training data ${D}_{train}$, and evaluated on validation data ${D}_{validate}$, for a given loss function $\mathcal{L}$, \emph{i.e.},
 \begin{equation}
 \label{eq:ch02:def-hpo}
-\mathbf{\lambda}^{*} \in \argmin_{\mathbf{\lambda} \in \mathbf{\Lambda}} 
-\mathcal{L}(\mathcal{A}_{\mathbf{\lambda}}, {D}_{train}, {D}_{validate}) = \argmin_{\mathbf{\lambda} \in \mathbf{\Lambda}} c(\mathbf{\lambda})
+\boldsymbol{\lambda}^{*} \in \argmin_{\boldsymbol{\lambda} \in \boldsymbol{\Lambda}} 
+\mathcal{L}(\mathcal{A}_{\boldsymbol{\lambda}}, {D}_{train}, {D}_{validate}) = \argmin_{\boldsymbol{\lambda} \in \boldsymbol{\Lambda}} c(\boldsymbol{\lambda})
 \end{equation}
-Here, $c(\mathbf{\lambda})$ is a shorthand for the loss function when $\mathcal{A}_{\mathbf{\lambda}}$ and $D$ are fixed.
-Note that $c(\mathbf{\lambda})$ is a black-box function, without a closed-form expression nor analytic gradient information.
+Here, $c(\boldsymbol{\lambda})$ is a shorthand for the loss function when $\mathcal{A}_{\boldsymbol{\lambda}}$ and $D$ are fixed.
+Note that $c(\boldsymbol{\lambda})$ is a black-box function, without a closed-form expression nor analytic gradient information.
 
 \subsection{Bayesian optimisation} 
 \label{sec:ch02:bac_bo}
@@ -165,7 +165,7 @@ Bayesian optimisation (\gls{bo})~\citep{Mockus12,Garnett23,Frazier18,Kushner62,K
 \changed{Typically,} \gls{bo} consists of three main modules: an \emph{initial design}, \emph{i.e.}, in \gls{hpo}, a set of hyperparameter configuration candidates $\boldsymbol{\lambda} = (\lambda^{(1)},\ldots, \lambda^{(r)})$ and their evaluations 
 $c(\boldsymbol{\lambda}) = (c(\lambda^{(1)}),\ldots, c(\lambda^{(r)}))$; a \emph{surrogate model} (fitted to the 
 
-observations) that returns an approximation $\hat{c}(\mathbf{\lambda})$ of the unknown loss function $c(\mathbf{\lambda})$ while capturing the uncertainty in the prediction $\hat{\sigma}(\mathbf{\lambda})$ on unobserved points in the search space; and an \emph{acquisition function}, which is optimised to suggest solution candidates to be evaluated next, usually balancing exploration and exploitation of the search space.
+observations) that returns an approximation $\hat{c}(\boldsymbol{\lambda})$ of the unknown loss function $c(\boldsymbol{\lambda})$ while capturing the uncertainty in the prediction $\hat{\sigma}(\boldsymbol{\lambda})$ on unobserved points in the search space; and an \emph{acquisition function}, which is optimised to suggest solution candidates to be evaluated next, usually balancing exploration and exploitation of the search space.
 \changed{\gls{bo} then evaluates the most promising candidates.} 
 
 To approximate the expensive objective function, \gls{bo} typically employs a Gaussian process (GP) model as the surrogate. The GP model defines a distribution over functions on the configuration space $c(\lambda)\sim\mathcal{GP}_c(\mu(\lambda),k(\lambda,\lambda'))$, where 

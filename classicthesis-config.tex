@@ -85,7 +85,7 @@
 %\PassOptionsToPackage{ngerman,american}{babel}   % change this to your language(s)
 % Spanish languages need extra options in order to work with this template
 %\PassOptionsToPackage{spanish,es-lcroman}{babel}
-	\usepackage{babel}                  
+	\usepackage{babel}
 
 \usepackage{csquotes}
 \PassOptionsToPackage{%
@@ -246,7 +246,12 @@
 \PassOptionsToPackage{pdftex,hyperfootnotes=false,pdfpagelabels}{hyperref}
     \usepackage{hyperref}  % backref linktocpage pagebackref
     \usepackage{bookmark} % handles KOMA heading levels without bookmark gaps
-    \usepackage[capitalise,nameinlink]{cleveref}
+    % Supply the English language hook without loading a second Babel dialect.
+    \providecommand*{\extrasenglish}{}
+    \usepackage[english,capitalise,nameinlink]{cleveref}
+    % cleveref recognises "english", but Babel's main language is "american".
+    % Restore English reference names when leaving the German abstract.
+    \AtBeginDocument{\addto\extrasamerican{\extrasenglish}}
 \pdfcompresslevel=9
 \pdfadjustspacing=1 
 \PassOptionsToPackage{pdftex}{graphicx}
