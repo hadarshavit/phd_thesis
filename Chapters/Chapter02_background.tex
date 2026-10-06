@@ -113,12 +113,12 @@ Algorithm selection methods are integrated into \textit{algorithm selection pipe
 
     \item \textbf{Pre-solving schedules:} For problems where the metric of interest is running time (e.g., $\mathcal{NP}$-complete problem solving), it is beneficial to first run a short schedule (\emph{i.e.}, a sequence of solvers, each executed with a specific cut-off time) of solvers to solve easy instances quickly, thereby avoiding unnecessary feature computation. Such methods use, for example, a greedy method to decide which algorithms to run~\citep{XuEtAl08}, or use an optimisation problem to find the optimal pre-solving schedule~\citep{HooEtAl12,KadEtAl11}.
 
-    \item \textbf{Algorithm selection:} An algorithm (or a schedule of algorithms) is selected based on the computed features. This step typically involves a machine learning model. For example, there can be models that predict the performance for each instance~\citep{XuEtAl08,OztEtAl22}, models that predict the ranking of the algorithms~\citep{XuEtAl12b,KerEtAl18}, formulating the problem as a recommendation task~\citep{MisSeb17} and other approaches.
+    \item \textbf{Algorithm selection:} An algorithm (or a schedule of algorithms) is selected based on the computed features. This step typically involves a machine learning model. For example, there can be models that predict the performance for each instance~\citep{XuEtAl08,OztEtAl22}, models that predict the ranking of the algorithms~\citep{XuEtAl12,KerEtAl18}, formulating the problem as a recommendation task~\citep{MisSeb17} and other approaches.
 
 \end{itemize}
 Additionally, for algorithm selection, there is a need for two additional, problem specific components:
 \begin{itemize}
-    \item \textbf{Feature computation:} Representative features of the problem instance are computed and used as input to the learned selector. These features can be hand-crafted or learned from the data. The choice of features is crucial for the performance of the algorithm selector. For example, the SATzilla features are well-known to be a good representation of \gls{sat} instances~\citep{HutEtAl14c,ShaHoo24}, while for machine learning datasets, there exists many features, such as the basic descriptors of~\citet{OztEtAl22} to more complicated features, that include advanced statistics, such as the ones implemented in PyMFE~\citep{AlcEtAl20}.
+    \item \textbf{Feature computation:} Representative features of the problem instance are computed and used as input to the learned selector. These features can be hand-crafted or learned from the data. The choice of features is crucial for the performance of the algorithm selector. For example, the SATzilla features are well-known to be a good representation of \gls{sat} instances~\citep{HutEtAl14,ShaHoo24}, while for machine learning datasets, there exists many features, such as the basic descriptors of~\citet{OztEtAl22} to more complicated features, that include advanced statistics, such as the ones implemented in PyMFE~\citep{AlcEtAl20}.
 
     \item \textbf{Evaluation metric:} This is an important component of algorithm selection, as it is used to evaluate the performance of the algorithm selector. While there exist broadly applicable metrics such as the performance of the \gls{vbs} and \gls{sbs}, their definition depends on the specific problem.
 
@@ -161,7 +161,7 @@ Note that $c(\mathbf{\lambda})$ is a black-box function, without a closed-form e
 
 \subsection{Bayesian optimisation} 
 \label{sec:ch02:bac_bo}
-Bayesian optimisation (\gls{bo})~\citep{Mockus12,Garnett23,Frazier18,Kushner62,Kushner64b} is a family of surrogate-based algorithms for efficient global optimisation of black-box problems.
+Bayesian optimisation (\gls{bo})~\citep{Mockus12,Garnett23,Frazier18,Kushner62,Kushner64} is a family of surrogate-based algorithms for efficient global optimisation of black-box problems.
 \changed{Typically,} \gls{bo} consists of three main modules: an \emph{initial design}, \emph{i.e.}, in \gls{hpo}, a set of hyperparameter configuration candidates $\boldsymbol{\lambda} = (\lambda^{(1)},\ldots, \lambda^{(r)})$ and their evaluations 
 $c(\boldsymbol{\lambda}) = (c(\lambda^{(1)}),\ldots, c(\lambda^{(r)}))$; a \emph{surrogate model} (fitted to the 
 
@@ -209,17 +209,17 @@ We adopt this approach to estimate uncertainty for another tree-based model, gra
 by repeatedly querying the surrogate model to generate a pool of solution candidates. It then evaluates the most high-potential solutions (\emph{i.e.}, the solutions that maximise the acquisition function) from this pool,
 refines the surrogate model based on the new observations, and updates the optimum if the new point improves upon the true function value of the best observation so far.
 
-Among the many variants of \gls{bo} from the literature, in this work, we focus on the state-of-the-art method for \gls{hpo} to empirically evaluate our ensembling method: HEBO~\citep{CowEtAl22b}.
+Among the many variants of \gls{bo} from the literature, in this work, we focus on the state-of-the-art method for \gls{hpo} to empirically evaluate our ensembling method: HEBO~\citep{CowEtAl22}.
 HEBO (Heteroscedastic and Evolutionary Bayesian optimisation) is a \gls{bo}-based optimiser with several advancements 
 \changed{
 targeting each of the core \gls{bo} modules described above.
 For the surrogate model, HEBO uses GP with two key transformations: a power transformation applied to the output observations $\boldsymbol{y}$ and a Kumaraswamy transformation applied to the input configurations $\boldsymbol{\lambda}$; 
 
 jointly, these address heteroscedasticity in the noise $\epsilon$ and non-stationarity in the covariance matrix $K_{\boldsymbol{\lambda},\boldsymbol{\lambda}}$.
-\citet{CowEtAl22b} showed that these transformations enhance the ability of GPs to accurately approximate the mapping between configurations and corresponding performances, which is crucial for \gls{hpo}.
+\citet{CowEtAl22} showed that these transformations enhance the ability of GPs to accurately approximate the mapping between configurations and corresponding performances, which is crucial for \gls{hpo}.
 
 
-For the acquisition function, rather than optimising a single criterion, HEBO samples new candidate configurations by maximising MACE~\citep{LyuEtAl18}, a multi-objective acquisition function that simultaneously considers expected improvement (EI)~\citep{Mockus74}, probability of improvement (PI)~\citep{Kushner64b}, and upper confidence bound (UCB)~\citep{ForEtAl08}, providing a more robust balance between exploration and exploitation of the search space than any single acquisition function alone.
+For the acquisition function, rather than optimising a single criterion, HEBO samples new candidate configurations by maximising MACE~\citep{LyuEtAl18}, a multi-objective acquisition function that simultaneously considers expected improvement (EI)~\citep{Mockus75}, probability of improvement (PI)~\citep{Kushner64}, and upper confidence bound (UCB)~\citep{ForEtAl08}, providing a more robust balance between exploration and exploitation of the search space than any single acquisition function alone.
 
 Additional details on HEBO can be found in~\cref{sec:imp_det}.
 }

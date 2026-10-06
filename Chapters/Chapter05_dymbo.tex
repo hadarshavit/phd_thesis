@@ -424,7 +424,7 @@ for each model greedily as follows:
 
 % \aj{Elena's comment: why newline?} \er{Fixed it.}
 % \changed{
-\begin{equation}\label{eqn:ch05:weight}
+\begin{equation}\label{eq:ch05:weight}
     {w}_{t,m} =
     \begin{cases}
         1, & \text{if } \text{RL}(\mu_{t,m}, \boldsymbol{\lambda}) = \text{min}_{l \in M} \text{RL}(\mu_{t,l}, \boldsymbol{\lambda}), \\
@@ -439,7 +439,7 @@ for each model greedily as follows:
 % $
 %     \lambda_t=\{\lambda_t^{(1)}, \lambda_t^{(2)}, \dots, \lambda_t^{(k)}\}.
 % $
-Therefore, in~\cref{eqn:ch05:weight}, 
+Therefore, in~\cref{eq:ch05:weight}, 
 we assign a weight of ${w}_{t,m} = 1$ to the model
 % \hh{minor change:} 
 with the lowest ranking loss on all points sampled up to iteration $t$.
@@ -456,7 +456,7 @@ Then, for each model $m$, we use an exponential moving average between the previ
 % }
 % \changed{
 We use the exponential moving average in the weighting scheme so that the accumulated weight history, and not only the most recent model accuracy, determines the influence of each surrogate.
-A surrogate that has been consistently accurate can therefore retain meaningful weight even at an iteration where it is not the single top performer under~\cref{eqn:ch05:weight}. We retain the term ``ensemble'' throughout to describe this general weighting mechanism, even though the special case when $\alpha = 1$ discards the history and becomes single-surrogate selection at each iteration.
+A surrogate that has been consistently accurate can therefore retain meaningful weight even at an iteration where it is not the single top performer under~\cref{eq:ch05:weight}. We retain the term ``ensemble'' throughout to describe this general weighting mechanism, even though the special case when $\alpha = 1$ discards the history and becomes single-surrogate selection at each iteration.
 % We use ``dynamic tailoring'' when referring to the mechanism spanning both ensembling and selection regimes.
 % }
 
@@ -466,7 +466,7 @@ As $\alpha \to 0$, the update
 %\hh{cut one of the two:} \er{I like that both extreme cases are explained, especially since some reviewers have dismissed the method as mere selection. Perhaps this part could just be shortened a bit.}
 progressively increasingly 
 disregards the ranking loss of the current iteration and instead preserves the previously accumulated weights; in the limit, the ensemble composition stops reacting to which surrogate is currently most accurate, therefore becoming effectively static. 
-In contrast, when $\alpha = 1$,~\cref{eq:ch05:weight_ema} collapses to $\bar{w}_{t+1,m} = {w}_{t,m}$, meaning that all weight history is discarded at every iteration, and the ensemble reduces to a selection of the single surrogate with the best ranking loss on all points sampled up to iteration $t$ (see~\cref{eqn:ch05:weight}).
+In contrast, when $\alpha = 1$,~\cref{eq:ch05:weight_ema} collapses to $\bar{w}_{t+1,m} = {w}_{t,m}$, meaning that all weight history is discarded at every iteration, and the ensemble reduces to a selection of the single surrogate with the best ranking loss on all points sampled up to iteration $t$ (see~\cref{eq:ch05:weight}).
 Note that even at $\alpha = 1$, the method is not ``memoryless'' in the sense of ignoring past observations, as the ranking loss in~\cref{eq:ch05:rl} is itself computed cumulatively over the full sample set $\boldsymbol{\lambda}$ accumulated so far (including the initial design), rather than merely over the most recent batch. 
 Therefore, $\alpha$ governs how quickly the method revises its belief about which surrogates currently deserve influence, and not whether past observations inform the weighting. 
 % since they always do via ranking loss.
@@ -557,7 +557,7 @@ We provide more details on these choices in~\cref{sec:imp_det}.
             % \todo{line 8, AF should take M as an input}
             \STATE Evaluate new candidates: $c_t = \{c_{t}^{(1)},\ldots,c_t^{(k)}\} \gets \{c(\lambda) \mid \lambda\in \lambda_t\}$
             \STATE Augment dataset: $\boldsymbol{\lambda} \gets \boldsymbol{\lambda} \cup \lambda_t$, $\mathbf{C} \gets \mathbf{C} \cup c_t$
-            \STATE Calculate new model weights: ${w}_{t,m}$ according to \cref{eqn:ch05:weight}
+            \STATE Calculate new model weights: ${w}_{t,m}$ according to \cref{eq:ch05:weight}
             \STATE Update weights $\bar{w}_{t,m}$ according to \cref{eq:ch05:weight_ema}
         \ENDWHILE
         \STATE \textbf{Return} best configuration $\lambda^* \in \argmin_{\lambda \in \boldsymbol{\lambda}} \mathbf{C}$
@@ -666,7 +666,7 @@ For results on additional benchmarks, refer to~\cref{sec:ch05:add-bench}.
 
 % \changed{
 We used single-surrogate BO variants within HEBO with each of the surrogate models considered (GP, RF, ET, and GB) as baselines to compare against \texttt{DyMBO}. 
-Furthermore, we compared \texttt{DyMBO} to additional standard HPO methods: random search (RS)~\citep{BerEtAl11}, SMAC3~\citep{LinEtAl22, HutEtAl11}, Optuna with TPE as a surrogate model~\citep{BerEtAl11,AkiEtAl19}, and Optuna AutoSampler, which automatically selects HPO method based on hand-crafted rules~\citep{Ozaki24}.
+Furthermore, we compared \texttt{DyMBO} to additional standard HPO methods: random search (RS)~\citep{BerEtAl11}, SMAC3~\citep{LinEtAl22e, HutEtAl11}, Optuna with TPE as a surrogate model~\citep{BerEtAl11,AkiEtAl19}, and Optuna AutoSampler, which automatically selects HPO method based on hand-crafted rules~\citep{Ozaki24}.
 More details on these baselines are provided in~\cref{sec:ch05:add_baselines}.
 % }
 
@@ -1566,7 +1566,7 @@ Intuitively, it is the distance to the closest variance bound, as can be seen in
 Since computing $\text{VE}_m(\lambda_t)$ relies on the true function value $c(\lambda_t)$, this error can only be calculated post-hoc on points that have already been fully evaluated.
 We update the weights for variance accordingly. 
 The new weights are defined as:
-\begin{equation}\label{eqn:ch05:weight_var}
+\begin{equation}\label{eq:ch05:weight_var}
     {w}'_{t,m}=
     \begin{cases}
         1 & \text{if } \text{VE}_m(\lambda_t)=\text{min}_{l\in M} \text{VE}_l(\lambda_t),  \\

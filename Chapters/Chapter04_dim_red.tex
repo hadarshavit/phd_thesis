@@ -278,7 +278,7 @@ Feature extraction techniques are themselves categorised into supervised and uns
 In~\cref{tab:ch04:dimensionality reduction-methods}, we list a range of supervised and unsupervised dimensionality reduction methods considered in this work; all of them are based on feature extraction.
 
 
-Our criteria for selecting these methods for our study are outlined in \cref{ssec:ch04:dimensionality reduction-methods}.
+Our criteria for selecting these methods for our study are outlined in \cref{sec:ch04:dimensionality reduction-methods}.
 
 
 
@@ -347,7 +347,7 @@ At the same time, they emphasise the importance dimensionality reduction methods
 
 
 \subsection{Methods assessed in this work}
-\label{ssec:ch04:dimensionality reduction-methods}
+\label{sec:ch04:dimensionality reduction-methods}
 
 
 \begin{table*}
@@ -475,7 +475,7 @@ Finally, we exclude autoencoder-based dimensionality reduction approaches, since
 
 
 \subsection{Transforming unsupervised into supervised}
-\label{ssec:ch04:transform}
+\label{sec:ch04:transform}
 
 
 
@@ -583,7 +583,7 @@ Performance is measured using standard metrics such as accuracy, balanced accura
 \subsection{Black-box optimisation}
 
 \subsubsection*{Black-box optimisation task 1: Target function approximation.}
-\label{ssec:ch04:method-bbo-task2}
+\label{sec:ch04:method-bbo-task2}
 
 In this task, we assess whether dimensionality reduction methods are able to capture information about the input $\mathbf{x}$ of the black-box problem relevant for accurate prediction of its function value $y$ in a lower-dimensional manifold.
 
@@ -605,7 +605,7 @@ to quantify information loss.
 
 
 \subsubsection*{Black-box optimisation task 2: Optimiser performance.}
-\label{ssec:ch04:method-bbo-task3}
+\label{sec:ch04:method-bbo-task3}
 In this task, we assess how the optimisation process is affected by operating in the reduced space using a Bayesian optimisation algorithm.
 
 Bayesian optimisation~\citep{Garnett23} 
@@ -806,7 +806,7 @@ Due to limited additional insight they bring, we do not discuss them in detail i
 \subsubsection*{Machine learning task 2: Tabular classification accuracy.}
 We consider the following three classification algorithms that are traditionally used for tabular data~\citep{GriEtAl22}: random forest, gradient boosting and multi-layer perceptron (\gls{mlp}), all in their scikit-learn~\citep{PedEtAl11} implementations.
 
-We optimise all classifiers using SMAC3~\citep{LinEtAl22}, a popular hyperparameter optimiser, with a budget of 30 evaluations. We provide the configuration spaces in~\cref{app:cs}.
+We optimise all classifiers using SMAC3~\citep{LinEtAl22e}, a popular hyperparameter optimiser, with a budget of 30 evaluations. We provide the configuration spaces in~\cref{app:cs}.
 
 
 
@@ -877,7 +877,7 @@ To build the surrogate, we sample $\min\{50 \cdot D, 5000\}$ using Sobol samplin
 We employ a random forest regressor as a surrogate model, specifically using the scikit-learn implementation. 
 We use log-transformation for the target values and optimise 
 
-the hyperparameter settings of the random forest using SMAC3~\citep{LinEtAl22}.
+the hyperparameter settings of the random forest using SMAC3~\citep{LinEtAl22e}.
 To aggregate the results, we use min-max normalisation per function.
 \subsubsection*{Black-box optimisation task 2: Optimiser performance.}
 We use BoTorch~\citep{BalEtAl19} for the implementation of the EI acquisition function and the Gaussian process surrogate model.
