@@ -12,7 +12,7 @@ In this section, we introduce the algorithm selection problem and its components
 Given a set of problem instances $\mathcal{I}$ (which can be, for example, datasets), instance features $\mathcal{F}$, a set of algorithms $\mathcal{A}$ and a performance metric $m:\mathcal{A} \times \mathcal{I} \rightarrow \mathbb{R}$ (for example, predictive accuracy or running time), the algorithm selection problem~\citep{Rice76} seeks to find a selector $S:\mathcal{F}\rightarrow\mathcal{A}$ such that the performance of $S$ on the instances $\mathcal{I}$ is optimal according to $m$~\citep{KerEtAl19}. 
 
 Extensions include the use of \textit{algorithm features}, which are combined with the instance features to predict the best algorithm for each problem instance. For simplicity, for the remainder of the section, we assume that the goal is to minimise $m$.
-In algorithm selection, the ideal goal is to reach the performance of the virtual best solver (\gls{vbs}) (\emph{i.e.}, perfect selector). Furthermore, the selection must be better than the single best solver (\gls{sbs}) in order to make the use of algorithm selection worthwhile.
+In algorithm selection, the ideal goal is to reach the performance of the \gls{vbs} (\emph{i.e.}, perfect selector). Furthermore, the selection must be better than the single best solver (\gls{sbs}) in order to make the use of algorithm selection worthwhile.
 
 
 
