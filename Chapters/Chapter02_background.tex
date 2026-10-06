@@ -21,86 +21,89 @@ Further details are provided in~\cref{sec:ch10:add_background}.
 \subsection{Algorithm selection pipelines}
 \begin{figure}[tbp]
     \centering
-    \resizebox{\linewidth}{!}{
-    \begin{tikzpicture}[>=stealth, font=\normalsize]
+    % Portrait layout: readable labels at the thesis's 336 pt text width.
+    \begin{tikzpicture}[
+        >=Stealth, font=\fontsize{9}{10.5}\selectfont,
+        box/.style={rounded corners=3pt, line width=.6pt,
+            text width=2.7cm, minimum height=.72cm, inner sep=4pt,
+            align=center, draw=blue!35!black, fill=blue!5},
+        input/.style={box, draw=black!25, fill=white},
+        process/.style={box, fill=blue!12, font=\fontsize{9}{10.5}\selectfont\bfseries},
+        metric/.style={box, draw=green!35!black, fill=green!5},
+        result/.style={box, draw=green!35!black, fill=green!12,
+            font=\fontsize{9}{10.5}\selectfont\bfseries},
+        arrow/.style={->, line width=.65pt, draw=black!60,
+            rounded corners=2pt},
+        optional/.style={arrow, dashed},
+        stage/.style={font=\fontsize{9}{10.5}\selectfont\bfseries, text=black!65,
+            anchor=west}
+    ]
+        \fill[black!3, rounded corners=5pt]
+            (-5.05,1.05) rectangle (5.05,-4.65);
+        \fill[blue!3, rounded corners=5pt]
+            (-5.05,-4.85) rectangle (5.05,-9.0);
+        \node[stage] at (-4.8,.8) {Prepare inputs};
+        \node[stage] at (-4.8,-5.1) {Learn and evaluate};
 
-        \fill[gray!5, rounded corners=8pt] (-0.5, 0.0) rectangle (26.0, 7.5);
-        \definecolor{pipelineblue}{RGB}{30, 80, 140}
-        \definecolor{evalgreen}{RGB}{30, 100, 50}
-        \tikzset{
-            data/.style={draw=pipelineblue!80!black, thick, fill=pipelineblue, text=white, rounded corners=4pt, text width=3.0cm, minimum height=1.3cm, align=center},
-            process/.style={draw=pipelineblue!80!black, thick, fill=pipelineblue, text=white, rounded corners=4pt, text width=3.0cm, minimum height=1.3cm, align=center},
-            eval/.style={draw=evalgreen!80!black, thick, fill=evalgreen, text=white, rounded corners=4pt, text width=3.0cm, minimum height=1.3cm, align=center},
-            inputset/.style={align=center, font=\normalsize, text=black},
-            metric/.style={align=center, font=\normalsize, text=black},
-            arrow/.style={->, thick, draw=black!70},
-            line/.style={thick, draw=black!70}
-        }
-        
+        \node[input] (feat_sets) at (-3.45,-.2)
+            {Feature sets\\$\{\mathcal{F}_1,\ldots\}$};
+        \node[input] (instances) at (0,-.2)
+            {Instances\\$\{I_1,\ldots\}$};
+        \node[input] (algos) at (3.45,-.2)
+            {Algorithms\\$\{A_1,\ldots\}$};
+        \node[process] (feat_comp) at (-3.45,-1.55)
+            {Feature\\computation};
+        \node[metric] (train_metric) at (0,-1.55)
+            {Performance metric};
+        \node[process] (preselector) at (3.45,-1.55)
+            {Pre-selection};
+        \node[box] (features) at (-3.45,-2.8) {Instance features};
+        \node[box] (perf_data) at (0,-2.8) {Performance data};
+        \node[box] (usage_algos) at (3.45,-2.8)
+            {Algorithm portfolio};
+        \node[box] (algo_feats) at (3.45,-4.0)
+            {Algorithm features\\\normalfont(optional)};
 
-        \fill[pipelineblue!10, rounded corners=6pt] (14.1, 3.1) rectangle (21.9, 4.9);
-        \draw[dashed, pipelineblue!50!black, thick, rounded corners=6pt] (14.1, 3.1) rectangle (21.9, 4.9);
-        \node[text=pipelineblue!80!black, font=\bfseries\scriptsize, anchor=south east] at (21.7, 3.25) {Core ML Pipeline};
-        
+        \node[process] (ml_task) at (0,-5.6)
+            {Machine learning task};
+        \node[process] (selector) at (0,-7.0)
+            {Algorithm selector};
+        \node[process] (presolving) at (3.45,-6.25)
+            {Pre-solving\\\normalfont(optional)};
+        \node[result] (perf_selector) at (0,-8.35)
+            {Selector\\performance};
+        \node[metric] (eval_metric) at (3.45,-8.35)
+            {Performance metric};
 
-        \node[inputset] (feat_sets) at (1.5, 6.0) {Set of Feature Sets\\[-0.5ex]\textnormal{\footnotesize \{$\mathcal{F}_1$, \dots\}}};
-        \node[inputset] (instances) at (1.5, 4.0) {Set of Problem Instances\\[-0.5ex]\textnormal{\footnotesize \{$I_1$, \dots\}}};
-        \node[inputset] (algos) at (1.5, 2.0) {Set of Algorithms\\[-0.5ex]\textnormal{\footnotesize \{$A_1$, \dots\}}};
-
-
-        \node[process] (preselector) at (4.5, 2.0) {\textbf{Pre-selector}};
-        \node[inputset] (usage_algos) at (7.5, 2.0) {Usage Set\\[-0.5ex]of Algorithms};
-
-
-        \node[data] (features) at (10.5, 6.0) {\textbf{Features}};
-        \node[data] (perf_data) at (10.5, 4.0) {\textbf{Performance}\\\textbf{Data}};
-        \node[data] (algo_feats) at (10.5, 2.0) {\textbf{Algorithm}\\\textbf{Features}};
-
-
-        \node[process] (ml_task) at (16.0, 4.0) {\textbf{Machine Learning}\\\textbf{Task}};
-        \node[process] (presolving) at (16.0, 5.5) {\textbf{Pre-solving}};
-        \node[process] (selector) at (20.0, 4.0) {\textbf{Algorithm}\\\textbf{Selector}};
-        \node[eval] (perf_selector) at (24.0, 4.0) {\textbf{Performance of}\\\textbf{Algorithm Selector}};
-
-
-        \node[metric] (perf_meas) at (18.0, 2.0) {Performance Measure(s)\\\textnormal{\footnotesize \{Accuracy, Running time, \dots\}}};
-
-
-
-        \node[font=\small, text=black, fill=gray!5] (feat_comp) at (6.5, 6.0) {Feature Computation};
-        \draw[line] (feat_sets.east) -- (feat_comp.west);
-        \draw[arrow] (feat_comp.east) -- (features.west);
-        \draw[arrow] (instances.east) -| (feat_comp.south);
-
-
+        \draw[arrow] (feat_sets) -- (feat_comp);
+        \draw[arrow] (instances.south) -- (0,-.85)
+            -| (feat_comp.north);
+        \draw[arrow] (feat_comp) -- (features);
         \draw[arrow] (algos) -- (preselector);
         \draw[arrow] (preselector) -- (usage_algos);
-        
+        \draw[arrow] (instances.east) -- (1.7,-.2)
+            |- (perf_data.east);
+        \draw[arrow] (train_metric) -- (perf_data);
+        \draw[arrow] (usage_algos.west) -- (perf_data.east);
+        \draw[optional] (usage_algos) -- (algo_feats);
 
-        \draw[arrow] (instances) -- (perf_data);
-        \draw[arrow] (usage_algos.east) |- (perf_data.south west);
-        \draw[arrow] (usage_algos.east) -- (algo_feats.west);
-
-
-        \draw[line] (features.east) -| (13.0, 4.0);
-        \draw[line] (algo_feats.east) -| (13.0, 4.0);
-        \draw[line] (perf_data.east) -- (13.0, 4.0);
-        \draw[arrow] (13.0, 4.0) -- (ml_task.west);
-
-
+        \draw[arrow] (perf_data) -- (ml_task);
+        \draw[arrow] (features.east) -- (-1.8,-2.8) -- (-1.8,-5.6)
+            -- (ml_task.west);
         \draw[arrow] (ml_task) -- (selector);
+        \draw[arrow] (features.west) -- (-4.9,-2.8)
+            |- (selector.west);
+        \draw[optional] (perf_data.east) -- (1.7,-2.8)
+            -- (1.7,-6.25) -- (presolving.west);
+        \draw[optional] (presolving.south) -- (3.45,-7.0)
+            -- (selector.east);
+        \draw[optional, preaction={draw=white, line width=2.2pt}]
+            (algo_feats.south) -- (3.45,-4.55)
+            -- (2.0,-4.55) |- (ml_task.east);
         \draw[arrow] (selector) -- (perf_selector);
-        \draw[arrow] (features.north) |- (20.0, 7.0) -- (selector.north);
-        \draw[arrow] (perf_data.east) -| (13.8, 5.5) -- (presolving.west);
-        \draw[arrow] (presolving.east) -| (selector.110);
-
-
-        \draw[arrow] (perf_meas.east) -| (perf_selector.south);
-        \draw[arrow] (perf_meas.west) -| (13.5, 3.5) -- (perf_data.east |- 0, 3.5);
-
+        \draw[arrow] (eval_metric) -- (perf_selector);
     \end{tikzpicture}
-    }
-    \caption[Algorithm selection pipeline]{Algorithm selection pipeline. A portfolio of complementary algorithms can first be chosen by pre-selection. In running-time scenarios, a short pre-solving schedule may solve easy instances before feature computation or before invoking the learned selector. Instance features, optional algorithm features, and performance data are then used to train and evaluate the algorithm selector.
+    \caption[Algorithm selection pipeline]{Algorithm selection pipeline. A portfolio of complementary algorithms can first be chosen by pre-selection. In running-time scenarios, a short pre-solving schedule may solve easy instances before feature computation or before invoking the learned selector. Instance features, optional algorithm features, and performance data are then used to train and evaluate the algorithm selector. Dashed arrows indicate optional components. The same performance metric is used to generate performance data and evaluate the selector.
 
     }
     \label{fig:ch02:asf_pipeline}
