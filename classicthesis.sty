@@ -351,7 +351,7 @@
 \PassOptionsToPackage{automark}{scrlayer-scrpage}
     %\RequirePackage{scrpage2} % provides headers and footers (KOMA Script)
     \RequirePackage{scrlayer-scrpage} % provides headers and footers (KOMA Script)
-    \clearscrheadings
+    \clearmainofpairofpagestyles
     %\setheadsepline{0pt}
     \ifthenelse{\boolean{@nochapters}}%
         {\relax}%
@@ -373,6 +373,7 @@
 % layout of the chapter-, section-, subsection-, subsubsection-,
 % paragraph and description-headings
 % ********************************************************************             
+\@ifundefined{KOMAClassName}{%
 \RequirePackage{titlesec}
         % parts
         \ifthenelse{\boolean{@parts}}%
@@ -631,6 +632,9 @@
                 \fi%
      }{\relax}
              
+}{%
+    \input{classicthesis-koma.tex}
+}
     \newcommand{\tocEntry}[1]{% for bib, etc.
         \ifpdf\texorpdfstring{\spacedlowsmallcaps{#1}}{#1}%
         \else{#1}\fi%
@@ -707,25 +711,24 @@
 }{%
     \ifthenelse{\boolean{@listings}}{%
         \lstset{numberbychapter=false}}{\relax}%
-    \RequirePackage{remreset}%
     \makeatletter%
         \ifthenelse{\boolean{@nochapters}}%
         {\relax}{%
-            \@removefromreset{table}{chapter}  % requires remreset package
+            \@removefromreset{table}{chapter}  % provided by the LaTeX kernel
         }%
         \renewcommand{\thetable}{\arabic{table}}%
     \makeatother%
     \makeatletter%
         \ifthenelse{\boolean{@nochapters}}%
         {\relax}{%
-            \@removefromreset{figure}{chapter}  % requires remreset package
+            \@removefromreset{figure}{chapter}  % provided by the LaTeX kernel
         }%
         \renewcommand{\thefigure}{\arabic{figure}}%  
     \makeatother%
     \makeatletter%
         \ifthenelse{\boolean{@nochapters}}%
         {\relax}{%
-            \@removefromreset{equation}{chapter}  % requires remreset package
+            \@removefromreset{equation}{chapter}  % provided by the LaTeX kernel
         }%
         \renewcommand{\theequation}{\arabic{equation}}%  
     \makeatother%    
