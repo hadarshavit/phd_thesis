@@ -15,7 +15,7 @@ Consequently, all automated HPO techniques rely on the only available informatio
 Throughout this article, we consider HPO in the batched setting, in which $k$ candidate configurations are proposed and evaluated per BO iteration, as is standard practice in large-scale HPO~\citep{CowEtAl22,BisEtAl23}.
 % }
 
-Bayesian optimisation (BO)~\citep{Mockus12,Garnett23,Frazier18,Kushner62,Kushner64} is a surrogate-based, sample-efficient approach for global optimisation of expensive-to-evaluate black-box problems.
+Bayesian optimisation (BO)~\citep{Mockus12b,Garnett23,Frazier18b,Kushner62,Kushner64} is a surrogate-based, sample-efficient approach for global optimisation of expensive-to-evaluate black-box problems.
 BO is particularly well-suited for settings with a very limited budget of available evaluations (relative to the size of the search space), such as HPO.
 Various BO-based HPO techniques have been developed and successfully applied to this end; a prominent example is 
 HEBO~\citep{CowEtAl22}, the winner of the NeurIPS BBO competition~\citep{TurEtAl20}.
@@ -38,13 +38,13 @@ BO then uses these probabilistic predictions of function values across the searc
 % \changed{
 The choice of the surrogate model strongly affects BO performance and is often linked to the dimensionality of the problem at hand and the nature of the corresponding search space.
 % }
-For continuous search spaces, Gaussian processes (GPs)~\citep{RasWil06} are the most widely adopted surrogate model and tend to be particularly effective in continuous search spaces~\citep{EggEtAl13,EggEtAl21,BenEtAl25}.
+For continuous search spaces, Gaussian processes (GPs)~\citep{RasWil06} are the most widely adopted surrogate model and tend to be particularly effective in continuous search spaces~\citep{EggEtAl13,EggEtAl21b,BenEtAl25}.
 On the other hand, random forests (RFs)~\citep{Breiman01} as surrogate models natively support discrete and conditional search spaces, and tend to excel in higher problem dimensionalities, where GPs suffer from prohibitive computational complexity and reduced accuracy due to the increased volume of the search space
 % search space volume
 % \er{where GPs suffer from prohibitive computational complexity and reduced accuracy due to the increased search space volume}
 ~\citep{EggEtAl13,JenEtAl17,LiEtAl18}.
 For complex HPO tasks in mixed domains, with numerical, ordinal and categorical hyperparameters, it is highly desirable to leverage the complementary strengths of inherently different surrogate models.
-One natural way to achieve this is via ensemble methods, which have demonstrated their versatility in the context of BO-based HPO techniques for treating a wide range of heterogeneous problems~\citep{TurEtAl20,HofEtAl11}.
+One natural way to achieve this is via ensemble methods, which have demonstrated their versatility in the context of BO-based HPO techniques for treating a wide range of heterogeneous problems~\citep{TurEtAl20,HofEtAl11b}.
 % \hh{the following didn't flow well and was rather unclear, so I've changed it a bit -- check carefully:}
 % Here, we tackle complex HPO search spaces directly through adaptive choice of the most suitable surrogate model. 
 
@@ -217,7 +217,7 @@ Note that $c(\mathbf{\lambda})$ is a black-box function, without a closed-form e
 \subsection{Bayesian optimisation} 
 \label{sec:ch05:bac_bo}
 
-Bayesian optimisation (BO)~\citep{Mockus12,Garnett23,Frazier18,Kushner62,Kushner64} is a family of surrogate-based algorithms for efficient global optimisation of black-box problems.
+Bayesian optimisation (BO)~\citep{Mockus12b,Garnett23,Frazier18b,Kushner62,Kushner64} is a family of surrogate-based algorithms for efficient global optimisation of black-box problems.
 Typically, BO consists of three main components: an \emph{initial design}, \emph{i.e.}, in HPO, a set of candidate hyperparameter configurations $\boldsymbol{\lambda} = (\lambda^{(1)},\ldots, \lambda^{(r)})$ and their evaluations 
 $c(\boldsymbol{\lambda}) = (c(\lambda^{(1)}),\ldots, c(\lambda^{(r)}))$; a \emph{surrogate model} (fitted to the 
 % initial 
@@ -300,10 +300,10 @@ However, these fall outside the scope of our work presented here, as they do not
 \subsection{Dynamic component selection in Bayesian optimisation}
 As a modular framework, BO performance is highly sensitive to design choices of its modules. 
 Different sampling strategies for the initial design, such as Latin hypercube sampling~\citep{McKEtAl00}, low-discrepancy sequences (\emph{e.g.}, Sobol~\citep{AntSal79}) or random uniform sampling; different surrogate models, such as GPs or RFs; and different acquisition functions, such as EI, PI or UCB -- all affect the overall BO performance to various degrees~\citep{BosEtAl20,LinEtAl19,CowEtAl22}. 
-Despite few works showing the potential of automated selection of components~\citep{BenTom18,BenEtAl22,BenEtAl22}, the settings for each component are typically chosen by practitioners beforehand depending on the desired use-case, and are fixed for the entire optimisation procedure.
+Despite few works showing the potential of automated selection of components~\citep{SalTom18,BenEtAl22c,BenEtAl22c}, the settings for each component are typically chosen by practitioners beforehand depending on the desired use-case, and are fixed for the entire optimisation procedure.
 
 However, there have been efforts to show that the dynamic choices of BO modules lead to performance gains across multiple contexts.
-Prior attempts to investigate the dynamic adjustment of acquisition functions include works on mixed acquisition function strategies, \emph{e.g.}, a self-adjusting approach to balance the exploration-exploitation trade-off~\citep{BenEtAl23}, an online multi-armed bandit strategy on a portfolio of acquisition functions~\citep{HofEtAl11}, or an online update of weights in a portfolio of acquisition functions~\citep{KanEtAl20}.
+Prior attempts to investigate the dynamic adjustment of acquisition functions include works on mixed acquisition function strategies, \emph{e.g.}, a self-adjusting approach to balance the exploration-exploitation trade-off~\citep{BenEtAl23}, an online multi-armed bandit strategy on a portfolio of acquisition functions~\citep{HofEtAl11b}, or an online update of weights in a portfolio of acquisition functions~\citep{KanEtAl20}.
 When it comes to dynamic adjustment of surrogate models, several directions have been investigated, notably an online selection of surrogate models based on their ranking in each BO iteration~\citep{BagEtAl16}, adaptive global surrogate modelling via genetic algorithm-driven sampling~\citep{GorEtAl09}, or adaptive combining of surrogates based on crowding distance trust regions~\citep{ZhaEtAl12}.
 It has also been shown that dynamic component selection in general is beneficial in terms of performance in other related areas, \emph{e.g.}, in algorithm configuration~\citep{BieEtAl20}, evolutionary computation~\citep{KarEtAl15,DoeDoe20}, planning~\citep{SpeEtAl21}, and deep learning~\citep{AdrEtAl22}.
 
@@ -318,7 +318,7 @@ Nevertheless, to the best of our knowledge, our work is the first one to use a
 dynamic tailoring strategy, ranging from full ensembling to greedy selection, for surrogate models in mixed discrete-continuous search spaces of problems that tend to be very expensive to evaluate in practice, such as HPO.
 % }
 A series of earlier studies has demonstrated the advantage of using ensembles in BO, most notably in engineering~\citep{JiaEtAl20,ZhoEtAl11}; however, the search spaces explored in these are of a purely continuous nature.
-Various ensembling strategies investigated in the literature do not apply in a straightforward manner to our use-case, \emph{e.g.}, optimal weighting strategies of surrogates trained on existing observations~\citep{HanEtAl22} or on extracted features~\citep{GuoEtAl19} have been designed for multi-objective constrained optimisation, while techniques for optimising multiple acquisition functions on multiple surrogates and combining them accordingly~\citep{HuaEtAl22, BeaEtAl19} have been developed for purely discrete search spaces.
+Various ensembling strategies investigated in the literature do not apply in a straightforward manner to our use-case, \emph{e.g.}, optimal weighting strategies of surrogates trained on existing observations~\citep{HanEtAl22} or on extracted features~\citep{GuoEtAl19} have been designed for multi-objective constrained optimisation, while techniques for optimising multiple acquisition functions on multiple surrogates and combining them accordingly~\citep{HuaEtAl22c, BeaEtAl19} have been developed for purely discrete search spaces.
 Moreover, all these existing approaches consider a static (\emph{i.e.}, global) ensemble construction which is then used throughout the entire optimisation process. Additionally, ensembles of surrogate models are commonly used in meta-learning for BO~\citep{WisEtAl16,FeuEtAl22}. 
 % \er{We use both BO and the full name, Bayesian optimization, in text. We should stick to BO once the acronym is introduced.}
 % \aj{This is now fixed. We only use the full name ``Bayesian optimisation'' in the abstract, for the first time we introduce it in the manuscript, and then in section titles (because it is cleaner than using an acronym in the title, IMO, but we can change this), and in the Figure 1 caption, because it should be self-contained (but we can also change this). }
@@ -578,7 +578,7 @@ We provide more details on these choices in~\cref{sec:imp_det}.
 
 We conducted a range of experiments to assess the performance of \texttt{DyMBO} in various HPO settings compared to a range of single-surrogate baselines and other competitive HPO frameworks.
 In particular, we investigated how \texttt{DyMBO} performs in light of the trade-off between the time for evaluating the target function and the time for finding the optimal hyperparameter configuration.
-We implemented our method in HEBO~\citep{CowEtAl22}, a state-of-the-art HPO framework~\citep{EggEtAl21}.
+We implemented our method in HEBO~\citep{CowEtAl22}, a state-of-the-art HPO framework~\citep{EggEtAl21b}.
 % \changed{
 We provide implementation details and the description of the HEBO working mechanism in~\cref{sec:imp_det}.
 % }
@@ -644,14 +644,14 @@ The selection regime leads to the shortest running time, due to the fact that in
 
 We used the native implementations of the initial design sampling and the acquisition function in HEBO; an ablation study on different acquisitions can be found in~\cref{sec:ch05:ablations}.
 We set the size of the initial sample to 8 for all experiments; results with different initial sample sizes can be found in~\cref{sec:ch05:diff_exp_setup}.
-Each method ran with 51 different random seeds and with a total budget of $100 \times$ mean evaluation time, similarly to~\citet{EggEtAl21}. 
+Each method ran with 51 different random seeds and with a total budget of $100 \times$ mean evaluation time, similarly to~\citet{EggEtAl21b}. 
 More details on the evaluation time are available in~\cref{sec:ch05:benchs}. %$\{0, \dots, 50\}$.
 
 
 % \subsection{Benchmarks and baselines}
 We empirically evaluated our approach on two benchmark suites, YAHPO Gym~\citep{PfiEtAl22} and JAHS-Bench-201~\citep{BanEtAl22}.
 YAHPO Gym is a surrogate-based benchmark for hyperparameter optimisation, consisting of 15 scenarios (\emph{i.e.}, machine learning pipelines and their configuration space) on various datasets.
-In particular, it contains LCBench~\citep{ZimEtAl21}, which is used to optimise neural networks on tabular data, and yields a purely numerical search space; combined algorithm selection and hyperparameter optimisation (CASH) on OpenML datasets~\citep{BinEtAl20,FalEtAl18}; as well as the NAS Bench 301~\citep{ZelEtAl22}. 
+In particular, it contains LCBench~\citep{ZimEtAl21b}, which is used to optimise neural networks on tabular data, and yields a purely numerical search space; combined algorithm selection and hyperparameter optimisation (CASH) on OpenML datasets~\citep{BinEtAl20,FalEtAl18}; as well as the NAS Bench 301~\citep{ZelEtAl22}. 
 From YAHPO Gym, we used all 856 available instances.
 JAHS-Bench-201 is a surrogate-based benchmark for optimisation of the architecture and hyperparameters of convolutional neural network on image datasets. 
 From JAHS-Bench-201, we used all three available instances, each optimising the architecture for a different dataset.
@@ -666,7 +666,7 @@ For results on additional benchmarks, refer to~\cref{sec:ch05:add-bench}.
 
 % \changed{
 We used single-surrogate BO variants within HEBO with each of the surrogate models considered (GP, RF, ET, and GB) as baselines to compare against \texttt{DyMBO}. 
-Furthermore, we compared \texttt{DyMBO} to additional standard HPO methods: random search (RS)~\citep{BerEtAl11}, SMAC3~\citep{LinEtAl22e, HutEtAl11}, Optuna with TPE as a surrogate model~\citep{BerEtAl11,AkiEtAl19}, and Optuna AutoSampler, which automatically selects HPO method based on hand-crafted rules~\citep{Ozaki24}.
+Furthermore, we compared \texttt{DyMBO} to additional standard HPO methods: random search (RS)~\citep{BerEtAl11}, SMAC3~\citep{LinEtAl22, HutEtAl11}, Optuna with TPE as a surrogate model~\citep{BerEtAl11,AkiEtAl19}, and Optuna AutoSampler, which automatically selects HPO method based on hand-crafted rules~\citep{Ozaki24}.
 More details on these baselines are provided in~\cref{sec:ch05:add_baselines}.
 % }
 
@@ -1359,7 +1359,7 @@ We describe additional baselines against which we compared our method. We note t
 \end{figure*}
 
 \paragraph{Squirrel.}
-Squirrel~\citep{AwaEtAl20} is an HPO method which won the third place in the NeurIPS black-box optimisation challenge. 
+Squirrel~\citep{AwaEtAl20b} is an HPO method which won the third place in the NeurIPS black-box optimisation challenge. 
 Squirrel uses a GP surrogate model and a portfolio of acquisition functions, including EI, PI, Lower Confidence Bound (LCB)~\citep{ForEtAl08} and logEI~\citep{HutEtAl11}, selected adaptively during optimisation.
 It should be noted that Squirrel was specifically designed to meet the rules of the challenge (batch size, number of random samples, total number of batches). A similar approach is Optuna AutoSampler, which selects the HPO method to use based on hand-crafted rules. We ran Squirrel only on the YAHPO Gym benchmark, as it is not compatible with JAHS-Bench-201 due to Python package versioning. We provide the results in \cref{fig:ch05:squirrel}, where we see that our approach outperforms Squirrel on almost all benchmarks (mean rank of 1.07).
 
@@ -1822,7 +1822,7 @@ The YAHPO Gym scenarios are: \\
     \textbf{iaml\_ranger}~\citep{PfiEtAl22}: RF using the ranger R implementation.\\
     \textbf{iaml\_xgboost}~\citep{PfiEtAl22}: gradient boosting using XGBoost.\\
     \textbf{iaml\_super}~\citep{PfiEtAl22}: combined algorithm selection and hyperparameter optimisation (CASH) scenario that uses all the above iaml scenarios.\\
-    \textbf{LCBench}~\citep{ZimEtAl21}: optimising the training hyperparameters and architecture of multi-layer perceptron on tabular datasets.\\
+    \textbf{LCBench}~\citep{ZimEtAl21b}: optimising the training hyperparameters and architecture of multi-layer perceptron on tabular datasets.\\
     \textbf{FCNet}~\citep{FalEtAl18}: hyperparameter optimisation of a fully-connected network for tabular data.\\
     \textbf{NAS-Bench-301}~\citep{ZelEtAl22}: neural architecture search (NAS) scenario using a constant set of training hyperparameters. The search space describes a cell of the neural network and the hyperparameters are different operations done in each cell.
 % \end{itemize}
@@ -1835,12 +1835,12 @@ While the iaml and rbv2 scenarios look similar, there are a few differences in t
 First, the configuration space of rbv2 contains the input imputation used, while in iaml the input imputation is constant. 
 Another difference is a different range of hyperparameters (for example, the number of rounds in XGBoost). 
 In all scenarios, the target metric is accuracy, as defined in~\citep{PfiEtAl22}.  
-The configuration spaces for LCBench, FCNet and NAS-Bench-301 are taken from~\citep{ZimEtAl21,FalEtAl18,ZelEtAl22}, respectively.
+The configuration spaces for LCBench, FCNet and NAS-Bench-301 are taken from~\citep{ZimEtAl21b,FalEtAl18,ZelEtAl22}, respectively.
 Additionally, we benchmarked our method on \textbf{JAHS-Bench-201}~\citep{BanEtAl22}: a neural architecture search (NAS) benchmark that optimises both the architecture of the neural network and the training hyperparameters. The benchmark contains three datasets: CIFAR10, Fashion MNIST and Colorectal Histology.
 
 \paragraph{Evaluation budget.}
 All YAHPO Gym and JAHS-Bench-201 surrogates predict the running time required to train and evaluate the model using a specific configuration. 
-Therefore, we calculate the budget per instance similarly to~\citet{EggEtAl21}: we sample 1\,000 uniform random configurations per instance and predict the required running time.
+Therefore, we calculate the budget per instance similarly to~\citet{EggEtAl21b}: we sample 1\,000 uniform random configurations per instance and predict the required running time.
 We then calculate the mean running time per instance. 
 The budget for each optimisation is then $100\times $ mean running time of the instance. 
 % The running times per scenario are available in~\autoref{fig:running-times}.
@@ -1921,9 +1921,9 @@ Among the single-surrogate baselines, GP tends to perform competitively on smoot
 \subsection{HPOBench}
 \label{sec:ch05:hpobench}
 
-In addition to synthetic continuous functions, we empirically evaluated our method on HPOBench~\citep{EggEtAl21}, a collection of HPO benchmarks widely used in benchmarking studies.
+In addition to synthetic continuous functions, we empirically evaluated our method on HPOBench~\citep{EggEtAl21b}, a collection of HPO benchmarks widely used in benchmarking studies.
 Out of various raw, surrogate or tabular benchmark families included in HPOBench, we selected Random Forest and XGBoost as raw benchmarks for our evaluation.
-These benchmarks are based on configuring hyperparameters of Random Forest and XGBoost models in their native implementations~\citep{PedEtAl11,CheGue16} on 20 publicly available datasets from the OpenML AutoML benchmark~\citep{GijEtAl19}.
+These benchmarks are based on configuring hyperparameters of Random Forest and XGBoost models in their native implementations~\citep{PedEtAl11b,CheGue16} on 20 publicly available datasets from the OpenML AutoML benchmark~\citep{GijEtAl19}.
 The setup of experiments used here is the same as the default described in~\cref{sec:ch05:experiments}.
 
 In~\cref{fig:ch05:hpobench}, we show the mean ranks of \texttt{DyMBO} and single-surrogate HEBO baselines on these two HPOBench problems.

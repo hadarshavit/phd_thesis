@@ -54,7 +54,7 @@ We argue that preserving essential information about the data might not be imper
 
 in the reduced space).  
 
-In recent years, there have been some attempts to leverage the power of dimensionality reduction for solving challenging optimisation problems in domains other than hyperparameter optimisation and neural architecture search~\citep{RapEtAl20,AntEtAl22,MeiWan21,WanEtAl16,KapEtAl16,AbbEtAl20}, where notably, the performance of (surrogate- and population-based) optimisation algorithms have been boosted by incorporating dimensionality reduction methods into the optimisation process.
+In recent years, there have been some attempts to leverage the power of dimensionality reduction for solving challenging optimisation problems in domains other than hyperparameter optimisation and neural architecture search~\citep{RapEtAl20,AntEtAl22,MeiWan21b,WanEtAl16b,KapEtAl16,AbbEtAl20}, where notably, the performance of (surrogate- and population-based) optimisation algorithms have been boosted by incorporating dimensionality reduction methods into the optimisation process.
 Many real-world optimisation applications have high dimensionality, for example, in mechanical engineering~\citep{Jones08} and control problems~\citep{ZuoEtAl24}. 
 Likewise, improving machine learning models in terms of scalability and accuracy by means of dimensionality reduction facilitates meta-learning and meta-optimisation approaches, such as algorithm selection and configuration, where state-of-the-art methods typically rely on predictions obtained from machine learning models, \emph{e.g.,} in the context of algorithm configuration~\citep{HutEtAl11}.
 
@@ -324,9 +324,9 @@ In image retrieval,~\citet{ZhuEtAl14} compared a set of feature extraction and f
 
 
 Bayesian optimisation in high-dimensional spaces has also received considerable attention in recent years, with numerous methods proposed to address the curse of dimensionality. 
-REMBO~\citep{WanEtAl16} exploits the assumption that high-dimensional objective functions often have low effective dimensionality by optimising within random low-dimensional subspaces.
+REMBO~\citep{WanEtAl16b} exploits the assumption that high-dimensional objective functions often have low effective dimensionality by optimising within random low-dimensional subspaces.
 Linear embedding approaches such as ALEBO~\citep{LetEtAl20} learn low-dimensional representations of the search space through adaptive coordinate transformations. 
-Trust-region methods like TuRBO~\citep{EriEtAl19} decompose the optimisation problem into local subproblems that are easier to solve in high dimensions.
+Trust-region methods like TuRBO~\citep{EriEtAl19b} decompose the optimisation problem into local subproblems that are easier to solve in high dimensions.
 BAxUS~\citep{PapEtAl22} employs axially aligned subspaces to reduce dimensionality while maintaining interpretability, while BOIDS~\citep{NgoEtAl25} exploits additive structure in the objective function. 
 Random projection methods such as RPM-\gls{bo}~\citep{NguTra24} leverage the Johnson-Lindenstrauss lemma to perform optimisation in randomly projected subspaces. 
 While these methods demonstrate the effectiveness of dimensionality reduction in Bayesian optimisation contexts, they are typically designed as integrated systems where the dimensionality reduction method is tightly coupled with the optimisation procedure. 
@@ -806,7 +806,7 @@ Due to limited additional insight they bring, we do not discuss them in detail i
 \subsubsection*{Machine learning task 2: Tabular classification accuracy.}
 We consider the following three classification algorithms that are traditionally used for tabular data~\citep{GriEtAl22}: random forest, gradient boosting and multi-layer perceptron (\gls{mlp}), all in their scikit-learn~\citep{PedEtAl11} implementations.
 
-We optimise all classifiers using SMAC3~\citep{LinEtAl22e}, a popular hyperparameter optimiser, with a budget of 30 evaluations. We provide the configuration spaces in~\cref{app:cs}.
+We optimise all classifiers using SMAC3~\citep{LinEtAl22b}, a popular hyperparameter optimiser, with a budget of 30 evaluations. We provide the configuration spaces in~\cref{app:cs}.
 
 
 
@@ -877,7 +877,7 @@ To build the surrogate, we sample $\min\{50 \cdot D, 5000\}$ using Sobol samplin
 We employ a random forest regressor as a surrogate model, specifically using the scikit-learn implementation. 
 We use log-transformation for the target values and optimise 
 
-the hyperparameter settings of the random forest using SMAC3~\citep{LinEtAl22e}.
+the hyperparameter settings of the random forest using SMAC3~\citep{LinEtAl22b}.
 To aggregate the results, we use min-max normalisation per function.
 \subsubsection*{Black-box optimisation task 2: Optimiser performance.}
 We use BoTorch~\citep{BalEtAl19} for the implementation of the EI acquisition function and the Gaussian process surrogate model.
@@ -1806,7 +1806,7 @@ For instance, LLE consistently performed worst in this task, showing that preser
 
 
 In particular, PLS regression (which was top-ranked for target function approximation) is not able to outperform PCA with the RBF kernel here.
-Intuitively, this is because accurate prediction of function values does not necessarily translate to effective (and efficient) optimisation, as already observed in~\citep{FeuEtAl18}.
+Intuitively, this is because accurate prediction of function values does not necessarily translate to effective (and efficient) optimisation, as already observed in~\citep{FeuEtAl18b}.
 In other words, problem characteristics required for guiding the search process fundamentally differ from those allowing for accurate function value regression, and the strong performance of PCA with the RBF kernel specifically suggests that capturing non-linear, distance-based relationships in the search space is crucial for optimisation, more so than explicit supervision on objective values.
 
 We note that different sample sizes for training dimensionality reduction methods were used for the two black-box optimisation tasks.
