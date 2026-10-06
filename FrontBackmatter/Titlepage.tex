@@ -2,4 +2,5 @@
 % Titlepage
 %*******************************************************
 % Separate printable copy preserves the entries in the editable cover form.
-\includepdf[pages=1,fitpaper=true,pagecommand={\thispagestyle{empty}}]{FrontBackmatter/Deckblatt.print.pdf}
+% Keep the thesis's A4 page size and scale the supplied cover to fit.
+\includepdf[pages=1,fitpaper=false,pagecommand={\thispagestyle{empty}}]{FrontBackmatter/Deckblatt.print.pdf}
