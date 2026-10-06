@@ -286,7 +286,7 @@ We then stack multiple layers to form the processor component of our baseline ar
 Unless otherwise specified, we use mean pooling for graph-level tasks at the end of the processor step. 
 
 \textbf{GNN+ Baseline methods}
-In addition to the graph transformer and GINE baseline methods, we use current state-of-the-art GNN methods originally proposed by \citet{} as an extension to existing GNN baselines. Following the approach from their paper, we include the GIN+, GatedGCN+, and GCN+ baselines throughout our experiments. Specifically, layer updates are given by the following, with node representations $h_v^{(l)}$ updated. \\
+In addition to the graph transformer and GINE baseline methods, we use current state-of-the-art GNN methods originally proposed by \citet{LuoEtAl25} as an extension to existing GNN baselines. Following the approach from their paper, we include the GIN+, GatedGCN+, and GCN+ baselines throughout our experiments. Specifically, layer updates are given by the following, with node representations $h_v^{(l)}$ updated. \\
 GIN+:
 \begin{equation*}
     \boldsymbol{h}_v^l = \text{FFN}(\text{Dropout}(\sigma(\text{BN}( \text{MLP}^l((1 + \epsilon) \cdot \boldsymbol{h}_v^{l-1} + \sum_{u \in \mathcal{N}(v)} \boldsymbol{h}_u^{l-1}) + \boldsymbol{e}_{uv} \boldsymbol{W}_e^l)))) + \boldsymbol{h}_v^{l-1})
