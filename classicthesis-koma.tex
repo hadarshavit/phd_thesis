@@ -1,0 +1,74 @@
+% ClassicThesis typography using KOMA-Script's supported heading/TOC APIs.
+% Loaded inside classicthesis.sty, where @ is a letter.
+\setkomafont{disposition}{\normalfont}
+\setkomafont{chapter}{\normalfont\normalsize}
+\setkomafont{section}{\normalfont\normalsize}
+\setkomafont{subsection}{\normalfont\normalsize\itshape}
+\setkomafont{subsubsection}{\normalfont\normalsize\itshape}
+\setkomafont{paragraph}{\normalfont\normalsize}
+\RedeclareSectionCommand[beforeskip=1\baselineskip,afterskip=1.2\baselineskip]{chapter}
+\RedeclareSectionCommands[beforeskip=1.25\baselineskip,afterskip=1\baselineskip,afterindent=false]{section,subsection}
+\RedeclareSectionCommand[beforeskip=1\baselineskip,afterskip=1\baselineskip,runin=true]{paragraph}
+\renewcommand*{\chapterformat}{%
+  \mbox{}\oldmarginpar{\vspace*{-3\baselineskip}\color{halfgray}\chapterNumber\thechapter}}
+\renewcommand*{\chapterlinesformat}[3]{%
+  #2\raggedright\spacedallcaps{#3}\par\nobreak
+  \normalsize\vspace*{.8\baselineskip}\hrule height .4pt\relax}
+\renewcommand*{\sectionformat}{\textup{\textsc{\thesection}}\quad}
+\renewcommand*{\subsectionformat}{\textup{\textsc{\thesubsection}}\quad}
+\renewcommand*{\subsubsectionformat}{\textup{\textsc{\thesubsubsection}}\quad}
+\renewcommand*{\sectionlinesformat}[4]{%
+  \@hangfrom{\hskip#2#3}{\Ifstr{#1}{section}{\spacedlowsmallcaps{#4}}{#4}}}
+\renewcommand*{\sectioncatchphraseformat}[4]{%
+  \hskip#2#3\spacedlowsmallcaps{#4}}
+\renewcommand*{\descriptionlabel}[1]{\hspace*{\labelsep}\spacedlowsmallcaps{#1}}
+
+\ifthenelse{\boolean{@parts}}{%
+  \newcommand{\ct@parttext}{\relax}
+  \newcommand{\ctparttext}[1]{\renewcommand{\ct@parttext}{#1\relax}}
+  \renewcommand{\thepart}{\roman{part}}
+  \setkomafont{part}{\normalfont\large}
+  \setkomafont{partprefix}{\normalfont\large}
+  \renewcommand*{\partformat}{\partname~\MakeTextUppercase{\thepart}}
+  \renewcommand*{\partlineswithprefixformat}[3]{%
+    \thispagestyle{empty}\centering#2\spacedallcaps{#3}%
+    \bigskip\normalfont\normalsize\color{Black}\begin{quote}\ct@parttext\end{quote}%
+    \ctparttext{\relax}}
+}{\relax}
+
+\RequirePackage{tocbasic}
+\newlength{\beforebibskip}
+\setlength{\beforebibskip}{1em}
+\newcommand*{\cttocnumber}[1]{\textup{\textsc{#1}}}
+\newcommand*{\cttocpage}[1]{#1}
+\newcommand*{\cttocchapter}[1]{{\normalfont\scshape #1}}
+\DeclareTOCStyleEntries[entryformat=\normalfont,entrynumberformat=\cttocnumber,
+  pagenumberformat=\normalfont,beforeskip=0pt]{tocline}{section,subsection,subsubsection}
+\DeclareTOCStyleEntry[entryformat=\cttocchapter,entrynumberformat=\cttocnumber,
+  pagenumberformat=\normalfont,beforeskip=.1em]{tocline}{chapter}
+\DeclareTOCStyleEntry[entryformat=\normalfont,entrynumberformat=\cttocnumber,
+  pagenumberformat=\normalfont,beforeskip=1em]{tocline}{part}
+\newlength{\figurelabelwidth}
+\settowidth{\figurelabelwidth}{\figurename~999}
+\addtolength{\figurelabelwidth}{2.5em}
+\newcommand*{\cttocfigure}[1]{\figurename~#1}
+\newcommand*{\cttoctable}[1]{\tablename~#1}
+\newcommand*{\cttoclisting}[1]{\lstlistingname~#1}
+\DeclareTOCStyleEntry[indent=0pt,numwidth=\figurelabelwidth,
+  entryformat=\normalfont,entrynumberformat=\cttocfigure,pagenumberformat=\normalfont]{tocline}{figure}
+\DeclareTOCStyleEntry[indent=0pt,numwidth=\figurelabelwidth,
+  entryformat=\normalfont,entrynumberformat=\cttoctable,pagenumberformat=\normalfont]{tocline}{table}
+\ifthenelse{\boolean{@listings}}{%
+  \DeclareTOCStyleEntry[level=1,indent=0pt,numwidth=\figurelabelwidth,
+    entryformat=\normalfont,entrynumberformat=\cttoclisting,pagenumberformat=\normalfont]{tocline}{lstlisting}
+}{\relax}
+\ifthenelse{\boolean{@dottedtoc}}{}{%
+  \DeclareTOCStyleEntries[linefill=\hspace{1.5em},raggedpagenumber=true,
+    pagenumberbox=\cttocpage]{tocline}{part,chapter,section,subsection,subsubsection,figure,table}
+  \ifthenelse{\boolean{@listings}}{%
+    \DeclareTOCStyleEntry[linefill=\hspace{1.5em},raggedpagenumber=true,
+      pagenumberbox=\cttocpage]{tocline}{lstlisting}
+  }{\relax}}
+\ifthenelse{\boolean{@tocaligned}}{%
+  \DeclareTOCStyleEntries[indent=0pt]{tocline}{section,subsection,subsubsection}
+}{\relax}
