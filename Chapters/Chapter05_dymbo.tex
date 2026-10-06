@@ -1,4 +1,4 @@
-\chapter{DyMBO: Dynamic Mixture of Surrogate Models for Hyperparameter Optimisation}\label{ch:dymbo}
+\chapter{DyMBO: Dynamic Mixture of Surrogate Models for Hyperparameter Optimisation}\label{ch:ch05:dymbo}
 
 
 
@@ -144,7 +144,7 @@ One natural way to achieve this is via ensemble methods, which have demonstrated
     % \todo{mark explicitly where sample evaluation is happening}
     }
     
-    \label{fig:diagram}
+    \label{fig:ch05:diagram}
 \end{figure}
 
 % \changed{
@@ -153,7 +153,7 @@ Our approach, dubbed \texttt{DyMBO}, dynamically adjusts the influence of multip
 To this end, \texttt{DyMBO}
 assigns the largest weight to the surrogate model with the highest accuracy
 on all observed points up to the current BO iteration and updates the 
-weights via exponential moving average (see~\autoref{fig:diagram} for details).
+weights via exponential moving average (see~\cref{fig:ch05:diagram} for details).
 We use the term
 % \hh{add: the term} 
 \emph{ensemble} for the regime in which multiple surrogates retain non-zero weight, and \emph{selection} for the special case in which the weighting collapses to a single retained surrogate at each iteration.
@@ -167,8 +167,8 @@ In the context of HPO, evaluating the target function means evaluating the perfo
 Ensembling approaches in general require training and querying more than one surrogate model, which leads to more time required for the optimisation phase.
 We assess the effectiveness of \texttt{DyMBO} %our dynamic surrogate ensembling 
 on various HPO tasks involving numerous datasets and machine learning models. 
-To this end, we compare \texttt{DyMBO} to several single-surrogate-based BO baselines and a range of competitive HPO frameworks, and we show that our method achieves a better average ranks than all other considered methods across both cheap and expensive functions in terms of time required for their evaluation. An overview of the results is shown in~\autoref{fig:box_plot_mean_rank}.
-We provide the code, instructions for reproducibility, as well as all figures in~\autoref{sec:code-availability}. 
+To this end, we compare \texttt{DyMBO} to several single-surrogate-based BO baselines and a range of competitive HPO frameworks, and we show that our method achieves a better average ranks than all other considered methods across both cheap and expensive functions in terms of time required for their evaluation. An overview of the results is shown in~\cref{fig:ch05:box_plot_mean_rank}.
+We provide the code, instructions for reproducibility, as well as all figures in~\cref{sec:code-availability}. 
 
 \begin{figure}
     \centering
@@ -178,17 +178,17 @@ We provide the code, instructions for reproducibility, as well as all figures in
     Box plot showing the ranks of various methods across 859 benchmark functions from YAHPO Gym and JAHS-Bench-201. \texttt{DyMBO} outperforms all baselines.
     % }
     }
-    \label{fig:box_plot_mean_rank}
+    \label{fig:ch05:box_plot_mean_rank}
 \end{figure}
 
-The remainder of this paper is organised as follows: in~\autoref{sec:back-rw}, we define the HPO problem, describe how BO operates, and position our approach with respect to related work on dynamically adapting BO components and using ensembles for enhancing BO performance.~\autoref{sec:method} introduces 
+The remainder of this paper is organised as follows: in~\cref{sec:ch05:back-rw}, we define the HPO problem, describe how BO operates, and position our approach with respect to related work on dynamically adapting BO components and using ensembles for enhancing BO performance.~\cref{sec:ch05:method} introduces 
 % the \texttt{DyMBO} methodology.
 our methodology for
 % \changed{
 dynamic ensembling and selection
 % }
 of surrogate models. 
-In~\autoref{sec:ch05:experiments}, we provide the technical details on the experimental setup and describe the benchmarks and baselines chosen for our empirical analysis. We present results and critically discuss them in~\autoref{sec:ch05:res}. Finally, in~\autoref{sec:concl-fw}, we provide concluding remarks and outline directions for future research.
+In~\cref{sec:ch05:experiments}, we provide the technical details on the experimental setup and describe the benchmarks and baselines chosen for our empirical analysis. We present results and critically discuss them in~\cref{sec:ch05:res}. Finally, in~\cref{sec:ch05:concl-fw}, we provide concluding remarks and outline directions for future research.
 
 
 
@@ -198,7 +198,7 @@ In~\autoref{sec:ch05:experiments}, we provide the technical details on the exper
 
 
 \section{Background and related work}
-\label{sec:back-rw}
+\label{sec:ch05:back-rw}
 
 In this section, we define the HPO problem and describe the working mechanisms of the BO framework. 
 We also cover related work on dynamic design choices related to the components of BO, as well as using ensembles in BO.
@@ -265,7 +265,7 @@ BO proceeds iteratively until a termination criterion is met. In each iteration,
 by repeatedly querying the surrogate model to generate a pool of candidate solutions. It then evaluates the most high-potential solutions (\emph{i.e.}, the solutions that maximise the acquisition function) from this pool,
 refines the surrogate model based on the new observations, and updates the optimum if the new point improves upon the true function value of the best observation so far.
 % \changed{
-Throughout this work, we consider the batched setting, in which $k$ configurations are proposed and evaluated per BO iteration; see~\autoref{sec:method}. This is reflected in the acquisition and update steps described here.
+Throughout this work, we consider the batched setting, in which $k$ configurations are proposed and evaluated per BO iteration; see~\cref{sec:ch05:method}. This is reflected in the acquisition and update steps described here.
 % }
 
 Among the many variants of BO from the literature, in this work, we focus on the state-of-the-art method for HPO to empirically evaluate our method: HEBO~\citep{CowEtAl22}.
@@ -280,7 +280,7 @@ jointly, these address heteroscedasticity in the noise $\epsilon$ and non-statio
 % \er{``performance'' used twice with different meanings, could be confusing. What do we exactly mean with ``performance data'' and, earlier, with ``performance observations''? Is it another phrasing for solution quality, specific for HPO?}
 For the acquisition function, rather than optimising a single criterion, HEBO samples new candidate configurations by maximising MACE~\citep{LyuEtAl18}, a multi-objective acquisition function that simultaneously considers expected improvement (EI)~\citep{Mockus75}, probability of improvement (PI)~\citep{Kushner64}, and upper confidence bound (UCB)~\citep{ForEtAl08}, providing a more robust balance between exploration and exploitation of the search space than any single acquisition function alone.
 % \hh{modified:}
-Additional details on HEBO can be found in~\autoref{sec:imp_det}.
+Additional details on HEBO can be found in~\cref{sec:imp_det}.
 
 % \changed{
 In conjunction with BO-based HPO techniques, \emph{multi-fidelity approaches}~\citep{LiEtAl18,LiEtAl20,FalEtAl18,AwaEtAl21} have been widely used to address expensive HPO problems, due to the fact that they use cheap approximations of the target function at hand.
@@ -343,7 +343,7 @@ configuration.
 
 
 \section{Methodology}
-\label{sec:method}
+\label{sec:ch05:method}
 
 % Our dynamic ensembling approach works as follows. 
 % \changed{
@@ -359,18 +359,18 @@ The ensemble can then predict the $\mu_{\text{ens}}(\lambda)$ and $\sigma_{\text
 of the individual model predictions $\mu_m(\lambda)$ and their standard deviations $\sigma_m(\lambda)$:
 \begin{equation}
     \mu_{\text{ens}}(\lambda)= \sum_{m\in M} \hat{w}_{t,m} \cdot \mu_{m}(\lambda),
-    \label{ens_mu}
+    \label{ch05:ens_mu}
 \end{equation}
 \begin{equation}
     \sigma_{\text{ens}}(\lambda)= \sum_{m\in M} \hat{w}_{t,m} \cdot \sigma_{m}(\lambda).
-    \label{ens_sigma}
+    \label{ch05:ens_sigma}
 \end{equation}
 
 % \changed{
-We note that~\autoref{ens_sigma} combines the standard deviations $\sigma_{m}(\lambda)$ directly rather than the variances $\sigma_{m}^{2}(\lambda)$; we adopt this convention for consistency with the expected use of $\sigma_{ens}$ as a scale parameter in the acquisition function definition.
-We discuss an alternative formulation based on the rule of total variance in~\autoref{sec:ablations}.
+We note that~\cref{ch05:ens_sigma} combines the standard deviations $\sigma_{m}(\lambda)$ directly rather than the variances $\sigma_{m}^{2}(\lambda)$; we adopt this convention for consistency with the expected use of $\sigma_{ens}$ as a scale parameter in the acquisition function definition.
+We discuss an alternative formulation based on the rule of total variance in~\cref{sec:ch05:ablations}.
 % }
-We also note that, in preliminary experiments, we investigated a variation of our ensembling method that applies different weighting schemes for the mean and the variance. However, this did not yield sufficient improvements to justify a more complex method definition. Further details can be found in~\autoref{sec:ablations}.
+We also note that, in preliminary experiments, we investigated a variation of our ensembling method that applies different weighting schemes for the mean and the variance. However, this did not yield sufficient improvements to justify a more complex method definition. Further details can be found in~\cref{sec:ch05:ablations}.
 
 % \hh{minor change in the following:}
 % \changed{
@@ -387,7 +387,7 @@ rather than as a loss function, as originally introduced by~\citet{WisEtAl16}, a
 
     % \aj{Elena's comment: mathbb{1} compiles incorrectly} \er{Fixed. And changed the equation to be on one line.}
 \begin{equation}
-\label{eq:rl}
+\label{eq:ch05:rl}
     \begin{aligned}
        \text{RL}(\mu_m, \boldsymbol{\lambda}) = 
         \sum_{\lambda^{(j)}\in \boldsymbol{\lambda}} 
@@ -408,9 +408,9 @@ Therefore, the rank of the candidate solutions is more important than their spec
 % \changed{
 % This is why we do not compute RL using cross-validation or a held-out set.
 We use ranking loss to determine how well each surrogate ranks the points in $\boldsymbol{\lambda}$, which is directly observable without any held-out set. 
-We provide an ablation for using a holdout set in~\autoref{sec:ablations}.
+We provide an ablation for using a holdout set in~\cref{sec:ch05:ablations}.
 % }
-Additional results on the performance of our method in terms of MSE are also provided in~\autoref{sec:ablations}.
+Additional results on the performance of our method in terms of MSE are also provided in~\cref{sec:ch05:ablations}.
 % }
 
 % \aj{in the following + in pseudocode, swapped w and w bar to be more intuitive (Reviewer 3)}
@@ -424,7 +424,7 @@ for each model greedily as follows:
 
 % \aj{Elena's comment: why newline?} \er{Fixed it.}
 % \changed{
-\begin{equation}\label{eqn:weight}
+\begin{equation}\label{eqn:ch05:weight}
     {w}_{t,m} =
     \begin{cases}
         1, & \text{if } \text{RL}(\mu_{t,m}, \boldsymbol{\lambda}) = \text{min}_{l \in M} \text{RL}(\mu_{t,l}, \boldsymbol{\lambda}), \\
@@ -439,7 +439,7 @@ for each model greedily as follows:
 % $
 %     \lambda_t=\{\lambda_t^{(1)}, \lambda_t^{(2)}, \dots, \lambda_t^{(k)}\}.
 % $
-Therefore, in~\autoref{eqn:weight}, 
+Therefore, in~\cref{eqn:ch05:weight}, 
 we assign a weight of ${w}_{t,m} = 1$ to the model
 % \hh{minor change:} 
 with the lowest ranking loss on all points sampled up to iteration $t$.
@@ -451,12 +451,12 @@ Then, for each model $m$, we use an exponential moving average between the previ
 % \changed{
 \begin{equation}
     \bar{w}_{t+1,m} = (1-\alpha) \cdot \bar{w}_{t, m} + \alpha  \cdot {w}_{t,m} \; .
-    \label{eq:weight_ema}
+    \label{eq:ch05:weight_ema}
 \end{equation}
 % }
 % \changed{
 We use the exponential moving average in the weighting scheme so that the accumulated weight history, and not only the most recent model accuracy, determines the influence of each surrogate.
-A surrogate that has been consistently accurate can therefore retain meaningful weight even at an iteration where it is not the single top performer under~\autoref{eqn:weight}. We retain the term ``ensemble'' throughout to describe this general weighting mechanism, even though the special case when $\alpha = 1$ discards the history and becomes single-surrogate selection at each iteration.
+A surrogate that has been consistently accurate can therefore retain meaningful weight even at an iteration where it is not the single top performer under~\cref{eqn:ch05:weight}. We retain the term ``ensemble'' throughout to describe this general weighting mechanism, even though the special case when $\alpha = 1$ discards the history and becomes single-surrogate selection at each iteration.
 % We use ``dynamic tailoring'' when referring to the mechanism spanning both ensembling and selection regimes.
 % }
 
@@ -466,8 +466,8 @@ As $\alpha \to 0$, the update
 %\hh{cut one of the two:} \er{I like that both extreme cases are explained, especially since some reviewers have dismissed the method as mere selection. Perhaps this part could just be shortened a bit.}
 progressively increasingly 
 disregards the ranking loss of the current iteration and instead preserves the previously accumulated weights; in the limit, the ensemble composition stops reacting to which surrogate is currently most accurate, therefore becoming effectively static. 
-In contrast, when $\alpha = 1$,~\autoref{eq:weight_ema} collapses to $\bar{w}_{t+1,m} = {w}_{t,m}$, meaning that all weight history is discarded at every iteration, and the ensemble reduces to a selection of the single surrogate with the best ranking loss on all points sampled up to iteration $t$ (see~\autoref{eqn:weight}).
-Note that even at $\alpha = 1$, the method is not ``memoryless'' in the sense of ignoring past observations, as the ranking loss in~\autoref{eq:rl} is itself computed cumulatively over the full sample set $\boldsymbol{\lambda}$ accumulated so far (including the initial design), rather than merely over the most recent batch. 
+In contrast, when $\alpha = 1$,~\cref{eq:ch05:weight_ema} collapses to $\bar{w}_{t+1,m} = {w}_{t,m}$, meaning that all weight history is discarded at every iteration, and the ensemble reduces to a selection of the single surrogate with the best ranking loss on all points sampled up to iteration $t$ (see~\cref{eqn:ch05:weight}).
+Note that even at $\alpha = 1$, the method is not ``memoryless'' in the sense of ignoring past observations, as the ranking loss in~\cref{eq:ch05:rl} is itself computed cumulatively over the full sample set $\boldsymbol{\lambda}$ accumulated so far (including the initial design), rather than merely over the most recent batch. 
 Therefore, $\alpha$ governs how quickly the method revises its belief about which surrogates currently deserve influence, and not whether past observations inform the weighting. 
 % since they always do via ranking loss.
 % }
@@ -503,13 +503,13 @@ Second, because different surrogate models tend to suit different regions of the
 % }
 % We also want to respond to the exploration/exploitation tendency of the acquisition function, and therefore we accordingly reward the models that are accurate in the regions of the search space which are favoured by the acquisition function.
 % \hh{slightly modified for language:}
-We note that the acquisition function in HEBO trades off exploration and exploitation by combining EI, PI and UCB in a multi-objective way (for additional details, see \autoref{sec:ch05:bac_bo} and~\autoref{sec:ablations}).
-We also provide details on acquisition functions used in different baselines in~\autoref{sec:add_baselines}.
+We note that the acquisition function in HEBO trades off exploration and exploitation by combining EI, PI and UCB in a multi-objective way (for additional details, see \cref{sec:ch05:bac_bo,sec:ch05:ablations}).
+We also provide details on acquisition functions used in different baselines in~\cref{sec:ch05:add_baselines}.
 % }
 % As we also want to respond to the exploration/exploitation tendency of the acquisition function, we accordingly reward the models that are accurate in the regions of the search space which are favoured by the acquisition function.
 
 \paragraph{Pseudocode.}
-We summarise our method in the pseudocode description provided in Algorithm~\autoref{alg:debo}. \\
+We summarise our method in the pseudocode description provided in \cref{alg:ch05:debo}. \\
 % \er{There numbering was incongruent with the new version of the pseudocode}
 \noindent\textit{Initialisation (Lines 2--4). }
 An initial set of $r$ hyperparameter configurations 
@@ -530,7 +530,7 @@ configuration $\lambda^*$ is returned as the optimal solution.
 
 Note that, since our method is a plug-in for a generic BO framework, some of the steps (initial sample generation and acquisition function optimisation) depend on the specific BO framework.
 % \changed{
-We provide more details on these choices in~\autoref{sec:imp_det}.
+We provide more details on these choices in~\cref{sec:imp_det}.
 % }
 % \changed{
 % We note that \texttt{DyMBO} is designed to be a plug-in method that works well regardless of the chosen BO framework.
@@ -552,17 +552,17 @@ We provide more details on these choices in~\autoref{sec:imp_det}.
         \STATE Initialise model weights $w_{0,m}$ 
         \WHILE{budget is not exhausted}
             \STATE Fit models to data: $\{(\mu_{m},\sigma_{m}) \mid m \in M\}\gets \{\text{fit}(m, \boldsymbol{\lambda}) \mid m\in M\}$
-            \STATE Generate model ensemble $(\mu_\text{ens},\sigma_\text{ens})$ according to \autoref{ens_mu} and \autoref{ens_sigma}
+            \STATE Generate model ensemble $(\mu_\text{ens},\sigma_\text{ens})$ according to \cref{ch05:ens_mu,ch05:ens_sigma}
             \STATE Optimise acquisition function: $\lambda_t = \{\lambda_{t}^{(1)},\ldots,\lambda_t^{(k)}\}\gets \argmax AF(\lambda,\mu_\text{ens},\sigma_\text{ens},M)$
             % \todo{line 8, AF should take M as an input}
             \STATE Evaluate new candidates: $c_t = \{c_{t}^{(1)},\ldots,c_t^{(k)}\} \gets \{c(\lambda) \mid \lambda\in \lambda_t\}$
             \STATE Augment dataset: $\boldsymbol{\lambda} \gets \boldsymbol{\lambda} \cup \lambda_t$, $\mathbf{C} \gets \mathbf{C} \cup c_t$
-            \STATE Calculate new model weights: ${w}_{t,m}$ according to \autoref{eqn:weight}
-            \STATE Update weights $\bar{w}_{t,m}$ according to \autoref{eq:weight_ema}
+            \STATE Calculate new model weights: ${w}_{t,m}$ according to \cref{eqn:ch05:weight}
+            \STATE Update weights $\bar{w}_{t,m}$ according to \cref{eq:ch05:weight_ema}
         \ENDWHILE
         \STATE \textbf{Return} best configuration $\lambda^* \in \argmin_{\lambda \in \boldsymbol{\lambda}} \mathbf{C}$
   \end{algorithmic}
-  \label{alg:debo}
+  \label{alg:ch05:debo}
 \end{algorithm}
 
 
@@ -580,7 +580,7 @@ We conducted a range of experiments to assess the performance of \texttt{DyMBO} 
 In particular, we investigated how \texttt{DyMBO} performs in light of the trade-off between the time for evaluating the target function and the time for finding the optimal hyperparameter configuration.
 We implemented our method in HEBO~\citep{CowEtAl22}, a state-of-the-art HPO framework~\citep{EggEtAl21}.
 % \changed{
-We provide implementation details and the description of the HEBO working mechanism in~\autoref{sec:imp_det}.
+We provide implementation details and the description of the HEBO working mechanism in~\cref{sec:imp_det}.
 % }
 % \er{I am not a fan of this explanation of how HEBO works in the experimental setup. I would rather see it at the end of Section 2.2 and jump directly to the following paragraph here. But I leave it to you.} \aj{done, pls check}
 % HEBO is a BO-based optimiser with several advancements to improve performance. It applies a power transformation to the performance data and 
@@ -600,13 +600,13 @@ RF~\citep{Breiman01}, GB~\citep{Friedman01} and extremely randomised trees (ET)~
 We considered all different combinations of these models within our method, with particular emphasis on the combination of GP and RF as the most prominent surrogate models for HPO, which was found to yield the best performance. 
 % \er{What does ``particular emphasis'' mean here? Don't we also include GB and ET in the portfolio of surrogate models M?}
 % \aj{this means that the results in the main body of the paper are based on the combination of GP and RF (so in all plots where we report DyMBO we use only GP and RF). The results where we include GB and ET are in Section 5.3.5.}
-Details on the performance of all different surrogate model combinations are provided in~\autoref{sec:ablations}.
+Details on the performance of all different surrogate model combinations are provided in~\cref{sec:ch05:ablations}.
 % }
 % \hh{This was incorrect; I've tried to fix it and also streamline the text. The old version commented out in the source.}
 %\changed{We initialise the weights by assigning a weight of $1$ to RF ($w_{0,RF}=1$) and $0$ to GP ($w_{0,GP}=1$). An ablation for different initialisation strategies can be found in the Appendix~\ref{sec:init_ablation}.}
 % \changed{
 We initialised the weights by assigning  $w_{0,RF}=1$ for RF and $w_{0,GP}=0$ for GP. 
-In~\autoref{sec:ablations}, we also provide an ablation analysis for different initialisation strategies.
+In~\cref{sec:ch05:ablations}, we also provide an ablation analysis for different initialisation strategies.
 % }
 % For GP, we used its native implementation from HEBO.
 % For tree-based models, we used the \texttt{scikit-learn} implementation of RF, ET and GB.
@@ -642,10 +642,10 @@ In each iteration, the models with null weights are dynamically pruned, \emph{i.
 % The $\alpha=1$
 The selection regime leads to the shortest running time, due to the fact that in acquisition function optimisation having fewer models with non-zero weights reduces inference time, since fewer models need to be accessed altogether.
 
-We used the native implementations of the initial design sampling and the acquisition function in HEBO; an ablation study on different acquisitions can be found in~\autoref{sec:ablations}.
-We set the size of the initial sample to 8 for all experiments; results with different initial sample sizes can be found in~\autoref{sec:diff_exp_setup}.
+We used the native implementations of the initial design sampling and the acquisition function in HEBO; an ablation study on different acquisitions can be found in~\cref{sec:ch05:ablations}.
+We set the size of the initial sample to 8 for all experiments; results with different initial sample sizes can be found in~\cref{sec:ch05:diff_exp_setup}.
 Each method ran with 51 different random seeds and with a total budget of $100 \times$ mean evaluation time, similarly to~\citet{EggEtAl21}. 
-More details on the evaluation time are available in~\autoref{sec:benchs}. %$\{0, \dots, 50\}$.
+More details on the evaluation time are available in~\cref{sec:ch05:benchs}. %$\{0, \dots, 50\}$.
 
 
 % \subsection{Benchmarks and baselines}
@@ -658,16 +658,16 @@ From JAHS-Bench-201, we used all three available instances, each optimising the 
 % \changed{
 Both YAHPO Gym and JAHS-Bench-201 contain mixed discrete-continuous search spaces. 
 % }
-For further experimental and implementation details, refer to~\autoref{sec:imp_det} and~\autoref{sec:benchs}.
+For further experimental and implementation details, refer to~\cref{sec:imp_det,sec:ch05:benchs}.
 % \changed{
-For results on additional benchmarks, refer to~\autoref{sec:add-bench}.
+For results on additional benchmarks, refer to~\cref{sec:ch05:add-bench}.
 % }
 
 
 % \changed{
 We used single-surrogate BO variants within HEBO with each of the surrogate models considered (GP, RF, ET, and GB) as baselines to compare against \texttt{DyMBO}. 
 Furthermore, we compared \texttt{DyMBO} to additional standard HPO methods: random search (RS)~\citep{BerEtAl11}, SMAC3~\citep{LinEtAl22, HutEtAl11}, Optuna with TPE as a surrogate model~\citep{BerEtAl11,AkiEtAl19}, and Optuna AutoSampler, which automatically selects HPO method based on hand-crafted rules~\citep{Ozaki24}.
-More details on these baselines are provided in~\autoref{sec:add_baselines}.
+More details on these baselines are provided in~\cref{sec:ch05:add_baselines}.
 % }
 
 
@@ -682,11 +682,11 @@ More details on these baselines are provided in~\autoref{sec:add_baselines}.
 \label{sec:ch05:res}
 
 In this section, we present and discuss the experimental results comparing \texttt{DyMBO} to the baselines. 
-We first present the mean rank results on different benchmarks for various budgets in~\autoref{sec:res_general}, whereas results under different experimental setups and ablation studies can be found in~\autoref{sec:diff_exp_setup} and~\autoref{sec:ablations}, respectively. We then analyse the running time required by our method in~\autoref{sec:running_time}, discuss the evolution of the weights assigned to surrogate models throughout the optimisation process in~\autoref{sec:weights}, and assess the predictive quality of the surrogate models used in the ensembles themselves in~\autoref{sec:surr-acc}.
+We first present the mean rank results on different benchmarks for various budgets in~\cref{sec:ch05:res_general}, whereas results under different experimental setups and ablation studies can be found in~\cref{sec:ch05:diff_exp_setup,sec:ch05:ablations}, respectively. We then analyse the running time required by our method in~\cref{sec:ch05:running_time}, discuss the evolution of the weights assigned to surrogate models throughout the optimisation process in~\cref{sec:ch05:weights}, and assess the predictive quality of the surrogate models used in the ensembles themselves in~\cref{sec:ch05:surr-acc}.
 % We then analyse the evolution of the weights assigned to surrogate models throughout the optimisation process, and finally assess the running time of our method.
 
 \subsection{Overall performance}
-\label{sec:res_general}
+\label{sec:ch05:res_general}
 
 % \begin{figure*}[h]
 %     \centering
@@ -728,7 +728,7 @@ We first present the mean rank results on different benchmarks for various budge
 
 
 % \changed{
-We begin by comparing \texttt{DyMBO} variants with different $\alpha$ values in~\autoref{fig:gen_res_alpha}. We present the average rank as a function of the fraction of the budget for YAHPO Gym and JAHS-Bench-201. The results are split into four parts, according to the mean time required for evaluating the target function. Therefore, we show mean ranks on all target functions, on cheap functions with a budget of up to 10 minutes, on medium-cost functions with a budget
+We begin by comparing \texttt{DyMBO} variants with different $\alpha$ values in~\cref{fig:ch05:gen_res_alpha}. We present the average rank as a function of the fraction of the budget for YAHPO Gym and JAHS-Bench-201. The results are split into four parts, according to the mean time required for evaluating the target function. Therefore, we show mean ranks on all target functions, on cheap functions with a budget of up to 10 minutes, on medium-cost functions with a budget
 between 10 minutes up to 1 hour, and on expensive functions with a budget exceeding 1~hour. 
 We observe that for cheap benchmarks, the selection variant ($\alpha=1.0$) works best, while the advantage of it compared to lower $\alpha$ values diminishes when the budget grows, whereas for expensive benchmarks, selection has similar performance to $\alpha=0.9$. Over all target functions, $\alpha=1.0$ works best.
 % }
@@ -765,7 +765,7 @@ We observe that for cheap benchmarks, the selection variant ($\alpha=1.0$) works
     Mean rank of \texttt{DyMBO} with ($\alpha \in {1.0, 0.9, 0.5, 0.1}$) on YAHPO Gym and JAHS-Bench-201 as a function of the fraction of the wall-clock time budget of each task. Results are shown for (a) all target functions, (b) cheap functions with budgets of up to 10 minutes, (c) medium-cost functions with budgets between 10 minutes and 1 hour, and (d) expensive functions with budgets exceeding 1 hour. Lower ranks indicate better performance. The greedy selection variant ($\alpha=1.0$) achieves the best overall mean rank, while its advantage decreases for more expensive target functions.
     % }
     }
-    \label{fig:gen_res_alpha}
+    \label{fig:ch05:gen_res_alpha}
 \end{figure*}
 
 % \hs{
@@ -804,7 +804,7 @@ We observe that for cheap benchmarks, the selection variant ($\alpha=1.0$) works
     Mean rank of \texttt{DyMBO} with ($\alpha=1.0$), HEBO with RF and GP surrogates, and random search on YAHPO Gym and JAHS-Bench-201 as a function of the fraction of the wall-clock time budget of each task. Results are shown for (a) all target functions, (b) cheap functions with budgets of up to 10 minutes, (c) medium-cost functions with budgets between 10 minutes and 1 hour, and (d) expensive functions with budgets exceeding 1 hour. Lower ranks indicate better performance. \texttt{DyMBO} achieves the best mean rank in all budget groups, while the relative performance of the RF and GP baselines varies across groups.
     % }
     }
-    \label{fig:gen_res_simple}
+    \label{fig:ch05:gen_res_simple}
 \end{figure*}
 
 \begin{figure*}[h]
@@ -836,12 +836,12 @@ We observe that for cheap benchmarks, the selection variant ($\alpha=1.0$) works
     \caption{
     Mean rank of \texttt{DyMBO} with ($\alpha=1.0$), SMAC, Optuna AutoSampler, Optuna TPE, and random search on YAHPO Gym and JAHS-Bench-201 as a function of the fraction of the wall-clock time budget of each task. Results are shown for (a) all target functions, (b) cheap functions with budgets of up to 10 minutes, (c) medium-cost functions with budgets between 10 minutes and 1 hour, and (d) expensive functions with budgets exceeding 1 hour. Lower ranks indicate better performance. \texttt{DyMBO} achieves the best mean rank throughout the optimisation across all budget groups.
     }
-    \label{fig:gen_res_baselines}
+    \label{fig:ch05:gen_res_baselines}
 \end{figure*}
 
 % \hs{
-We continue our evaluation by comparing the best \texttt{DyMBO} variant with HEBO with single surrogates, which is shown in~\autoref{fig:gen_res_simple}.
-The results demonstrate that \texttt{DyMBO} achieves a better mean rank compared the HEBO with RF and GP across all budget categories. While for cheap and medium-cost functions GP works well, for the expensive functions, RF works well when more than $50\%$ of the budget has been spent, showing the performance complementarity between the different surrogates. As expected, random search consistently performs worst. Comparing \texttt{DyMBO} to additional baselines, namely TPE as implemented in Optuna, AutoSampler of Optuna and SMAC, we observe in~\autoref{fig:gen_res_baselines} that \texttt{DyMBO} outperforms all of these baselines on average, as SMAC emerges as the second best method, followed by Optuna AutoSampler and Optuna TPE.
+We continue our evaluation by comparing the best \texttt{DyMBO} variant with HEBO with single surrogates, which is shown in~\cref{fig:ch05:gen_res_simple}.
+The results demonstrate that \texttt{DyMBO} achieves a better mean rank compared the HEBO with RF and GP across all budget categories. While for cheap and medium-cost functions GP works well, for the expensive functions, RF works well when more than $50\%$ of the budget has been spent, showing the performance complementarity between the different surrogates. As expected, random search consistently performs worst. Comparing \texttt{DyMBO} to additional baselines, namely TPE as implemented in Optuna, AutoSampler of Optuna and SMAC, we observe in~\cref{fig:ch05:gen_res_baselines} that \texttt{DyMBO} outperforms all of these baselines on average, as SMAC emerges as the second best method, followed by Optuna AutoSampler and Optuna TPE.
 % }
 % \aj{unresolved ref for fig}
 
@@ -881,11 +881,11 @@ The results demonstrate that \texttt{DyMBO} achieves a better mean rank compared
     Normalised regret on YAHPO Gym and JAHS-Bench-201 as a function of the fraction of the wall-clock time budget of each task. Panels compare (a) \texttt{DyMBO} with $\alpha=1.0$ against single-surrogate HEBO variants and random search, (b) \texttt{DyMBO} with $\alpha=1.0$ against other HPO frameworks and random search, and (c) \texttt{DyMBO} variants with different values of $\alpha$. Panel (d) shows the distribution of final normalised regret for all methods on a logarithmic scale. Lower normalised regret indicates better performance. \texttt{DyMBO} with $\alpha=1.0$ attains the lowest mean regret and a favourable distribution of final regret relative to the baselines.
     }
     % }
-    \label{fig:mean_reg}
+    \label{fig:ch05:mean_reg}
 \end{figure}
 
 % \changed{
-We present the mean normalised regret of all methods in~\autoref{fig:mean_reg}. Normalised regret is calculated per function, using min-max normalisation with the minimum and maximum value found by all optimisers. 
+We present the mean normalised regret of all methods in~\cref{fig:ch05:mean_reg}. Normalised regret is calculated per function, using min-max normalisation with the minimum and maximum value found by all optimisers. 
 We performed such normalisation as the values of different functions are in different ranges and scales. We observe lower mean regret for \texttt{DyMBO} compared to the other methods, confirming the results reported by the mean ranks.
 % }
 
@@ -904,7 +904,7 @@ To do this, we used the best-found target function values per optimiser.
 We then calculated the mean value for each pair of function and optimiser over the 51 random seeds. 
 The optimiser that has the best value per function is then considered as the best for the particular function. 
 We calculated whether the values obtained for each of the other optimisers are statistically equal to the values of the best optimiser using a permutation test with 10\,000 samples and a significance level of $0.05$. 
-We report these results in~\autoref{tab:stat_signif}. 
+We report these results in~\cref{tab:ch05:stat_signif}. 
 We see that \texttt{DyMBO} achieves equal performance to the best method more times than any other baseline, across all budget groups. 
 \texttt{DyMBO} with $\alpha = 1.0$ is statistically tied with the best method in 724 cases, followed by a monotonically decreasing number of ties as $\alpha$ decreases, but remaining statistically significantly better than non-\texttt{DyMBO} methods.
 % second-best
@@ -942,14 +942,14 @@ Model & All & Cheap & Medium & Expensive \\
  SMAC & 222 & 47 & 65 & 110 \\
 \bottomrule
 \end{tabular}
-    \label{tab:stat_signif}
+    \label{tab:ch05:stat_signif}
 \end{table}
 
-All figures (convergence plots, weight evolution and performance comparison), including results for JAHS-Bench-201, are available in the supplemental Git repository (see~\autoref{sec:code-availability})
+All figures (convergence plots, weight evolution and performance comparison), including results for JAHS-Bench-201, are available in the supplemental Git repository (see~\cref{sec:code-availability})
 due to reasons of space.
 % as there are 859 such figures. 
-We provide convergence plots in~\autoref{fig:full_res} and~\autoref{fig:full_res2} for a subset of YAHPO Gym, namely the YAHPO-SO benchmark suite that contains 20 HPO problems from different scenarios. 
-Additionally, we provide results for raw benchmarks (such as HPOBench) and synthetic benchmarks in~\autoref{sec:add-bench}.
+We provide convergence plots in~\cref{fig:ch05:full_res,fig:ch05:full_res2} for a subset of YAHPO Gym, namely the YAHPO-SO benchmark suite that contains 20 HPO problems from different scenarios. 
+Additionally, we provide results for raw benchmarks (such as HPOBench) and synthetic benchmarks in~\cref{sec:ch05:add-bench}.
 
 
 % \section{Weights evolution}
@@ -1019,7 +1019,7 @@ Additionally, we provide results for raw benchmarks (such as HPOBench) and synth
     \caption{Convergence plots of \texttt{DyMBO}, HEBO with GP, HEBO with RF, and random search for the YAHPO-SO subset, as a function of the fraction of the wall-clock time budget for each task. 
     }
     % \todo{}\er{What's happening in subfigure (t) for HEBO?}}
-    \label{fig:full_res}
+    \label{fig:ch05:full_res}
 \end{figure*}
 
 
@@ -1076,11 +1076,11 @@ Additionally, we provide results for raw benchmarks (such as HPOBench) and synth
         \centering
         \includegraphics[scale=0.33]{figures/05/figs/figs/co/co_8_init_srbv2\_xgboosti40499_time_legend.pdf}
     \end{subfigure}
-    \caption{Convergence plots of \texttt{DyMBO}, HEBO with GP, HEBO with RF, and random search for the YAHPO-SO subset, as a function of the fraction of the wall-clock time budget for each task (continued from~\autoref{fig:full_res}).
+    \caption{Convergence plots of \texttt{DyMBO}, HEBO with GP, HEBO with RF, and random search for the YAHPO-SO subset, as a function of the fraction of the wall-clock time budget for each task (continued from~\cref{fig:ch05:full_res}).
     % \er{In the x-axis label, the g of budget is often cut. This actually happens in many other figures too (like Fig. 6)}.
     }
     % \todo{}\er{What's happening in subfigure (t) for HEBO?}}
-    \label{fig:full_res2}
+    \label{fig:ch05:full_res2}
 \end{figure*}
 
 
@@ -1088,7 +1088,7 @@ Additionally, we provide results for raw benchmarks (such as HPOBench) and synth
 
 
 \subsection{Running time}
-\label{sec:running_time}
+\label{sec:ch05:running_time}
 
 \begin{figure*}[h!]
     \centering
@@ -1096,24 +1096,24 @@ Additionally, we provide results for raw benchmarks (such as HPOBench) and synth
         \centering
         \includegraphics[width=\textwidth]{figures/05/figs/figs/time_percent.pdf}
         \caption{Fraction of budget (in seconds)}
-        \label{fig:rt_frac_of_bud}
+        \label{fig:ch05:rt_frac_of_bud}
     \end{subfigure}
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
         \includegraphics[width=\textwidth]{figures/05/figs/figs/time/nb301_time.pdf}
         \caption{Absolute running time}
-        \label{fig:rt_absolute}
+        \label{fig:ch05:rt_absolute}
     \end{subfigure}
 \includegraphics[width=\textwidth]{figures/05/figs/figs/time/nb301_time_legend.pdf}
     \caption{
     Running time of the optimisation with \texttt{DyMBO} (excluding the time needed to evaluate the target function): (a) as a fraction of optimisation budget, and (b) as absolute running time relative to the number of target function evaluations. Ensembles generally require a higher fraction of the budget compared to single surrogates and take the longest to run in absolute terms, with a notable exception of the ensemble with $\alpha=1.0$, which 
     consumes less budget by an order of magnitude, and which is the fastest to run, due to dynamic pruning. 
     }
-    \label{fig:running-times}
+    \label{fig:ch05:running-times}
 \end{figure*}
 
 We assessed the wall-clock time used by the optimiser itself, \emph{i.e.,} excluding the time required to evaluate the target function, as a percentage of the optimisation budget and as absolute running time relative to the number of target function evaluations. 
-\autoref{fig:rt_frac_of_bud} shows the proportion of the optimisation budget (in seconds)
+\cref{fig:ch05:rt_frac_of_bud} shows the proportion of the optimisation budget (in seconds)
 used by the optimiser to suggest the next configurations to sample across all YAHPO Gym functions. 
 As expected, for very low budgets (up to approximately 20 seconds), the optimiser consumes a high fraction of the budget (more than 35\%). 
 As the budget increases, this fraction decreases, until it becomes negligible (less than 1\% for budgets of more than 10\,000 seconds).
@@ -1123,7 +1123,7 @@ However, the difference becomes indistinguishable when the budget exceeds 1\,000
 
 % \hh{minor changes -- check:}
 % \changed{
-Additionally, we assessed the absolute cost of using different surrogates on the benchmark NAS-Bench-301 from YAHPO Gym, considering up to 512 evaluations. The results are presented in~\autoref{fig:rt_absolute}. 
+Additionally, we assessed the absolute cost of using different surrogates on the benchmark NAS-Bench-301 from YAHPO Gym, considering up to 512 evaluations. The results are presented in~\cref{fig:ch05:rt_absolute}. 
 We first observe that \texttt{DyMBO} 
 % \er{It's the second time I find the plural, why? We show one version of DyMBO on that figure.} 
 takes the longest to run, although the gap from the single-surrogate HEBO variants is not large, at around 150 seconds for 512 evaluations; this is a relatively short time given that each evaluation of the target function takes around one hour. For lower numbers of evaluations, the gap is even smaller.
@@ -1134,10 +1134,10 @@ GPs are the fastest to run with a low number of evaluations, however the gap bet
 
 
 \subsection{Evolution of weights}
-\label{sec:weights}
+\label{sec:ch05:weights}
 
-We show the evolution of the weights of the surrogate models in the ensemble over the course of the optimisation in~\autoref{fig:weights}. 
-To this end, we made use of the data from the experiment with fixed 512 evaluations as described in~\autoref{sec:diff_exp_setup}, with GP and RF as surrogate models.
+We show the evolution of the weights of the surrogate models in the ensemble over the course of the optimisation in~\cref{fig:ch05:weights}. 
+To this end, we made use of the data from the experiment with fixed 512 evaluations as described in~\cref{sec:ch05:diff_exp_setup}, with GP and RF as surrogate models.
 % We show the results in. 
 % \changed{
 We observe that the weights of the surrogates change rapidly and frequently during the optimisation process, \emph{i.e.}, the weights are not constant, and the surrogates are not used equally. 
@@ -1147,9 +1147,9 @@ This switching behaviour justifies the use of a dynamic ensemble over simply cho
 
 We also see different weight dynamics, depending on the given target function. 
 % \hh{better: optimised? or ... on the given target function?}.
-On some target functions, \emph{e.g.,}~\autoref{fig:weights}(c, p, q), GP is assigned a near-constant weight of $1$ for the majority of the optimisation process, suggesting a strong and 
+On some target functions, \emph{e.g.,}~\cref{fig:ch05:weights}(c, p, q), GP is assigned a near-constant weight of $1$ for the majority of the optimisation process, suggesting a strong and 
 stable preference for GP on these problems.
-On the target function in~\autoref{fig:weights}(n), it is RF that consistently dominates the optimisation with a near-constant weight of $1$.
+On the target function in~\cref{fig:ch05:weights}(n), it is RF that consistently dominates the optimisation with a near-constant weight of $1$.
 In contrast, on most other target functions, the weights oscillate frequently between the two surrogates, indicating that both GP and RF contribute meaningfully and that neither is uniformly superior.
 Furthermore, the onset of switching behaviour varies substantially depending on the target function.
 % }
@@ -1260,16 +1260,16 @@ Furthermore, the onset of switching behaviour varies substantially depending on 
 
     \caption{Weights of the models in the \texttt{DyMBO} surrogate ensemble on the first seed of each of the YAHPO-SO target functions as a function of the number of evaluations for each task. Different target functions have different weights for the models.}
     % \er{Why do we exclude ET and GB from this analysis?}}
-    \label{fig:weights}
+    \label{fig:ch05:weights}
 \end{figure*}
 
 
 \subsection{Surrogate model accuracy}
-\label{sec:surr-acc}
+\label{sec:ch05:surr-acc}
 
 % \changed{
 To analyse why dynamic surrogate tailoring yields superior performance, we assessed the predictive quality of the surrogate models used in the ensemble themselves.
-The results can be seen in~\autoref{fig:surrogate-accuracy}, where we compare the ranking loss achieved by \texttt{DyMBO} with different $\alpha$ values and single-surrogate models on a set of 256 randomly sampled configurations. 
+The results can be seen in~\cref{fig:ch05:surrogate-accuracy}, where we compare the ranking loss achieved by \texttt{DyMBO} with different $\alpha$ values and single-surrogate models on a set of 256 randomly sampled configurations. 
 We see that all \texttt{DyMBO} variants achieve lower ranking loss than single surrogates.
 In particular, \texttt{DyMBO} variants with lower $\alpha$ values achieve better ranking loss, while the performance observed in previous sections indicated that higher values of $\alpha$ are better.
 We furthermore looked into the pairwise distance between the sampled points, which we measure as Gower's distance between the newly proposed configurations in each batch and the incumbent. We found that higher $\alpha$ values result in higher pairwise distances (0.0606 for $\alpha=1.0$, 0.0578 for $\alpha=0.9$, 0.0544 for $\alpha=0.5$ and 0.0496 for $\alpha=0.1$), \emph{i.e.}, more diverse sampling, shows enhanced exploration. This is due to the more aggressive selection policy.
@@ -1314,17 +1314,17 @@ We furthermore looked into the pairwise distance between the sampled points, whi
     \includegraphics[scale=0.33]{figures/05/figs/figs/model_acc_legend.pdf}
     \caption{Ranking loss as a measure of surrogate accuracy of \texttt{DyMBO} (with different values of $\alpha$) and single-surrogate HEBO variants with RF and GP. The ranking loss is measured on randomly sampled configurations: (a) ranking on all configurations; (b) ranking on the top 50\% of configurations; (c) ranking on the top 25\% of configurations; and (d) ranking on the top 10\% of configurations. All \texttt{DyMBO} variants exhibit substantially better ranking loss than single-surrogate baselines. 
     }
-    \label{fig:surrogate-accuracy}
+    \label{fig:ch05:surrogate-accuracy}
 \end{figure}
 
 
 
 \section{Additional baselines}
-\label{sec:add_baselines}
+\label{sec:ch05:add_baselines}
 
 We describe additional baselines against which we compared our method. We note that these baselines are described in the appendix and not in the main paper as they are either not an established HPO method or not compatible with some of the benchmarks.
 
-\paragraph{HEBO with different surrogate models.} To isolate the effect of the surrogate model, we evaluated four single-surrogate HEBO variants using GP, RF, ET, and GB, respectively. All other components of the optimisation pipeline, including the initial-design strategy, acquisition function, and acquisition-function optimiser, were kept unchanged. \autoref{fig:gen_res_more_surrogate} compares these variants with \texttt{DyMBO} ($\alpha=1.0$) and random search. The relative performance of the single-surrogate variants varies with the cost of the target function: GP performs particularly well on cheap and medium-cost functions, whereas RF becomes the strongest single-surrogate baseline on expensive functions toward the end of the optimisation. ET and GB generally obtain lower ranks, although their relative performance also changes across budget groups. \texttt{DyMBO} achieves the best mean rank in every group, demonstrating the benefit of dynamically selecting between complementary surrogate models instead of committing to a single model before optimisation.
+\paragraph{HEBO with different surrogate models.} To isolate the effect of the surrogate model, we evaluated four single-surrogate HEBO variants using GP, RF, ET, and GB, respectively. All other components of the optimisation pipeline, including the initial-design strategy, acquisition function, and acquisition-function optimiser, were kept unchanged. \cref{fig:ch05:gen_res_more_surrogate} compares these variants with \texttt{DyMBO} ($\alpha=1.0$) and random search. The relative performance of the single-surrogate variants varies with the cost of the target function: GP performs particularly well on cheap and medium-cost functions, whereas RF becomes the strongest single-surrogate baseline on expensive functions toward the end of the optimisation. ET and GB generally obtain lower ranks, although their relative performance also changes across budget groups. \texttt{DyMBO} achieves the best mean rank in every group, demonstrating the benefit of dynamically selecting between complementary surrogate models instead of committing to a single model before optimisation.
 
 \begin{figure*}[h]
     \centering
@@ -1355,13 +1355,13 @@ We describe additional baselines against which we compared our method. We note t
     \caption{
     Mean rank of DyMBO with $\alpha=1.0$, single-surrogate HEBO variants using RF, GP, ET, or GB, and random search on YAHPO Gym and JAHS-Bench-201 as a function of the fraction of the wall-clock time budget for each task. Results are shown for (a) all target functions, (b) cheap functions with budgets of up to 10 minutes, (c) medium-cost functions with budgets between 10 minutes and 1 hour, and (d) expensive functions with budgets exceeding 1 hour. Smaller numbers indicate a better rank, thus better performance. \texttt{DyMBO} achieves the best mean rank in every budget group, while the relative performance of the individual surrogate models varies with target function cost.
     }
-    \label{fig:gen_res_more_surrogate}
+    \label{fig:ch05:gen_res_more_surrogate}
 \end{figure*}
 
 \paragraph{Squirrel.}
 Squirrel~\citep{AwaEtAl20} is an HPO method which won the third place in the NeurIPS black-box optimisation challenge. 
 Squirrel uses a GP surrogate model and a portfolio of acquisition functions, including EI, PI, Lower Confidence Bound (LCB)~\citep{ForEtAl08} and logEI~\citep{HutEtAl11}, selected adaptively during optimisation.
-It should be noted that Squirrel was specifically designed to meet the rules of the challenge (batch size, number of random samples, total number of batches). A similar approach is Optuna AutoSampler, which selects the HPO method to use based on hand-crafted rules. We ran Squirrel only on the YAHPO Gym benchmark, as it is not compatible with JAHS-Bench-201 due to Python package versioning. We provide the results in \autoref{fig:squirrel}, where we see that our approach outperforms Squirrel on almost all benchmarks (mean rank of 1.07).
+It should be noted that Squirrel was specifically designed to meet the rules of the challenge (batch size, number of random samples, total number of batches). A similar approach is Optuna AutoSampler, which selects the HPO method to use based on hand-crafted rules. We ran Squirrel only on the YAHPO Gym benchmark, as it is not compatible with JAHS-Bench-201 due to Python package versioning. We provide the results in \cref{fig:ch05:squirrel}, where we see that our approach outperforms Squirrel on almost all benchmarks (mean rank of 1.07).
 
 
 \begin{figure*}
@@ -1370,7 +1370,7 @@ It should be noted that Squirrel was specifically designed to meet the rules of 
     \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/additional_baselines_squirrel_all_legend.pdf}
     \caption{Comparison of \texttt{DyMBO} to Squirrel as a function of the fraction of the wall-clock time budget on YAHPO Gym. Our method outperforms Squirrel on almost all benchmarks. 
     }
-    \label{fig:squirrel}
+    \label{fig:ch05:squirrel}
 
 \end{figure*}
 
@@ -1384,7 +1384,7 @@ It should be noted that Squirrel was specifically designed to meet the rules of 
     \caption{Comparison of \texttt{DyMBO} to simple selection and equal weights baselines as a function of the fraction of the wall-clock time budget on YAHPO Gym and JAHS-Bench-201. Our method outperforms both baselines.
     % \todo{missing line in te label}
     }
-    \label{fig:add_baselines}
+    \label{fig:ch05:add_baselines}
 
 \end{figure*}
 
@@ -1393,13 +1393,13 @@ It should be noted that Squirrel was specifically designed to meet the rules of 
 We compared our method to two additional baselines: one that simply averages the predictions of the surrogate models (RF and GP), and a simple selection baseline, which selects the best performing (\emph{i.e.}, most accurate) surrogate model after the initial 8 samples and uses only this model for the rest of the optimisation. 
 Since both baselines are HEBO-based, they inherit MACE as the acquisition function.
 We performed the selection using 8-fold cross-validation, and we used the MSE loss as an accuracy metric; we then chose the surrogate which yields the most accurate predictions. 
-We provide the results in~\autoref{fig:add_baselines}, where we see that our method outperforms both baselines. This emphasises the effectiveness of dynamically assigning weights to the surrogate models.
+We provide the results in~\cref{fig:ch05:add_baselines}, where we see that our method outperforms both baselines. This emphasises the effectiveness of dynamically assigning weights to the surrogate models.
 
 \paragraph{Random selection of surrogates.}
 Finally, we compared our method to another simple selection baseline that chooses a surrogate uniformly at random in each iteration.
 In this experiment, we used RF and GP as surrogate models with 8 initial samples.
 % \changed{
-\autoref{fig:rnd_sel_rnk} shows that \texttt{DyMBO} maintains a substantially better mean rank throughout the optimisation. To further analyse this, we present in~\autoref{fig:rnd_sel_ecdf} a task-level comparison of the final objective values, where we compare the log-scaled ratio between the final values \texttt{DyMBO} achieved and the final values that the random selection baseline achieved. Positive log-ratios show that \texttt{DyMBO} performs better, negative values show that random selection perform better, and zero indicates equal performance. \texttt{DyMBO} obtains a better final value on 406 of the 859 tasks, while random selection performs better on 262 tasks, and the two methods are tied on the remaining 191 tasks. These results indicate that the gains of \texttt{DyMBO} cannot be explained solely by randomly switching between complementary surrogate models, as selecting the surrogate according to its observed ranking accuracy provides a clear advantage over random switching.
+\cref{fig:ch05:rnd_sel_rnk} shows that \texttt{DyMBO} maintains a substantially better mean rank throughout the optimisation. To further analyse this, we present in~\cref{fig:ch05:rnd_sel_ecdf} a task-level comparison of the final objective values, where we compare the log-scaled ratio between the final values \texttt{DyMBO} achieved and the final values that the random selection baseline achieved. Positive log-ratios show that \texttt{DyMBO} performs better, negative values show that random selection perform better, and zero indicates equal performance. \texttt{DyMBO} obtains a better final value on 406 of the 859 tasks, while random selection performs better on 262 tasks, and the two methods are tied on the remaining 191 tasks. These results indicate that the gains of \texttt{DyMBO} cannot be explained solely by randomly switching between complementary surrogate models, as selecting the surrogate according to its observed ranking accuracy provides a clear advantage over random switching.
 % }
 
 
@@ -1408,34 +1408,34 @@ In this experiment, we used RF and GP as surrogate models with 8 initial samples
     \begin{subfigure}[t]{0.49\textwidth}
         \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/comp_rnd_choice2_all.pdf}
         \caption{}
-        \label{fig:rnd_sel_rnk}
+        \label{fig:ch05:rnd_sel_rnk}
     \end{subfigure}
     
     \begin{subfigure}[t]{0.49\textwidth}
         \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/comp_rnd_choice_final_regret_log_ratio_ecdf.pdf}
         \caption{}
-        \label{fig:rnd_sel_ecdf}
+        \label{fig:ch05:rnd_sel_ecdf}
     \end{subfigure}
     \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/comp_rnd_choice2_all_legend.pdf}
     \caption{Comparison of \texttt{DyMBO} with $\alpha=1.0$ against a baseline that randomly selects between the RF and GP surrogates at every iteration, evaluated on YAHPO Gym and JAHS-Bench-201. (a) Mean rank as a function of the fraction of  wall-clock time budget for each task; lower ranks indicate better performance. (b) Empirical cumulative distribution (ECDF) across tasks of the log-ratio between the final objective values obtained by random selection and \texttt{DyMBO}. Positive values favour \texttt{DyMBO}, negative values favour random selection, and zero indicates equal performance. \texttt{DyMBO} performs better on 406 of the 859 tasks, random selection performs better on 262 tasks, and the remaining 191 tasks are tied.
     }
-    \label{fig:random-surrogates}
+    \label{fig:ch05:random-surrogates}
 \end{figure}
 
 
 \section{Different setups of experiments}
-\label{sec:diff_exp_setup}
+\label{sec:ch05:diff_exp_setup}
 
-We ran \texttt{DyMBO} with different setups of experiments in addition to the one corresponding to the main results from~\autoref{sec:res_general}. We first explore the effects of using a fixed number of evaluations, as compared to a time-based budget. We then investigate the performance of our method with a varying size of initial design, \emph{i.e.}, for different numbers of initial random samples. 
+We ran \texttt{DyMBO} with different setups of experiments in addition to the one corresponding to the main results from~\cref{sec:ch05:res_general}. We first explore the effects of using a fixed number of evaluations, as compared to a time-based budget. We then investigate the performance of our method with a varying size of initial design, \emph{i.e.}, for different numbers of initial random samples. 
 We also look into whether different batch sizes affect the performance of \texttt{DyMBO}.
 
 \paragraph{Fixed number of evaluations.}
-\label{sec:256_evals}
+\label{sec:ch05:256_evals}
 
-In addition to the main results in~\autoref{sec:res_general}, we performed additional experiments to assess the effectiveness of our method as a function of the number of evaluations and not as the budget measured in wall-clock time. 
+In addition to the main results in~\cref{sec:ch05:res_general}, we performed additional experiments to assess the effectiveness of our method as a function of the number of evaluations and not as the budget measured in wall-clock time. 
 We used 8 initial samples and a total budget of 512 evaluations. 
 This additional experiment was designed to show the ability of the optimiser to find good-performing candidates, regardless of the running time required for the optimiser or the target function. 
-We evaluated the approach on YAHPO Gym, and the results are presented in~\autoref{fig:ranks512}.
+We evaluated the approach on YAHPO Gym, and the results are presented in~\cref{fig:ch05:ranks512}.
 We see that \texttt{DyMBO} outranks the single-surrogate baselines when budget is measured in terms of the number of function evaluations.
 % Dynamic ensembling is ranked better, with $\alpha=0.9$ having the best performance, closely followed by $\alpha=1.0$. 
 % All dynamic ensembling methods are ranked better than the single surrogate baselines, as well as the static ensemble with equal weights to all models.
@@ -1455,13 +1455,13 @@ We see that \texttt{DyMBO} outranks the single-surrogate baselines when budget i
     [scale=0.33]{figures/05/figs/figs/ranks/main_ranks_all_fixed_legend.pdf}
     \caption{Mean ranks of the different methods on YAHPO Gym and JAHS-Bench-201 as a function of the number of evaluations, with a total budget of 512 evaluations. \texttt{DyMBO} exhibits the best performance.
     }
-    \label{fig:ranks512}
+    \label{fig:ch05:ranks512}
 \end{figure}
 
 
 \paragraph{Different number of initial samples.}
-\label{sec:diff_init_samp}
-We evaluated the performance of our method with different numbers of initial random samples. We used 16 and 32 initial samples, in addition to the 8 initial samples in~\autoref{sec:res_general}. We used a total budget of $100\times$ average evaluation time. We evaluated the method on YAHPO Gym and JAHS-Bench-201, and the results are presented in~\autoref{fig:diff_init_samp}. We see that \texttt{DyMBO} outperforms the single-surrogate baselines in all cases.
+\label{sec:ch05:diff_init_samp}
+We evaluated the performance of our method with different numbers of initial random samples. We used 16 and 32 initial samples, in addition to the 8 initial samples in~\cref{sec:ch05:res_general}. We used a total budget of $100\times$ average evaluation time. We evaluated the method on YAHPO Gym and JAHS-Bench-201, and the results are presented in~\cref{fig:ch05:diff_init_samp}. We see that \texttt{DyMBO} outperforms the single-surrogate baselines in all cases.
 
 \begin{figure}
     \centering
@@ -1484,12 +1484,12 @@ We evaluated the performance of our method with different numbers of initial ran
     \caption{Mean ranks with different numbers of initial samples as a function of the fraction of the wall-clock time budget on YAHPO Gym and JAHS-Bench-201. \texttt{DyMBO} achieves the best mean rank in both cases.
     % \todo{string "HEBO" can be dropped from the legends and explained in the caption, same for Fig.8 and Fig.9}
     }
-    \label{fig:diff_init_samp}
+    \label{fig:ch05:diff_init_samp}
 \end{figure}
 
 \paragraph{Different batch sizes.}
-\label{sec:diff_batch_sizer}
-We evaluated the performance of our method with different batch sizes. We used batch sizes of 1 (fully sequential sampling) and 4, in addition to the batch size of 8 in~\autoref{sec:res_general}. For this experiment, we used a similar setup as in~\autoref{sec:res_general}, with 8 initial samples and a total budget of $100\times$ average evaluation time. We evaluated the method on YAHPO Gym and JAHS-Bench-201, and the results are shown in~\autoref{fig:diff_batch_sizer}. We see that with different batch sizes \texttt{DyMBO} also outperforms the single-surrogate baselines. We furthermore observe that RF performs better with batch sizes larger than 1, \emph{i.e.,} not in a fully sequential setup, based on both~\autoref{fig:gen_res_simple} and~\autoref{fig:diff_batch_sizer}.
+\label{sec:ch05:diff_batch_sizer}
+We evaluated the performance of our method with different batch sizes. We used batch sizes of 1 (fully sequential sampling) and 4, in addition to the batch size of 8 in~\cref{sec:ch05:res_general}. For this experiment, we used a similar setup as in~\cref{sec:ch05:res_general}, with 8 initial samples and a total budget of $100\times$ average evaluation time. We evaluated the method on YAHPO Gym and JAHS-Bench-201, and the results are shown in~\cref{fig:ch05:diff_batch_sizer}. We see that with different batch sizes \texttt{DyMBO} also outperforms the single-surrogate baselines. We furthermore observe that RF performs better with batch sizes larger than 1, \emph{i.e.,} not in a fully sequential setup, based on both~\cref{fig:ch05:gen_res_simple,fig:ch05:diff_batch_sizer}.
 % \aj{unresolved ref to fig}
 % \er{Question: we say this only observing Figure 7, or also based on Figure 2, for batch size = 8?} \aj{We need to rephrase this a bit. For batch sizes 4 and 8 RF performs better than in a fully sequential setup. I don't see drastic differences in RF performance for batch 4 and batch 8.}
 
@@ -1509,11 +1509,11 @@ We evaluated the performance of our method with different batch sizes. We used b
     \caption{Mean ranks with different batch sizes as a function of the fraction of the wall-clock time budget on YAHPO Gym and JAHS-Bench-201. \texttt{DyMBO} has the best mean rank in both cases.
     % \todo{legend?}
     }
-    \label{fig:diff_batch_sizer}
+    \label{fig:ch05:diff_batch_sizer}
 \end{figure}
 
 \section{Ablation studies}
-\label{sec:ablations}
+\label{sec:ch05:ablations}
 
 % \er{Elena, readi this - new part (no H.3)} 
 In this section, we describe several ablation studies we performed on our method. 
@@ -1526,7 +1526,7 @@ Last, we explore different weight initialisation strategies, and look into how a
 
 
 \paragraph{Changing the acquisition function.}
-\label{sec:abl_af}
+\label{sec:ch05:abl_af}
 Our method is implemented in the HEBO framework, which by default uses the MACE acquisition function~\citep{LyuEtAl18}. 
 Instead of deciding where to sample the next point based on a single criterion, MACE adopts a multi-objective perspective on this decision process by simultaneously optimising EI, PI and UCB as acquisitions.
 This allows for a robust balance between exploration and exploitation, which are traded off in different ways using different acquisitions, by sampling the next point from the Pareto set resulting from this multi-objective optimisation.
@@ -1535,7 +1535,7 @@ This allows for a robust balance between exploration and exploitation, which are
 In order to evaluate the effect of the acquisition function choice on our method, we experimented with the three stand-alone acquisition functions considered in MACE: EI, PI and UCB.
 % \er{Can't we just use abbreviated names here? Or is too far from where we introduced the acronyms?} 
 % \aj{we can, done.}
-We ran \texttt{DyMBO} with EI, PI and UCB separately on YAHPO Gym and JAHS-Bench-201 with a budget of $100\times$ mean evaluation time per target function. We present the results in~\autoref{fig:acqs}. We see that the MACE acquisition function performs better than the other three acquisition functions, especially with a larger budget, followed by EI and UCB.
+We ran \texttt{DyMBO} with EI, PI and UCB separately on YAHPO Gym and JAHS-Bench-201 with a budget of $100\times$ mean evaluation time per target function. We present the results in~\cref{fig:ch05:acqs}. We see that the MACE acquisition function performs better than the other three acquisition functions, especially with a larger budget, followed by EI and UCB.
 \begin{figure}
     \centering
     % \begin{subfigure}[t]{0.49\textwidth}
@@ -1545,13 +1545,13 @@ We ran \texttt{DyMBO} with EI, PI and UCB separately on YAHPO Gym and JAHS-Bench
     % \end{subfigure}
     \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/act_all_legend.pdf}
     \caption{Mean ranks of \texttt{DyMBO} with different acquisition functions as a function of the fraction of the wall-clock time budget on YAHPO Gym and JAHS-Bench-201. Using MACE yields the best performance.}
-    \label{fig:acqs}
+    \label{fig:ch05:acqs}
 \end{figure}
 
 \paragraph{Using different weights for variance.}
-\label{sec:with_variance}
+\label{sec:ch05:with_variance}
 We experimented with weighting the mean and the variance separately by having two, independent weight vectors. 
-The weight vector of the mean is the same as described in~\autoref{sec:method}. 
+The weight vector of the mean is the same as described in~\cref{sec:ch05:method}. 
 For the variance weights,
 % \changed{
 we introduce variance error (VE) as a non-probabilistic measure of calibration that does not require additional assumptions about the underlying predictive distribution. In contrast, metrics such as log-likelihood evaluate the full predictive distribution and therefore require a well-specified noise model, which is less straightforward for some surrogates, such as tree-based models.
@@ -1562,11 +1562,11 @@ We define VE for a model $m\in M$ as follows:
 \begin{equation}
     \text{VE}_m(\lambda_t) = \frac{1}{k}\sum_{i=1}^{k} \min \{|(\mu_m(\lambda_t^{(i)}) - \sigma_m(\lambda_t^{(i)}))- c(\lambda_t^{(i)})|,  |(\mu_m(\lambda_t^{(i)}) + \sigma_m(\lambda_t^{(i)}))- c(\lambda_t^{(i)})|\}
 \end{equation}
-Intuitively, it is the distance to the closest variance bound, as can be seen in~\autoref{fig:gen_res_var}. 
+Intuitively, it is the distance to the closest variance bound, as can be seen in~\cref{fig:ch05:gen_res_var}. 
 Since computing $\text{VE}_m(\lambda_t)$ relies on the true function value $c(\lambda_t)$, this error can only be calculated post-hoc on points that have already been fully evaluated.
 We update the weights for variance accordingly. 
 The new weights are defined as:
-\begin{equation}\label{eqn:weight_var}
+\begin{equation}\label{eqn:ch05:weight_var}
     {w}'_{t,m}=
     \begin{cases}
         1 & \text{if } \text{VE}_m(\lambda_t)=\text{min}_{l\in M} \text{VE}_l(\lambda_t),  \\
@@ -1576,7 +1576,7 @@ The new weights are defined as:
 We calculate the weights for variances using the exponential moving average:
 \begin{equation}
     \bar{w}'_{t+1,m} = (1-\alpha) \cdot \bar{w}'_{t, m} + \alpha  \cdot {w}'_{t,m} \; ,
-    \label{eq:weight_ema_var}
+    \label{eq:ch05:weight_ema_var}
 \end{equation}
 Then, we normalise the weights for the variances independently from the weights for the means:
 \begin{equation}
@@ -1585,16 +1585,16 @@ Then, we normalise the weights for the variances independently from the weights 
 Finally, the variance predicted by the ensemble is defined as the weighted sum of the normalised weights of the variances:
 \begin{equation}
     \sigma_{\text{ens}}(\lambda)= \sum_{m\in M} \hat{w}'_{t,m} \cdot \sigma_{m}(\lambda).
-    \label{eq:ens_sigma_var}
+    \label{eq:ch05:ens_sigma_var}
 \end{equation}
 % \changed{
 We note that VE is a custom metric introduced in this work to measure the accuracy of the predicted uncertainty bounds, analogous to the interval score used in proper scoring rules~\citep{GneRaf07}.
 % }
 
 We ran \texttt{DyMBO} with variance with $\alpha=0.9$ and a budget of $100\times$ mean evaluation time per target function. 
-Similarly to the results presented in~\autoref{sec:res_general}, we present the mean rank of all methods, including \texttt{DyMBO} with different weights for variances in~\autoref{fig:gen_res_var}. 
-The experimental setup is similar to~\autoref{sec:res_general}, where the budget is $100\times$ mean running time of one evaluation. 
-We see in~\autoref{fig:diff_var_w} that using different weights for variance ranks worse than \texttt{DyMBO} with the same weights for both the means and variances.
+Similarly to the results presented in~\cref{sec:ch05:res_general}, we present the mean rank of all methods, including \texttt{DyMBO} with different weights for variances in~\cref{fig:ch05:gen_res_var}. 
+The experimental setup is similar to~\cref{sec:ch05:res_general}, where the budget is $100\times$ mean running time of one evaluation. 
+We see in~\cref{fig:ch05:diff_var_w} that using different weights for variance ranks worse than \texttt{DyMBO} with the same weights for both the means and variances.
 \begin{figure*}
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
@@ -1622,7 +1622,7 @@ We see in~\autoref{fig:diff_var_w} that using different weights for variance ran
     % \todo{Making this a representative example of how the argmin is being used will utilize this plot better.}
     % \aj{I have no idea what this comment means...}
     }
-    \label{fig:gen_res_var}
+    \label{fig:ch05:gen_res_var}
 \end{figure*}
 
 \begin{figure}
@@ -1631,19 +1631,19 @@ We see in~\autoref{fig:diff_var_w} that using different weights for variance ran
     \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/diff_var_w_all.pdf}
     \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/diff_var_w_all_legend.pdf}
     \caption{Comparison of \texttt{DyMBO} with same weights for means and variances and \texttt{DyMBO} with different weights for means and variances as a function of the fraction of the wall-clock time budget on YAHPO Gym and JAHS-Bench-201. Same weights for means and variances yield better performance.}
-    \label{fig:diff_var_w}
+    \label{fig:ch05:diff_var_w}
 \end{figure}
 
 
 
 \paragraph{Using the rule of total variance.}
-\label{sec:abl_totalvar}
+\label{sec:ch05:abl_totalvar}
 We considered computing the variance of the ensemble using the rule of total variance. Such calculation was proposed by~\citet{HutEtAl14} and~\citet{KenGal17}, where the total variance was decomposed into aleatoric uncertainty (noise inherent to the data) and epistemic uncertainty (disagreement between models). We calculate the total variance of the ensemble as follows:
 \begin{equation}
     \sigma^2 = \sum_{m\in M} \hat{w}_m \sigma_m^2 + \sum_{m\in M} \hat{w}_m \mu_m^2 - \left(\sum_{m\in M} \hat{w}_m \mu_m\right)^2
 \end{equation}
 
-By using the rule of total variance, we add the measure of the correlation between the means and the variances of the models (\emph{i.e.}, epistemic uncertainty) to our initial variance equation that captures aleatoric uncertainty. We ran \texttt{DyMBO} with total variance with $\alpha=0.9$ and a budget of $100\times$ mean evaluation time per target function. We present the results in~\autoref{fig:total_variance}. We see that using total variance ranks worse than \texttt{DyMBO} with aleatoric-only variance.
+By using the rule of total variance, we add the measure of the correlation between the means and the variances of the models (\emph{i.e.}, epistemic uncertainty) to our initial variance equation that captures aleatoric uncertainty. We ran \texttt{DyMBO} with total variance with $\alpha=0.9$ and a budget of $100\times$ mean evaluation time per target function. We present the results in~\cref{fig:ch05:total_variance}. We see that using total variance ranks worse than \texttt{DyMBO} with aleatoric-only variance.
 \begin{figure}
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
@@ -1656,11 +1656,11 @@ By using the rule of total variance, we add the measure of the correlation betwe
     \end{subfigure}
 
     \caption{Comparison of \texttt{DyMBO} which computes the variance using the rule of total variance to \texttt{DyMBO} which computes the variance as a weighted sum of the variances as a function of the fraction of the wall-clock time budget on YAHPO Gym and JAHS-Bench-201. Weighted sum of variances yields better performance.}
-    \label{fig:total_variance}
+    \label{fig:ch05:total_variance}
 \end{figure}
 
 \paragraph{Considering different loss functions.}
-\label{sec:loss_ablation}
+\label{sec:ch05:loss_ablation}
 In \texttt{DyMBO}, we use ranking loss as the loss function, as we are interested in identifying where the optimum lies, as opposed to having a model with the most accurate actual predictions. %Indeed, by preserving the pairwise ordering of predicted function values which is to decide which configurations to evaluate next, \emph{i.e.}, to identify promising regions of the search space. 
 % The optimisation trajectory relying on the model would therefore still be driven towards promising regions, without using model capacity to perfectly fit the data, which is particularly important when we have limited evaluation budget.
 % On the other hand, 
@@ -1669,48 +1669,48 @@ The predictive power of a model is better reflected by more common loss function
 \begin{equation}
     \text{MSE}(\mu_m, \boldsymbol{\lambda}) = \frac{1}{n} \cdot\sum_{\lambda^{(j)}\in \boldsymbol{\lambda}} (\mu_m(\lambda^{(j)}) - c(\lambda^{(j)}))^2.
 \end{equation}
-We ran \texttt{DyMBO} with MSE as a loss function on YAHPO Gym and JAHS-Bench-201 with a budget of $100\times$ mean evaluation time per target function. We present the results in~\autoref{fig:loss_ablation}. We see that \texttt{DyMBO} using ranking loss performs slightly better than \texttt{DyMBO} using MSE.
+We ran \texttt{DyMBO} with MSE as a loss function on YAHPO Gym and JAHS-Bench-201 with a budget of $100\times$ mean evaluation time per target function. We present the results in~\cref{fig:ch05:loss_ablation}. We see that \texttt{DyMBO} using ranking loss performs slightly better than \texttt{DyMBO} using MSE.
 \begin{figure}
     \centering
     \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/loss_all.pdf}
     \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/loss_all_legend.pdf}
 
     \caption{Mean ranks of \texttt{DyMBO} with different loss functions (ranking loss vs. MSE) as a function of the fraction of the wall-clock time budget on YAHPO Gym and JAHS-Bench-201. Ranking loss performs better than MSE, especially in low budgets.}
-    \label{fig:loss_ablation}
+    \label{fig:ch05:loss_ablation}
 \end{figure}
 
 \paragraph{Varying the combinations of surrogate models in the ensemble.}
-\label{sec:models_choice}
+\label{sec:ch05:models_choice}
 We evaluated the performance of \texttt{DyMBO} with different surrogate models as part of the ensemble. Having more surrogate models allows for better best-found configurations 
 % \aj{what do we mean by maximal results?}\er{best-found results?}\aj{I would replace it with "best-found solutions" or "configurations", pls check how it reads} 
-as the ensemble can choose the best model for each target function. However, including more models also increases the risk of choosing a model that performs poorly. We ran \texttt{DyMBO} with different combinations of 4 surrogate models: RF, GP, GB, and ET. We used a budget of $100\times$ mean evaluation time per target function. We present the results in~\autoref{fig:models_choice}. We observe best performance by using only RF and GP, followed by using RF, GP and ET.
+as the ensemble can choose the best model for each target function. However, including more models also increases the risk of choosing a model that performs poorly. We ran \texttt{DyMBO} with different combinations of 4 surrogate models: RF, GP, GB, and ET. We used a budget of $100\times$ mean evaluation time per target function. We present the results in~\cref{fig:ch05:models_choice}. We observe best performance by using only RF and GP, followed by using RF, GP and ET.
 \begin{figure}
     \centering
     \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/models_choice_all.pdf}
     \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/models_choice_all_legend.pdf}
     \caption{Mean ranks of \texttt{DyMBO} with different surrogate models as a function of the fraction of the wall-clock time budget on YAHPO Gym and JAHS-Bench-201. Using the combination of RF and GP yields the best performance.}
-    \label{fig:models_choice}
+    \label{fig:ch05:models_choice}
 \end{figure}
 
 \paragraph{Using different weight initialisation strategies.}
-\label{sec:init_ablation}
-We experimented with different weight initialisation schemes to assess how they affect the performance of \texttt{DyMBO}. In addition to initialising with RF (with $w_{RF}=1$ and $w_{GP}=0$ as in~\autoref{sec:ch05:experiments}), we also considered initialising with GP: $w_{GP}=1$ and $w_{RF}=0$. Additionally, we tested initialising with both models: $w_{RF}=1$ and $w_{GP}=1$. Finally, we tried a heuristic initialisation, where we set $w_{RF}=1$ if the target function has categorical hyperparameters, and $w_{GP}=1$ if the target function is cheap. The rest of the weights are set to 0. 
+\label{sec:ch05:init_ablation}
+We experimented with different weight initialisation schemes to assess how they affect the performance of \texttt{DyMBO}. In addition to initialising with RF (with $w_{RF}=1$ and $w_{GP}=0$ as in~\cref{sec:ch05:experiments}), we also considered initialising with GP: $w_{GP}=1$ and $w_{RF}=0$. Additionally, we tested initialising with both models: $w_{RF}=1$ and $w_{GP}=1$. Finally, we tried a heuristic initialisation, where we set $w_{RF}=1$ if the target function has categorical hyperparameters, and $w_{GP}=1$ if the target function is cheap. The rest of the weights are set to 0. 
 % \er{Just a comment about aesthetics... many times in the manuscript, the last line of a paragraph is composed of 1 word only. Am I allowed to slightly shorten so that this does not happen? Maybe we can also gain some space given the page limit.} \aj{I agree and also don't like a short last sentence. If you have an idea on how to shorten so that the meaning stays the same, please go ahead :)}
 
-We ran \texttt{DyMBO} with different weight initialisation schemes on YAHPO Gym and JAHS-Bench-201 with a budget of $100\times$ mean evaluation time per target function. We show the results in~\autoref{fig:init-ablation}. We see similar ranks between the different initialisation schemes, with the best performance achieved by initialising with RF.
+We ran \texttt{DyMBO} with different weight initialisation schemes on YAHPO Gym and JAHS-Bench-201 with a budget of $100\times$ mean evaluation time per target function. We show the results in~\cref{fig:ch05:init-ablation}. We see similar ranks between the different initialisation schemes, with the best performance achieved by initialising with RF.
 
 \begin{figure}
     \centering
     \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/init_ablation_all.pdf}
     \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/init_ablation_all_legend.pdf}
     \caption{Mean ranks of \texttt{DyMBO} with different initialisation schemes as a function of the fraction of the wall-clock time budget on YAHPO Gym and JAHS-Bench-201.  Initialising with RF yields the best performance, although the differences are small.}
-    \label{fig:init-ablation}
+    \label{fig:ch05:init-ablation}
 \end{figure}
 
 \paragraph{Varying the number of points for accuracy evaluation.}
-\label{sec:abl_eval_all}
+\label{sec:ch05:abl_eval_all}
 
-We tested whether evaluating the model accuracy on all previously sampled points (\emph{i.e.}, the full history of observations) yields better performance than evaluating only on the last batch of points (\emph{i.e.}, observations from the last iteration only, which corresponds to having a train-test split). In the latter setting, computation of the new weights for the models was adapted accordingly so as to depend only on the accuracy from the last iteration. We ran \texttt{DyMBO} in this setting with a budget of $100\times$ mean evaluation time per target function. We show the results in~\autoref{fig:eval-all}. We see that evaluating on the entire history of observations yields better performance than evaluating only on the last batch of points.
+We tested whether evaluating the model accuracy on all previously sampled points (\emph{i.e.}, the full history of observations) yields better performance than evaluating only on the last batch of points (\emph{i.e.}, observations from the last iteration only, which corresponds to having a train-test split). In the latter setting, computation of the new weights for the models was adapted accordingly so as to depend only on the accuracy from the last iteration. We ran \texttt{DyMBO} in this setting with a budget of $100\times$ mean evaluation time per target function. We show the results in~\cref{fig:ch05:eval-all}. We see that evaluating on the entire history of observations yields better performance than evaluating only on the last batch of points.
 \begin{figure}
     \centering
     \centering
@@ -1719,20 +1719,20 @@ We tested whether evaluating the model accuracy on all previously sampled points
     \caption{Comparison of original \texttt{DyMBO} (which evaluates on all points) to \texttt{DyMBO} which evaluates only on the last batch of points as a function of the fraction of the wall-clock time budget on YAHPO Gym and JAHS-Bench-201.
     % \todo{legend}
     }
-    \label{fig:eval-all}
+    \label{fig:ch05:eval-all}
 \end{figure}
 
 \section{Results per search space}
-\label{sec:res-search-space}
+\label{sec:ch05:res-search-space}
 
 We analysed the performance of our method based on search space characteristics, offering insights into the efficacy of dynamic ensembling and selection of different surrogates that excel in various types of search spaces.
-We provide the results for mixed discrete-continuous and numerical search spaces in~\autoref{fig:search-spaces1} and \autoref{fig:search-spaces2}.
-We see that all \texttt{DyMBO} variants are consistently top-ranked regardless of the nature of the search space, with exception of the rbv2\_svm scenario in~\autoref{fig:rbv2_svm}, based on optimising hyperparameters of a support vector machine (SVM), for which Optuna AutoSampler exhibits the best performance.
+We provide the results for mixed discrete-continuous and numerical search spaces in~\cref{fig:ch05:search-spaces1,fig:ch05:search-spaces2}.
+We see that all \texttt{DyMBO} variants are consistently top-ranked regardless of the nature of the search space, with exception of the rbv2\_svm scenario in~\cref{fig:ch05:rbv2_svm}, based on optimising hyperparameters of a support vector machine (SVM), for which Optuna AutoSampler exhibits the best performance.
 % \todo{check if true, legend}
 
-For certain mixed discrete-continuous search spaces, \emph{e.g.,} scenarios in~\autoref{fig:rbv2_aknn},~\autoref{fig:rbv2_ranger} and~\autoref{fig:rbv2_rpart}, \texttt{DyMBO} variants with $\alpha = 0.9$ and $\alpha = 1.0$ perform notably well, with low variance in performance, emphasising the advantage of either a strong reliance on the newly assigned weights or a pure selection in those cases.
-For other mixed discrete-continuous spaces, \emph{e.g.,} scenarios in~\autoref{fig:rbv2_glmnet},~\autoref{fig:rbv2_super} and~\autoref{fig:rbv2_xgboost}, \texttt{DyMBO} variants with medium or very low values of $\alpha$ are top performers, revealing that our method can leverage not only the complementary strengths of different surrogates, but that having a possibility to rely more strongly on the history of surrogate accuracies can be crucial for the overall performance of the method.
-For numerical-only search space in~\autoref{fig:lcbench}, all \texttt{DyMBO} variants outperform single surrogates and other HPO methods, with a notable gap in ranks between \texttt{DyMBO} and the next-best method.
+For certain mixed discrete-continuous search spaces, \emph{e.g.,} scenarios in~\cref{fig:ch05:rbv2_aknn,fig:ch05:rbv2_ranger,fig:ch05:rbv2_rpart}, \texttt{DyMBO} variants with $\alpha = 0.9$ and $\alpha = 1.0$ perform notably well, with low variance in performance, emphasising the advantage of either a strong reliance on the newly assigned weights or a pure selection in those cases.
+For other mixed discrete-continuous spaces, \emph{e.g.,} scenarios in~\cref{fig:ch05:rbv2_glmnet,fig:ch05:rbv2_super,fig:ch05:rbv2_xgboost}, \texttt{DyMBO} variants with medium or very low values of $\alpha$ are top performers, revealing that our method can leverage not only the complementary strengths of different surrogates, but that having a possibility to rely more strongly on the history of surrogate accuracies can be crucial for the overall performance of the method.
+For numerical-only search space in~\cref{fig:ch05:lcbench}, all \texttt{DyMBO} variants outperform single surrogates and other HPO methods, with a notable gap in ranks between \texttt{DyMBO} and the next-best method.
 
 \begin{figure*}
     \centering
@@ -1740,30 +1740,30 @@ For numerical-only search space in~\autoref{fig:lcbench}, all \texttt{DyMBO} var
         \centering
         \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/main_ranks_rbv2_aknn.pdf}
         \caption{rbv2\_aknn: $6D$ mixed discrete-continuous search space}
-        \label{fig:rbv2_aknn}
+        \label{fig:ch05:rbv2_aknn}
     \end{subfigure}
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
         \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/main_ranks_rbv2_glmnet.pdf}
         \caption{rbv2\_glmnet: $3D$ mixed discrete-continuous search space}
-        \label{fig:rbv2_glmnet}
+        \label{fig:ch05:rbv2_glmnet}
     \end{subfigure}
         \begin{subfigure}[t]{0.49\textwidth}
         \centering
         \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/main_ranks_rbv2_ranger.pdf}
         \caption{rbv2\_ranger: $8D$ mixed discrete-continuous search space}
-        \label{fig:rbv2_ranger}
+        \label{fig:ch05:rbv2_ranger}
     \end{subfigure}
         \begin{subfigure}[t]{0.49\textwidth}
         \centering
         \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/main_ranks_rbv2_rpart.pdf}
         \caption{rbv2\_rpart: $5D$ mixed discrete-continuous search space}
-        \label{fig:rbv2_rpart}
+        \label{fig:ch05:rbv2_rpart}
     \end{subfigure}
     \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/main_ranks_rbv2_xgboost_legend.pdf}
     \caption{Mean ranks of \texttt{DyMBO} (with different values of $\alpha$), HEBO with different surrogate models, and other HPO methods, as a function of the fraction of the wall-clock time budget on benchmarks from YAHPO Gym, split by search space characteristics (mixed discrete-continuous or numerical only). Variants of \texttt{DyMBO} are consistently top-ranked across different types of search spaces and different dimensionalities.
     }
-    \label{fig:search-spaces1}
+    \label{fig:ch05:search-spaces1}
 \end{figure*}
 
 \begin{figure*}
@@ -1772,34 +1772,34 @@ For numerical-only search space in~\autoref{fig:lcbench}, all \texttt{DyMBO} var
         \centering
         \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/main_ranks_rbv2_super.pdf}
         \caption{rbv2\_super: $38D$ mixed discrete-continuous search space}
-        \label{fig:rbv2_super}
+        \label{fig:ch05:rbv2_super}
     \end{subfigure}
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
         \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/main_ranks_rbv2_svm.pdf}
         \caption{rbv2\_svm: $6D$ mixed discrete-continuous search space}
-        \label{fig:rbv2_svm}
+        \label{fig:ch05:rbv2_svm}
     \end{subfigure}
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
         \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/main_ranks_rbv2_xgboost.pdf}
         \caption{rbv2\_xgboost: $14D$ mixed discrete-continuous search space}
-        \label{fig:rbv2_xgboost}
+        \label{fig:ch05:rbv2_xgboost}
     \end{subfigure}
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
         \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/main_ranks_lcbench.pdf}
         \caption{lcbench: $7D$ numerical search space}
-        \label{fig:lcbench}
+        \label{fig:ch05:lcbench}
     \end{subfigure}
     \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/main_ranks_rbv2_xgboost_legend.pdf}
     \caption{Mean ranks of \texttt{DyMBO} (with different values of $\alpha$), HEBO with different surrogate models, and other HPO methods, as a function of the fraction of the wall-clock time budget on benchmarks from YAHPO Gym, split by search space characteristics (mixed discrete-continuous or numerical only). Variants of \texttt{DyMBO} are consistently top-ranked across different types of search spaces and different dimensionalities.
     }
-    \label{fig:search-spaces2}
+    \label{fig:ch05:search-spaces2}
 \end{figure*}
 
 \section{Benchmark details}
-\label{sec:benchs}
+\label{sec:ch05:benchs}
 
 \textbf{Yet Another HPO Benchmark (YAHPO) Gym}~\citep{PfiEtAl22} is a surrogate-based benchmark for hyperparameter optimisation on tabular machine learning tasks. 
 The benchmark consists of multiple datasets from OpenML and various machine learning algorithms. 
@@ -1855,19 +1855,19 @@ The budget for each optimisation is then $100\times $ mean running time of the i
 % \end{figure}
 
 \section{Additional benchmarks}
-\label{sec:add-bench}
+\label{sec:ch05:add-bench}
 
 We have shown that \texttt{DyMBO} outperforms all baselines on YAHPO Gym and JAHS-Bench-201 across a wide range of settings, emphasising its strong performance on mixed discrete-continuous domains.
 In this section, we report results of our method on two additional benchmarks: on synthetic continuous functions in order to illustrate good performance of \texttt{DyMBO} on purely numerical search spaces, and on HPOBench, in order to confirm good performance of \texttt{DyMBO} on a classic, widely studied HPO benchmark suite.
 
 \subsection{Synthetic continuous functions}
-\label{sec:synth-cont-func}
+\label{sec:ch05:synth-cont-func}
 
 We empirically evaluated our method on purely numerical search spaces by considering six synthetic continuous target functions, widely used in studies on design and development of novel black-box optimisation methods and benchmarks.
 Specifically, we used the $10$-dimensional Ackley, Hachevsky, Griewank, Himmelblau, Schaffer and Schwefel functions, in their native HEBO implementation.
-The experimental setup used here is the same as the default described in~\autoref{sec:ch05:experiments}.
+The experimental setup used here is the same as the default described in~\cref{sec:ch05:experiments}.
 
-We show in~\autoref{fig:synth-cont} the convergence behaviour of \texttt{DyMBO} and the single-surrogate HEBO baselines on those functions.
+We show in~\cref{fig:ch05:synth-cont} the convergence behaviour of \texttt{DyMBO} and the single-surrogate HEBO baselines on those functions.
 \texttt{DyMBO} achieves faster or competitive convergence and reaches a lower or comparable final regret across most benchmarks.
 The advantage of \texttt{DyMBO} is most pronounced on the multimodal functions: on Ackley and Schwefel, \texttt{DyMBO} converges faster than all single-surrogate baselines and achieves a lower final regret, suggesting that our method is better equipped to navigate complex, multimodal landscapes.
 
@@ -1915,18 +1915,18 @@ Among the single-surrogate baselines, GP tends to perform competitively on smoot
     \end{subfigure}
     \caption{Convergence plots of \texttt{DyMBO} and single-surrogate HEBO baselines as a function of the number of evaluations on synthetic continuous functions in dimension $10$. \texttt{DyMBO} exhibits faster or competitive convergence, and an overall lower or comparable final regret.
     }
-    \label{fig:synth-cont}
+    \label{fig:ch05:synth-cont}
 \end{figure*}
 
 \subsection{HPOBench}
-\label{sec:hpobench}
+\label{sec:ch05:hpobench}
 
 In addition to synthetic continuous functions, we empirically evaluated our method on HPOBench~\citep{EggEtAl21}, a collection of HPO benchmarks widely used in benchmarking studies.
 Out of various raw, surrogate or tabular benchmark families included in HPOBench, we selected Random Forest and XGBoost as raw benchmarks for our evaluation.
 These benchmarks are based on configuring hyperparameters of Random Forest and XGBoost models in their native implementations~\citep{PedEtAl11,CheGue16} on 20 publicly available datasets from the OpenML AutoML benchmark~\citep{GijEtAl19}.
-The setup of experiments used here is the same as the default described in~\autoref{sec:ch05:experiments}.
+The setup of experiments used here is the same as the default described in~\cref{sec:ch05:experiments}.
 
-In~\autoref{fig:hpobench}, we show the mean ranks of \texttt{DyMBO} and single-surrogate HEBO baselines on these two HPOBench problems.
+In~\cref{fig:ch05:hpobench}, we show the mean ranks of \texttt{DyMBO} and single-surrogate HEBO baselines on these two HPOBench problems.
 \texttt{DyMBO} is ranked similarly to GB throughout the optimisation.
 One possible reason for strong performance of GB compared to its performance on other benchmarks studied in this work is that uncertainty estimation of GB, based on quantile regression, is particularly well suited for for the structure of HPOBench.
 In the later stages of optimisation, \texttt{DyMBO} becomes competitive with and even outperforms GB, since the dynamic weighting mechanism is increasingly able to recognise and incorporate accurate GB predictions as more observations become available.
@@ -1953,13 +1953,13 @@ These results emphasise that \texttt{DyMBO} consistently performs well across va
     \caption{
     Mean ranks of \texttt{DyMBO} and single-surrogate HEBO baselines as a function of the fraction of the wall-clock time budget on Random Forest and XGBoost raw benchmarks from HPOBench. \texttt{DyMBO} is ranked similarly to standalone GB surrogate, while outperforming GP and RF which are strongest single-surrogate candidates across all other benchmark scenarios.
     }
-    \label{fig:hpobench}
+    \label{fig:ch05:hpobench}
 \end{figure*}
 
 
 
 \section{Conclusions, limitations and future work}
-\label{sec:concl-fw}
+\label{sec:ch05:concl-fw}
 
 % \changed{
 In this work, we proposed a novel dynamic tailoring approach for surrogate models in BO-based HPO, spanning weighted ensembling and greedy selection. 

@@ -1,13 +1,13 @@
 
 \chapter{Graph Neural Networks as EPMs}
-\label{ch:gnns_epms}
+\label{ch:ch06:gnns_epms}
 \providecommand{\gb}{GraphBench}
 
 \begin{figure}[t]
 	\centering
 	\includegraphics[width=0.75\textwidth]{figures/06/sat.pdf}
 	\caption[Overview of SAT graph types]{Overview of the three graph types generated from a given \gls{sat} formula.
-		\label{fig:sat}}
+		\label{fig:ch06:sat}}
 \end{figure}
 
 \section{Introduction}
@@ -39,12 +39,12 @@ As the use of MPNNs for algorithm selection is a relatively new research directi
 
 \section{Methodology}
 
-We add node features to provide the \gls{gnn} with additional information about the formula's structure. Our node embeddings are inspired by the hand-crafted features used in \textsc{SATzilla}~\citep{NudEtAl04} and the node-level encodings proposed in \textsc{GraSS}~\citep{ZhaEtAl24}. These features capture local syntactic properties (e.g., polarity counts, clause membership statistics), normalized and relational quantities (e.g., positive-to-negative ratio, normalized frequency), and sinusoidal positional encodings for clause nodes. \Cref{tab:vcg_features,tab:lcg_features,tab:vg_features} summarize the node features for each graph type. All features are computed during graph construction and stored as floating-point node attributes.
+We add node features to provide the \gls{gnn} with additional information about the formula's structure. Our node embeddings are inspired by the hand-crafted features used in \textsc{SATzilla}~\citep{NudEtAl04} and the node-level encodings proposed in \textsc{GraSS}~\citep{ZhaEtAl24}. These features capture local syntactic properties (e.g., polarity counts, clause membership statistics), normalized and relational quantities (e.g., positive-to-negative ratio, normalized frequency), and sinusoidal positional encodings for clause nodes. \cref{tab:ch06:vcg_features,tab:ch06:lcg_features,tab:ch06:vg_features} summarize the node features for each graph type. All features are computed during graph construction and stored as floating-point node attributes.
 
 \begin{table}[htbp]
 	\centering
 	\caption[VCG node features]{Node features for the variable-clause graph (VCG). Variable nodes carry 12 features, and clause nodes carry 22 features. Edges between variables and clauses are attributed with the literal polarity ($+1$/$-1$); reverse edges are included.}
-	\label{tab:vcg_features}
+	\label{tab:ch06:vcg_features}
 	\renewcommand{\arraystretch}{1.2}
 	\resizebox{\columnwidth}{!}{
 		\begin{tabular}{@{} p{0.22\textwidth} c p{0.62\textwidth} @{}}
@@ -85,7 +85,7 @@ We add node features to provide the \gls{gnn} with additional information about 
 \begin{table}[htbp]
 	\centering
 	\caption[LCG node features]{Node features for the literal-clause graph (LCG). Literal nodes carry 12 features, and clause nodes carry 22 features. Literal-to-clause edges carry a polarity attribute ($+1$/$-1$); reverse and complement edges (linking each literal to its negation) are also included.}
-	\label{tab:lcg_features}
+	\label{tab:ch06:lcg_features}
 	\renewcommand{\arraystretch}{1.2}
 	\resizebox{\columnwidth}{!}{
 		\begin{tabular}{@{} p{0.22\textwidth} c p{0.62\textwidth} @{}}
@@ -127,7 +127,7 @@ We add node features to provide the \gls{gnn} with additional information about 
 \begin{table}[htbp]
 	\centering
 	\caption[VG node features]{Node features for the variable graph (VG). Each variable node carries 12 features. Edges connect co-occurring variables and carry no attributes.}
-	\label{tab:vg_features}
+	\label{tab:ch06:vg_features}
 	\renewcommand{\arraystretch}{1.2}
 	\resizebox{\columnwidth}{!}{
 		\begin{tabular}{@{} p{0.22\textwidth} c p{0.62\textwidth} @{}}
@@ -152,7 +152,7 @@ We add node features to provide the \gls{gnn} with additional information about 
 \end{table}
 
 In \gb, we introduce, to the best of our knowledge, the largest algorithm-selection benchmark for \gls{sat} solvers, covering eleven solvers and more than 100\,000 instances. Our benchmark supports multiple graph representations of \gls{sat} formulae and also provides the \textsc{SATzilla} 2024 feature set~\citep{ShaHoo24}, enabling their combination with MPNNs. Unlike existing \gls{gnn} benchmarks for \gls{sat}~\citep{LiEtAl24}, which primarily focus on satisfiability prediction or assignment generation, our benchmark is designed for practical downstream tasks in \gls{sat} solving---specifically, algorithm selection and performance prediction.
-\cref{fig:sat} provides an overview of how the three graph types are constructed from a given Boolean formula.
+\cref{fig:ch06:sat} provides an overview of how the three graph types are constructed from a given Boolean formula.
 
 
 \subsection{Learning tasks}
@@ -192,7 +192,7 @@ We created the largest algorithm-selection scenario for \gls{sat} solvers to dat
 	\item \new{Community attachment}~\citep{GirLev16} produces pseudo-random \gls{sat} formulae with community structure, a property often observed in real-world \gls{sat} encodings (e.g., hardware and software verification tasks~\citep{AnsEtAl12}). The generator can create relatively small but difficult instances. We used $n \in [1\,000, 3\,000]$ variables, $c \in [5,100]$ communities, a clause-to-variable ratio of $[3{.}7, 4{.}5]$, and modularity factor $q \in [0{.}3,0{.}9]$. Higher modularity values enforce stronger community structure.
 \end{itemize}
 
-For each generator, parameter ranges were chosen to yield challenging but still solvable instances.  To ensure this, we excluded ranges of values yielding no instances solvable by \solver{Kissat}, the winner of the 2024 \gls{sat} Competition, between 1 and 5\,000 seconds. After generation, we applied the \textsc{Satellite} preprocessor to remove redundant clauses and variables. A summary of all generated instances is provided in \cref{tab:sat_generatred_instances}.
+For each generator, parameter ranges were chosen to yield challenging but still solvable instances.  To ensure this, we excluded ranges of values yielding no instances solvable by \solver{Kissat}, the winner of the 2024 \gls{sat} Competition, between 1 and 5\,000 seconds. After generation, we applied the \textsc{Satellite} preprocessor to remove redundant clauses and variables. A summary of all generated instances is provided in \cref{tab:ch06:sat_generatred_instances}.
 
 We pre-selected solvers for the benchmark by constructing a portfolio of $m$ complementary state-of-the-art \gls{sat} solvers, based on the results of the 2024 \gls{sat} Competition. Portfolios were built using beam search to identify the set of $m$ solvers achieving the \gls{vbs} performance. To determine $m$, we evaluated portfolios of all possible sizes and plotted portfolio size against achieved \gls{vbs}. We then identified the inflection point (the ``knee'') of this curve using the Kneedle algorithm~\citep{SatEtAl11} and adopted the corresponding portfolio. The \gls{asf} library~\url{https://github.com/hadarshavit/asf} was used to perform the selection procedure. The same procedure was repeated on the \gls{sat} Competition 2023.
 
@@ -217,14 +217,14 @@ In total, our dataset includes the following solvers. From the 2024 \gls{sat} Co
 			\bottomrule
 		\end{tabular}
 	}
-	\label{tab:sat_generatred_instances}
+	\label{tab:ch06:sat_generatred_instances}
 \end{table}
 We provide three datasets, \dataset{small}, which includes only small formulae with up to 3\,000 variables and 15\,000 clauses, \dataset{medium}, which consists of the small formulae with additional medium size formulae with size of up to 20\,000 variables and 80\,000 clauses and \dataset{large}, which includes all formulae. This way, we provide datasets with varying levels of hardness, as formula size can pose hurdles for training time and GPU memory. While the \dataset{large} and \dataset{medium} datasets are unlikely to be accessible on current hardware, we provide them to keep the benchmark relevant in the long term.
 
 
 \paragraph{Dataset challenges:} Algorithm selection and performance prediction are particularly challenging in this setting for several reasons. First, solver performance is inherently stochastic: repeated runs of the same solver on the same instance can result in substantially different running times. This induces noisy target values that the learning algorithm must account for. Second, the targets are right-censored due to the use of solver cutoffs: when a solver does not terminate before the cutoff, its true running time is only known to exceed the cutoff. Third, the \gls{sat} instances can be very large, with corresponding graphs containing thousands to millions of variable nodes, making scalable graph processing a major challenge. Finally, accurate prediction requires the \gls{gnn} to capture both local structural patterns and the formula's global properties.
 
-\subsection{Experimental setup}\label{Section:ExpSetup}
+\subsection{Experimental setup}\label{Section:ch06:ExpSetup}
 Similar to~\cite{BecEtAl25,StoEtAl25}, we provide an encoder-processor-decoder architecture for all tasks, which we detail in the following. While the task-specific components of our architecture vary, we provide a general architecture to measure the performance of selected baselines on our tasks. For the chip design and weather forecast dataset, we adapt this architecture to provide the necessary task-dependent encoder and decoder functionality. 
 
 \textbf{Encoder}~
@@ -232,7 +232,7 @@ For each task, we provide a task-specific encoder that derives encodings of node
 
 \textbf{Processor}~
 As our processor, we select one of the baseline models we evaluate. These consist of two dummy baselines: an MLP and a DeepSet architecture; a GNN baseline using a GIN architecture; and a Graph Transformer baseline. Independent of the selected baseline, we compute updated node and graph representations at each layer as follows, given a graph $G$ with node representations $\vec{X}$,
-\begin{equation}\label{eq:processor_eq}
+\begin{equation}\label{eq:ch06:processor_eq}
 \vec{X} = \phi(\textsf{LayerNorm}(\vec{X}), G)
 \end{equation}
 \begin{equation*}
@@ -260,7 +260,7 @@ Using the aforementioned hyperparameter tuning process, we evaluate all baseline
 
 \subsection{Baseline Architectures}
 \textbf{Graph transformer architecture}
-As described in \Cref{Section:ExpSetup} we use an encoder-processor-decoder baseline across tasks. In this case, we consider a graph transformer as the processor architecture following the implementation outlined in \citet{BecEtAl25} and \citet{StoEtAl25}. 
+As described in \cref{Section:ch06:ExpSetup} we use an encoder-processor-decoder baseline across tasks. In this case, we consider a graph transformer as the processor architecture following the implementation outlined in \citet{BecEtAl25} and \citet{StoEtAl25}. 
 For most tasks, we use node-level tokenization, where each graph node is treated as a single token input to the graph transformer. However, for edge-level tasks, we use the transformation outlined for algorithmic reasoning tasks, allowing edge-level tokens to be used without changes to the processor architecture. 
 Additionally, absolute PEs, such as RWSE or LPE, are added to the node embeddings before the first graph transformer layer. 
 Then, the graph transformer layer computes full multi-head scaled-dot-product attention, adding an attention bias $\vec{B}$ to the unnormalized attention matrix and applying softmax to it. Let $\vec{Q}, \vec{K}, \vec{V} \in \mathbb{R}^{L \times d}$ and $\vec{B} \in \mathbb{R}^{L \times L}$ with $L$ denoting the number of tokens and $d$ the embedding dimension. Then attention and a graph transformer layer take the form
@@ -270,11 +270,11 @@ Then, the graph transformer layer computes full multi-head scaled-dot-product at
 \begin{equation*}
 \vec{X}^{t+1} \coloneqq \mathsf{MLP}\big(\textsf{Attention}(\vec{X}^t\vec{W}_Q, \vec{X}^t\vec{W}_K, \vec{X}^t\vec{W}_V, \vec{B})\big),
 \end{equation*}
-where $\vec{W}_Q, \vec{W}_K, \vec{W}_V \in \mathbb{R}^{d \times d}$ are learnable weight matrices and $\mathsf{MLP}$ denotes a two layer-MLP.  In practice, we compute attention over multiple heads, allowing for different attention biases to be added to the attention matrix. With $\phi$ given by the multihead attention computation, a processor layer is provided by \Cref{eq:processor_eq}. 
-In the processor, multiple layers are stacked, enabling the pipeline shown in \Cref{Section:ExpSetup}. 
+where $\vec{W}_Q, \vec{W}_K, \vec{W}_V \in \mathbb{R}^{d \times d}$ are learnable weight matrices and $\mathsf{MLP}$ denotes a two layer-MLP.  In practice, we compute attention over multiple heads, allowing for different attention biases to be added to the attention matrix. With $\phi$ given by the multihead attention computation, a processor layer is provided by \cref{eq:ch06:processor_eq}. 
+In the processor, multiple layers are stacked, enabling the pipeline shown in \cref{Section:ch06:ExpSetup}. 
 
 \textbf{GINE architecture}~
-Throughout this work, we use a GINE-based GNN baseline as the processor within the framework outlined in \Cref{Section:ExpSetup}. Following, \citet{HuEtAl20} the GINE layer updates the node representations $h_v^{(t)}$ at iteration $t$ as follows: 
+Throughout this work, we use a GINE-based GNN baseline as the processor within the framework outlined in \cref{Section:ch06:ExpSetup}. Following, \citet{HuEtAl20} the GINE layer updates the node representations $h_v^{(t)}$ at iteration $t$ as follows: 
 \begin{equation*}
     \boldsymbol{h}_v^{(t+1)} = \mathsf{N}\Big((1+\epsilon) \boldsymbol{h}_v^{(t)} + \sum_{u \in \mathcal{N}(v)}\mathsf{ReLU}(\boldsymbol{h}_v^{(t)} + e_{uv})\Big)
 \end{equation*}
@@ -303,7 +303,7 @@ GCN+
 where $\sigma$ denotes an activation function, FFN and MLP denote a fully connected linear layer and an $l$ layer MLP, respectively. Furthermore, $\eta= \sigma(\boldsymbol{h}_{u}^{l-1}\boldsymbol{W}_3 + \boldsymbol{h}_{v}^{l-1}\boldsymbol{W}_4)$, $\hat{d}_u$ denotes the degree of node $u$ and $\boldsymbol{W}$ denote weight matrices. Edge features are included via $e_{uv}$
 
 \subsection{Experimental evaluation and baselines}
-All \gls{sat} solving tasks in the benchmark are graph-level. For the graph transformer baselines, we employ an encoder-processor-decoder pipeline, as described in~\Cref{Section:ExpSetup}. We used the following architectures: GIN, GCN, GIN+, GCN+, Gated GCN+. While we considered GT for the tasks, we encountered high computational costs in calculating the positional embeddings (more than a CPU day) and therefore excluded them from the evaluation. To ensure a fair comparison with hand-crafted features and to evaluate the capacity of \glspl{gnn} to extract relevant information purely from the formula's topology, we did not provide the models with any initial node-level features, forcing them to learn solely from the graph structure. Furthermore, when training on medium- and large-sized graphs, we encountered out-of-memory errors even on an H100. Consequently, we only consider small formulae for MPNNs. Similarly, we observed out-of-memory issues with the clause graphs and therefore excluded them from the evaluation. We optimized the hyperparameters of these models using SMAC3~\citep{LinEtAl22e} with a multi-fidelity facade, running 60 trials. Full details of the hyperparameter configuration space and the tuning procedure can be found in~\Cref{sec:hpo}.
+All \gls{sat} solving tasks in the benchmark are graph-level. For the graph transformer baselines, we employ an encoder-processor-decoder pipeline, as described in~\cref{Section:ch06:ExpSetup}. We used the following architectures: GIN, GCN, GIN+, GCN+, Gated GCN+. While we considered GT for the tasks, we encountered high computational costs in calculating the positional embeddings (more than a CPU day) and therefore excluded them from the evaluation. To ensure a fair comparison with hand-crafted features and to evaluate the capacity of \glspl{gnn} to extract relevant information purely from the formula's topology, we did not provide the models with any initial node-level features, forcing them to learn solely from the graph structure. Furthermore, when training on medium- and large-sized graphs, we encountered out-of-memory errors even on an H100. Consequently, we only consider small formulae for MPNNs. Similarly, we observed out-of-memory issues with the clause graphs and therefore excluded them from the evaluation. We optimized the hyperparameters of these models using SMAC3~\citep{LinEtAl22e} with a multi-fidelity facade, running 60 trials. Full details of the hyperparameter configuration space and the tuning procedure can be found in~\cref{sec:ch06:hpo}.
 
 We note that traditionally, algorithm selection datasets are evaluated using cross-validation, primarily due to limited data availability. In contrast, our new dataset contains tens of thousands of formulas. Since it is also intended for deep learning approaches, which are computationally expensive and thus impractical to evaluate using 10-fold cross-validation, we instead provide a fixed train–validation–test split and report results across 3 random seeds.
 
@@ -314,7 +314,7 @@ winner of the ICON challenge on algorithm selection~\citep{LinEtAl19b}
 ) as well as a simple multi-class classification~\citep{Kotthoff13} (MC; directly predicts the best solver). Similar to the \gls{epm} baselines, these baselines use the \solver{SATzilla} 2024 features with a random forest. We tune these baselines using SMAC3~\citep{LinEtAl22e} for 50 trials.
 
 \subsection{Automated hyperparameter optimization}
-\label{sec:hpo}
+\label{sec:ch06:hpo}
 
 \gb{} also integrates automated hyperparameter optimization (HPO), which aims to make it easier to tune new models, improve performance, and enhance reproducibility. Deep graph learning architectures are notoriously sensitive to their hyperparameter configurations, ranging from learning rates and weight decay to structural choices such as the number of layers and hidden dimensions. To address this, the hyperparameter optimization in \gb{} is based on the \textsc{SMAC3}~\citep{LinEtAl22e} package, a versatile framework that leverages Bayesian Optimization (BO) to efficiently explore the configuration space. 
 
@@ -325,14 +325,14 @@ While standard BO is vastly more efficient than random search, evaluating every 
 
 The underlying scheduling algorithm used by the \textsc{SMAC3} multi-fidelity facade is based on BOHB~\citep{FalEtAl18}, which combines the strengths of Hyperband for early-stage elimination of unpromising configurations with those of BO for late-stage convergence toward the global optimum. In short, BOHB samples new configurations using BO and prunes unpromising configurations using a Hyperband-style strategy.
 
-Due to limited computational resources, we were unable to run HPO on all datasets and domains. However, we conducted HPO for all SAT datasets and for all baselines. For this purpose, we used the \textsc{SMAC3} multi-fidelity facade with 60 trials per run. The chosen fidelity metric was the number of training steps: we defined the minimum budget as 1\,000 steps and the maximum budget as 100\,000 steps. This multi-fidelity approach allowed us to explore a vast configuration space---evaluating many architectures and hyperparameter combinations at 1\,000 steps---while only training the very best candidates to the full 100\,000 steps. The complete configuration space used for this process is shown in \autoref{table:hpo_cs}.
+Due to limited computational resources, we were unable to run HPO on all datasets and domains. However, we conducted HPO for all SAT datasets and for all baselines. For this purpose, we used the \textsc{SMAC3} multi-fidelity facade with 60 trials per run. The chosen fidelity metric was the number of training steps: we defined the minimum budget as 1\,000 steps and the maximum budget as 100\,000 steps. This multi-fidelity approach allowed us to explore a vast configuration space---evaluating many architectures and hyperparameter combinations at 1\,000 steps---while only training the very best candidates to the full 100\,000 steps. The complete configuration space used for this process is shown in \cref{tab:ch06:hpo_cs}.
 
 \begin{table}[htbp]
 \centering
 \caption{Configuration space used in the hyperparameter optimization.}
 
 
-\label{table:hpo_cs}
+\label{tab:ch06:hpo_cs}
 \begin{tabular}{lc}
 \toprule
 \textbf{Hyperparameter} & \textbf{Range} \\
@@ -356,7 +356,7 @@ Hidden dim & \{256, 384, 512\}\\
 	\tabledefaults
 	\centering
 	\caption[SAT solving RMSE on small instances]{\textbf{\gls{sat} Solving.} \gls{rmse} (log\textsubscript{10} time) for performance prediction on \dataset{small} \gls{sat} instances. We report results on three different graph representations (\dataset{VG}, \dataset{VCG}, \dataset{LCG}) and using the hand-crafted SATzilla features. Lower is better.}
-	\label{table:sat_epm_res_small}
+	\label{tab:ch06:sat_epm_res_small}
 	\resizebox{0.6\textwidth}{!}{
 		\begin{tabular}{llcccc}
 			\toprule
@@ -405,7 +405,7 @@ Hidden dim & \{256, 384, 512\}\\
 	\tabledefaults
 	\centering
 	\caption[SAT solving RMSE on medium and large instances]{\textbf{\gls{sat} Solving.} \gls{rmse} (log\textsubscript{10} time) for performance prediction on \dataset{medium} and \dataset{large} \gls{sat} instances. Lower is better.}
-	\label{table:sat_epm_res_med_large}
+	\label{tab:ch06:sat_epm_res_med_large}
 	\begin{minipage}{0.48\textwidth}
 		\centering
 		\subcaption{Medium-size \gls{sat} instances}
@@ -431,7 +431,7 @@ Hidden dim & \{256, 384, 512\}\\
 				                & XGB             & \meanstd{0.69}{0.00} \\
 				\bottomrule
 			\end{tabular}}
-		\label{table:sat_epm_res_med}
+		\label{tab:ch06:sat_epm_res_med}
 	\end{minipage}
 	\hfill
 	\begin{minipage}{0.48\textwidth}
@@ -459,17 +459,17 @@ Hidden dim & \{256, 384, 512\}\\
 				                & XGB             & \meanstd{0.69}{0.00} \\
 				\bottomrule
 			\end{tabular}}
-		\label{table:sat_epm_res_large}
+		\label{tab:ch06:sat_epm_res_large}
 	\end{minipage}
 \end{table}
 
 \section{Results}
-We start by presenting the results for the performance prediction task. We present the \gls{rmse} of the log-scaled computation time for the solvers from \gls{sat} Competition 2024 (\solver{Kissat}, \solver{BreakIDKissat}, \solver{KissatMABDC}, \solver{AMSAT}) for the small formulae in table~\Cref{table:sat_epm_res_small}. Note that missing values (--) for Gated GCN Plus with the VG representation indicate that the model encountered out-of-memory (OOM) errors on the GPU.
+We start by presenting the results for the performance prediction task. We present the \gls{rmse} of the log-scaled computation time for the solvers from \gls{sat} Competition 2024 (\solver{Kissat}, \solver{BreakIDKissat}, \solver{KissatMABDC}, \solver{AMSAT}) for the small formulae in \cref{tab:ch06:sat_epm_res_small}. Note that missing values (--) for Gated GCN Plus with the VG representation indicate that the model encountered out-of-memory (OOM) errors on the GPU.
 The table shows that the best performance for \solver{Kissat}, \solver{BreakIDKissat}, and \solver{AMSAT} is achieved by GCN Plus with the VCG graph, as this model outperforms the SATzilla features. For \solver{KissatMABDC}, a simple GIN with a variable graph performs best. We also note that the \gls{sat}-specific architecture, GraSS, performs surprisingly poorly across the board compared to general-purpose architectures.
-To the best of our knowledge, this is the first time the SATzilla features have been outperformed on the performance prediction task. We furthermore present the results of random forest and XGBoost on medium-size and large formulae in~\Cref{table:sat_epm_res_med,table:sat_epm_res_large}, such that they can be compared against graph machine learning solutions in the future. Overall, we observe similar performance between XGBoost and random forest, with a slight advantage to XGBoost.
+To the best of our knowledge, this is the first time the SATzilla features have been outperformed on the performance prediction task. We furthermore present the results of random forest and XGBoost on medium-size and large formulae in~\cref{tab:ch06:sat_epm_res_med,tab:ch06:sat_epm_res_large}, such that they can be compared against graph machine learning solutions in the future. Overall, we observe similar performance between XGBoost and random forest, with a slight advantage to XGBoost.
 
 For the algorithm selection task, we report the
-closed gap metric of different selectors in~\Cref{table:sat_as_res}.
+closed gap metric of different selectors in~\cref{tab:ch06:sat_as_res}.
 For the small instances, we observe that gated GCN plus performs best, followed by GCN plus and GIN, all of which are trained on literal-clause graphs. These graph-based approaches outperform the SATzilla feature-based baselines, with only pairwise regression achieving a positive closed gap. Comparing the different graph representations across tasks, we observe clear trade-offs: while the VCG representation yields the strongest performance for the prediction task, the LCG representation enables the highest gap closure for algorithm selection. This suggests that the explicit literal polarity and complementary edges in LCG might be more beneficial for relative performance ranking than for absolute runtime prediction.
 Among the three baselines based on hand-crafted features, we observe that multi-class classification underperforms both pairwise classification and regression, leaving a negative gap on the small and medium-sized datasets. This highlights that algorithm selection is not a simple multi-class classification problem. In that formulation, the model loses valuable information about the performance of algorithms other than the best one.
 Finally, we find more gaps closed for the large dataset across all three baselines, as it includes harder instances. As time increases, the benefit of algorithm selection grows because feature computation accounts for a smaller fraction of the total computation time. Moreover, for harder instances, multiple solvers frequently time out, so choosing a solver that successfully solves the instance becomes especially valuable, given the additional penalty imposed by the \gls{par} score.
@@ -480,7 +480,7 @@ Finally, we find more gaps closed for the large dataset across all three baselin
 	\tabledefaults
 	\centering
 	\caption[SAT solving algorithm selection results]{\textbf{\gls{sat} Solving.} Algorithm selection results (gap closed; higher is better).}
-	\label{table:sat_as_res}
+	\label{tab:ch06:sat_as_res}
 	\resizebox{0.6\textwidth}{!}{
 		\begin{tabular}{llcccc}
 			\toprule

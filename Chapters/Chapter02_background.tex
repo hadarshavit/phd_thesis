@@ -1,10 +1,10 @@
 
-\chapter{Background}\label{ch:background}
+\chapter{Background}\label{ch:ch02:background}
 
 
 
 \section{Algorithm selection}
-\label{sec:algorithm_selection}
+\label{sec:ch02:algorithm_selection}
 
 In this section, we introduce the algorithm selection problem and its components, including a formal definition, common baselines and use cases. We also relate it to multi-class classification and empirical performance prediction.
 
@@ -16,7 +16,7 @@ In algorithm selection, the ideal goal is to reach the performance of the virtua
 
 
 
-Further details are provided in~\autoref{sec:add_background}.
+Further details are provided in~\cref{sec:ch10:add_background}.
 
 \subsection{Algorithm selection pipelines}
 \begin{figure}[]
@@ -103,7 +103,7 @@ Further details are provided in~\autoref{sec:add_background}.
     \caption[Algorithm selection pipeline]{Algorithm selection pipeline. A portfolio of complementary algorithms can first be chosen by pre-selection. In running-time scenarios, a short pre-solving schedule may solve easy instances before feature computation or before invoking the learned selector. Instance features, optional algorithm features, and performance data are then used to train and evaluate the algorithm selector.
 
     }
-    \label{fig:asf_pipeline}
+    \label{fig:ch02:asf_pipeline}
 \end{figure}
 
 Algorithm selection methods are integrated into \textit{algorithm selection pipelines}, which include several components:
@@ -125,7 +125,7 @@ Additionally, for algorithm selection, there is a need for two additional, probl
 
     Therefore, a problem-specific evaluation metric must be chosen that represents the performance of the algorithm. This can be, for example, accuracy, precision, recall, F1-score, AUC, running time and more, depending on the use-case.
 \end{itemize}
-An overview of the algorithm selection pipeline is presented in~\autoref{fig:asf_pipeline}.
+An overview of the algorithm selection pipeline is presented in~\cref{fig:ch02:asf_pipeline}.
 
 
 
@@ -139,7 +139,7 @@ can therefore be seen as performing a multi-class prediction task, training it a
 To see why, consider an instance where the performance gap between the best and the second-best algorithm is small.
 In that case, selecting the second-best algorithm is a reasonable error.
 A plain multi-class classifier, however, treats this outcome as equally wrong as choosing an algorithm that performs very poorly on the instance.
-As we show in our ASlib experiments (\autoref{sec:aslib_appendix}), multi-class classifiers can indeed perform far below the other methods in practice.
+As we show in our ASlib experiments (\cref{sec:ch10:aslib_appendix}), multi-class classifiers can indeed perform far below the other methods in practice.
 
 
 \section{Bayesian optimisation}
@@ -221,7 +221,7 @@ jointly, these address heteroscedasticity in the noise $\epsilon$ and non-statio
 
 For the acquisition function, rather than optimising a single criterion, HEBO samples new candidate configurations by maximising MACE~\citep{LyuEtAl18}, a multi-objective acquisition function that simultaneously considers expected improvement (EI)~\citep{Mockus74}, probability of improvement (PI)~\citep{Kushner64b}, and upper confidence bound (UCB)~\citep{ForEtAl08}, providing a more robust balance between exploration and exploitation of the search space than any single acquisition function alone.
 
-Additional details on HEBO can be found in~\autoref{sec:imp_det}.
+Additional details on HEBO can be found in~\cref{sec:imp_det}.
 }
 
 

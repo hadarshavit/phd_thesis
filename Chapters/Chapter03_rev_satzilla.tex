@@ -1,4 +1,4 @@
-\chapter{Revisiting SATzilla Features in 2024}\label{ch:rev_SATzilla}
+\chapter{Revisiting SATzilla Features in 2024}\label{ch:ch03:rev_SATzilla}
 
 \section{Introduction}
 
@@ -31,10 +31,10 @@ Most notably, \gls{sat} instances that we typically encounter today have a large
 In this paper, we revisit the SATzilla features and introduce a new version of the feature extraction tool. First, we replace the underlying solvers and the preprocessor with their most up-to-date versions. We then fix compilation errors and other memory errors related to dealing with larger formulas. Finally, we allow the user to set the time limits for feature computation. 
 We compare the performance of our new tool with the old one in two \gls{sat} competitions. We measure the running times and the number of extracted features to check for performance gains of our new tool. We then evaluate the extracted features on three downstream tasks: satisfiability prediction, performance prediction and algorithm selection. We show that our new tool yields an important advantage in performance compared to the old tool across all three tasks.
 
-The rest of the paper is organised as follows. We give a historical overview of the development and applications of the SATzilla features in~\autoref{sec:related-work}. We then introduce the technical definitions, as well as the standard methodological pipeline in~\autoref{sec:SATzilla-features}, wrapping it up with the contributions of this study. The results are presented in~\autoref{sec:ch03:experiments}, and conclusions drawn in~\autoref{sec:conclusions}.
+The rest of the paper is organised as follows. We give a historical overview of the development and applications of the SATzilla features in~\cref{sec:ch03:related-work}. We then introduce the technical definitions, as well as the standard methodological pipeline in~\cref{sec:ch03:SATzilla-features}, wrapping it up with the contributions of this study. The results are presented in~\cref{sec:ch03:experiments}, and conclusions drawn in~\cref{sec:ch03:conclusions}.
 
 \section{Related work}
-\label{sec:related-work}
+\label{sec:ch03:related-work}
 
 
 
@@ -89,7 +89,7 @@ Last but not least, feature-based \glspl{epm} are proven to be useful for benchm
 
 
 \section{SATzilla features}
-\label{sec:SATzilla-features}
+\label{sec:ch03:SATzilla-features}
 
 
 The SATzilla features describe the \gls{sat} formula using various representations and statistics. We briefly introduce three graph representations of a \gls{sat} formula, as undirected graphs are a meaningful representation of \gls{sat}, maintaining the permutation invariance: a) variable graph: nodes are variables, an edge exists if variables appear in the same clause; b) clause graph: nodes are clauses, an edge exists when two clauses share a negated literal; and c) variable-clause graph: nodes are variables and clauses, an edge exists between a variable node and a clause node if the variable appears in the clause.
@@ -159,7 +159,7 @@ To assess the advantage of using the new version of the extraction tool, we extr
 We use a cluster of 18 nodes, each equipped with 2 AMD EPYC 7543 32-core CPUs with 256 MB L3 cache. Each node also has 1TB of memory. The cluster is running on a Rocky Linux 9.4 operating system. We measure running times using the runsolver tool \cite{Roussel11}.
 
 \subsection{Feature computation time}
-\label{ssec:feature-computation-time}
+\label{ssec:ch03:feature-computation-time}
 
 \begin{figure*}[h]
     \caption[Percentage of computed features (2022 SAT Competition)]{Percentage of features computed by the old tool (SATzilla 2012; in red) and the new tool (SATzilla 2024; in blue) over the available time budget for each feature group on the 2022 \gls{sat} Competition. For most feature groups, the new tool extracts features from more instances than the old one.}
@@ -168,78 +168,78 @@ We use a cluster of 18 nodes, each equipped with 2 AMD EPYC 7543 32-core CPUs wi
         \centering
         \includegraphics[]{figures/03/figs/ecdf_sc2022_Pre-featuretime.pdf}
         \caption{Preliminary}
-        \label{fig:satcomp22_pre}
+        \label{fig:ch03:satcomp22_pre}
     \end{subfigure}
     \centering
     \begin{subfigure}[b]{0.24\textwidth}
         \centering
         \includegraphics[]{figures/03/figs/ecdf_sc2022_Basic-featuretime.pdf}
         \caption{Basic}
-        \label{fig:satcomp22_basic}
+        \label{fig:ch03:satcomp22_basic}
     \end{subfigure}
     \begin{subfigure}[b]{0.24\textwidth}
         \centering
         \includegraphics[]{figures/03/figs/ecdf_sc2022_KLB-featuretime.pdf}
         \caption{KLB}
-        \label{fig:satcomp22_klb}
+        \label{fig:ch03:satcomp22_klb}
     \end{subfigure}
         \begin{subfigure}[b]{0.24\textwidth}
         \centering
         \includegraphics[]{figures/03/figs/ecdf_sc2022_CG-featuretime.pdf}
         \caption{Clause graph}
-        \label{fig:satcomp22_cg}
+        \label{fig:ch03:satcomp22_cg}
     \end{subfigure}
     \centering
     \begin{subfigure}[b]{0.24\textwidth}
         \centering
         \includegraphics[]{figures/03/figs/ecdf_sc2022_cl-featuretime.pdf}
         \caption{Clause learning}
-        \label{fig:satcomp22_cl}
+        \label{fig:ch03:satcomp22_cl}
     \end{subfigure}
     \begin{subfigure}[b]{0.24\textwidth}
         \centering
         \includegraphics[]{figures/03/figs/ecdf_sc2022_ls-gsat-featuretime.pdf}
         \caption{LS: GSAT}
-        \label{fig:satcomp22_ls_gsat}
+        \label{fig:ch03:satcomp22_ls_gsat}
     \end{subfigure}
         \begin{subfigure}[b]{0.24\textwidth}
         \centering
         \includegraphics[]{figures/03/figs/ecdf_sc2022_ls-saps-featuretime.pdf}
         \caption{LS: \gls{saps}/Sparrow}
-        \label{fig:satcomp22_ls_saps}
+        \label{fig:ch03:satcomp22_ls_saps}
     \end{subfigure}
     \centering
     \begin{subfigure}[b]{0.24\textwidth}
         \centering
         \includegraphics[]{figures/03/figs/ecdf_sc2022_sp-featuretime.pdf}
         \caption{Survey propagation}
-        \label{fig:satcomp22_sp}
+        \label{fig:ch03:satcomp22_sp}
     \end{subfigure}
     \begin{subfigure}[b]{0.24\textwidth}
         \centering
         \includegraphics[]{figures/03/figs/ecdf_sc2022_DIAMETER-featuretime.pdf}
         \caption{Diameter}
-        \label{fig:satcomp22_dia}
+        \label{fig:ch03:satcomp22_dia}
     \end{subfigure}
     \begin{subfigure}[b]{0.24\textwidth}
         \centering
         \includegraphics[]{figures/03/figs/ecdf_sc2022_lobjois-featuretime.pdf}
         \caption{Lobjois}
-        \label{fig:satcomp22_lobjois}
+        \label{fig:ch03:satcomp22_lobjois}
     \end{subfigure}
     \begin{subfigure}[b]{0.24\textwidth}
         \centering
         \includegraphics[]{figures/03/figs/ecdf_sc2022_unit-featuretime.pdf}
         \caption{Unit propagation}
-        \label{fig:satcomp22_unit}
+        \label{fig:ch03:satcomp22_unit}
     \end{subfigure}
     \begin{subfigure}[b]{0.24\textwidth}
         \centering
         \includegraphics[]{figures/03/figs/ecdf_sc2022_lpTIME.pdf}
         \caption{Linear programming}
-        \label{fig:satcomp22_lp}
+        \label{fig:ch03:satcomp22_lp}
     \end{subfigure}
-    \label{fig:feat_comtimes_2022}
+    \label{fig:ch03:feat_comtimes_2022}
 \end{figure*}
 
 \begin{figure*}[h]
@@ -249,85 +249,85 @@ We use a cluster of 18 nodes, each equipped with 2 AMD EPYC 7543 32-core CPUs wi
         \centering
         \includegraphics[]{figures/03/figs/ecdf_sc2023_Pre-featuretime.pdf}
         \caption{Preliminary}
-        \label{fig:satcomp23_pre}
+        \label{fig:ch03:satcomp23_pre}
     \end{subfigure}
     \centering
     \begin{subfigure}[b]{0.24\textwidth}
         \centering
         \includegraphics[]{figures/03/figs/ecdf_sc2023_Basic-featuretime.pdf}
         \caption{Basic}
-        \label{fig:satcomp23_basic}
+        \label{fig:ch03:satcomp23_basic}
     \end{subfigure}
     \begin{subfigure}[b]{0.24\textwidth}
         \centering
         \includegraphics[]{figures/03/figs/ecdf_sc2023_KLB-featuretime.pdf}
         \caption{KLB}
-        \label{fig:satcomp23_klb}
+        \label{fig:ch03:satcomp23_klb}
     \end{subfigure}
         \begin{subfigure}[b]{0.24\textwidth}
         \centering
         \includegraphics[]{figures/03/figs/ecdf_sc2023_CG-featuretime.pdf}
         \caption{Clause graph}
-        \label{fig:satcomp23_cg}
+        \label{fig:ch03:satcomp23_cg}
     \end{subfigure}
     \centering
     \begin{subfigure}[b]{0.24\textwidth}
         \centering
         \includegraphics[]{figures/03/figs/ecdf_sc2023_cl-featuretime.pdf}
         \caption{Clause learning}
-        \label{fig:satcomp23_cl}
+        \label{fig:ch03:satcomp23_cl}
     \end{subfigure}
     \begin{subfigure}[b]{0.24\textwidth}
         \centering
         \includegraphics[]{figures/03/figs/ecdf_sc2023_ls-gsat-featuretime.pdf}
         \caption{LS: GSAT}
-        \label{fig:satcomp23_ls_gsat}
+        \label{fig:ch03:satcomp23_ls_gsat}
     \end{subfigure}
         \begin{subfigure}[b]{0.24\textwidth}
         \centering
         \includegraphics[]{figures/03/figs/ecdf_sc2023_ls-saps-featuretime.pdf}
         \caption{LS: \gls{saps}/Sparrow}
-        \label{fig:satcomp23_ls_saps}
+        \label{fig:ch03:satcomp23_ls_saps}
     \end{subfigure}
     \centering
     \begin{subfigure}[b]{0.24\textwidth}
         \centering
         \includegraphics[]{figures/03/figs/ecdf_sc2023_sp-featuretime.pdf}
         \caption{Survey propagation}
-        \label{fig:satcomp23_sp}
+        \label{fig:ch03:satcomp23_sp}
     \end{subfigure}
     \begin{subfigure}[b]{0.24\textwidth}
         \centering
         \includegraphics[]{figures/03/figs/ecdf_sc2023_DIAMETER-featuretime.pdf}
         \caption{Diameter}
-        \label{fig:satcomp23_dia}
+        \label{fig:ch03:satcomp23_dia}
     \end{subfigure}
     \begin{subfigure}[b]{0.24\textwidth}
         \centering
         \includegraphics[]{figures/03/figs/ecdf_sc2023_lobjois-featuretime.pdf}
         \caption{Lobjois}
-        \label{fig:satcomp23_lobjois}
+        \label{fig:ch03:satcomp23_lobjois}
     \end{subfigure}
     \begin{subfigure}[b]{0.24\textwidth}
         \centering
         \includegraphics[]{figures/03/figs/ecdf_sc2023_unit-featuretime.pdf}
         \caption{Unit propagation}
-        \label{fig:satcomp23_unit}
+        \label{fig:ch03:satcomp23_unit}
     \end{subfigure}
     \begin{subfigure}[b]{0.24\textwidth}
         \centering
         \includegraphics[]{figures/03/figs/ecdf_sc2023_lpTIME.pdf}
         \caption{Linear programming}
-        \label{fig:satcomp23_lp}
+        \label{fig:ch03:satcomp23_lp}
     \end{subfigure}
-    \label{fig:feat_comtimes_2023}
+    \label{fig:ch03:feat_comtimes_2023}
 \end{figure*}
 
-\autoref{fig:feat_comtimes_2022} and \autoref{fig:feat_comtimes_2023} show the percentage of features computed over the available time budget using the old (depicted in red) and new (depicted in blue) SATzilla tool on the 2022 and 2023 \gls{sat} Competition data, respectively. For simplicity, due to the similarity of the overall results between the two competitions, we draw more detailed insights based on plots from the 2023 edition (\autoref{fig:feat_comtimes_2023}). 
+\cref{fig:ch03:feat_comtimes_2022,fig:ch03:feat_comtimes_2023} show the percentage of features computed over the available time budget using the old (depicted in red) and new (depicted in blue) SATzilla tool on the 2022 and 2023 \gls{sat} Competition data, respectively. For simplicity, due to the similarity of the overall results between the two competitions, we draw more detailed insights based on plots from the 2023 edition (\cref{fig:ch03:feat_comtimes_2023}). 
 
-We first observe that the new tool is able to extract more features than the old one for most feature groups. In particular, we highlight the performance gains on the preliminary feature group (\autoref{fig:satcomp23_pre}), for which the new tool can extract the features for all formulas, compared to less than $80\%$ of the formulas when using the the old tool. We note that for some feature groups, like graph learning (\autoref{fig:satcomp23_cg}), the old tool is able to extract more features compared to the preliminary feature group. This is due to the fact that the old tool extracts the preliminary, basic, KLB and \gls{clg} feature groups together. Therefore, in case computing one of those groups takes a long time, the whole feature extraction fails.
+We first observe that the new tool is able to extract more features than the old one for most feature groups. In particular, we highlight the performance gains on the preliminary feature group (\cref{fig:ch03:satcomp23_pre}), for which the new tool can extract the features for all formulas, compared to less than $80\%$ of the formulas when using the the old tool. We note that for some feature groups, like graph learning (\cref{fig:ch03:satcomp23_cg}), the old tool is able to extract more features compared to the preliminary feature group. This is due to the fact that the old tool extracts the preliminary, basic, KLB and \gls{clg} feature groups together. Therefore, in case computing one of those groups takes a long time, the whole feature extraction fails.
 
-We also note that for KLB and \gls{clg} features there is an advantage for the old version, due to the new SBVA preprocessing method yielding larger formulas than its predecessor \textsc{SATElite} (as in many cases smaller formulas are not always easier to solve). Similarly, the expensive graph-based features (\emph{e.g.}, \autoref{fig:satcomp23_cg} and \autoref{fig:satcomp23_dia}) require more time to extract than smaller formulas. 
+We also note that for KLB and \gls{clg} features there is an advantage for the old version, due to the new SBVA preprocessing method yielding larger formulas than its predecessor \textsc{SATElite} (as in many cases smaller formulas are not always easier to solve). Similarly, the expensive graph-based features (\emph{e.g.}, \cref{fig:ch03:satcomp23_cg,fig:ch03:satcomp23_dia}) require more time to extract than smaller formulas. 
 
 \changed{This is more apparent in the 2022 \gls{sat} Competition, where larger instances were used than in the 2023 \gls{sat} Competition.}
 
@@ -335,26 +335,26 @@ We also note that for KLB and \gls{clg} features there is an advantage for the o
 
 
 \subsection{Satisfiability prediction}
-\label{ssec:satisfiability-prediction}
+\label{ssec:ch03:satisfiability-prediction}
 
 The first downstream task is satisfiability prediction, for which we measure the performance when using features extracted by our tool. 
 
 We use the random forest (RF) classifier from the scikit-learn package to learn the mapping between features (representing \gls{sat} instances) and outputs (satisfiable or unsatisfiable). We optimise the hyperparameters of the RF for one hour using SMAC3~\cite{LinEtAl22} on 10-fold cross-validation of the training data.
 We consider instances from the 2022 and 2023 \gls{sat} Competitions for which we know the satisfiability result (put differently, we omit instances for which the solution is unknown). On each competition, we evaluate the performance of the RF model using 10-fold cross-validation. This results in having outer cross-validation (for evaluation) and inner cross-validation (for training). Such techniques have been previously used by AutoFolio~\cite{LinEtAl15}.
 
-We present the satisfiability prediction accuracy scores in \autoref{fig:sat_prediction}. We see that, by using features extracted via the new tool, we achieve better performance across all instances on both \gls{sat} competitions. Furthermore, we notice that the new tool leads to a higher accuracy gain for satisfiable instances than for unsatisfiable instances. For the latter, the accuracy remains very similar to the one achieved by using the old tool in the 2023 \gls{sat} Competition and slightly dropped for the 2022 \gls{sat} Competition. This might be due to the fact that the unsatisfiable instances are larger on average, thus being more prone to timeouts even when using our new tool, \changed{which goes along with the worse performance in the 2022 \gls{sat} Competition, where the unsatisfiable instances were larger than in the 2023 \gls{sat} Competition}. We point out that such high accuracy was already achieved before for industrial \gls{sat} instances~\cite{DevOSu08}.
+We present the satisfiability prediction accuracy scores in \cref{fig:ch03:sat_prediction}. We see that, by using features extracted via the new tool, we achieve better performance across all instances on both \gls{sat} competitions. Furthermore, we notice that the new tool leads to a higher accuracy gain for satisfiable instances than for unsatisfiable instances. For the latter, the accuracy remains very similar to the one achieved by using the old tool in the 2023 \gls{sat} Competition and slightly dropped for the 2022 \gls{sat} Competition. This might be due to the fact that the unsatisfiable instances are larger on average, thus being more prone to timeouts even when using our new tool, \changed{which goes along with the worse performance in the 2022 \gls{sat} Competition, where the unsatisfiable instances were larger than in the 2023 \gls{sat} Competition}. We point out that such high accuracy was already achieved before for industrial \gls{sat} instances~\cite{DevOSu08}.
 
 
 \begin{figure*}[h]
     \caption[Satisfiability prediction accuracy]{Accuracy of the satisfiability prediction task using a random forest with features extracted by the old (SATzilla 2012) and the new tool (SATzilla 2024). We see an overall higher accuracy for the new tool, which results from higher accuracy on satisfiable instances. On unsatisfiable ones, the accuracy remains the same.}
-    \label{fig:sat_prediction}
+    \label{fig:ch03:sat_prediction}
     \begin{subfigure}[b]{0.49\textwidth}
         \centering
         
 
         \includegraphics[]{figures/03/figs/sat_bar_2022.pdf}
         \caption{2022 \gls{sat} Competition}
-        \label{fig:satpred22}
+        \label{fig:ch03:satpred22}
     \end{subfigure}
     \centering
     \begin{subfigure}[b]{0.49\textwidth}
@@ -363,7 +363,7 @@ We present the satisfiability prediction accuracy scores in \autoref{fig:sat_pre
 
         \includegraphics[]{figures/03/figs/sat_bar_2023.pdf}
         \caption{2023 \gls{sat} Competition}
-        \label{fig:satpred23}
+        \label{fig:ch03:satpred23}
     \end{subfigure}
 \end{figure*}
 
@@ -373,17 +373,17 @@ The second downstream task we investigate is performance prediction, which has i
 \emph{et al.}~\cite{HutEtAl14}. This transformation allows to capture the order of magnitude rather than small variations in the running time. The \gls{epm} then maps instance features to the log-transformed running times, and we aim to minimise the root mean squared error (\gls{rmse}) of the model, which is defined as $\sqrt{\frac{1}{n}\cdot \sum_{i=1}^n (\hat{y}_i-y_i)^2}$ for $n$ predicted running times  $\hat{y}_i$ and ground truth running times  $y_i$. Lower \gls{rmse} scores are better and 0 is the optimal value.
 In line with the previous task, we perform inner and outer cross-validation and optimise the RF's hyperparameters for one hour using SMAC3.
 
-We look into the performance of the \gls{epm} for running time prediction on all solvers from the 2022 and 2023 \gls{sat} Competitions. Here, we do not actually run solvers on instances to record their running times, but rather use the running times reported by the competitions. We display the results for the 10 best solvers from each competition in \autoref{fig:rt_pred} (the results for all solvers can be found in the supplementary material). We see that using the features extracted by the new tool leads to the lower \gls{rmse} for all solvers, compared to using those extracted by the old tool. For some solvers, we observe a significantly lower \gls{rmse}, like Kissat{\_}MAB{\_}prop-no{\_}sym, where using the new tool decreases the \gls{rmse} from 0.84 to 0.69. \autoref{fig:rmse_hists} shows the histogram of the error percentage for all solvers in the 2022 and 2023 \gls{sat} Competitions. We see that for the 2022 competition, the new tool has more instances with error rate lower than $10\%$ compared to the old version. For the 2023 competition, using the features extracted with the new version, more instances are predicted with less than $1\%$ error. Histograms per solver are available in \autoref{sec:rts_hists_per_solver}.
+We look into the performance of the \gls{epm} for running time prediction on all solvers from the 2022 and 2023 \gls{sat} Competitions. Here, we do not actually run solvers on instances to record their running times, but rather use the running times reported by the competitions. We display the results for the 10 best solvers from each competition in \cref{fig:ch03:rt_pred} (the results for all solvers can be found in the supplementary material). We see that using the features extracted by the new tool leads to the lower \gls{rmse} for all solvers, compared to using those extracted by the old tool. For some solvers, we observe a significantly lower \gls{rmse}, like Kissat{\_}MAB{\_}prop-no{\_}sym, where using the new tool decreases the \gls{rmse} from 0.84 to 0.69. \cref{fig:ch03:rmse_hists} shows the histogram of the error percentage for all solvers in the 2022 and 2023 \gls{sat} Competitions. We see that for the 2022 competition, the new tool has more instances with error rate lower than $10\%$ compared to the old version. For the 2023 competition, using the features extracted with the new version, more instances are predicted with less than $1\%$ error. Histograms per solver are available in \cref{sec:rts_hists_per_solver}.
 
 \begin{figure*}[h]
     \caption[RMSE of running time prediction]{Root mean square error (\gls{rmse}) of (log-transformed) running time prediction using a random forest with features extracted by the old (SATzilla 2012; in red) and the new tool (SATzilla 2024; in blue), on \gls{sat} solvers from the 2022 and 2023 \gls{sat} Competitions. The new tool achieves lower \gls{rmse} for all solvers.}
-    \label{fig:rt_pred}
+    \label{fig:ch03:rt_pred}
     \begin{subfigure}[b]{0.99\textwidth}
         \centering
         
         \includegraphics[]{figures/03/figs/rts_bar_2022.pdf}
         \caption{2022 \gls{sat} Competition}
-        \label{fig:rt_pred22}
+        \label{fig:ch03:rt_pred22}
     \end{subfigure}
     \centering
     \begin{subfigure}[b]{0.99\textwidth}
@@ -391,21 +391,21 @@ We look into the performance of the \gls{epm} for running time prediction on all
         
         \includegraphics[]{figures/03/figs/rts_bar_2023.pdf}
         \caption{2023 \gls{sat} Competition}
-        \label{fig:rt_pred23}
+        \label{fig:ch03:rt_pred23}
     \end{subfigure}
 \end{figure*}
 
 
 \begin{figure*}[h]
     \caption[Error percentage histogram of running time prediction]{Histogram of the error percentage of the root mean square error (\gls{rmse}) of (log-transformed) running time prediction using a random forest with features extracted by the old (SATzilla 2012; in red) and the new tool (SATzilla 2024; in blue), on \gls{sat} solvers from the 2022 and 2023 \gls{sat} Competitions. The new tool achieves lower error percentages.}
-    \label{fig:rmse_hists}
+    \label{fig:ch03:rmse_hists}
     \begin{subfigure}[b]{0.49\textwidth}
         \centering
                 
 
         \includegraphics[]{figures/03/figs/acc_rt_pred_sc2022_both.pdf}
         \caption{2022 \gls{sat} Competition}
-        \label{fig:rmse_hist_2022}
+        \label{fig:ch03:rmse_hist_2022}
     \end{subfigure}
     \centering
     \begin{subfigure}[b]{0.49\textwidth}
@@ -414,7 +414,7 @@ We look into the performance of the \gls{epm} for running time prediction on all
 
         \includegraphics[]{figures/03/figs/acc_rt_pred_sc2023_both.pdf}
         \caption{2023 \gls{sat} Competition}
-        \label{fig:rmse_hist_2023}
+        \label{fig:ch03:rmse_hist_2023}
     \end{subfigure}
 \end{figure*}
 
@@ -460,13 +460,13 @@ We then use AutoFolio~\cite{LinEtAl15} as an algorithm selector, which consists 
 
 As algorithm portfolio for the selection, we use the 10 best solvers from each \gls{sat} competition. We train the selector for 8 hours.
 
-\autoref{fig:closed_gap} shows the closed gap results on the 2022 and 2023 \gls{sat} Competitions. Positive closed gap values on both scenarios using both the old and the new tool indicate that, in general, SATzilla features are useful for the algorithm selection task. 
+\cref{fig:ch03:closed_gap} shows the closed gap results on the 2022 and 2023 \gls{sat} Competitions. Positive closed gap values on both scenarios using both the old and the new tool indicate that, in general, SATzilla features are useful for the algorithm selection task. 
 
 Importantly, features extracted with the new tool lead to better closed gap values on both scenarios.
 
-In \autoref{fig:ecdf_as}, we provide ECDF plots showing the fraction of instances solved over time. In the 2022 \gls{sat} Competition scenario, the old version of the tool performs worse than the \gls{sbs} until a budget of approximately 1000 seconds, while the new version of the tool performs similarly to the \gls{sbs}. After 1000 seconds, both versions of the SATzilla features perform similarly. In the 2023 \gls{sat} Competition scenario, the new tool performs better than the old one for budgets between 100 and 1000 seconds. With a budget of less than 10 seconds, the old tool solves more instances. 
+In \cref{fig:ch03:ecdf_as}, we provide ECDF plots showing the fraction of instances solved over time. In the 2022 \gls{sat} Competition scenario, the old version of the tool performs worse than the \gls{sbs} until a budget of approximately 1000 seconds, while the new version of the tool performs similarly to the \gls{sbs}. After 1000 seconds, both versions of the SATzilla features perform similarly. In the 2023 \gls{sat} Competition scenario, the new tool performs better than the old one for budgets between 100 and 1000 seconds. With a budget of less than 10 seconds, the old tool solves more instances. 
 
-Overall, the ECDF plots reflect well what is shown in \autoref{fig:closed_gap}, where we see that the new tool exhibits a few percents higher closed gap value.
+Overall, the ECDF plots reflect well what is shown in \cref{fig:ch03:closed_gap}, where we see that the new tool exhibits a few percents higher closed gap value.
 
 
 
@@ -475,24 +475,24 @@ Overall, the ECDF plots reflect well what is shown in \autoref{fig:closed_gap}, 
     \centering
     \caption[Closed gap values for algorithm selection]{Closed gap values for the algorithm selection task using the old (SATzilla 2012; in red) and the new tool (SATzilla 2024; in blue) on the 2022 and 2023 \gls{sat} Competitions; higher is better.}
     \includegraphics{figures/03/figs/as_bar_2023.pdf}
-    \label{fig:closed_gap}
+    \label{fig:ch03:closed_gap}
 \end{figure}
 
 \begin{figure*}[h]
     \caption[ECDF plots for algorithm selection]{ECDF plots for the algorithm selection task using the old (SATzilla 2012) and the new tool (SATzilla 2024) on the 2022 and 2023 \gls{sat} Competitions.}
-    \label{fig:ecdf_as}
+    \label{fig:ch03:ecdf_as}
     \begin{subfigure}[b]{0.49\textwidth}
         \centering
         \includegraphics[]{figures/03/figs/ecds_af_2022.pdf}
         \caption{2022 \gls{sat} Competition}
-        \label{fig:ecdf_as_2022}
+        \label{fig:ch03:ecdf_as_2022}
     \end{subfigure}
     \centering
     \begin{subfigure}[b]{0.49\textwidth}
         \centering
         \includegraphics[]{figures/03/figs/ecds_af_2023.pdf}
         \caption{2023 \gls{sat} Competition}
-        \label{fig:ecdf_as_2023}
+        \label{fig:ch03:ecdf_as_2023}
     \end{subfigure}
 \end{figure*}
 
@@ -532,7 +532,7 @@ Overall, the ECDF plots reflect well what is shown in \autoref{fig:closed_gap}, 
 
 
 \section{Chapter conclusion}
-\label{sec:conclusions}
+\label{sec:ch03:conclusions}
 
 This chapter introduced an improved version of the well-known SATzilla feature extraction tool, motivated by the need to make feature extraction more robust through better user infrastructure and bug fixes.
 The new version uses up-to-date preprocessing techniques and \gls{sat} solvers, which allow for better representation of \gls{sat} formulae.

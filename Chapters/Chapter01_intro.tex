@@ -1,5 +1,5 @@
 
-\chapter{Introduction}\label{ch:introduction}
+\chapter{Introduction}\label{ch:ch01:introduction}
 
 
 \Gls{ai} has made substantial progress in recent decades, both in research and in practice.
@@ -82,7 +82,7 @@ The chapters answer these questions in sequence.
 \subsection{Better Features}
 
 The first part of the dissertation focuses on the representations that make empirical performance prediction possible.
-Chapter~\ref{ch:rev_SATzilla}, based on
+\cref{ch:ch03:rev_SATzilla}, based on
 \begin{itemize}
     \item \fullcite{ShaHoo24}
 \end{itemize}
@@ -90,7 +90,7 @@ contributes a modernised feature extraction tool that replaces outdated preproce
 The chapter shows that this infrastructure work is not merely engineering maintenance: updating the feature extractor leads to better downstream performance in satisfiability prediction, runtime prediction, and automated algorithm selection.
 In this sense, the chapter establishes a central theme of the dissertation: better empirical performance prediction often begins with making the inputs to the model reliable and informative.
 
-Chapter~\ref{ch:dim_red}, based on
+\cref{ch:ch04:dim_red}, based on
 \begin{itemize}
     \item \fullcite{ShaEtAl25}
 \end{itemize}
@@ -99,7 +99,7 @@ Rather than judging dimensionality reduction only by generic reconstruction or v
 The results show strong performance complementarity: methods that work well for one task, dimensionality, or data regime may be poor choices for another.
 This makes dimensionality reduction itself an algorithm selection problem and motivates task-aware representation choices.
 
-Chapter~\ref{ch:dymbo}, based on
+\cref{ch:ch05:dymbo}, based on
 \begin{itemize}
     \item \fullcite{ShaEtAl25b}
 \end{itemize}
@@ -112,19 +112,19 @@ Together with the preceding chapters, this shows that empirical performance pred
 \subsection{Better Models}
 
 The second part turns from representation to predictive modelling.
-Chapter~\ref{ch:gnns_epms}, based on
+\cref{ch:ch06:gnns_epms}, based on
 \begin{itemize}
     \item \fullcite{ShaHoo25b}
 \end{itemize}
 contributes a benchmark for graph-based \gls{sat} empirical performance prediction and compares multiple graph representations and neural architectures against standard tabular models trained on hand-crafted SATzilla features.
 Its main contribution is to show that learned graph representations can be competitive for performance prediction and algorithm selection, and can in some settings outperform hand-crafted features.
-This provides a complementary answer to the feature-engineering work in Chapter~\ref{ch:rev_SATzilla}: instead of only improving hand-crafted features, we can also learn representations from the structure of the instance itself.
+This provides a complementary answer to the feature-engineering work in \cref{ch:ch03:rev_SATzilla}: instead of only improving hand-crafted features, we can also learn representations from the structure of the instance itself.
 
 The automated machine learning chapter studies empirical performance prediction in automated machine learning.
 Its role in the thesis is to connect the algorithm selection and optimisation themes to machine learning pipelines, where the objects being selected are not solvers for a single combinatorial problem but learning algorithms and their configurations.
 This chapter strengthens the cross-domain argument of the dissertation: the same core difficulties of representation, prediction, and decision making appear in \gls{sat}, black-box optimisation, and automated machine learning, even though the data structures and performance measures differ.
 
-Chapter~\ref{ch:noisy_oracle}, based on
+\cref{ch:ch08:noisy_oracle}, based on
 \begin{itemize}
     \item \fullcite{ShaHoo25}
 \end{itemize}
@@ -135,7 +135,7 @@ This gives a more precise design principle for surrogate modelling: models shoul
 \subsection{Better Insights}
 
 The third part addresses the interpretability and usability of empirical performance prediction.
-Chapter~\ref{sec:dist_explain}, based on
+\cref{sec:ch09:dist_explain}, based on
 \begin{itemize}
     \item \fullcite{ShaHoo25c}
 \end{itemize}
@@ -144,7 +144,7 @@ It introduces a tree-based XGBoost approach for parametric distribution predicti
 This makes it possible to identify which instance features affect the scale of algorithm performance and which affect the shape and tail behaviour of the distribution.
 The chapter therefore extends empirical performance prediction from asking only how long an algorithm is expected to run to asking how uncertain, variable, and risky its behaviour may be.
 
-Chapter~\ref{ch:asf}, based on
+\cref{ch:ch10:asf}, based on
 \begin{itemize}
     \item \fullcite{ShaHoo25d}
 \end{itemize}

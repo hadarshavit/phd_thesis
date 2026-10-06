@@ -1,11 +1,11 @@
-\chapter{Task-driven Assessment of Dimensionality Reduction Methods for Machine Learning and Black-Box Optimisation}\label{ch:dim_red}
+\chapter{Task-driven Assessment of Dimensionality Reduction Methods for Machine Learning and Black-Box Optimisation}\label{ch:ch04:dim_red}
 
 \section{Introduction}
 \label{sec:ch04:intro}
 High-dimensional data is ubiquitous in numerous application domains of machine learning and black-box optimisation.
 
 
-In areas ranging from computer vision~\citep{SchEtAl15}, genome sequencing~\citep{VanEtAl22} and anomaly detection~\citep{TalEtAlNoYear} to engineering~\citep{PreEtAlNoYear}, hyperparameter optimisation~\citep{SehEtAl22} and neural architecture search~\citep{ElsEtAl19}, complex datasets with a large number of features defining 
+In areas ranging from computer vision~\citep{SchEtAl15}, genome sequencing~\citep{VanEtAl22} and anomaly detection~\citep{TalEtAl21} to engineering~\citep{PreEtAl24}, hyperparameter optimisation~\citep{SehEtAl22} and neural architecture search~\citep{ElsEtAl19}, complex datasets with a large number of features defining 
 
 a space to be searched for desirable design choices or solutions 
 need to be handled effectively, in order to ensure that machine learning and  black-box optimisation algorithms applied to them are as accurate, efficient and scalable as possible. 
@@ -122,13 +122,13 @@ In the context of black-box optimisation, depending on the setting at hand, we o
 
 Therefore, our analysis aims to provide insights into how these methods leverage their working mechanisms depending on the task at hand, highlighting the crucial need for a thorough understanding of the intended use of the reduced space before choosing the appropriate method.
 
-The remainder of this paper is organised as follows: in \autoref{sec:dim_red}, we give an overview of dimensionality reduction, position our study in the broader related work context, introduce the methods selected for benchmarking, and give details on the transformation scheme required for dimensionality reduction methods to operate in the context of optimisation.
-In \autoref{sec:tasks}, we outline our methodology and present the four tasks designed to assess the performance of dimensionality reduction methods.
-In \autoref{sec:exp_setup}, we introduce the benchmark problem suites used in our empirical investigation and provide details on the setup of the experiments.
-We present our results in \autoref{sec:ch04:res}, analyse the running times of dimensionality reduction methods in \autoref{sec:rt}, critically discuss our findings in \autoref{sec:disc}, and provide concluding remarks in \autoref{sec:ch04:concl}.
+The remainder of this paper is organised as follows: in \cref{sec:ch04:dim_red}, we give an overview of dimensionality reduction, position our study in the broader related work context, introduce the methods selected for benchmarking, and give details on the transformation scheme required for dimensionality reduction methods to operate in the context of optimisation.
+In \cref{sec:ch04:tasks}, we outline our methodology and present the four tasks designed to assess the performance of dimensionality reduction methods.
+In \cref{sec:ch04:exp_setup}, we introduce the benchmark problem suites used in our empirical investigation and provide details on the setup of the experiments.
+We present our results in \cref{sec:ch04:res}, analyse the running times of dimensionality reduction methods in \cref{sec:ch04:rt}, critically discuss our findings in \cref{sec:ch04:disc}, and provide concluding remarks in \cref{sec:ch04:concl}.
 
 \section{Dimensionality reduction}
-\label{sec:dim_red}
+\label{sec:ch04:dim_red}
 
 
 This section provides the necessary background of the concept of dimensionality reduction, including related work, descriptions of methods selected for this study, and the transformation scheme used for the optimisation tasks.
@@ -275,10 +275,10 @@ Feature extraction techniques are themselves categorised into supervised and uns
 
 
 
-In~\autoref{tab:dimensionality reduction-methods}, we list a range of supervised and unsupervised dimensionality reduction methods considered in this work; all of them are based on feature extraction.
+In~\cref{tab:ch04:dimensionality reduction-methods}, we list a range of supervised and unsupervised dimensionality reduction methods considered in this work; all of them are based on feature extraction.
 
 
-Our criteria for selecting these methods for our study are outlined in \autoref{ssec:dimensionality reduction-methods}.
+Our criteria for selecting these methods for our study are outlined in \cref{ssec:ch04:dimensionality reduction-methods}.
 
 
 
@@ -311,7 +311,7 @@ operating on the pairs $(\T(\mathbf{x}),y)$ for machine learning and $(\T(\mathb
 
 
 \subsection{Related work}
-\label{sec:rel-work}
+\label{sec:ch04:rel-work}
 
 
 
@@ -347,7 +347,7 @@ At the same time, they emphasise the importance dimensionality reduction methods
 
 
 \subsection{Methods assessed in this work}
-\label{ssec:dimensionality reduction-methods}
+\label{ssec:ch04:dimensionality reduction-methods}
 
 
 \begin{table*}
@@ -356,7 +356,7 @@ At the same time, they emphasise the importance dimensionality reduction methods
 
 
     }
-    \label{tab:dimensionality reduction-methods}
+    \label{tab:ch04:dimensionality reduction-methods}
     \small{
     \begin{tabular}{cccc} 
         \toprule
@@ -399,7 +399,7 @@ At the same time, they emphasise the importance dimensionality reduction methods
 We assess the effectiveness of 16 different feature extraction methods, 
 
 covering unsupervised and supervised as well as linear and non-linear methods.
-We first outline the working mechanisms of these dimensionality reduction methods, an overview of which is given in~\autoref{tab:dimensionality reduction-methods}.
+We first outline the working mechanisms of these dimensionality reduction methods, an overview of which is given in~\cref{tab:ch04:dimensionality reduction-methods}.
 
 \begin{itemize}
     \item \textbf{Partial least squares (PLS) regression}~\citep{DeeEtAl90} 
@@ -458,9 +458,9 @@ All are accessible via Python packages that require only CPU computation and are
 
 
 A crucial criterion for choosing a method for the study was the possibility of transforming inputs into a lower-dimensional space independently of training the method itself, \emph{i.e.,} we selected only those methods for which the \texttt{transform} method was natively supported in the original implementation on top of the standard \texttt{fit\_transform}.
-Consequently, we do not include t-SNE~\citep{VanHin08} nor DensMAP~\citep{NarEtAlNoYear}, neither of which supports \texttt{transform}.
+Consequently, we do not include t-SNE~\citep{VanHin08} nor DensMAP~\citep{NarEtAl21}, neither of which supports \texttt{transform}.
 Furthermore, we do not consider methods such as ivis~\citep{SzuEtAl19} and UMAP~\citep{SaiEtAl21}, due to their prohibitively high computational cost in the task of optimiser performance evaluation.
-Methods such as NMF~\citep{LeeSeuNoYear} and LatentDA~\citep{BleEtAlNoYear} were also excluded, as they do not support negative values in the data.
+Methods such as NMF~\citep{LeeSeu00} and LatentDA~\citep{BleEtAl03} were also excluded, as they do not support negative values in the data.
 We do not consider linear discriminant analysis (LDA), because it does not work for the regression task.
 Finally, we exclude autoencoder-based dimensionality reduction approaches, since they do not have out-of-the-box readily available implementation and operate on a considerably different scale in terms of compute time compared to the other methods considered in this study.
 
@@ -475,7 +475,7 @@ Finally, we exclude autoencoder-based dimensionality reduction approaches, since
 
 
 \subsection{Transforming unsupervised into supervised}
-\label{ssec:transform}
+\label{ssec:ch04:transform}
 
 
 
@@ -518,7 +518,7 @@ For each of the unsupervised feature extraction methods that we benchmark, the i
 
 
 \section{Assessment methodology}
-\label{sec:tasks}
+\label{sec:ch04:tasks}
 In this section, we introduce four different tasks to assess the effectiveness of dimensionality reduction methods: two for machine learning and two for black-box optimisation.
 
 The tasks are specifically designed to benchmark different aspects of dimensionality reduction methods, offering complementary views into these two different use-cases.
@@ -549,7 +549,7 @@ The tasks are specifically designed to benchmark different aspects of dimensiona
 
 \subsection{Machine learning}
 \subsubsection*{Machine learning task 1: Clustering ability.}
-\label{sec:method-ml-task1}
+\label{sec:ch04:method-ml-task1}
 
 In this task, we investigate how the different dimensionality reduction methods affect the clustering of the samples in datasets in the reduced space, \emph{i.e.}, the final performance of an unsupervised machine learning approach.
 By being able to cluster the samples, we verify whether a dimensionality reduction method preserves 
@@ -569,7 +569,7 @@ We measure the quality of the clusters $C(\T(\mathcal{D}_{\text{test}}))$ using 
 
 
 \subsubsection*{Machine learning task 2: Tabular classification accuracy.}
-\label{sec:method-ml-task2}
+\label{sec:ch04:method-ml-task2}
 
 In this task, we assess the effect of 
 
@@ -583,7 +583,7 @@ Performance is measured using standard metrics such as accuracy, balanced accura
 \subsection{Black-box optimisation}
 
 \subsubsection*{Black-box optimisation task 1: Target function approximation.}
-\label{ssec:method-bbo-task2}
+\label{ssec:ch04:method-bbo-task2}
 
 In this task, we assess whether dimensionality reduction methods are able to capture information about the input $\mathbf{x}$ of the black-box problem relevant for accurate prediction of its function value $y$ in a lower-dimensional manifold.
 
@@ -605,7 +605,7 @@ to quantify information loss.
 
 
 \subsubsection*{Black-box optimisation task 2: Optimiser performance.}
-\label{ssec:method-bbo-task3}
+\label{ssec:ch04:method-bbo-task3}
 In this task, we assess how the optimisation process is affected by operating in the reduced space using a Bayesian optimisation algorithm.
 
 Bayesian optimisation~\citep{Garnett23} 
@@ -744,13 +744,13 @@ We measure the performance of Bayesian optimisation assisted by different dimens
 
 
 \section{Setup of experiments}
-\label{sec:exp_setup}
+\label{sec:ch04:exp_setup}
 
 
 
 
 
-We outline the setup used for our experiments, with details on benchmark problems, concrete design choices and implementation details for the machine learning tasks in \autoref{sec:ml_setup}, and for the  black-box optimisation tasks in \autoref{sec:bbo_setup}.
+We outline the setup used for our experiments, with details on benchmark problems, concrete design choices and implementation details for the machine learning tasks in \cref{sec:ch04:ml_setup}, and for the  black-box optimisation tasks in \cref{sec:ch04:bbo_setup}.
 We conducted our experiments on two computer clusters.
 For the machine learning tasks, we use Kathleen cluster, in which each node has two AMD EPYC 7543 32-Core processors with 512MB of L3 cache and 1TB of RAM running Rocky Linux 9.
 For the black-box optimisation tasks, we used the CLAIX-2023 cluster, in which each node is equipped with 2 Intel Xeon 8468 Sapphire CPUs, 210MB L3 cache and 256GB RAM, running Rocky Linux 8. The code to reproduce our experiments, including the analysis is available at our GitHub repository\footnote{\url{https://github.com/hadarshavit/bench_dim_red_submission_code}}.
@@ -766,11 +766,11 @@ For methods tailored to binary inputs such as Bernoulli RBM, we use ordinal enco
 
 
 \subsection{Machine learning experiments}
-\label{sec:ml_setup}
+\label{sec:ch04:ml_setup}
 
 \subsubsection*{Benchmarks}
 
-We use the OpenML~CC-18~\citep{BisEtAl21} and the classification datasets from the \gls{automl} Benchmark~\citep{GijEtAl24b}, 
+We use the OpenML~CC-18~\citep{BisEtAl21} and the classification datasets from the \gls{automl} Benchmark~\citep{GijEtAl24}, 
 
 a well-known dataset collection used for benchmarking tabular machine learning algorithms. The collection contains various tabular classification tasks from different domains, with different sizes, numbers of classes and other characteristics. 
 
@@ -806,7 +806,7 @@ Due to limited additional insight they bring, we do not discuss them in detail i
 \subsubsection*{Machine learning task 2: Tabular classification accuracy.}
 We consider the following three classification algorithms that are traditionally used for tabular data~\citep{GriEtAl22}: random forest, gradient boosting and multi-layer perceptron (\gls{mlp}), all in their scikit-learn~\citep{PedEtAl11} implementations.
 
-We optimise all classifiers using SMAC3~\citep{LinEtAl22}, a popular hyperparameter optimiser, with a budget of 30 evaluations. We provide the configuration spaces in~\autoref{app:cs}.
+We optimise all classifiers using SMAC3~\citep{LinEtAl22}, a popular hyperparameter optimiser, with a budget of 30 evaluations. We provide the configuration spaces in~\cref{app:cs}.
 
 
 
@@ -817,7 +817,7 @@ We optimise all classifiers using SMAC3~\citep{LinEtAl22}, a popular hyperparame
 
 
 \subsection{Black-box optimisation experiments}
-\label{sec:bbo_setup}
+\label{sec:ch04:bbo_setup}
 
 
 
@@ -922,20 +922,20 @@ The total Bayesian optimisation budget is set at $300$ evaluations including the
 \label{sec:ch04:res}
 
 
-We present and discuss selected results from our experiments in \autoref{sec:res-ml} for the machine learning tasks and in \autoref{sec:res-bbo} for the black-box optimisation tasks.
+We present and discuss selected results from our experiments in \cref{sec:ch04:res-ml} for the machine learning tasks and in \cref{sec:ch04:res-bbo} for the black-box optimisation tasks.
 Full results across all different settings are provided in the code repository\footnote{\url{https://github.com/hadarshavit/bench_dim_red_submission_code}}.
 
 
 
 \subsection{Machine learning tasks}
-\label{sec:res-ml}
+\label{sec:ch04:res-ml}
 
 
 
 \subsubsection*{Machine learning task 1: Clustering ability}
 
 
-For the unsupervised machine learning task (\emph{i.e.,} clustering), we look at the results aggregated over all datasets for the two metrics (homogeneity and completeness) with different target dimensionalities $k$ in~\autoref{fig:cluster_all_agg}. 
+For the unsupervised machine learning task (\emph{i.e.,} clustering), we look at the results aggregated over all datasets for the two metrics (homogeneity and completeness) with different target dimensionalities $k$ in~\cref{fig:ch04:cluster_all_agg}. 
 Regarding the cluster homogeneity metric, we first observe only small differences between the different target dimensionalities.
 Most methods are unable to preserve cluster homogeneity, as the corresponding values of this metric are mostly below $0.3$.
 This means that the data points within any one cluster created in the reduced space often do not have the same label as other members of the same cluster.
@@ -1021,10 +1021,10 @@ thereby retaining the same assignment of elements to clusters both in the origin
 Performance of different dimensionality reduction methods aggregated across all OpenML~CC-18 datasets, for different target dimensionalities $k$, in terms of (a-d) cluster homogeneity and (e-h) cluster completeness on \textbf{machine learning task 1: clustering ability}; higher is better. Homogeneity measures whether each cluster contains samples from the same true class; we observe very small homogeneity differences between dimensionality reduction methods for different target dimensionalities. Completeness quantifies whether all samples belonging to the same true class are in the same cluster; we observe a slight improvement in performance measured by completeness as the target dimensionality increases.
 
 }
-\label{fig:cluster_all_agg}
+\label{fig:ch04:cluster_all_agg}
 \end{figure}
 
-We now investigate the effect of input dimensionality by grouping the datasets into three categories based on their number of features: low- (up to 60 features), medium- (60–200 features), and high-dimensional datasets (more than 200 features). The results are presented in \autoref{fig:cluster_homogeneity_dataset_sizes}.
+We now investigate the effect of input dimensionality by grouping the datasets into three categories based on their number of features: low- (up to 60 features), medium- (60–200 features), and high-dimensional datasets (more than 200 features). The results are presented in \cref{fig:ch04:cluster_homogeneity_dataset_sizes}.
 We observe that LLE performs increasingly well on both metrics as the input dimensionality grows, reaching its best performance on medium-dimensional datasets.
 
 
@@ -1084,7 +1084,7 @@ Performance of different dimensionality reduction methods on low-, medium- and h
 
 
 }
-\label{fig:cluster_homogeneity_dataset_sizes}
+\label{fig:ch04:cluster_homogeneity_dataset_sizes}
 \end{figure}
 
 
@@ -1095,7 +1095,7 @@ Performance of different dimensionality reduction methods on low-, medium- and h
 
 For the supervised machine learning task (\emph{i.e.,} prediction), 
 
-we begin by analysing the results aggregated across all datasets and different machine learning models (random forest, gradient boosting, \gls{mlp}) for varying target dimensionalities $k$, as shown in \autoref{fig:ml_pred_all}.
+we begin by analysing the results aggregated across all datasets and different machine learning models (random forest, gradient boosting, \gls{mlp}) for varying target dimensionalities $k$, as shown in \cref{fig:ch04:ml_pred_all}.
 Across all models and methods, we observe that accuracy increases with the target dimensionality. 
 
 
@@ -1168,7 +1168,7 @@ Overall, while most methods achieve comparable accuracy, LoLP consistently perfo
 Performance of different dimensionality reduction methods aggregated across all OpenML~CC-18 datasets, for different target dimensionalities $k$ and for different machine learning models used for classification (random forest, gradient boosting, \gls{mlp}), in terms of accuracy on \textbf{machine learning task 2: tabular classification accuracy}; higher is better. Bernoulli RBM performs consistently bad across all settings, followed by Gaussian and sparse random projections, while LoLP exhibits a consistent slight performance edge over other methods.
 
 }
-\label{fig:ml_pred_all}
+\label{fig:ch04:ml_pred_all}
 \end{figure}
 
 We conclude our analysis of the machine learning tasks by examining the results of the prediction task across different dataset sizes, following the same procedure as for the clustering task. We fix the target dimensionality to $k=5$.
@@ -1224,12 +1224,12 @@ In contrast, PCA (Linear) and PCA (Polynomial) perform better than other PCA var
 Performance of different dimensionality reduction methods on low-, medium- and high-dimensional OpenML~CC-18 datasets, all reduced to target dimensionality $k = 5$, in terms of accuracy on \textbf{machine learning task 2: tabular classification accuracy}, where classification is done using different machine learning models (random forest, gradient boosting, \gls{mlp}); higher is better. The performance of Bernoulli RBM and Gaussian and sparse random projection degrades even further as the dataset dimensionality increases, regardless of the machine learning model used for classification. The differences induced by the choice of the machine learning model are generally negligible for low-, medium- and high-dimensional datasets alike.
 
 }
-\label{fig:ml_pred_sizes}
+\label{fig:ch04:ml_pred_sizes}
 \end{figure}
 
 
 \subsection{Black-box optimisation tasks}
-\label{sec:res-bbo}
+\label{sec:ch04:res-bbo}
 
 \subsubsection*{Black-box optimisation task 1: Target function approximation}
 
@@ -1268,7 +1268,7 @@ Performance of different dimensionality reduction methods on low-, medium- and h
 
 
     }
-    \label{fig:res-bbo-task1_red_dim_inpt_dim}
+    \label{fig:ch04:res-bbo-task1_red_dim_inpt_dim}
 \end{figure}
 
 
@@ -1276,7 +1276,7 @@ We focus on a selection of representative aggregated results to simplify analysi
 We start by looking into the results on synthetic benchmarks for black-box optimisation task 1.
 
 
-First, we examine the effect of varying the target dimensionality $k$ in \autoref{fig:res-bbo-task1_red_dim_inpt_dim}, keeping the input dimensionality fixed at $D = 120$ and the initial sample size at $N = 100$.
+First, we examine the effect of varying the target dimensionality $k$ in \cref{fig:ch04:res-bbo-task1_red_dim_inpt_dim}, keeping the input dimensionality fixed at $D = 120$ and the initial sample size at $N = 100$.
 Across all target dimensionalities, and particularly in the low-dimensional setting, PLS regression consistently performs best. 
 This aligns with expectations, as PLS components are explicitly optimised to maximise the predictive power of the target variables, which is especially suitable when dimensionality reduction is used as a preprocessing step for regression. 
 
@@ -1327,12 +1327,12 @@ As the target dimensionality increases, PCA (RBF) gradually catches up and event
 
 
     }
-    \label{fig:res-bbo-task1_inpt_dim}
+    \label{fig:ch04:res-bbo-task1_inpt_dim}
 \end{figure}
 
 
 
-Second, we look into the effect of varying the input dimensionality $D$, keeping the target dimensionality fixed at $k = 20$ and the initial sample size at $N = 100$. This is illustrated in~\autoref{fig:res-bbo-task1_inpt_dim}.
+Second, we look into the effect of varying the input dimensionality $D$, keeping the target dimensionality fixed at $k = 20$ and the initial sample size at $N = 100$. This is illustrated in~\cref{fig:ch04:res-bbo-task1_inpt_dim}.
 
 
 As expected, the variance of all methods decreases with lower input dimensionality, reflecting the reduced complexity of the search space. In this setting (up to ~120 input dimensions), PLS regression consistently outperforms other methods, leveraging its ability to extract components that are directly predictive of the targets. Conversely, for higher input dimensionalities, PCA (RBF) becomes the dominant method, likely because it captures more of the underlying variance and non-linear structure that PLS regression cannot exploit efficiently in very high-dimensional spaces. Together with previous findings, this suggests that PLS regression is best when both input and output dimensions are small, while PCA (RBF) is more suitable for high-dimensional settings.
@@ -1394,11 +1394,11 @@ As expected, the variance of all methods decreases with lower input dimensionali
 
 
     }
-    \label{fig:res-bbo-task2_samp_sizes}
+    \label{fig:ch04:res-bbo-task2_samp_sizes}
 \end{figure}
 
 
-We now analyse the effect of varying initial sample sizes for training dimensionality reduction methods. \autoref{fig:res-bbo-task2_samp_sizes} shows the results aggregated across all different initial sample sizes ($N \in \{100, 200, 500, 1000\}$) for two settings: low-dimensional inputs ($D = 40$, target dimensionality $k = 5$; figures a–d) and high-dimensional inputs ($D = 1000$, target dimensionality $k = 40$; figures e–h).
+We now analyse the effect of varying initial sample sizes for training dimensionality reduction methods. \cref{fig:ch04:res-bbo-task2_samp_sizes} shows the results aggregated across all different initial sample sizes ($N \in \{100, 200, 500, 1000\}$) for two settings: low-dimensional inputs ($D = 40$, target dimensionality $k = 5$; figures a–d) and high-dimensional inputs ($D = 1000$, target dimensionality $k = 40$; figures e–h).
 
 For the low-dimensional setting ($D = 40$), performance is largely stable across different initial sample sizes. This stability likely arises due to the fact that even the smallest initial sample size already exceeds the number of input dimensions, providing sufficient information for reliable component extraction.
 In contrast, for high-dimensional inputs ($D = 1000$), variance decreases noticeably as the initial sample size grows. With $1000$ samples used for dimensionality reduction training, the variance approaches levels observed in the low-dimensional case. This indicates that, although the dimensionality reduction methods are designed to work with limited data, they still depend on sufficient initial sample size (especially when input dimensionality is large) to produce stable and reliable results in predictive tasks.
@@ -1460,16 +1460,16 @@ In contrast, for high-dimensional inputs ($D = 1000$), variance decreases notice
 
 
     }
-    \label{fig:res-bbo-task1_real}
+    \label{fig:ch04:res-bbo-task1_real}
 \end{figure}
 
-So far, our assessment has focused on synthetic benchmarks for black-box optimisation. \autoref{fig:res-bbo-task1_real} shows the results on real-world benchmarks. Figures (a–d) illustrate performance across varying target dimensionalities, with the initial sample size fixed at $N = 100$ (note that input dimensionality is determined by the benchmark and cannot be controlled). Across all target dimensionalities, PLS regression consistently outperforms other methods, reflecting its ability to extract components that are directly predictive of the target variables.
+So far, our assessment has focused on synthetic benchmarks for black-box optimisation. \cref{fig:ch04:res-bbo-task1_real} shows the results on real-world benchmarks. Figures (a–d) illustrate performance across varying target dimensionalities, with the initial sample size fixed at $N = 100$ (note that input dimensionality is determined by the benchmark and cannot be controlled). Across all target dimensionalities, PLS regression consistently outperforms other methods, reflecting its ability to extract components that are directly predictive of the target variables.
 Figures (e–g) show the effect of varying the initial sample size while keeping the target dimensionality fixed at $k = 5$. Similar to the synthetic experiments, performance is relatively comparable across methods at smaller initial sample sizes, likely because most real-world benchmarks are high-dimensional, and small initial sample sizes limit the ability of the methods to extract reliable components. At an initial sample size of $N = 1000$, however, PLS regression clearly emerges as the best-performing method, confirming that adequate initial sample size is crucial for its predictive advantage in real-world, high-dimensional tasks.
 
 
 \subsubsection*{Black-box optimisation task 2: Optimiser performance}
 
-We now focus on the results of black-box optimisation task 2, where Bayesian optimisation is assisted by the dimensionality reduction methods. As in the previous task, we vary the target dimensionality $k$, while fixing both the initial sample size to $N = 100$ and the original input dimensionality to $D = 120$. The aggregated results across all synthetic benchmark problems are shown in \autoref{fig:res-bbo-task2_red_dim}.
+We now focus on the results of black-box optimisation task 2, where Bayesian optimisation is assisted by the dimensionality reduction methods. As in the previous task, we vary the target dimensionality $k$, while fixing both the initial sample size to $N = 100$ and the original input dimensionality to $D = 120$. The aggregated results across all synthetic benchmark problems are shown in \cref{fig:ch04:res-bbo-task2_red_dim}.
 In contrast to the previous black-box optimisation task, PCA (RBF) consistently exhibits best performance across all target dimensionalities. Interestingly, PCA (Cosine) shows a noticeable improvement compared to its performance in the previous task, although it still falls short of PCA (RBF).
 
 In contrast to relatively good performance of LLE in the machine learning task 1 (clustering ability), it is consistently the worst performing method in this task, closely followed by Bernoulli RBM for the highest target dimensionality.
@@ -1510,10 +1510,10 @@ In contrast to relatively good performance of LLE in the machine learning task 1
 
 
     }
-    \label{fig:res-bbo-task2_red_dim}
+    \label{fig:ch04:res-bbo-task2_red_dim}
 \end{figure}
 
-Next, we analyse the effect of varying input dimensionalities $D$ while fixing the initial sample size at $N = 100$ and the target dimensionality at $k = 20$.~\autoref{fig:res-bbo-task2_diff_dims} shows the results aggregated across all synthetic benchmark problems. Across all input dimensionalities, PCA (RBF) consistently outperforms the other methods, confirming its robustness in this task.
+Next, we analyse the effect of varying input dimensionalities $D$ while fixing the initial sample size at $N = 100$ and the target dimensionality at $k = 20$.~\cref{fig:ch04:res-bbo-task2_diff_dims} shows the results aggregated across all synthetic benchmark problems. Across all input dimensionalities, PCA (RBF) consistently outperforms the other methods, confirming its robustness in this task.
 Interestingly, unlike in black-box optimisation task 1 (target function approximation, which can also be seen as performance prediction from the point of view of empirical performance models~\citep{HutEtAl14}), where PLS regression excelled at lower input dimensionalities, here it performs better on higher-dimensional inputs on average. This shift likely reflects the difference in task objectives: in Bayesian optimisation, capturing broader input-space structure becomes more important as dimensionality increases, allowing PLS regression to extract useful predictive directions even without low-dimensional constraints.
 Additionally, PCA (Cosine) shows improved performance across all input dimensionalities compared to the previous task, though it still remains slightly below PCA (RBF), suggesting that kernel-based PCA variants generally benefit more from the unsupervised optimisation setting.
 
@@ -1565,10 +1565,10 @@ Last, LLE exhibits consistent poor performance, in line with the previous findin
 
 
     }
-    \label{fig:res-bbo-task2_diff_dims}
+    \label{fig:ch04:res-bbo-task2_diff_dims}
 \end{figure}
 
-We further examine the effect of varying initial sample sizes $N$ on performance, as shown in \autoref{fig:res-bbo-task2_samples}. Figures (a–d) correspond to low-dimensional inputs ($D = 40$) with target dimensionality fixed at $k = 5$. In this setting, PCA (RBF) generally performs best, although PCA (Cosine) competes closely at small initial sample sizes, suggesting that with limited data, the choice of kernel can influence the stability of the projection.
+We further examine the effect of varying initial sample sizes $N$ on performance, as shown in \cref{fig:ch04:res-bbo-task2_samples}. Figures (a–d) correspond to low-dimensional inputs ($D = 40$) with target dimensionality fixed at $k = 5$. In this setting, PCA (RBF) generally performs best, although PCA (Cosine) competes closely at small initial sample sizes, suggesting that with limited data, the choice of kernel can influence the stability of the projection.
 Figures (e–h) show the results for high-dimensional inputs ($D = 1000$) with target dimensionality fixed at $k = 40$. Here, PLS regression performs comparably to PCA (RBF) when the initial sample size is large, indicating that with sufficient data, supervised methods can extract predictive directions even in very high-dimensional spaces, narrowing the gap with unsupervised methods.
 \begin{figure}
     \centering
@@ -1625,11 +1625,11 @@ Figures (e–h) show the results for high-dimensional inputs ($D = 1000$) with t
 
 
     }
-    \label{fig:res-bbo-task2_samples}
+    \label{fig:ch04:res-bbo-task2_samples}
 \end{figure}
 
 
-Finally, we look into the results on real-world benchmark problems in~\autoref{fig:res-bbo-task2-real-world}, which paint a considerably different picture than synthetic benchmarks.
+Finally, we look into the results on real-world benchmark problems in~\cref{fig:ch04:res-bbo-task2-real-world}, which paint a considerably different picture than synthetic benchmarks.
 In Figures (a-d) we investigate the impact of varying target dimensionality $k$ while keeping the initial sample size fixed at $N = 100$. 
 Unlike synthetic benchmarks where higher value of target dimensionality allowed for a relatively consistent performance improvement, here we see more complex optimisation dynamics, with highly variable performance across methods.
 At the lowest target dimensionality we observe the most diverse performance of all methods, and the rapid convergence followed by plateaus suggests that most of the intrinsic information in dimension $5$ is captured early on in the optimisation process.
@@ -1710,15 +1710,15 @@ Finally, through high variability of observed behaviours across all settings, we
 
 
     }
-    \label{fig:res-bbo-task2-real-world}
+    \label{fig:ch04:res-bbo-task2-real-world}
 \end{figure}
 
 
 \section{Running times}
-\label{sec:rt}
+\label{sec:ch04:rt}
 
 
-In~\autoref{fig:res-rt} we present the training and transformation running times of the dimensionality reduction methods for 2 selected OpenML datasets 
+In~\cref{fig:ch04:res-rt} we present the training and transformation running times of the dimensionality reduction methods for 2 selected OpenML datasets 
 
 used in machine learning tasks 1 and 2: one with a lower dimensionality and a high number of elements, and one with a higher dimensionality and a low number of elements.
 
@@ -1774,13 +1774,13 @@ We observe that Gaussian and sparse random projections consistently incur low ru
     Running times in terms of CPU hours for dimensionality reduction training (a, c) and transformation (b, d) of OpenML datasets 9985 (51 features and 6618 elements) and 9981 (856 features and 1080 elements).
 
     }
-    \label{fig:res-rt}
+    \label{fig:ch04:res-rt}
 \end{figure}
 
 
 
 \section{Discussion}
-\label{sec:disc}
+\label{sec:ch04:disc}
 
 
 Our comprehensive assessment of dimensionality reduction methods reveals fundamental differences in how the benchmarked methods perform in machine learning and black-box optimisation contexts.
