@@ -182,7 +182,7 @@ A higher \gls{cg} score indicates stronger selection performance, with \gls{cg} 
 \section{Setup of experiments}
 
 \subsection{Datasets}
-We created the largest algorithm-selection scenario for \gls{sat} solvers to date. We collected all \gls{sat} Competition instances via GBD~\citep{IseJab24} and added all instances from the AClib benchmark for algorithm configuration~\citep{HutEtAl14c}. Together, these sources include \gls{sat} formulae from diverse real-world applications and synthetically generated instances. To further enrich the dataset, we generated additional formulae using three well-established \gls{sat} instance generators, i.e.,
+We created the largest algorithm-selection scenario for \gls{sat} solvers to date. We collected all \gls{sat} Competition instances via GBD~\citep{IseJab24} and added all instances from the AClib benchmark for algorithm configuration~\citep{HutEtAl14d}. Together, these sources include \gls{sat} formulae from diverse real-world applications and synthetically generated instances. To further enrich the dataset, we generated additional formulae using three well-established \gls{sat} instance generators, i.e.,
 
 \begin{itemize}
 	\item \new{FuzzSAT}~\citep{BruEtAl10} produces \gls{cnf} fuzzing instances originally designed to identify issues in digital circuits. It generates random Boolean circuits as DAGs and converts them into \gls{cnf} via the Tseitin transformation~\citep{Tseitin83}. To construct the \gls{dag}, we used $v \in [50,150]$ input variables; operands were randomly paired and connected by randomly chosen operator nodes until each input was referenced at least $t \in [1,5]$ times. Finally, random clauses of length $s \in [3,8]$ were added to increase complexity.
