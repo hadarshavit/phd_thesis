@@ -1,11 +1,11 @@
 \chapter{Task-driven Assessment of Dimensionality Reduction Methods for Machine Learning and Black-Box Optimisation}\label{ch:dim_red}
 
 \section{Introduction}
-\label{sec:intro}
+\label{sec:ch04:intro}
 High-dimensional data is ubiquitous in numerous application domains of machine learning and black-box optimisation.
 
 
-In areas ranging from computer vision~\citep{SchEtAl15}, genome sequencing~\citep{VanEtAl22} and anomaly detection~\citep{TalEtAlNoYear} to engineering~\citep{PreEtAlNoYear}, hyperparameter optimisation~\citep{SehEtAl22c} and neural architecture search~\citep{ElsEtAl19b}, complex datasets with a large number of features defining 
+In areas ranging from computer vision~\citep{SchEtAl15}, genome sequencing~\citep{VanEtAl22} and anomaly detection~\citep{TalEtAlNoYear} to engineering~\citep{PreEtAlNoYear}, hyperparameter optimisation~\citep{SehEtAl22} and neural architecture search~\citep{ElsEtAl19}, complex datasets with a large number of features defining 
 
 a space to be searched for desirable design choices or solutions 
 need to be handled effectively, in order to ensure that machine learning and  black-box optimisation algorithms applied to them are as accurate, efficient and scalable as possible. 
@@ -125,7 +125,7 @@ Therefore, our analysis aims to provide insights into how these methods leverage
 The remainder of this paper is organised as follows: in \autoref{sec:dim_red}, we give an overview of dimensionality reduction, position our study in the broader related work context, introduce the methods selected for benchmarking, and give details on the transformation scheme required for dimensionality reduction methods to operate in the context of optimisation.
 In \autoref{sec:tasks}, we outline our methodology and present the four tasks designed to assess the performance of dimensionality reduction methods.
 In \autoref{sec:exp_setup}, we introduce the benchmark problem suites used in our empirical investigation and provide details on the setup of the experiments.
-We present our results in \autoref{sec:res}, analyse the running times of dimensionality reduction methods in \autoref{sec:rt}, critically discuss our findings in \autoref{sec:disc}, and provide concluding remarks in \autoref{sec:concl}.
+We present our results in \autoref{sec:ch04:res}, analyse the running times of dimensionality reduction methods in \autoref{sec:rt}, critically discuss our findings in \autoref{sec:disc}, and provide concluding remarks in \autoref{sec:ch04:concl}.
 
 \section{Dimensionality reduction}
 \label{sec:dim_red}
@@ -378,7 +378,7 @@ At the same time, they emphasise the importance dimensionality reduction methods
          Dictionary Learning& \citet{MaiEtAl09}& Unsupervised \\
          Truncated SVD& \citet{HalEtAl11} &  Unsupervised\\ 
          Factor Analysis& \citet{Barber12} & Unsupervised\\
-         LoLP& \citet{VogEtAl21b}& Supervised\\
+         LoLP& \citet{VogEtAl21}& Supervised\\
 
 
 
@@ -439,7 +439,7 @@ We first outline the working mechanisms of these dimensionality reduction method
     \item \textbf{Truncated singular value decomposition (SVD)}~\citep{HalEtAl11} is an SVD-based method that computes only the top $k$ singular values and their corresponding singular vectors, rather than the complete SVD decomposition. Similar to traditional PCA, the directions of maximum variance in the data are preserved. It provides the best possible low-rank approximation to the original data matrix, effectively reducing dimensionality while preserving significant features. It is also computationally efficient, as it works directly with the original data and avoids explicit covariance computation. Truncated SVD is suitable for cases where data matrices are naturally sparse.
     \item \textbf{Factor analysis (FA)}~\citep{Barber12} is a statistical method that reduces the dimensionality by preserving the common factors of the data. Each data point is assumed to be a linear transformation of the low-dimensional latent factors, with the addition of Gaussian noise. It uses SVD to perform maximum likelihood estimation of the transformation matrix. Unlike PCA, which focuses on variance preservation and treats all variance as meaningful, factor analysis specifically aims to identify underlying constructs that explain correlations in the data. Factor analysis excels in psychological and social science research, as it provides insight into data structures beyond mere dimensionality reduction, offering substantive interpretation of what the reduced dimensions represent.
 
-    \item \textbf{Linear optimal low-rank projection (LoLP)}~\citep{VogEtAl21b} is a recent supervised method that learns linear projections optimised for class separability. It is designed for high-dimensional scenarios with low initial sample sizes. LoLP leverages both first and second moments (mean and covariance) of the data, unlike methods like PCA which only use the second moment, and it incorporates class label information to guide the projection, again unlike PCA that operates in an unsupervised manner.
+    \item \textbf{Linear optimal low-rank projection (LoLP)}~\citep{VogEtAl21} is a recent supervised method that learns linear projections optimised for class separability. It is designed for high-dimensional scenarios with low initial sample sizes. LoLP leverages both first and second moments (mean and covariance) of the data, unlike methods like PCA which only use the second moment, and it incorporates class label information to guide the projection, again unlike PCA that operates in an unsupervised manner.
 
 
 \end{itemize}
@@ -620,7 +620,7 @@ To assess this, we first collect an initial dataset of points in the original sp
 We then use pre-learned feature mappings to transform the inputs to the reduced space. 
 
 
-Here, we fit a Gaussian process regression model, and we use the predicted mean and variance to define the acquisition function, specifically the expected improvement (EI)~\citep{ForEtAl08d}, in lower dimensionality.  
+Here, we fit a Gaussian process regression model, and we use the predicted mean and variance to define the acquisition function, specifically the expected improvement (EI)~\citep{SobEtAl08}, in lower dimensionality.  
 We optimise EI by generating samples in the original space using a genetic algorithm, as done in the state-of-the-art Bayesian optimisation-based optimiser HEBO~\citep{CowEtAl22}. 
 
 
@@ -919,7 +919,7 @@ The total Bayesian optimisation budget is set at $300$ evaluations including the
 
 
 \section{Results}
-\label{sec:res}
+\label{sec:ch04:res}
 
 
 We present and discuss selected results from our experiments in \autoref{sec:res-ml} for the machine learning tasks and in \autoref{sec:res-bbo} for the black-box optimisation tasks.
@@ -1839,7 +1839,7 @@ Taken together, these findings suggest that the task objective strongly shapes w
 
 
 \section{Chapter conclusion}
-\label{sec:concl}
+\label{sec:ch04:concl}
 
 
 

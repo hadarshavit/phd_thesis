@@ -1,23 +1,56 @@
-*.log
-*.out
+# Generated PDFs; retain figure assets and the supplied/printable covers.
 *.pdf
 !figures/**/*.pdf
 !figures/*.pdf
+!Deckblatt.pdf
+!FrontBackmatter/Deckblatt.pdf
+
+# LaTeX, latexmk, and bibliography build output.
 *.aux
 *.bbl
+*.bcf
 *.blg
+*-blx.bib
+*-SAVE-ERROR
 *.dvi
 *.fdb_latexmk
 *.fls
 *.lof
 *.lol
 *.lot
+*.loa
+*.log
+*.out
 *.run.xml
-*.synctex.gz
+*.synctex
+*.synctex.gz*
 *.toc
-*.synctex.gz(busy)
-*.synctex.gz(busy).gz
+*.tcp
+*.tps
 
-publications/**
-.dblp_cache/**
-biber_cache/**
+# Glossaries, acronyms, and index build output.
+*.acn
+*.acr
+*.alg
+*.glg
+*.glo
+*.gls
+*.glsdefs
+*.ist
+*.idx
+*.ind
+*.ilg
+
+# Beamer build output.
+*.nav
+*.snm
+*.vrb
+
+# Local publication checkouts, caches, and temporary files.
+/publications/
+/.dblp_cache/
+/biber_cache/
+/tmp
+__pycache__/
+*.py[cod]
+.DS_Store

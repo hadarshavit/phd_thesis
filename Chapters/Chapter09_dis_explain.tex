@@ -3,7 +3,7 @@
 
 
 \section{Introduction}
-\label{sec:intro}
+\label{sec:ch09:intro}
 
 Empirical performance models (\glspl{epm}) are data-driven predictive models that learn the relationship between problem instance features and an algorithm performance metric, such as expected running time or solution quality. They serve as critical components in automated algorithm selection, configuration, and parameter tuning across various domains, including compiler optimisation, database query optimisation, and machine learning.
 
@@ -33,7 +33,7 @@ $f: \mathcal{F} \to \mathcal{P}$
 
 that generalises from a set of observed pairs $\mathcal{D}_\text{train}=\{(\mathbf{z}_{I},p_I) \mid I\in\mathcal{I}_\text{train}\}$ to unseen instances $\mathcal{D}_\text{test}=\{(\mathbf{z}_{I},p_I) \mid I\in\mathcal{I}_\text{test}\}$. 
 
-\Glspl{epm} have been developed for a wide range of tasks, including automated algorithm selection~\citep{XuEtAl08,Kotthoff16b}, algorithm configuration and parameter tuning~\citep{HutEtAl12,HutEtAl06}, data centre and cloud scheduling~\citep{LeeEtAl25,IslEtAl12,SaxEtAl23,PhaEtAl20}, compiler optimisation~\citep{YotEtAl03,AshEtAl18}, and database query optimisation~\citep{WuEtAl13}. \Glspl{epm} require a set of features describing instances as an input to the model. For $\mathcal{NP}$-complete problems, high-level properties of instances are encoded to serve as an instance identifier, such as the SATzilla features for propositional satisfiability (\gls{sat})~\citep{HutEtAl14c,ShaHoo24} and causal-graph or planning-graph features for automated planning~\citep{FawEtAl14}. 
+\Glspl{epm} have been developed for a wide range of tasks, including automated algorithm selection~\citep{XuEtAl08,Kotthoff16}, algorithm configuration and parameter tuning~\citep{HutEtAl12,HutEtAl06}, data centre and cloud scheduling~\citep{LeeEtAl25,IslEtAl12,SaxEtAl23,PhaEtAl20}, compiler optimisation~\citep{YotEtAl03,AshEtAl18}, and database query optimisation~\citep{WuEtAl13}. \Glspl{epm} require a set of features describing instances as an input to the model. For $\mathcal{NP}$-complete problems, high-level properties of instances are encoded to serve as an instance identifier, such as the SATzilla features for propositional satisfiability (\gls{sat})~\citep{HutEtAl14,ShaHoo24} and causal-graph or planning-graph features for automated planning~\citep{FawEtAl14}. 
 
 For stochastic algorithms, the performance of $\mathcal{A}$ on a fixed instance $I$ is a random variable. Traditional \glspl{epm} handle this stochasticity by either: (i) modelling an aggregate statistic calculated from repeated runs (e.g., the empirical mean or median), or (ii) training directly on noisy, single-run observations. In both cases, the \gls{epm} outputs a single scalar value, discarding all information about the variance and shape of the underlying distribution.
 
@@ -43,7 +43,7 @@ To capture the complete run-to-run variation of stochastic algorithms, \citet{Eg
 To improve predictive quality in data-scarce regimes, \emph{BayesDistNet}~\citep{TueBur21} replaces the deterministic network with a Bayesian neural network (BNN). During inference, BayesDistNet generates running-time samples by repeatedly evaluating the BNN with different weight samples, subsequently fitting a parametric distribution post-hoc. While effective with few training runs, this sampling-based inference introduces substantial computational overhead. Furthermore, because BNN predictions rely on stochastic weight samples, feature attribution becomes unstable and computationally prohibitive, making it ill-suited for explainability.
 
 \subsection{Explainability of algorithms using EPMs}
-To gain insights into why an algorithm performs well or poorly on specific instances, researchers have leveraged \glspl{epm} for feature and parameter attribution. For example, \citet{HutEtAl13} used forward selection to identify key parameter-feature interactions, and \citet{HutEtAl14f} proposed functional ANOVA to quantify hyperparameter importance. More recently, model-agnostic explanation tools have been applied to \glspl{epm}, such as partial dependence plots (PDP) and individual conditional expectation (\gls{ice}) curves to visualise feature effects~\citep{MooEtAl21}, and SHAP interactions to analyse hyperparameter relationships~\citep{WevEtAl26}.
+To gain insights into why an algorithm performs well or poorly on specific instances, researchers have leveraged \glspl{epm} for feature and parameter attribution. For example, \citet{HutEtAl13} used forward selection to identify key parameter-feature interactions, and \citet{HutEtAl14} proposed functional ANOVA to quantify hyperparameter importance. More recently, model-agnostic explanation tools have been applied to \glspl{epm}, such as partial dependence plots (PDP) and individual conditional expectation (\gls{ice}) curves to visualise feature effects~\citep{MooEtAl21}, and SHAP interactions to analyse hyperparameter relationships~\citep{WevEtAl26}.
 
 Crucially, all of these techniques assume a scalar-valued prediction target. Because they map features to a single performance value, they cannot be directly applied to models that output full parametric distributions or sample sets.
 
@@ -120,7 +120,7 @@ We emphasise that these statistics are not equally easy to estimate from limited
 
 
 
-To understand \emph{which features} are the most influential for each statistic, we apply permutation importance~\citep{Breiman01d} to $g_s$. 
+To understand \emph{which features} are the most influential for each statistic, we apply permutation importance~\citep{Breiman01} to $g_s$. 
 For a statistic $s$, we measure predictive accuracy by the mean squared error between the predicted statistic $g_s(\mathbf{z}_I)$ and the corresponding statistic estimated from the observed running time distribution of instance $I$.
 The method randomly shuffles the values of one feature across instances, breaking any association between that feature and the statistic-specific target, and measures the resulting increase in MSE: important features yield a substantially larger increase, while irrelevant features cause negligible changes.
 
@@ -204,7 +204,7 @@ We do not use SHAP since we explain a statistic $s = h_s(\boldsymbol\theta)$ tha
 \label{sec:xgboost}
 
 Preliminary experiments showed that applying permutation importance and \gls{ice} curves to DistNet produced numerical instabilities, motivating a more robust and reliable predictor.
-To this end, we adopt XGBoost~\citep{CheGue16b} due to its strong performance on tabular data and its support for custom objectives.
+To this end, we adopt XGBoost~\citep{CheGue16} due to its strong performance on tabular data and its support for custom objectives.
 Conceptually, our approach follows distributional regression, as in GAMLSS~\citep{RigSta05}, where each distribution parameter is modelled as a function of instance features; it is also closely related to XGBoostLSS~\citep{Marz19}.
 
 
@@ -482,7 +482,7 @@ To verify the robustness of our approach across different distributional assumpt
 
 
 
-We analyse the running time distribution of the Spear \gls{sat} solver on the Small World Graph Colouring Problem (SWGCP)~\citep{GenEtAl99} instances using SATZilla features~\citep{HutEtAl14c,ShaHoo24}.
+We analyse the running time distribution of the Spear \gls{sat} solver on the Small World Graph Colouring Problem (SWGCP)~\citep{GenEtAl99} instances using SATZilla features~\citep{HutEtAl14,ShaHoo24}.
 Figures~\ref{fig:spear_swgcp_permut} and~\ref{fig:spear_swgcp_ice} show permutation importance rankings per statistic and \gls{ice} curves for the top feature per statistic, respectively.
 The results reveal a clear structure: the most influential features for the scale statistics (mean, variance and IQR) are local-search probing features, while \gls{dpll} probing features are the most influential for the shape statistics (skewness and kurtosis).
 
@@ -683,7 +683,7 @@ This suggests that tail behaviour for LPG-Zenotravel is tied to the size of the 
 
 
 \section{Chapter conclusion}
-\label{sec:concl}
+\label{sec:ch09:concl}
 
 This chapter proposed a methodology for explaining distribution predictions in the context of algorithm running time distributions.
 To this end, it used a probabilistic XGBoost model, which offers a computationally efficient and stable alternative to neural network approaches.

@@ -152,7 +152,7 @@ We also cover related work on dynamic design choices related to the components o
 We denote a hyperparameter configuration by $\mathbf{\lambda} \in \mathbf{\Lambda}$, and the algorithm $\mathcal{A}$ with its hyperparameters instantiated to $\mathbf{\lambda}$ by $\mathcal{A}_{\mathbf{\lambda}}$.
 Given a dataset $D$, the objective of \gls{hpo} is to find a hyperparameter configuration $\mathbf{\lambda}^{*}$ that minimises the loss $\mathcal{L}$ of a model fitted by algorithm $\mathcal{A}$ with hyperparameters $\mathbf{\lambda}$ on training data ${D}_{train}$, and evaluated on validation data ${D}_{validate}$, for a given loss function $\mathcal{L}$, \emph{i.e.},
 \begin{equation}
-\label{eq:def-hpo}
+\label{eq:ch02:def-hpo}
 \mathbf{\lambda}^{*} \in \argmin_{\mathbf{\lambda} \in \mathbf{\Lambda}} 
 \mathcal{L}(\mathcal{A}_{\mathbf{\lambda}}, {D}_{train}, {D}_{validate}) = \argmin_{\mathbf{\lambda} \in \mathbf{\Lambda}} c(\mathbf{\lambda})
 \end{equation}
@@ -160,7 +160,7 @@ Here, $c(\mathbf{\lambda})$ is a shorthand for the loss function when $\mathcal{
 Note that $c(\mathbf{\lambda})$ is a black-box function, without a closed-form expression nor analytic gradient information.
 
 \subsection{Bayesian optimisation} 
-\label{sec:bac_bo}
+\label{sec:ch02:bac_bo}
 Bayesian optimisation (\gls{bo})~\citep{Mockus12,Garnett23,Frazier18,Kushner62,Kushner64b} is a family of surrogate-based algorithms for efficient global optimisation of black-box problems.
 \changed{Typically,} \gls{bo} consists of three main modules: an \emph{initial design}, \emph{i.e.}, in \gls{hpo}, a set of hyperparameter configuration candidates $\boldsymbol{\lambda} = (\lambda^{(1)},\ldots, \lambda^{(r)})$ and their evaluations 
 $c(\boldsymbol{\lambda}) = (c(\lambda^{(1)}),\ldots, c(\lambda^{(r)}))$; a \emph{surrogate model} (fitted to the 

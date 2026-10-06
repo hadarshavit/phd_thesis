@@ -3,7 +3,7 @@
 
 
 \section{Introduction}
-\label{sec:intro}
+\label{sec:ch05:intro}
 The performance of machine learning (ML) and deep learning (DL) models crucially depends on how their hyperparameters are tuned~\citep{LavDav06,BisEtAl23}.
 Tuning the hyperparameters in order to achieve peak performance of the model on  a specific task is challenging even for experts. 
 This process is often addressed through trial-and-error methods, requiring significant effort and resources.
@@ -188,7 +188,7 @@ our methodology for
 dynamic ensembling and selection
 % }
 of surrogate models. 
-In~\autoref{sec:experiments}, we provide the technical details on the experimental setup and describe the benchmarks and baselines chosen for our empirical analysis. We present results and critically discuss them in~\autoref{sec:res}. Finally, in~\autoref{sec:concl-fw}, we provide concluding remarks and outline directions for future research.
+In~\autoref{sec:ch05:experiments}, we provide the technical details on the experimental setup and describe the benchmarks and baselines chosen for our empirical analysis. We present results and critically discuss them in~\autoref{sec:ch05:res}. Finally, in~\autoref{sec:concl-fw}, we provide concluding remarks and outline directions for future research.
 
 
 
@@ -207,7 +207,7 @@ We also cover related work on dynamic design choices related to the components o
 We denote a hyperparameter configuration by $\mathbf{\lambda} \in \mathbf{\Lambda}$, and the algorithm $\mathcal{A}$ with its hyperparameters instantiated to $\mathbf{\lambda}$ by $\mathcal{A}_{\mathbf{\lambda}}$.
 Given a dataset $D$, the objective of HPO is to find a hyperparameter configuration $\mathbf{\lambda}^{*}$ that minimises the loss $\mathcal{L}$ of a model fitted by algorithm $\mathcal{A}$ with hyperparameters $\mathbf{\lambda}$ on training data ${D}_{train}$, and evaluated on validation data ${D}_{validate}$, for a given loss function $\mathcal{L}$, \emph{i.e.},
 \begin{equation}
-\label{eq:def-hpo}
+\label{eq:ch05:def-hpo}
 \mathbf{\lambda}^{*} \in \argmin_{\mathbf{\lambda} \in \mathbf{\Lambda}} 
 \mathcal{L}(\mathcal{A}_{\mathbf{\lambda}}, {D}_{train}, {D}_{validate}) = \argmin_{\mathbf{\lambda} \in \mathbf{\Lambda}} c(\mathbf{\lambda})
 \end{equation}
@@ -215,7 +215,7 @@ Here, $c(\mathbf{\lambda})$ is a shorthand for the loss function when $\mathcal{
 Note that $c(\mathbf{\lambda})$ is a black-box function, without a closed-form expression nor analytic gradient information.
 
 \subsection{Bayesian optimisation} 
-\label{sec:bac_bo}
+\label{sec:ch05:bac_bo}
 
 Bayesian optimisation (BO)~\citep{Mockus12,Garnett23,Frazier18,Kushner62,Kushner64} is a family of surrogate-based algorithms for efficient global optimisation of black-box problems.
 Typically, BO consists of three main components: an \emph{initial design}, \emph{i.e.}, in HPO, a set of candidate hyperparameter configurations $\boldsymbol{\lambda} = (\lambda^{(1)},\ldots, \lambda^{(r)})$ and their evaluations 
@@ -503,8 +503,8 @@ Second, because different surrogate models tend to suit different regions of the
 % }
 % We also want to respond to the exploration/exploitation tendency of the acquisition function, and therefore we accordingly reward the models that are accurate in the regions of the search space which are favoured by the acquisition function.
 % \hh{slightly modified for language:}
-We note that the acquisition function in HEBO trades off exploration and exploitation by combining EI, PI and UCB in a multi-objective way (for additional details, see \autoref{sec:bac_bo} and~\autoref{sec:ablations}).
-We also provide details on acquisition functions used in different baselines in~\autoref{sec:baselines}.
+We note that the acquisition function in HEBO trades off exploration and exploitation by combining EI, PI and UCB in a multi-objective way (for additional details, see \autoref{sec:ch05:bac_bo} and~\autoref{sec:ablations}).
+We also provide details on acquisition functions used in different baselines in~\autoref{sec:add_baselines}.
 % }
 % As we also want to respond to the exploration/exploitation tendency of the acquisition function, we accordingly reward the models that are accurate in the regions of the search space which are favoured by the acquisition function.
 
@@ -572,7 +572,7 @@ We provide more details on these choices in~\autoref{sec:imp_det}.
 
 
 \section{Setup of experiments}
-\label{sec:experiments}
+\label{sec:ch05:experiments}
 
 
 
@@ -667,7 +667,7 @@ For results on additional benchmarks, refer to~\autoref{sec:add-bench}.
 % \changed{
 We used single-surrogate BO variants within HEBO with each of the surrogate models considered (GP, RF, ET, and GB) as baselines to compare against \texttt{DyMBO}. 
 Furthermore, we compared \texttt{DyMBO} to additional standard HPO methods: random search (RS)~\citep{BerEtAl11}, SMAC3~\citep{LinEtAl22, HutEtAl11}, Optuna with TPE as a surrogate model~\citep{BerEtAl11,AkiEtAl19}, and Optuna AutoSampler, which automatically selects HPO method based on hand-crafted rules~\citep{Ozaki24}.
-More details on these baselines are provided in~\autoref{sec:baselines}.
+More details on these baselines are provided in~\autoref{sec:add_baselines}.
 % }
 
 
@@ -679,7 +679,7 @@ More details on these baselines are provided in~\autoref{sec:baselines}.
 
 
 \section{Results and discussion}
-\label{sec:res}
+\label{sec:ch05:res}
 
 In this section, we present and discuss the experimental results comparing \texttt{DyMBO} to the baselines. 
 We first present the mean rank results on different benchmarks for various budgets in~\autoref{sec:res_general}, whereas results under different experimental setups and ablation studies can be found in~\autoref{sec:diff_exp_setup} and~\autoref{sec:ablations}, respectively. We then analyse the running time required by our method in~\autoref{sec:running_time}, discuss the evolution of the weights assigned to surrogate models throughout the optimisation process in~\autoref{sec:weights}, and assess the predictive quality of the surrogate models used in the ensembles themselves in~\autoref{sec:surr-acc}.
@@ -1694,7 +1694,7 @@ as the ensemble can choose the best model for each target function. However, inc
 
 \paragraph{Using different weight initialisation strategies.}
 \label{sec:init_ablation}
-We experimented with different weight initialisation schemes to assess how they affect the performance of \texttt{DyMBO}. In addition to initialising with RF (with $w_{RF}=1$ and $w_{GP}=0$ as in~\autoref{sec:experiments}), we also considered initialising with GP: $w_{GP}=1$ and $w_{RF}=0$. Additionally, we tested initialising with both models: $w_{RF}=1$ and $w_{GP}=1$. Finally, we tried a heuristic initialisation, where we set $w_{RF}=1$ if the target function has categorical hyperparameters, and $w_{GP}=1$ if the target function is cheap. The rest of the weights are set to 0. 
+We experimented with different weight initialisation schemes to assess how they affect the performance of \texttt{DyMBO}. In addition to initialising with RF (with $w_{RF}=1$ and $w_{GP}=0$ as in~\autoref{sec:ch05:experiments}), we also considered initialising with GP: $w_{GP}=1$ and $w_{RF}=0$. Additionally, we tested initialising with both models: $w_{RF}=1$ and $w_{GP}=1$. Finally, we tried a heuristic initialisation, where we set $w_{RF}=1$ if the target function has categorical hyperparameters, and $w_{GP}=1$ if the target function is cheap. The rest of the weights are set to 0. 
 % \er{Just a comment about aesthetics... many times in the manuscript, the last line of a paragraph is composed of 1 word only. Am I allowed to slightly shorten so that this does not happen? Maybe we can also gain some space given the page limit.} \aj{I agree and also don't like a short last sentence. If you have an idea on how to shorten so that the meaning stays the same, please go ahead :)}
 
 We ran \texttt{DyMBO} with different weight initialisation schemes on YAHPO Gym and JAHS-Bench-201 with a budget of $100\times$ mean evaluation time per target function. We show the results in~\autoref{fig:init-ablation}. We see similar ranks between the different initialisation schemes, with the best performance achieved by initialising with RF.
@@ -1865,7 +1865,7 @@ In this section, we report results of our method on two additional benchmarks: o
 
 We empirically evaluated our method on purely numerical search spaces by considering six synthetic continuous target functions, widely used in studies on design and development of novel black-box optimisation methods and benchmarks.
 Specifically, we used the $10$-dimensional Ackley, Hachevsky, Griewank, Himmelblau, Schaffer and Schwefel functions, in their native HEBO implementation.
-The experimental setup used here is the same as the default described in~\autoref{sec:experiments}.
+The experimental setup used here is the same as the default described in~\autoref{sec:ch05:experiments}.
 
 We show in~\autoref{fig:synth-cont} the convergence behaviour of \texttt{DyMBO} and the single-surrogate HEBO baselines on those functions.
 \texttt{DyMBO} achieves faster or competitive convergence and reaches a lower or comparable final regret across most benchmarks.
@@ -1924,7 +1924,7 @@ Among the single-surrogate baselines, GP tends to perform competitively on smoot
 In addition to synthetic continuous functions, we empirically evaluated our method on HPOBench~\citep{EggEtAl21}, a collection of HPO benchmarks widely used in benchmarking studies.
 Out of various raw, surrogate or tabular benchmark families included in HPOBench, we selected Random Forest and XGBoost as raw benchmarks for our evaluation.
 These benchmarks are based on configuring hyperparameters of Random Forest and XGBoost models in their native implementations~\citep{PedEtAl11,CheGue16} on 20 publicly available datasets from the OpenML AutoML benchmark~\citep{GijEtAl19}.
-The setup of experiments used here is the same as the default described in~\autoref{sec:experiments}.
+The setup of experiments used here is the same as the default described in~\autoref{sec:ch05:experiments}.
 
 In~\autoref{fig:hpobench}, we show the mean ranks of \texttt{DyMBO} and single-surrogate HEBO baselines on these two HPOBench problems.
 \texttt{DyMBO} is ranked similarly to GB throughout the optimisation.

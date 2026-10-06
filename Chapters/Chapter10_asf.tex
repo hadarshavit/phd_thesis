@@ -71,9 +71,9 @@ Traditionally, algorithm selection methods use instance features as input to one
 
 Such methods have shown exceptional performance in many sub-fields of \gls{ai}.
 For example, in machine learning, algorithm selection has been a cornerstone in hands-free automated machine learning methods (see, e.g., \citealp{FeuEtAl15}), which create a full machine learning pipeline given an input dataset.
-Portfolio-based algorithm selectors have also shown exceptional performance for many $\mathcal{NP}$-complete problems. A well-known example is in the \gls{sat} domain, where SATzilla~\citep{XuEtAl08} won multiple \gls{sat} competitions and consistently outperformed single-solver baselines~\citep{XuEtAl12b,ShaHoo24}. Additionally, such approaches have been applied for automated planning, where they outperformed state-of-the-art solvers~\citep{ValEtAl14}.
+Portfolio-based algorithm selectors have also shown exceptional performance for many $\mathcal{NP}$-complete problems. A well-known example is in the \gls{sat} domain, where SATzilla~\citep{XuEtAl08} won multiple \gls{sat} competitions and consistently outperformed single-solver baselines~\citep{XuEtAl12,ShaHoo24}. Additionally, such approaches have been applied for automated planning, where they outperformed state-of-the-art solvers~\citep{ValEtAl14}.
 
-Algorithm selection has also been applied in various other areas of \gls{ai}, such as out-of-distribution generalisation for neural networks~\citep{JiaTen25}, black-box optimisation~\citep{JonEtAl98b} and others.
+Algorithm selection has also been applied in various other areas of \gls{ai}, such as out-of-distribution generalisation for neural networks~\citep{JiaTen25}, black-box optimisation~\citep{JonEtAl98} and others.
 
 
 
@@ -91,10 +91,10 @@ The framework implements the main components of algorithm selection pipelines, i
 
 To showcase the advantage of using \gls{asf}, we evaluate it in the context of three important use cases in machine learning: 
 
-zero-shot portfolio selection~\citep{OztEtAl22}, out-of-distribution generalisation~\citep{JiaTen25}, and portfolio construction for hyperparameter optimisation~\citep{EggEtAl21b}.
+zero-shot portfolio selection~\citep{OztEtAl22}, out-of-distribution generalisation~\citep{JiaTen25}, and portfolio construction for hyperparameter optimisation~\citep{EggEtAl21}.
 Our empirical results demonstrate that well-known algorithm selection methods, made easily accessible through \gls{asf}, can match or surpass domain-specific implementations, sometimes at a fraction of the training cost. Ultimately, \gls{asf} makes it easier to assess performance complementarity that can be exploited using automated algorithm selection, thereby providing a more systematic foundation for empirical claims in \gls{ai}.
 
-The remainder of the paper is structured as follows: we begin by covering the background of algorithm selection and related methods in \autoref{sec:background}, continuing with a presentation of \gls{asf} and its components in \autoref{sec:asf_overview}, followed by our empirical results and discussion in \autoref{sec:experiments}, and concluding in \autoref{sec:conclusion}. Additional benchmarks and details are available in the appendix, and we provide the source code for \gls{asf} at \url{https://anonymous.4open.science/r/asf-660A/}.
+The remainder of the paper is structured as follows: we begin by covering the background of algorithm selection and related methods in \autoref{sec:add_background}, continuing with a presentation of \gls{asf} and its components in \autoref{sec:asf_overview}, followed by our empirical results and discussion in \autoref{sec:ch10:experiments}, and concluding in \autoref{sec:conclusion}. Additional benchmarks and details are available in the appendix, and we provide the source code for \gls{asf} at \url{https://anonymous.4open.science/r/asf-660A/}.
 
 
 
@@ -108,8 +108,8 @@ The remainder of the paper is structured as follows: we begin by covering the ba
 
 \subsection{Empirical performance prediction}
 A closely related problem to algorithm selection is empirical performance prediction, where given an instance $I\in\mathcal{I}$ and a feature vector $\mathbf{f}\in\mathcal{F}$, the goal is to create an empirical performance model (\gls{epm}) $P_A:\mathcal{F}\rightarrow \mathbb{R}$ that predicts $m(A, I)$ as accurately as possible.
-\Glspl{epm} can be used for algorithm selection~\citep{NudEtAl04b,XuEtAl08}, algorithm configuration~\citep{HutEtAl11,LinEtAl22e}, explainability~\citep{HutEtAl13}, and data centre scheduling~\citep{LeeEtAl25}.
-To model performance, one should account for the distribution of the performance, which can require preprocessing of the labels, such as log-transformation~\citep{HutEtAl14c}. However, \gls{epm}-based algorithm selection is often not the practically best approach, essentially because accurately predicting exact performance values is generally a harder task than determining the relative ranking of algorithms.
+\Glspl{epm} can be used for algorithm selection~\citep{NudEtAl04,XuEtAl08}, algorithm configuration~\citep{HutEtAl11,LinEtAl22}, explainability~\citep{HutEtAl13}, and data centre scheduling~\citep{LeeEtAl25}.
+To model performance, one should account for the distribution of the performance, which can require preprocessing of the labels, such as log-transformation~\citep{HutEtAl14}. However, \gls{epm}-based algorithm selection is often not the practically best approach, essentially because accurately predicting exact performance values is generally a harder task than determining the relative ranking of algorithms.
 
 
 
@@ -119,11 +119,11 @@ To model performance, one should account for the distribution of the performance
 At its core, the framework expects instance features together with a performance matrix over candidate algorithms and does not assume a specific application domain such as \gls{sat} solving, automated planning, \gls{automl}, or numerical optimisation.
 Any problem that can be described through descriptive features and a measurable target metric can be addressed with \gls{asf}.
 This design allows non-experts to apply algorithm selection effectively to new problems.
-\Gls{asf} follows a scikit-learn-like \gls{api}~\citep{PedEtAl11c}, making it easily accessible to machine learning practitioners.
+\Gls{asf} follows a scikit-learn-like \gls{api}~\citep{PedEtAl11}, making it easily accessible to machine learning practitioners.
 
 
 \textbf{Selectors.}
-\Gls{asf} implements a wide variety of algorithm selection methods, including multi-class classification~\citep{Kotthoff13}, pairwise classification~\citep{XuEtAl12b} and regression~\citep{KerEtAl18}, empirical-performance-model-based selection~\citep{XuEtAl08}, ranking-based methods, neighbourhood-based methods such as ISAC~\citep{KadEtAl10} and SUNNY~\citep{AmaEtAl14}, and ensemble-based approaches~\citep{TorEtAl23}. Additionally, while looking at algorithm selection as a recommendation system is a known technique~\citep{MisSeb17}, \gls{asf} furthermore implements it using the standard LambdaMART~\citep{Burges10} algorithm with XGBoost~\citep{CheGue16b}.
+\Gls{asf} implements a wide variety of algorithm selection methods, including multi-class classification~\citep{Kotthoff13}, pairwise classification~\citep{XuEtAl12} and regression~\citep{KerEtAl18}, empirical-performance-model-based selection~\citep{XuEtAl08}, ranking-based methods, neighbourhood-based methods such as ISAC~\citep{KadEtAl10} and SUNNY~\citep{AmaEtAl14}, and ensemble-based approaches~\citep{TorEtAl23}. Additionally, while looking at algorithm selection as a recommendation system is a known technique~\citep{MisSeb17}, \gls{asf} furthermore implements it using the standard LambdaMART~\citep{Burges10} algorithm with XGBoost~\citep{CheGue16}.
 A complete list of the selectors implemented in \gls{asf} is provided in \autoref{sec:methods_implemented}.
 
 
@@ -136,10 +136,10 @@ This is particularly useful when many candidate algorithms are available, as rem
 \textbf{Pre-solving.}
 \Gls{asf} also supports pre-solving schedules for running time scenarios, such as greedy scheduling~\citep{XuEtAl08}, Aspeed~\citep{HooEtAl12} and 3S~\citep{KadEtAl11}.
 
-\textbf{Pipelines.} \gls{asf} supports creating pipelines of components, such as pre-selection, pre-solving, selection, and data preprocessing (for which, any feature preprocessing that follows \textsc{scikit-learn}~\citep{PedEtAl11c} conventions is supported) into a single tunable unit.
+\textbf{Pipelines.} \gls{asf} supports creating pipelines of components, such as pre-selection, pre-solving, selection, and data preprocessing (for which, any feature preprocessing that follows \textsc{scikit-learn}~\citep{PedEtAl11} conventions is supported) into a single tunable unit.
 
 \textbf{Hyperparameter optimisation.}
-Pipelines and selectors can be automatically tuned using SMAC3~\citep{HutEtAl11,LinEtAl22e}, a well known model-based hyperparameter optimisation library, optionally selecting among multiple selector types (similarly to AutoFolio~\citep{LinEtAl15b}). \Gls{asf} includes configuration spaces for all implemented methods, in addition to configuration spaces for the underlying machine learning models.
+Pipelines and selectors can be automatically tuned using SMAC3~\citep{HutEtAl11,LinEtAl22}, a well known model-based hyperparameter optimisation library, optionally selecting among multiple selector types (similarly to AutoFolio~\citep{LinEtAl15}). \Gls{asf} includes configuration spaces for all implemented methods, in addition to configuration spaces for the underlying machine learning models.
 
 
 For every method component (selection, pre-selection, etc.), \gls{asf} provides an abstract class responsible for handling data preprocessing and more. For algorithm selection, there exists an additional abstract class responsible for handling the models used by the selectors (if applicable). We provide an example of how to use \gls{asf} for algorithm selection in \autoref{sec:asf_usage_appendix}.
@@ -148,7 +148,7 @@ For every method component (selection, pre-selection, etc.), \gls{asf} provides 
 
 
 \section{Case studies for algorithm selection in ML}
-\label{sec:experiments}
+\label{sec:ch10:experiments}
 In this section, we demonstrate the application of \gls{asf} to three machine learning tasks: zero-shot hyperparameter optimisation in deep learning, selection of out-of-distribution generalisation (\gls{ood}) algorithms, and pre-selection of algorithm portfolios of traditional machine learning algorithms. 
 Additional experiments on the well-known ASlib~\citep{BisEtAl16} are available in~\autoref{sec:aslib_appendix}.
 
@@ -173,7 +173,7 @@ Concretely, we first reduce the candidate configuration set to a compact portfol
 \subsubsection{Setup of experiments}
 We used the scenario and meta-data supplied by~\citet{OztEtAl22}, preserving the original dataset meta-features, candidate configurations, and five-fold cross-validation protocol. For every cross-validation fold, marginal-contribution pre-selection~\citep{XuEtAl08} was fitted only on the training fold before the selector was trained on the reduced portfolio.
 
-\textbf{Compared selectors.} We compared the joint-ranking model of~\citet{OztEtAl22}, the same model after pre-selection, and \gls{asf} selectors based on pairwise classification~\citep{XuEtAl12b}, pairwise regression~\citep{KerEtAl18}, empirical performance models, and simple ranking. The \gls{asf} selectors used XGBoost as the underlying tabular model. For the \gls{asf} models, we always used pre-selection. Each model was trained on a single H100 GPU with the settings reported in the experiment setup appendix, \autoref{sec:additional_experiment_details}. 
+\textbf{Compared selectors.} We compared the joint-ranking model of~\citet{OztEtAl22}, the same model after pre-selection, and \gls{asf} selectors based on pairwise classification~\citep{XuEtAl12}, pairwise regression~\citep{KerEtAl18}, empirical performance models, and simple ranking. The \gls{asf} selectors used XGBoost as the underlying tabular model. For the \gls{asf} models, we always used pre-selection. Each model was trained on a single H100 GPU with the settings reported in the experiment setup appendix, \autoref{sec:additional_experiment_details}. 
 
 
 \textbf{Performance metric.} We report per-dataset selector accuracy and per-fold training time. Higher accuracy is better, while lower training time is better. We also report the fold-local \gls{vbs} accuracy of marginal-contribution portfolios as the number of pre-selected configurations changes.
@@ -293,7 +293,7 @@ In this section, we benchmark several such methods implemented in \gls{asf}.
 
 \subsubsection{Setup of experiments}
 
-We use HPOBench~\citep{EggEtAl21b}, which provides performance data for traditional machine learning algorithms on OpenML datasets~\citep{BisEtAl21}. Each candidate algorithm is an algorithm-hyperparameter-configuration pair, and each pre-selector constructs a compact portfolio before being evaluated on the held-out dataset.
+We use HPOBench~\citep{EggEtAl21}, which provides performance data for traditional machine learning algorithms on OpenML datasets~\citep{BisEtAl21}. Each candidate algorithm is an algorithm-hyperparameter-configuration pair, and each pre-selector constructs a compact portfolio before being evaluated on the held-out dataset.
 
 
 \textbf{Evaluation protocol.} We used leave-one-dataset-out evaluation. For each held-out dataset and portfolio size $k\in\{5,10,25\}$, the pre-selector was fitted only on the remaining datasets, and the selected portfolio was evaluated on the held-out dataset. We compared \gls{sbs} pre-selection, marginal-contribution pre-selection, beam search, random local search, genetic search, and differential-evolution-based optimisation.
@@ -392,10 +392,10 @@ We note that LLAMA~\citep{Kotthoff13} is an established R library that helped ma
 Additionally, while \gls{asf} supports a wide variety of methods and pipelines, LLAMA does not support, for instance, pre-selection, which we showed can significantly improve the performance of algorithm selection methods. LLAMA focuses on relatively basic selection methods, such as pairwise classification and performance prediction, while \gls{asf} covers many more approaches, including ranking-based and neural-network-based methods.
 
 \subsection{AutoFolio and FlexFolio}
-AutoFolio~\citep{LinEtAl15b} is an automatic configuration system for algorithm-selection pipelines, originally designed to configure FlexFolio, a collection of algorithm-selection methods. FlexFolio was an important tool for benchmarking algorithm selectors, but it appears to be no longer actively maintained, as its implementation targets the deprecated Python 2 ecosystem. Moreover, FlexFolio focuses primarily on the selector stage and does not provide the same modular support for preprocessing, pre-solving, pre-selection, and end-to-end pipeline construction as \gls{asf}.
+AutoFolio~\citep{LinEtAl15} is an automatic configuration system for algorithm-selection pipelines, originally designed to configure FlexFolio, a collection of algorithm-selection methods. FlexFolio was an important tool for benchmarking algorithm selectors, but it appears to be no longer actively maintained, as its implementation targets the deprecated Python 2 ecosystem. Moreover, FlexFolio focuses primarily on the selector stage and does not provide the same modular support for preprocessing, pre-solving, pre-selection, and end-to-end pipeline construction as \gls{asf}.
 A newer Python 3 version of AutoFolio exists, but it supports only a restricted set of selector types, such as pairwise regression, pairwise classification, and multi-class classification. These selectors are not exposed as independently reusable Python components in the same way as in \gls{asf}. AutoFolio also supports pre-solving through Aspeed, but does not support portfolio pre-selection. Finally, AutoFolio and FlexFolio are primarily used through command-line interfaces based on the ASlib format, whereas \gls{asf} exposes a Python \gls{api} that directly accepts feature and performance matrices, while also supporting command-line usage.
 \subsection{Methods from the algorithm selection competitions}
-In the past, there have been two algorithm selection competitions~\citep{LinEtAl19c}. These competitions were heavily focussed on algorithm selection problems in $\mathcal{NP}$-complete 
+In the past, there have been two algorithm selection competitions~\citep{LinEtAl19}. These competitions were heavily focussed on algorithm selection problems in $\mathcal{NP}$-complete 
 
 domains, such as \gls{sat}, MIP, and TSP, while there was only a single machine learning selection scenario.
 We note that the methods evaluated in these competitions are full algorithm selection pipelines, which can be easily constructed using \gls{asf} components. In the future, we plan to add pre-defined selection pipelines to \gls{asf}, which will allow users to easily use these methods. However, as these methods were developed for $\mathcal{NP}$-complete problems, they are not directly applicable to machine learning or other types of problems. As our priority is to provide a flexible framework for algorithm selection, which is applicable to any problem domain, we focussed on implementing as many components as possible, rather than implementing a small number of narrowly focussed full pipelines.
@@ -453,9 +453,9 @@ predictions = pipeline.predict(features)
 \subsection{Selection}
 \begin{itemize}
     \item \textbf{Multi-class classifier}~\citep{Kotthoff13}: Treats algorithm selection as a standard classification problem where each instance is labelled by its best algorithm. This provides a simple model-based baseline, but ignores the magnitude of performance differences between algorithms.
-    \item \textbf{Pairwise classifier}~\citep{XuEtAl12b}: Reduces algorithm selection to binary classification tasks, one for each pair of algorithms. Pairwise predictions are aggregated in a tournament-style vote to select the final algorithm.
+    \item \textbf{Pairwise classifier}~\citep{XuEtAl12}: Reduces algorithm selection to binary classification tasks, one for each pair of algorithms. Pairwise predictions are aggregated in a tournament-style vote to select the final algorithm.
     \item \textbf{Pairwise regressor}~\citep{KerEtAl18}: Trains one regressor per algorithm pair to predict performance differences. The predicted pairwise margins are aggregated into a ranking, preserving information about how large the performance gaps are.
-    \item \textbf{Performance model selector}~\citep{NudEtAl04b,XuEtAl08}: Fits performance prediction models and selects the algorithm with the best predicted performance. \Gls{asf} supports per-algorithm models, multi-target prediction, and joint instance-algorithm models when algorithm features are available.
+    \item \textbf{Performance model selector}~\citep{NudEtAl04,XuEtAl08}: Fits performance prediction models and selects the algorithm with the best predicted performance. \Gls{asf} supports per-algorithm models, multi-target prediction, and joint instance-algorithm models when algorithm features are available.
     \item \textbf{Simple ranking}: Creates instance-algorithm examples by combining instance features with algorithm features or one-hot algorithm encodings. A learning-to-rank (by default, XGBoost model that uses LambdaMART~\citep{Burges10}) predicts algorithm ranks for each instance and selects the top-ranked algorithm. This is a new method implemented in \gls{asf}.
     \item \textbf{Joint ranking}~\citep{OztEtAl22}: Uses a ranking neural network over concatenated instance and algorithm representations. It scores every algorithm for a query instance and selects the algorithm with the best predicted rank.
     \item \textbf{Dyad ranking}~\citep{TorEtAl18}: A \emph{dyad} is the joint representation of an instance--algorithm pair, formed by concatenating instance features with algorithm features. The method learns pairwise rankings over these dyads, so that preferences between algorithms are informed by the combined instance and algorithm description. This is especially useful when meaningful algorithm features are available.
@@ -467,7 +467,7 @@ predictions = pipeline.predict(features)
     \item \textbf{ISAC}~\citep{KadEtAl10}: Clusters instances in feature space and assigns each cluster the algorithm with the best training performance inside that cluster. Prediction is fast because a new instance is assigned to a cluster and inherits its best algorithm, with a global-best fallback for outliers.
     \item \textbf{ISA}~\citep{LinEtAl16}: Finds similar training instances with $k$-nearest neighbours and then runs Aspeed on the neighbourhood to compute an instance-specific schedule. It is designed for running time scenarios where the output can be a schedule rather than a single algorithm.
     \item \textbf{SNNAP}~\citep{ColEtAl13}: Trains per-algorithm regressors on row-wise normalised performance and compares instances by Jaccard distance over predicted top algorithms. The selected algorithm is chosen from the best algorithms of the most similar neighbours.
-    \item \textbf{Optimistic superset loss linear selector (OSLlinear)}~\citep{HanEtAl21c}: Learns per-algorithm linear running time models with an optimistic superset loss for censored observations. It is intended for running time settings where timeouts provide partial rather than exact performance information.
+    \item \textbf{Optimistic superset loss linear selector (OSLlinear)}~\citep{HanEtAl21}: Learns per-algorithm linear running time models with an optimistic superset loss for censored observations. It is intended for running time settings where timeouts provide partial rather than exact performance information.
     \item \textbf{CSHC}~\citep{MalEtAl13}: Uses a primary selector together with guardian models that estimate whether the primary choice is reliable. If confidence is too low, the method switches to a backup selector.
     \item \textbf{Cosine selector}~\citep{WuEtAl24}: Learns neural embeddings for instances and algorithms and uses cosine similarity as part of the matching model. The implementation is algorithm-feature-aware and follows the \gls{as}-LLM-style idea of fusing learned and provided algorithm representations.
     \item \textbf{Automatic parallel portfolio selector (APPS)}~\citep{KasKot23}: Trains ensembles of performance models to estimate running time distributions and uncertainty. It selects a parallel portfolio by including algorithms whose predicted distributions sufficiently overlap with the predicted best algorithm.
@@ -612,12 +612,12 @@ We evaluated schedule-based presolvers on the same ASlib running time scenarios 
 \subsection{Algorithm selection}
 
 \paragraph{Setup of experiments. }
-We evaluated learned per-instance selectors on the ASlib scenarios with predefined folds. Every learned selector first received the same fold-local forward marginal-contribution pre-selection step, retaining at most 10 solvers from the training fold. The selector was then tuned using SMAC for 50 trials using 10-fold cross-validation on the training fold and evaluated once on the held-out ASlib fold. The selector set consists of PerformanceModel~\citep{XuEtAl08}, MultiClassClassifier, PairwiseClassifier~\citep{XuEtAl12b}, PairwiseRegressor, SimpleRanking, HARRIS, ISAC~\citep{KadEtAl10}, SNNAP, SUNNY, and OSLLinearSelector.
+We evaluated learned per-instance selectors on the ASlib scenarios with predefined folds. Every learned selector first received the same fold-local forward marginal-contribution pre-selection step, retaining at most 10 solvers from the training fold. The selector was then tuned using SMAC for 50 trials using 10-fold cross-validation on the training fold and evaluated once on the held-out ASlib fold. The selector set consists of PerformanceModel~\citep{XuEtAl08}, MultiClassClassifier, PairwiseClassifier~\citep{XuEtAl12}, PairwiseRegressor, SimpleRanking, HARRIS, ISAC~\citep{KadEtAl10}, SNNAP, SUNNY, and OSLLinearSelector.
 
 \paragraph{Performance metric.} We report the percentage of the \gls{sbs}--\gls{vbs} gap closed. A value of 0 matches \gls{sbs} and 100 matches \gls{vbs}. Negative displayed values were clipped at $-100\%$ for readability.
 
 \paragraph{Results.}
-Figures~\ref{fig:aslib_selection_gap_a}, \ref{fig:aslib_selection_gap_b}, and~\ref{fig:aslib_selection_gap_c} show that for each scenario, a different selector works well. PairwiseClassifier, PairwiseRegressor, SimpleRanking, and SNNAP are frequently among the stronger selectors, but the best method varies by scenario. For BNSL-2016 and TSP-LION2015 several selectors close a large fraction of the gap, while MIP-2016 and SAT20-MAIN remain more difficult, with all selectors solving only small fractions of the gap. MultiClassClassifier is competitive on some scenarios but less stable overall, supporting the observation made in \autoref{sec:experiments} that methods exploiting pairwise or ranking information are often better suited for selection than plain multi-class classification.
+Figures~\ref{fig:aslib_selection_gap_a}, \ref{fig:aslib_selection_gap_b}, and~\ref{fig:aslib_selection_gap_c} show that for each scenario, a different selector works well. PairwiseClassifier, PairwiseRegressor, SimpleRanking, and SNNAP are frequently among the stronger selectors, but the best method varies by scenario. For BNSL-2016 and TSP-LION2015 several selectors close a large fraction of the gap, while MIP-2016 and SAT20-MAIN remain more difficult, with all selectors solving only small fractions of the gap. MultiClassClassifier is competitive on some scenarios but less stable overall, supporting the observation made in \autoref{sec:ch10:experiments} that methods exploiting pairwise or ranking information are often better suited for selection than plain multi-class classification.
 
 
 \begin{figure*}[!htbp]
@@ -718,7 +718,7 @@ We used Python version 3.10.8, clingo version 5.8.0, SMAC3 version 2.3.1, scikit
 
 \paragraph{Hyperparameter settings.}
 We present the hyperparameter settings used in our experiments in~\autoref{tab:zap_hyperparameters} to \autoref{tab:aslib_presolving_hyperparameters}.
-The ASlib selector benchmark tunes learned selectors with SMAC for 50 trials using 10-fold cross-validation on the training fold (\emph{i.e.}, there is an outer cross validation used for evaluation and inner cross validation for tuning, as done by~\citealp{LinEtAl15b}). The tuning objective is the running-time closed gap. Before tuning each learned selector. The configuration spaces are presented in~\autoref{tab:shared_configuration_spaces} and~\autoref{tab:selector_configuration_spaces}.
+The ASlib selector benchmark tunes learned selectors with SMAC for 50 trials using 10-fold cross-validation on the training fold (\emph{i.e.}, there is an outer cross validation used for evaluation and inner cross validation for tuning, as done by~\citealp{LinEtAl15}). The tuning objective is the running-time closed gap. Before tuning each learned selector. The configuration spaces are presented in~\autoref{tab:shared_configuration_spaces} and~\autoref{tab:selector_configuration_spaces}.
 
 \begin{table*}[!htbp]
   \centering
