@@ -205,7 +205,7 @@ We can see that selector-based pre-selection turns the original large configurat
 Notably, pre-selection not only reduces training cost but also \emph{improves} selector accuracy: JointRankingSubsample achieves 0.912 mean accuracy compared to 0.869 for the full-set JointRanking model, suggesting that the large candidate space introduces noise that hampers learning. The finding that SimpleRanking matches the accuracy of the neural JointRankingSubsample model at a fraction of the cost indicates that, for this meta-feature space, simple tabular methods with proper pre-selection suffice.
 
 
-\begin{figure*}[]
+\begin{figure*}[tbp]
   \centering
   \begin{subfigure}[t]{0.49\textwidth}
     \centering
@@ -409,10 +409,10 @@ Our work introduces a problem-agnostic framework for algorithm selection, with t
 In \cref{lst:ch10:asf_usage} we show a simple example of how to use \gls{asf} to construct a pipeline for algorithm selection. In a few lines of code, it is possible to construct a complex algorithm selection pipeline, which can be used to solve algorithm selection problems. The example shows the structure used in the experiments above: a marginal-contribution pre-selector first reduces the candidate algorithm set, and a pairwise classifier then learns to choose among the remaining candidates from instance features.
 
 
-\begin{figure*}[]
-\captionsetup{type=lstlisting}
-\begin{minipage}{\textwidth}
 \begin{lstlisting}[
+  float=tbp,
+  caption={[ASF usage pseudocode]{Pseudocode illustrating the usage of \gls{asf}. A pipeline is instantiated with a pre-selector and a base model, fitted on instance features and a performance matrix, and used to predict the best algorithm for new instances.}},
+  label={lst:ch10:asf_usage},
   style=asfpython,
   xleftmargin=1em,
   xrightmargin=1em,
@@ -440,10 +440,6 @@ pipeline = SelectorPipeline(
 pipeline.fit(features, performance) 
 predictions = pipeline.predict(features)
 \end{lstlisting}
-\end{minipage}
-\caption[ASF usage pseudocode]{Pseudocode illustrating the usage of \gls{asf}. A pipeline is instantiated with a pre-selector and a base model, fitted on instance features and a performance matrix, and used to predict the best algorithm for new instances.}
-\label{lst:ch10:asf_usage}
-\end{figure*}
 
 \section{Methods implemented in ASF}
 \label{sec:ch10:methods_implemented}

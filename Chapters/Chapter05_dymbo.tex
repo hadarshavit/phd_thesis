@@ -734,7 +734,7 @@ We observe that for cheap benchmarks, the selection variant ($\alpha=1.0$) works
 % }
 
 
-\begin{figure*}[h]
+\begin{figure*}[ht]
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
@@ -773,7 +773,7 @@ We observe that for cheap benchmarks, the selection variant ($\alpha=1.0$) works
 % between 10 minutes up to 1 hour, and on expensive functions with a budget exceeding 1 hour. 
 % We observed that for cheap benchmarks, $\alpha=1.0$, the selection variant works best, while the advantage of it compared to other $\alpha$ values diminishes when the budget grows, as for expensive benchmarks, it has similar performance to $\alpha=0.9$. Over all target functions, $\alpha=1.0$ works best.
 % }
-\begin{figure*}[h]
+\begin{figure*}[ht]
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
@@ -807,7 +807,7 @@ We observe that for cheap benchmarks, the selection variant ($\alpha=1.0$) works
     \label{fig:ch05:gen_res_simple}
 \end{figure*}
 
-\begin{figure*}[h]
+\begin{figure*}[ht]
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
@@ -849,7 +849,7 @@ The results demonstrate that \texttt{DyMBO} achieves a better mean rank compared
 % We also present an analysis of the statistical significance of our results. 
 
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
@@ -914,7 +914,7 @@ all variants of \texttt{DyMBO} with different $\alpha$ values are significantly 
 We therefore conclude that \texttt{DyMBO} significantly outperforms any other baseline.
 % }
 
-\begin{table}[h]
+\begin{table}[ht]
     \centering
         \caption{
         Win/tie counts of different BO-based approaches, including \texttt{DyMBO}, single-surrogate HEBO baselines, and other HPO methods, per function category (\emph{i.e.}, all, cheap, medium-cost, and expensive functions).
@@ -1326,7 +1326,7 @@ We describe additional baselines against which we compared our method. We note t
 
 \paragraph{HEBO with different surrogate models.} To isolate the effect of the surrogate model, we evaluated four single-surrogate HEBO variants using GP, RF, ET, and GB, respectively. All other components of the optimisation pipeline, including the initial-design strategy, acquisition function, and acquisition-function optimiser, were kept unchanged. \cref{fig:ch05:gen_res_more_surrogate} compares these variants with \texttt{DyMBO} ($\alpha=1.0$) and random search. The relative performance of the single-surrogate variants varies with the cost of the target function: GP performs particularly well on cheap and medium-cost functions, whereas RF becomes the strongest single-surrogate baseline on expensive functions toward the end of the optimisation. ET and GB generally obtain lower ranks, although their relative performance also changes across budget groups. \texttt{DyMBO} achieves the best mean rank in every group, demonstrating the benefit of dynamically selecting between complementary surrogate models instead of committing to a single model before optimisation.
 
-\begin{figure*}[h]
+\begin{figure*}[ht]
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
         \centering

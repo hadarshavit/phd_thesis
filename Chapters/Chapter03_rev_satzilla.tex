@@ -161,7 +161,7 @@ We use a cluster of 18 nodes, each equipped with 2 AMD EPYC 7543 32-core CPUs wi
 \subsection{Feature computation time}
 \label{sec:ch03:feature-computation-time}
 
-\begin{figure*}[h]
+\begin{figure*}[ht]
     \caption[Percentage of computed features (2022 SAT Competition)]{Percentage of features computed by the old tool (SATzilla 2012; in red) and the new tool (SATzilla 2024; in blue) over the available time budget for each feature group on the 2022 \gls{sat} Competition. For most feature groups, the new tool extracts features from more instances than the old one.}
     \centering
     \begin{subfigure}[b]{0.24\textwidth}
@@ -242,7 +242,7 @@ We use a cluster of 18 nodes, each equipped with 2 AMD EPYC 7543 32-core CPUs wi
     \label{fig:ch03:feat_comtimes_2022}
 \end{figure*}
 
-\begin{figure*}[h]
+\begin{figure*}[ht]
     \caption[Percentage of computed features (2023 SAT Competition)]{Percentage of features computed by the old tool (SATzilla 2012; in red) and the new tool (SATzilla 2024; in blue) over the available time budget for each feature group on the 2023 \gls{sat} Competition. For most feature groups, the new tool extracts features from more instances than the old one.}
 
     \begin{subfigure}[b]{0.24\textwidth}
@@ -345,7 +345,7 @@ We consider instances from the 2022 and 2023 \gls{sat} Competitions for which we
 We present the satisfiability prediction accuracy scores in \cref{fig:ch03:sat_prediction}. We see that, by using features extracted via the new tool, we achieve better performance across all instances on both \gls{sat} competitions. Furthermore, we notice that the new tool leads to a higher accuracy gain for satisfiable instances than for unsatisfiable instances. For the latter, the accuracy remains very similar to the one achieved by using the old tool in the 2023 \gls{sat} Competition and slightly dropped for the 2022 \gls{sat} Competition. This might be due to the fact that the unsatisfiable instances are larger on average, thus being more prone to timeouts even when using our new tool, \changed{which goes along with the worse performance in the 2022 \gls{sat} Competition, where the unsatisfiable instances were larger than in the 2023 \gls{sat} Competition}. We point out that such high accuracy was already achieved before for industrial \gls{sat} instances~\cite{DevOSu08}.
 
 
-\begin{figure*}[h]
+\begin{figure*}[ht]
     \caption[Satisfiability prediction accuracy]{Accuracy of the satisfiability prediction task using a random forest with features extracted by the old (SATzilla 2012) and the new tool (SATzilla 2024). We see an overall higher accuracy for the new tool, which results from higher accuracy on satisfiable instances. On unsatisfiable ones, the accuracy remains the same.}
     \label{fig:ch03:sat_prediction}
     \begin{subfigure}[b]{0.49\textwidth}
@@ -375,7 +375,7 @@ In line with the previous task, we perform inner and outer cross-validation and 
 
 We look into the performance of the \gls{epm} for running time prediction on all solvers from the 2022 and 2023 \gls{sat} Competitions. Here, we do not actually run solvers on instances to record their running times, but rather use the running times reported by the competitions. We display the results for the 10 best solvers from each competition in \cref{fig:ch03:rt_pred} (the results for all solvers can be found in the supplementary material). We see that using the features extracted by the new tool leads to the lower \gls{rmse} for all solvers, compared to using those extracted by the old tool. For some solvers, we observe a significantly lower \gls{rmse}, like Kissat{\_}MAB{\_}prop-no{\_}sym, where using the new tool decreases the \gls{rmse} from 0.84 to 0.69. \cref{fig:ch03:rmse_hists} shows the histogram of the error percentage for all solvers in the 2022 and 2023 \gls{sat} Competitions. We see that for the 2022 competition, the new tool has more instances with error rate lower than $10\%$ compared to the old version. For the 2023 competition, using the features extracted with the new version, more instances are predicted with less than $1\%$ error. Histograms per solver are available in \cref{sec:rts_hists_per_solver}.
 
-\begin{figure*}[h]
+\begin{figure*}[ht]
     \caption[RMSE of running time prediction]{Root mean square error (\gls{rmse}) of (log-transformed) running time prediction using a random forest with features extracted by the old (SATzilla 2012; in red) and the new tool (SATzilla 2024; in blue), on \gls{sat} solvers from the 2022 and 2023 \gls{sat} Competitions. The new tool achieves lower \gls{rmse} for all solvers.}
     \label{fig:ch03:rt_pred}
     \begin{subfigure}[b]{0.99\textwidth}
@@ -396,7 +396,7 @@ We look into the performance of the \gls{epm} for running time prediction on all
 \end{figure*}
 
 
-\begin{figure*}[h]
+\begin{figure*}[ht]
     \caption[Error percentage histogram of running time prediction]{Histogram of the error percentage of the root mean square error (\gls{rmse}) of (log-transformed) running time prediction using a random forest with features extracted by the old (SATzilla 2012; in red) and the new tool (SATzilla 2024; in blue), on \gls{sat} solvers from the 2022 and 2023 \gls{sat} Competitions. The new tool achieves lower error percentages.}
     \label{fig:ch03:rmse_hists}
     \begin{subfigure}[b]{0.49\textwidth}
@@ -454,7 +454,7 @@ We look into the performance of the \gls{epm} for running time prediction on all
 The third and final downstream task we consider is algorithm selection. In algorithm selection, given a set of instances $I$, a set of solvers (\emph{i.e.}, algorithm portfolio) $\mathbf{A}$ and a performance metric $m: \mathbf{A} \times I \rightarrow \mathbb{R}$, we build an algorithm selector $S: I \rightarrow \mathbf{A}$ such that its performance is optimal on the instance set $I$ according to the metric $m$.
 We compare the performance of algorithm selection to two standard baselines, the single best solver (\gls{sbs}; \emph{i.e}, the solver with the lowest overall running time) and the virtual best solver (\gls{vbs}; \emph{i.e.}, the theoretical oracle which for each instance selects the actual best solver on it).
 
-We measure the performance of algorithm selection using \textit{closed gap}, which is computed as $\frac{m_{\gls{sbs}} - m_{S}}{m_{\gls{sbs}} - m_{\gls{vbs}}}$, (\emph{i.e.}, the closed gap stands for how much of the gap between the \gls{sbs} and the \gls{vbs} is closed by using the algorithm selector).
+We measure the performance of algorithm selection using \textit{closed gap}, which is computed as $\frac{m_{\text{\gls{sbs}}} - m_{S}}{m_{\text{\gls{sbs}}} - m_{\text{\gls{vbs}}}}$, (\emph{i.e.}, the closed gap stands for how much of the gap between the \gls{sbs} and the \gls{vbs} is closed by using the algorithm selector).
 We then use AutoFolio~\cite{LinEtAl15} as an algorithm selector, which consists of multiple algorithm selection approaches, from which the best one is suggested by using algorithm configuration.
 
 
@@ -471,14 +471,14 @@ Overall, the ECDF plots reflect well what is shown in \cref{fig:ch03:closed_gap}
 
 
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \caption[Closed gap values for algorithm selection]{Closed gap values for the algorithm selection task using the old (SATzilla 2012; in red) and the new tool (SATzilla 2024; in blue) on the 2022 and 2023 \gls{sat} Competitions; higher is better.}
     \includegraphics{figures/03/figs/as_bar_2023.pdf}
     \label{fig:ch03:closed_gap}
 \end{figure}
 
-\begin{figure*}[h]
+\begin{figure*}[ht]
     \caption[ECDF plots for algorithm selection]{ECDF plots for the algorithm selection task using the old (SATzilla 2012) and the new tool (SATzilla 2024) on the 2022 and 2023 \gls{sat} Competitions.}
     \label{fig:ch03:ecdf_as}
     \begin{subfigure}[b]{0.49\textwidth}
