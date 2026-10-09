@@ -1,24 +1,30 @@
 
 \chapter{Background}\label{ch:ch02:background}
-
+In this chapter we provide background for \todo
 \section{Empirical performance prediction}
 \label{sec:ch02:empirical_performance_prediction}
 
-Let $\algo$ denote a parameterised algorithm drawn from an algorithm space $\algorithmSpace$, and let $\configuration \in \configurationSpace$ be a configuration, \emph{i.e.}, an assignment of values to the parameters of $\algo$. Let $\instance\in \instanceSpace$ denote a problem instance out of the instance space $\instanceSpace$. $\instance$ is characterised by a feature vector $\instanceFeatures = [\instanceFeature_1, \ldots, \instanceFeature_m]^{\top} \in \mathbb{R}^m$. The observable performance of executing $\algo$ under configuration $\configuration$ on instance $\instance$ is denoted $\performanceVector \in \mathbb{R}^l$, $l \geq 1$. Common choices for $\performanceVector$ include running time (measured in CPU or wall-clock seconds), solution quality (\emph{e.g.}, accuracy), and combinations thereof.
+Let $\algo$ denote a parameterised algorithm drawn from an algorithm space $\algorithmSpace$, and let $\configuration \in \configurationSpace$ be a configuration, \emph{i.e.}, an assignment of values to the parameters of $\algo$. Let $\instance\in \instanceSpace$ denote a problem instance out of the instance space $\instanceSpace$. $\instance$ is characterised by a feature vector $\instanceFeatures = [\instanceFeature_1, \ldots, \instanceFeature_m]^{\top} \in \mathbb{R}^m$. The performance of $\algo$ using configuration $\configuration$ on $\instance$ is denoted by $\performanceVector \in \mathbb{R}^l$, $l \in \mathbb{N}$. Note that, $\performanceVector$ can be have a single element, if there is only one performance metric of interest (for example, the running time of a SAT solver), or, have multiple, potentially competing performance metrics (for example, accuracy and inference speed of a neural network).
 
-A key challenge that distinguishes EPMs from standard regression problems is the structure of the observed data. Performance observations are rarely independent: multiple configurations may be evaluated on the same problem instance (or vice versa), introducing group structure that violates the i.i.d.\ assumption. Runtime targets frequently exhibit heavy-tailed, right-skewed distributions caused by phase transitions and multi-modal difficulty, requiring log-transformation or survival-analysis treatment to produce well-behaved residuals. Many experimental protocols additionally impose a runtime cutoff $\runtimeCutoff$, beyond which a run is recorded as timed-out, introducing right-censored observations that must be handled carefully to avoid systematic bias. Finally, across different scenarios, the scale of the performance target can vary by many orders of magnitude, so preprocessing choices that are innocuous in one scenario may be harmful in another. These structural properties make EPMs strictly harder than standard tabular regression, and they motivate the use of principled, group-aware AutoML pipelines rather than off-the-shelf regressors.
-
-An empirical performance model is a learned function
+An empirical performance model (EPM) is a learned function
 \begin{equation}
   \hat{f} : \modelInput \mapsto \performance,
 \end{equation}
-where the input $\modelInput$ depends on the observation type. We identify three observation types:
+where the input $\modelInput$ depends on the observation type. There are three common types of inputs to and EPM:
 
 \begin{itemize}
   \item \textbf{Per-instance.} The algorithm is executed with a fixed (usually the default) configuration, and performance is predicted from instance features alone: $\modelInput = \instanceFeatures$. Such setting is commonly is in algorithm selectors such as SATzilla~\citep{XuEtAl08}.
   \item \textbf{Per-configuration.} The algorithm is evaluated on a fixed instance or a fixed set of instances, and performance is predicted from the configuration parameters: $\modelInput = \configuration$. This is the case in HPO~\citep{FeuEtAl19} and NAS~\citep{ElsEtAl19}.
   \item \textbf{Per-configuration-and-instance.} The input for the model consists of both configuration and instance features: $\modelInput = (\configuration, \instanceFeatures)$. This most general setting and is used, for example, in algorithm configuration~\citep{HutEtAl14,EggEtAl18a}.
 \end{itemize}
+
+A key challenge that distinguishes EPMs from standard regression problems is the structure of the observed data. Performance observations are usually not independent: multiple configurations may be evaluated on the same problem instance (or vice versa), introducing group structure that violates the i.i.d.\ assumption. Additionally, a common performance metric, running time, frequently exhibit heavy-tailed, right-skewed distributions, requiring special treatment. 
+The problem becomes more severe, as running time observations have a cutoff, meaning that the algorithms are ran until a certain time limit. 
+This means that, for some runs of the algorithm, we don't know the exact running time, but simply that it is larger than the cutoff.
+Moreover, performance data is usually noisy, as many algorithms use randomness, and, as data is scarce, it is necessary to learn a meaningful predictor from few observations. Performance observations are usually not independent: multiple configurations may be evaluated on the same problem instance (or vice versa), introducing group structure that violates the i.i.d.\ assumption. 
+Finally, across different scenarios, the scale of the performance target can vary by many orders of magnitude, so preprocessing choices that are beneficial in one scenario may be harmful in another. 
+
+
 
 
 The predict performance can be a single number per metric, showing the mean or median value. Alternatively, it is also possible to predict the full performance distribution distribution $p(y \mid \modelInput)$ rather than a single value to obtain a distributional EPM~\citep{EggEtAl18a}, which is particularly valuable for capturing more subtle details of the performance of the algorithm, such as its variance and skewness.
