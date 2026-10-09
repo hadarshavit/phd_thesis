@@ -24,18 +24,18 @@ In this section, we formally define empirical performance models, review existin
 \subsection{Empirical performance models}
 \label{sec:ch09:epm}
 
-Given an algorithm $\mathcal{A}$ that operates on 
+Given an algorithm $\algo$ that operates on
 
-instances $I$ from an instance set $\in\mathcal{I}$, with an associated feature vector $\mathbf{z}_{I}\in\mathcal{F}$ that describes $I$, and a measured performance $p_I\in\mathcal{P}$ (\emph{e.g.}, running time, solution quality or accuracy), an empirical performance model (\gls{epm}) is a predictor 
-$f: \mathcal{F} \to \mathcal{P}$
+instances $\instance$ from an instance set $\in\instanceSpace$, with an associated feature vector $\instanceFeatures_{\instance}\in\featureSpace$ that describes $\instance$, and a measured performance $\performance_{\instance}\in\performanceSpace$ (\emph{e.g.}, running time, solution quality or accuracy), an empirical performance model (\gls{epm}) is a predictor
+$f: \featureSpace \to \performanceSpace$
 
 
 
-that generalises from a set of observed pairs $\mathcal{D}_\text{train}=\{(\mathbf{z}_{I},p_I) \mid I\in\mathcal{I}_\text{train}\}$ to unseen instances $\mathcal{D}_\text{test}=\{(\mathbf{z}_{I},p_I) \mid I\in\mathcal{I}_\text{test}\}$. 
+that generalises from a set of observed pairs $\mathcal{D}_\text{train}=\{(\instanceFeatures_{\instance},\performance_{\instance}) \mid \instance\in\instanceSpace_\text{train}\}$ to unseen instances $\mathcal{D}_\text{test}=\{(\instanceFeatures_{\instance},\performance_{\instance}) \mid \instance\in\instanceSpace_\text{test}\}$.
 
 \Glspl{epm} have been developed for a wide range of tasks, including automated algorithm selection~\citep{XuEtAl08,Kotthoff16}, algorithm configuration and parameter tuning~\citep{HutEtAl12,HutEtAl06}, data centre and cloud scheduling~\citep{LeeEtAl25,IslEtAl12,SaxEtAl23,PhaEtAl20}, compiler optimisation~\citep{YotEtAl03,AshEtAl18}, and database query optimisation~\citep{WuEtAl13}. \Glspl{epm} require a set of features describing instances as an input to the model. For $\mathcal{NP}$-complete problems, high-level properties of instances are encoded to serve as an instance identifier, such as the SATzilla features for propositional satisfiability (\gls{sat})~\citep{HutEtAl14,ShaHoo24} and causal-graph or planning-graph features for automated planning~\citep{FawEtAl14}. 
 
-For stochastic algorithms, the performance of $\mathcal{A}$ on a fixed instance $I$ is a random variable. Traditional \glspl{epm} handle this stochasticity by either: (i) modelling an aggregate statistic calculated from repeated runs (e.g., the empirical mean or median), or (ii) training directly on noisy, single-run observations. In both cases, the \gls{epm} outputs a single scalar value, discarding all information about the variance and shape of the underlying distribution.
+For stochastic algorithms, the performance of $\algo$ on a fixed instance $\instance$ is a random variable. Traditional \glspl{epm} handle this stochasticity by either: (i) modelling an aggregate statistic calculated from repeated runs (e.g., the empirical mean or median), or (ii) training directly on noisy, single-run observations. In both cases, the \gls{epm} outputs a single scalar value, discarding all information about the variance and shape of the underlying distribution.
 
 
 To capture the complete run-to-run variation of stochastic algorithms, \citet{EggEtAl18} introduced \emph{DistNet}, a neural network that predicts the parameters of a per-instance running time distribution (e.g., a log-normal distribution). DistNet is trained by minimising the negative log-likelihood (NLL) of individual run observations, which is more efficient and numerically stable than a two-stage approach that first fits distribution parameters per instance and then regresses on those parameters.
@@ -50,11 +50,11 @@ Crucially, all of these techniques assume a scalar-valued prediction target. Bec
 \section{Explainability of performance distribution predictions}
 \label{sec:ch09:explainability}
 
-Our \gls{epm} predicts the parameters $\boldsymbol\theta$ of a given parametric family (\emph{e.g.,} log-normal or inverse Gaussian) as a function of instance features, \emph{i.e.}, $\boldsymbol\theta=f(\mathbf{z}_I)$. Each summary statistic $s$ is then a function of these parameters, $s=h_s(\boldsymbol\theta)$. 
+Our \gls{epm} predicts the parameters $\boldsymbol\theta$ of a given parametric family (\emph{e.g.,} log-normal or inverse Gaussian) as a function of instance features, \emph{i.e.}, $\boldsymbol\theta=f(\instanceFeatures_{\instance})$. Each summary statistic $s$ is then a function of these parameters, $s=h_s(\boldsymbol\theta)$.
 
-Therefore, we can represent the summary statistic function $g_s$ given instance features $\mathbf{z}_I$ as
+Therefore, we can represent the summary statistic function $g_s$ given instance features $\instanceFeatures_{\instance}$ as
 
-    $g_s(\mathbf{z}_I) = h_s(f(\mathbf{z}_I))$.
+    $g_s(\instanceFeatures_{\instance}) = h_s(f(\instanceFeatures_{\instance}))$.
 To explain the distribution predictions, we analyse how instance features affect the following summary statistics of the predicted distribution: 
 \emph{mean:} the expected (average) performance (\emph{e.g.,} running time);
 
@@ -121,7 +121,7 @@ We emphasise that these statistics are not equally easy to estimate from limited
 
 
 To understand \emph{which features} are the most influential for each statistic, we apply permutation importance~\citep{Breiman01} to $g_s$. 
-For a statistic $s$, we measure predictive accuracy by the mean squared error between the predicted statistic $g_s(\mathbf{z}_I)$ and the corresponding statistic estimated from the observed running time distribution of instance $I$.
+For a statistic $s$, we measure predictive accuracy by the mean squared error between the predicted statistic $g_s(\instanceFeatures_{\instance})$ and the corresponding statistic estimated from the observed running time distribution of instance $\instance$.
 The method randomly shuffles the values of one feature across instances, breaking any association between that feature and the statistic-specific target, and measures the resulting increase in MSE: important features yield a substantially larger increase, while irrelevant features cause negligible changes.
 
 
@@ -223,9 +223,9 @@ Let $\mathcal{D}$ denote a parametric family with density (or mass) function $p_
 
 
 
-For an observed performance value $y_{I,t}\in\mathcal{Y}$ on run $t$ of instance $I$ with predicted parameters $\boldsymbol\theta_I=\boldsymbol\theta(\mathbf{z}_I)$, we minimise the empirical mean over the training set of the per-observation loss, defined as:
+For an observed performance value $y_{\instance,t}\in\mathcal{Y}$ on run $t$ of instance $\instance$ with predicted parameters $\boldsymbol\theta_{\instance}=\boldsymbol\theta(\instanceFeatures_{\instance})$, we minimise the empirical mean over the training set of the per-observation loss, defined as:
 
-    $\ell_I\bigl(y_{I,t},\boldsymbol\theta_I\bigr) = -\log p_{\mathcal{D}}\bigl(y_{I,t}\mid \boldsymbol\theta_I\bigr)$.
+    $\ell_{\instance}\bigl(y_{\instance,t},\boldsymbol\theta_{\instance}\bigr) = -\log p_{\mathcal{D}}\bigl(y_{\instance,t}\mid \boldsymbol\theta_{\instance}\bigr)$.
 
 
 

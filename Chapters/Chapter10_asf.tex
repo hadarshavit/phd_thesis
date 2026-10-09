@@ -107,7 +107,7 @@ The remainder of the paper is structured as follows: we begin by covering the ba
 
 
 \subsection{Empirical performance prediction}
-A closely related problem to algorithm selection is empirical performance prediction, where given an instance $I\in\mathcal{I}$ and a feature vector $\mathbf{f}\in\mathcal{F}$, the goal is to create an empirical performance model (\gls{epm}) $P_A:\mathcal{F}\rightarrow \mathbb{R}$ that predicts $m(A, I)$ as accurately as possible.
+A closely related problem to algorithm selection is empirical performance prediction, where given an instance $\instance\in\instanceSpace$ and a feature vector $\instanceFeatures\in\featureSpace$, the goal is to create an empirical performance model (\gls{epm}) $P_{\algo}:\featureSpace\rightarrow \mathbb{R}$ that predicts $m(\algo, \instance)$ as accurately as possible.
 \Glspl{epm} can be used for algorithm selection~\citep{NudEtAl04,XuEtAl08}, algorithm configuration~\citep{HutEtAl11,LinEtAl22b}, explainability~\citep{HutEtAl13}, and data centre scheduling~\citep{LeeEtAl25}.
 To model performance, one should account for the distribution of the performance, which can require preprocessing of the labels, such as log-transformation~\citep{HutEtAl14}. However, \gls{epm}-based algorithm selection is often not the practically best approach, essentially because accurately predicting exact performance values is generally a harder task than determining the relative ranking of algorithms.
 
@@ -352,31 +352,31 @@ The methods with similar portfolio quality have different computational costs. \
 \section{Additional background}\label{sec:ch10:add_background}
 Here, we provide additional background on algorithm selection.
 \subsection{Algorithm Selection Baselines}
-A basic, widely used baseline for algorithm selection is the single-best-solver (\gls{sbs}), which is the algorithm that works best for the instances $\mathcal{I}$. The performance of the \gls{sbs} is defined as 
-$$m(SBS_\mathcal{A}, \mathcal{I})=\min_{A\in\mathcal{A}} \sum_{I\in\mathcal{I}} m(A, I)$$
+A basic, widely used baseline for algorithm selection is the single-best-solver (\gls{sbs}), which is the algorithm that works best for the instances $\instanceSpace$. The performance of the \gls{sbs} is defined as
+$$m(SBS_{\algorithmSpace}, \instanceSpace)=\min_{\algo\in\algorithmSpace} \sum_{\instance\in\instanceSpace} m(\algo, \instance)$$
 Another prominent baseline is the virtual-best-solver (\gls{vbs}), also known as an oracle selector. This baseline represents an idealised, optimal selector, \emph{i.e.}, always selecting the best algorithm, which has the performance of
-$$m(VBS_\mathcal{A}, \mathcal{I})= \sum_{I\in\mathcal{I}} \min_{A\in\mathcal{A}} m(A, I)$$
+$$m(VBS_{\algorithmSpace}, \instanceSpace)= \sum_{\instance\in\instanceSpace} \min_{\algo\in\algorithmSpace} m(\algo, \instance)$$
 We note that while in machine learning (and many other fields) the algorithms are not called ``solvers'', the algorithm selection literature adopted this terminology, because the first major successes of algorithm selection came from \gls{sat} solving. Nevertheless, the definitions above apply to any domain.
 
 \subsection{Assessment of Algorithm Selection Methods}
 For algorithm selection to be feasible, there needs to be \textit{performance complementarity}, \emph{i.e.,} a single algorithm should not dominate over all problem instances.
 This is a common phenomenon for many challenging computational problems, which has been thoroughly explored for $\mathcal{NP}$-complete problems~\citep{Kotthoff16,KerEtAl19}.
 A simple measure for performance complementarity is the \gls{sbs}-\gls{vbs} ratio:
-$$\frac{m(SBS_\mathcal{A}, \mathcal{I})}{m(VBS_\mathcal{A}, \mathcal{I})}$$
+$$\frac{m(SBS_{\algorithmSpace}, \instanceSpace)}{m(VBS_{\algorithmSpace}, \instanceSpace)}$$
 which needs to be large enough to enable viable algorithm selection.
 
 
 
 As algorithms commonly exhibit performance complementarity, the absolute marginal contribution quantifies the contribution of an algorithm to \gls{vbs} performance:
-$$\text{amc}(A, \mathcal{I}) =  m(VBS_{\mathcal{A} \backslash A}, \mathcal{I})-m(VBS_\mathcal{A}, \mathcal{I})$$
+$$\text{amc}(\algo, \instanceSpace) =  m(VBS_{\algorithmSpace \backslash \algo}, \instanceSpace)-m(VBS_{\algorithmSpace}, \instanceSpace)$$
 The relative marginal contribution is then defined as:
-$$\text{rmc}(A, \mathcal{I})=\frac{\text{amc}(A, \mathcal{I})}{\sum_{A\in \mathcal{A}}\text{amc}(A, \mathcal{I})}$$
+$$\text{rmc}(\algo, \instanceSpace)=\frac{\text{amc}(\algo, \instanceSpace)}{\sum_{\algo\in \algorithmSpace}\text{amc}(\algo, \instanceSpace)}$$
 The marginal contribution metric is important both for analysing algorithm selection scenarios and for constructing complementary portfolios in pre-selection methods.
 
 
 To measure how much of the performance difference between the \gls{sbs} and \gls{vbs} is recovered by an algorithm selector, we use the closed-gap metric:
-$$\frac{m(SBS_\mathcal{A}, \mathcal{I}) - m(S, \mathcal{I})}{m(SBS_\mathcal{A}, \mathcal{I}) - m(VBS_\mathcal{A}, \mathcal{I})}$$
-Where $m(S, \mathcal{I})$ is the performance of the selector. A value of 0 corresponds to \gls{sbs} performance, a value of 1 corresponds to \gls{vbs} performance, and negative values indicate performance worse than the \gls{sbs}.
+$$\frac{m(SBS_{\algorithmSpace}, \instanceSpace) - m(S, \instanceSpace)}{m(SBS_{\algorithmSpace}, \instanceSpace) - m(VBS_{\algorithmSpace}, \instanceSpace)}$$
+Where $m(S, \instanceSpace)$ is the performance of the selector. A value of 0 corresponds to \gls{sbs} performance, a value of 1 corresponds to \gls{vbs} performance, and negative values indicate performance worse than the \gls{sbs}.
 
 \paragraph{ASlib. } \citet{BisEtAl16} have introduced a unified benchmark for algorithm selection, which includes a unified format for algorithm runs, feature values, and all other necessary information for creating an algorithm selection pipeline. The benchmark contains more than 20 algorithm selection scenarios, most of them based on running time minimisation.
 ASlib has become a standard benchmark for evaluating algorithm selection systems for such use cases; however, it is less commonly used when dealing with other performance metrics.
