@@ -59,12 +59,8 @@
 %\setbibpreamble{}
 \pagenumbering{roman}
 \pagestyle{plain}
-%********************************************************************
-% Frontmatter
-%*******************************************************
-\include{FrontBackmatter/Titlepage}
-% \include{FrontBackmatter/Titleback}
-\include{FrontBackmatter/Dedication}
+\input{macros}
+
 \usetikzlibrary{shapes.geometric}
 \usetikzlibrary{positioning}
 \usetikzlibrary{shapes.geometric, arrows.meta, positioning, fit, backgrounds, calc}
@@ -89,7 +85,14 @@
   stringstyle=\color{orange!60!black},
 }
 \lstset{style=asfpython}
-\input{macros}
+
+%********************************************************************
+% Frontmatter
+%*******************************************************
+\include{FrontBackmatter/Titlepage}
+% \include{FrontBackmatter/Titleback}
+\include{FrontBackmatter/Dedication}
+
 %\cleardoublepage\include{FrontBackmatter/Foreword}
 \cleardoublepage\include{FrontBackmatter/Abstract}
 \cleardoublepage\include{FrontBackmatter/Publications}
