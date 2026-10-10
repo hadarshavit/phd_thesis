@@ -11,6 +11,7 @@ This is a well-known phenomenon that can be exploited using \textit{automated al
 \begin{figure}
   \centering
 
+\resizebox{\linewidth}{!}{%
 \begin{tikzpicture}[
     >=Stealth,
     font=\sffamily\small,
@@ -60,7 +61,7 @@ This is a well-known phenomenon that can be exploited using \textit{automated al
     \draw[->, ultra thick, draw=blue!80!black] (asf-core.east |- out-automl.west) -- (out-automl.west) node[midway, above, font=\tiny, text=black!80] {Assessment};
     \draw[->, ultra thick, draw=orange!80!black] (asf-core.east |- out-bbo.west) -- (out-bbo.west) node[midway, above, font=\tiny, text=black!80] {Assessment};
 
-\end{tikzpicture}
+\end{tikzpicture}}
   \caption[ASF library overview]{Overview of the \gls{asf} library which provides problem-agnostic implementations of algorithm selection methods, which can be used for various domains, such as \gls{automl}, \gls{bbo}, \gls{sat}, and others.
 
   }
@@ -183,7 +184,7 @@ We used the scenario and meta-data supplied by~\citet{OztEtAl22}, preserving the
 \begin{wrapfigure}{r}{0.4\textwidth}
   \begin{center}
       
-  \includegraphics{figures/10/figures/analysis/zap_preselection_vbs_box.pdf}
+  \includegraphics[width=\linewidth]{figures/10/figures/analysis/zap_preselection_vbs_box.pdf}
   \caption[ZAP pre-selection quality]{ZAP pre-selection quality. 
 
   Each box reports held-out \gls{vbs} accuracy, after marginal-contribution pre-selection was fitted on the corresponding training fold; higher is better.}
@@ -209,13 +210,12 @@ Notably, pre-selection not only reduces training cost but also \emph{improves} s
   \centering
   \begin{subfigure}[t]{0.49\textwidth}
     \centering
-    \includegraphics{figures/10/figures/analysis/zap_accuracy_box.pdf}
+    \includegraphics[width=\linewidth]{figures/10/figures/analysis/zap_accuracy_box.pdf}
     \caption{Accuracy}
-  \end{subfigure}
-  \hfill
-  \begin{subfigure}[t]{0.49\textwidth}
+  \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.49\textwidth}
     \centering
-    \includegraphics{figures/10/figures/analysis/zap_runtime_box.pdf}
+    \includegraphics[width=\linewidth]{figures/10/figures/analysis/zap_runtime_box.pdf}
     \caption{Running time}
   \end{subfigure}
   \caption[ZAP selector comparison]{ZAP selector comparison. The left panel reports per-dataset accuracy distributions and the right panel reports per-fold training time in seconds on a logarithmic scale. Higher accuracy and lower running time are better.
@@ -306,35 +306,33 @@ We use HPOBench~\citep{EggEtAl21}, which provides performance data for tradition
   \centering
   \begin{subfigure}[t]{0.32\textwidth}
     \centering
-    \includegraphics{figures/10/figures/analysis/hpobench_normalized_score_box_k5.pdf}
+    \includegraphics[width=\linewidth]{figures/10/figures/analysis/hpobench_normalized_score_box_k5.pdf}
     \caption{$k=5$}
-  \end{subfigure}
-
-  \begin{subfigure}[t]{0.32\textwidth}
+  \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.32\textwidth}
     \centering
-    \includegraphics{figures/10/figures/analysis/hpobench_normalized_score_box_k10.pdf}
+    \includegraphics[width=\linewidth]{figures/10/figures/analysis/hpobench_normalized_score_box_k10.pdf}
     \caption{$k=10$}
-  \end{subfigure}
-
-  \begin{subfigure}[t]{0.32\textwidth}
+  \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.32\textwidth}
     \centering
-    \includegraphics{figures/10/figures/analysis/hpobench_normalized_score_box_k25.pdf}
+    \includegraphics[width=\linewidth]{figures/10/figures/analysis/hpobench_normalized_score_box_k25.pdf}
     \caption{$k=25$}
   \end{subfigure}
-\par\medskip
-  \begin{subfigure}[t]{0.32\textwidth}
+    \par\medskip
+    \begin{subfigure}[t]{0.32\textwidth}
     \centering
-    \includegraphics{figures/10/figures/analysis/hpobench_runtime_box_k5.pdf}
+    \includegraphics[width=\linewidth]{figures/10/figures/analysis/hpobench_runtime_box_k5.pdf}
     \caption{$k=5$}
-  \end{subfigure}
-  \begin{subfigure}[t]{0.32\textwidth}
+  \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.32\textwidth}
     \centering
-    \includegraphics{figures/10/figures/analysis/hpobench_runtime_box_k10.pdf}
+    \includegraphics[width=\linewidth]{figures/10/figures/analysis/hpobench_runtime_box_k10.pdf}
     \caption{$k=10$}
-  \end{subfigure}
-  \begin{subfigure}[t]{0.32\textwidth}
+  \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.32\textwidth}
     \centering
-    \includegraphics{figures/10/figures/analysis/hpobench_runtime_box_k25.pdf}
+    \includegraphics[width=\linewidth]{figures/10/figures/analysis/hpobench_runtime_box_k25.pdf}
     \caption{$k=25$}
   \end{subfigure}
   \caption[HPOBench portfolio pre-selection by size]{HPOBench portfolio pre-selection by portfolio size. The top row reports normalised pre-selection score over held-out datasets, where 0 corresponds to \gls{sbs} and 1 corresponds to \gls{vbs}; higher is better. The bottom row reports pre-selector running time in seconds on a logarithmic scale; lower is better.}
@@ -515,7 +513,7 @@ We note that we used only running time-based scenarios from ASlib, namely: SAT12
 \subsection{Pre-selection}
 
 \paragraph{Setup of experiments.}
-We evaluated portfolio pre-selectors on each ASlib scenario using the pre-defined 10-fold cross-validation. We created portfolios of requested size $k\in\{2,5,10,15,20,25,30,35,40,45,50\}$; the pre-selector was fitted only on the performance matrix of the training fold and returned $k$ solvers. The selected portfolio was then evaluated on the held-out fold by the running time of its virtual best solver. 
+We evaluated portfolio pre-selectors on each ASlib scenario using the pre-defined 10-fold cross-validation. We created portfolios of requested size $k\in\{2,\allowbreak 5,\allowbreak 10,\allowbreak 15,\allowbreak 20,\allowbreak 25,\allowbreak 30,\allowbreak 35,\allowbreak 40,\allowbreak 45,\allowbreak 50\}$; the pre-selector was fitted only on the performance matrix of the training fold and returned $k$ solvers. The selected portfolio was then evaluated on the held-out fold by the running time of its virtual best solver.
 
 \textbf{Performance metric.} We report the normalised held-out pre-selection score. A score of 0 corresponds to selecting the scenario single-best solver, and a score of 1 corresponds to the full virtual-best solver over all solvers. Higher values indicate that the selected portfolio preserves more of the scenario-level oracle performance.
 
@@ -526,57 +524,60 @@ We evaluated portfolio pre-selectors on each ASlib scenario using the pre-define
   \centering
   \begin{subfigure}[t]{0.32\textwidth}
     \centering
-    \includegraphics{figures/10/figures/analysis/preselection_normalized_score_k2.pdf}
+    \includegraphics[width=\linewidth]{figures/10/figures/analysis/preselection_normalized_score_k2.pdf}
     \caption{$k=2$}
-  \end{subfigure}
-  \begin{subfigure}[t]{0.32\textwidth}
+  \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.32\textwidth}
     \centering
-    \includegraphics{figures/10/figures/analysis/preselection_normalized_score_k5.pdf}
+    \includegraphics[width=\linewidth]{figures/10/figures/analysis/preselection_normalized_score_k5.pdf}
     \caption{$k=5$}
-  \end{subfigure}
-  \begin{subfigure}[t]{0.32\textwidth}
+  \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.32\textwidth}
     \centering
-    \includegraphics{figures/10/figures/analysis/preselection_normalized_score_k10.pdf}
+    \includegraphics[width=\linewidth]{figures/10/figures/analysis/preselection_normalized_score_k10.pdf}
     \caption{$k=10$}
   \end{subfigure}
-  \begin{subfigure}[t]{0.32\textwidth}
+    \par\medskip
+    \begin{subfigure}[t]{0.32\textwidth}
     \centering
-    \includegraphics{figures/10/figures/analysis/preselection_normalized_score_k15.pdf}
+    \includegraphics[width=\linewidth]{figures/10/figures/analysis/preselection_normalized_score_k15.pdf}
     \caption{$k=15$}
-  \end{subfigure}
-  \begin{subfigure}[t]{0.32\textwidth}
+  \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.32\textwidth}
     \centering
-    \includegraphics{figures/10/figures/analysis/preselection_normalized_score_k20.pdf}
+    \includegraphics[width=\linewidth]{figures/10/figures/analysis/preselection_normalized_score_k20.pdf}
     \caption{$k=20$}
-  \end{subfigure}
-  \begin{subfigure}[t]{0.32\textwidth}
+  \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.32\textwidth}
     \centering
-    \includegraphics{figures/10/figures/analysis/preselection_normalized_score_k25.pdf}
+    \includegraphics[width=\linewidth]{figures/10/figures/analysis/preselection_normalized_score_k25.pdf}
     \caption{$k=25$}
   \end{subfigure}
-  \begin{subfigure}[t]{0.32\textwidth}
+    \par\medskip
+    \begin{subfigure}[t]{0.32\textwidth}
     \centering
-    \includegraphics{figures/10/figures/analysis/preselection_normalized_score_k30.pdf}
+    \includegraphics[width=\linewidth]{figures/10/figures/analysis/preselection_normalized_score_k30.pdf}
     \caption{$k=30$}
-  \end{subfigure}
-  \begin{subfigure}[t]{0.32\textwidth}
+  \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.32\textwidth}
     \centering
-    \includegraphics{figures/10/figures/analysis/preselection_normalized_score_k35.pdf}
+    \includegraphics[width=\linewidth]{figures/10/figures/analysis/preselection_normalized_score_k35.pdf}
     \caption{$k=35$}
-  \end{subfigure}
-  \begin{subfigure}[t]{0.32\textwidth}
+  \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.32\textwidth}
     \centering
-    \includegraphics{figures/10/figures/analysis/preselection_normalized_score_k40.pdf}
+    \includegraphics[width=\linewidth]{figures/10/figures/analysis/preselection_normalized_score_k40.pdf}
     \caption{$k=40$}
   \end{subfigure}
-  \begin{subfigure}[t]{0.32\textwidth}
+    \par\medskip
+    \begin{subfigure}[t]{0.32\textwidth}
     \centering
-    \includegraphics{figures/10/figures/analysis/preselection_normalized_score_k45.pdf}
+    \includegraphics[width=\linewidth]{figures/10/figures/analysis/preselection_normalized_score_k45.pdf}
     \caption{$k=45$}
-  \end{subfigure}
-  \begin{subfigure}[t]{0.32\textwidth}
+  \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.32\textwidth}
     \centering
-    \includegraphics{figures/10/figures/analysis/preselection_normalized_score_k50.pdf}
+    \includegraphics[width=\linewidth]{figures/10/figures/analysis/preselection_normalized_score_k50.pdf}
     \caption{$k=50$}
   \end{subfigure}
   \caption[ASlib pre-selection quality by portfolio size]{ASlib pre-selection quality by portfolio size. Each box summarizes normalised held-out pre-selection score over folds and scenarios; higher is better.}
@@ -599,7 +600,8 @@ We evaluated schedule-based presolvers on the same ASlib running time scenarios 
   \centering
   \caption[ASlib pre-solving solved-instance counts]{ASlib pre-solving solved-instance counts. Rows are grouped by pre-solving budget and ASlib scenario; columns are pre-solving methods. Higher is better, and bold entries mark the highest count in each row.}
 
-  {\input{figures/10/figures/tables/presolving_solved_counts_by_budget.tex}}
+  {\setlength{\extrarowheight}{0pt}%
+   \input{figures/10/figures/tables/presolving_solved_counts_by_budget.tex}}
   \label{tab:ch10:aslib_presolving_counts}
 \end{table*}
 
@@ -620,22 +622,25 @@ We evaluated learned per-instance selectors on the ASlib scenarios with predefin
   \centering
   \begin{subfigure}[t]{0.98\textwidth}
     \centering
-    \includegraphics{figures/10/figures/analysis/selection_closed_gap_asp_potassco.pdf}
+    \includegraphics[width=\linewidth]{figures/10/figures/analysis/selection_closed_gap_asp_potassco.pdf}
     \caption{ASP-POTASSCO}
   \end{subfigure}
-  \begin{subfigure}[t]{0.98\textwidth}
+    \par\medskip
+    \begin{subfigure}[t]{0.98\textwidth}
     \centering
-    \includegraphics{figures/10/figures/analysis/selection_closed_gap_bnsl_2016.pdf}
+    \includegraphics[width=\linewidth]{figures/10/figures/analysis/selection_closed_gap_bnsl_2016.pdf}
     \caption{BNSL-2016}
   \end{subfigure}
-  \begin{subfigure}[t]{0.98\textwidth}
+    \par\medskip
+    \begin{subfigure}[t]{0.98\textwidth}
     \centering
-    \includegraphics{figures/10/figures/analysis/selection_closed_gap_csp_minizinc_time_2016.pdf}
+    \includegraphics[width=\linewidth]{figures/10/figures/analysis/selection_closed_gap_csp_minizinc_time_2016.pdf}
     \caption{CSP-Minizinc-Time-2016}
   \end{subfigure}
-  \begin{subfigure}[t]{0.98\textwidth}
+    \par\medskip
+    \begin{subfigure}[t]{0.98\textwidth}
     \centering
-    \includegraphics{figures/10/figures/analysis/selection_closed_gap_ipc2018.pdf}
+    \includegraphics[width=\linewidth]{figures/10/figures/analysis/selection_closed_gap_ipc2018.pdf}
     \caption{IPC2018}
   \end{subfigure}
   \caption[ASlib closed gap by scenario, part 1]{ASlib algorithm-selection closed gap by scenario and selector, part 1. Bars show the percentage of the \gls{sbs}--\gls{vbs} gap closed by each selector; higher is better. Negative displayed values are clipped at $-100\%$.}
@@ -646,22 +651,25 @@ We evaluated learned per-instance selectors on the ASlib scenarios with predefin
   \centering
   \begin{subfigure}[t]{0.98\textwidth}
     \centering
-    \includegraphics{figures/10/figures/analysis/selection_closed_gap_maxsat19_ucms.pdf}
+    \includegraphics[width=\linewidth]{figures/10/figures/analysis/selection_closed_gap_maxsat19_ucms.pdf}
     \caption{MAXSAT19-UCMS}
   \end{subfigure}
-  \begin{subfigure}[t]{0.98\textwidth}
+    \par\medskip
+    \begin{subfigure}[t]{0.98\textwidth}
     \centering
-    \includegraphics{figures/10/figures/analysis/selection_closed_gap_mip_2016.pdf}
+    \includegraphics[width=\linewidth]{figures/10/figures/analysis/selection_closed_gap_mip_2016.pdf}
     \caption{MIP-2016}
   \end{subfigure}
-  \begin{subfigure}[t]{0.98\textwidth}
+    \par\medskip
+    \begin{subfigure}[t]{0.98\textwidth}
     \centering
-    \includegraphics{figures/10/figures/analysis/selection_closed_gap_qbf_2016.pdf}
+    \includegraphics[width=\linewidth]{figures/10/figures/analysis/selection_closed_gap_qbf_2016.pdf}
     \caption{QBF-2016}
   \end{subfigure}
-  \begin{subfigure}[t]{0.98\textwidth}
+    \par\medskip
+    \begin{subfigure}[t]{0.98\textwidth}
     \centering
-    \includegraphics{figures/10/figures/analysis/selection_closed_gap_sat12_indu.pdf}
+    \includegraphics[width=\linewidth]{figures/10/figures/analysis/selection_closed_gap_sat12_indu.pdf}
     \caption{SAT12-INDU}
   \end{subfigure}
   \caption[ASlib closed gap by scenario, part 2]{ASlib algorithm-selection closed gap by scenario and selector, part 2. Bars show the percentage of the \gls{sbs}--\gls{vbs} gap closed by each selector; higher is better. Negative displayed values are clipped at $-100\%$.}
@@ -672,12 +680,13 @@ We evaluated learned per-instance selectors on the ASlib scenarios with predefin
   \centering
   \begin{subfigure}[t]{0.98\textwidth}
     \centering
-    \includegraphics{figures/10/figures/analysis/selection_closed_gap_sat20_main.pdf}
+    \includegraphics[width=\linewidth]{figures/10/figures/analysis/selection_closed_gap_sat20_main.pdf}
     \caption{SAT20-MAIN}
   \end{subfigure}
-  \begin{subfigure}[t]{0.98\textwidth}
+    \par\medskip
+    \begin{subfigure}[t]{0.98\textwidth}
     \centering
-    \includegraphics{figures/10/figures/analysis/selection_closed_gap_tsp_lion2015.pdf}
+    \includegraphics[width=\linewidth]{figures/10/figures/analysis/selection_closed_gap_tsp_lion2015.pdf}
     \caption{TSP-LION2015}
   \end{subfigure}
   \caption[ASlib closed gap by scenario, part 3]{ASlib algorithm-selection closed gap by scenario and selector, part 3. Bars show the percentage of the \gls{sbs}--\gls{vbs} gap closed by each selector; higher is better. Negative displayed values are clipped at $-100\%$.}
@@ -724,7 +733,8 @@ The ASlib selector benchmark tunes learned selectors with SMAC for 50 trials usi
   \begin{subtable}[t]{0.48\textwidth}
     \centering
     \caption{JointRanking}
-    \begin{tabular}{ll}
+    \small
+    \begin{tabularx}{\linewidth}{@{}>{\RaggedRight\arraybackslash}X >{\RaggedRight\arraybackslash}X@{}}
       \toprule
       Hyperparameter & Value \\
       \midrule
@@ -735,14 +745,15 @@ The ASlib selector benchmark tunes learned selectors with SMAC for 50 trials usi
       Hidden sizes, dropout & $(383,383,383)$ \\
       Dropout & 0.1\\
       \bottomrule
-    \end{tabular}
+    \end{tabularx}
     
   \end{subtable}
   \hfill
   \begin{subtable}[t]{0.48\textwidth}
     \centering
     \caption{JointRankingSubsample}
-    \begin{tabular}{ll}
+    \small
+    \begin{tabularx}{\linewidth}{@{}>{\RaggedRight\arraybackslash}X >{\RaggedRight\arraybackslash}X@{}}
       \toprule
       Hyperparameter & Value \\
       \midrule
@@ -753,14 +764,15 @@ The ASlib selector benchmark tunes learned selectors with SMAC for 50 trials usi
       Hidden sizes & $(256,256,256)$ \\
       Dropout & 0.1 \\
       \bottomrule
-    \end{tabular}
+    \end{tabularx}
     
   \end{subtable}
 \hfill
   \begin{subtable}[t]{0.48\textwidth}
     \centering
     \caption{XGBoost}
-    \begin{tabular}{ll}
+    \small
+    \begin{tabularx}{\linewidth}{@{}>{\RaggedRight\arraybackslash}X >{\RaggedRight\arraybackslash}X@{}}
       \toprule
       Hyperparameter & Value \\
       \midrule
@@ -773,14 +785,15 @@ The ASlib selector benchmark tunes learned selectors with SMAC for 50 trials usi
       Colsample tree / level & 1.0 / 1.0 \\
       $\lambda$, $\alpha$ & 1, 0 \\
       \bottomrule
-    \end{tabular}
+    \end{tabularx}
     
   \end{subtable}
     \hfill
   \begin{subtable}[t]{0.48\textwidth}
     \centering
     \caption{CosineSelector}
-    \begin{tabular}{ll}
+    \small
+    \begin{tabularx}{\linewidth}{@{}>{\RaggedRight\arraybackslash}X >{\RaggedRight\arraybackslash}X@{}}
       \toprule
       Hyperparameter & Value \\
       \midrule
@@ -789,7 +802,7 @@ The ASlib selector benchmark tunes learned selectors with SMAC for 50 trials usi
       Embedded size & 50 \\
       \# hidden layers & 2 \\
       \bottomrule
-    \end{tabular}
+    \end{tabularx}
   \end{subtable}
 \end{table*}
 
@@ -800,7 +813,8 @@ The ASlib selector benchmark tunes learned selectors with SMAC for 50 trials usi
   \begin{subtable}[t]{0.48\textwidth}
     \centering
     \caption{\gls{mlp}}
-    \begin{tabular}{ll}
+    \small
+    \begin{tabularx}{\linewidth}{@{}>{\RaggedRight\arraybackslash}X >{\RaggedRight\arraybackslash}X@{}}
       \toprule
       Hyperparameter & Value \\
       \midrule
@@ -811,14 +825,15 @@ The ASlib selector benchmark tunes learned selectors with SMAC for 50 trials usi
       weight decay  & $10^{-4}$ \\
       Epochs & 800 \\
       \bottomrule
-    \end{tabular}
+    \end{tabularx}
   \end{subtable}
   \hfill
 
   \begin{subtable}[t]{0.48\textwidth}
     \centering
     \caption{Random forest}
-    \begin{tabular}{ll}
+    \small
+    \begin{tabularx}{\linewidth}{@{}>{\RaggedRight\arraybackslash}X >{\RaggedRight\arraybackslash}X@{}}
       \toprule
       Hyperparameter & Value \\
       \midrule
@@ -827,7 +842,7 @@ The ASlib selector benchmark tunes learned selectors with SMAC for 50 trials usi
       min samples split  & 2  \\
       Min samples leaf & 1 \\
       \bottomrule
-    \end{tabular}
+    \end{tabularx}
   \end{subtable}
  
 
@@ -841,20 +856,22 @@ The ASlib selector benchmark tunes learned selectors with SMAC for 50 trials usi
   \begin{subtable}[t]{0.48\textwidth}
     \centering
     \caption{RandomLocalSearch}
-    \begin{tabular}{ll}
+    \small
+    \begin{tabularx}{\linewidth}{@{}>{\RaggedRight\arraybackslash}X >{\RaggedRight\arraybackslash}X@{}}
       \toprule
       Hyperparameter & Value \\
       \midrule
       \# Restarts &  10 \\
       \# Iterations & 100 \\
       \bottomrule
-    \end{tabular}
+    \end{tabularx}
   \end{subtable}
   \hfill
   \begin{subtable}[t]{0.48\textwidth}
     \centering
     \caption{GeneticAlgorithm}
-    \begin{tabular}{ll}
+    \small
+    \begin{tabularx}{\linewidth}{@{}>{\RaggedRight\arraybackslash}X >{\RaggedRight\arraybackslash}X@{}}
       \toprule
       Hyperparameter & Value \\
       \midrule
@@ -863,13 +880,14 @@ The ASlib selector benchmark tunes learned selectors with SMAC for 50 trials usi
       Crossover rate & 0.8 \\
       Mutation rate & 0.1 \\
       \bottomrule
-    \end{tabular}
+    \end{tabularx}
   \end{subtable}
   \hfill
-  \begin{subtable}[t]{0.30\textwidth}
+  \begin{subtable}[t]{0.48\textwidth}
     \centering
     \caption{OptimizeDE}
-    \begin{tabular}{ll}
+    \small
+    \begin{tabularx}{\linewidth}{@{}>{\RaggedRight\arraybackslash}X >{\RaggedRight\arraybackslash}X@{}}
       \toprule
       Hyperparameter & Value \\
       \midrule
@@ -878,7 +896,7 @@ The ASlib selector benchmark tunes learned selectors with SMAC for 50 trials usi
       Population rate & (0.5, 1.0) \\
       Recombination rate & 0.7 \\
       \bottomrule
-    \end{tabular}
+    \end{tabularx}
   \end{subtable}
 \end{table*}
 
@@ -889,20 +907,22 @@ The ASlib selector benchmark tunes learned selectors with SMAC for 50 trials usi
     \begin{subtable}[t]{0.48\textwidth}
     \centering
     \caption{Submodular schedules}
-    \begin{tabular}{ll}
+    \small
+    \begin{tabularx}{\linewidth}{@{}>{\RaggedRight\arraybackslash}X >{\RaggedRight\arraybackslash}X@{}}
       \toprule
       Parameter & Value \\
       \midrule
       time grids & $(5,10,20)$ \\
       Max actions &  5 \\
       \bottomrule
-    \end{tabular}
+    \end{tabularx}
   \end{subtable}
   \hfill
   \begin{subtable}[t]{0.48\textwidth}
     \centering
     \caption{ASAPv2}
-    \begin{tabular}{ll}
+    \small
+    \begin{tabularx}{\linewidth}{@{}>{\RaggedRight\arraybackslash}X >{\RaggedRight\arraybackslash}X@{}}
       \toprule
       Parameter & Value \\
       \midrule
@@ -911,31 +931,33 @@ The ASlib selector benchmark tunes learned selectors with SMAC for 50 trials usi
       Population rate & (0.5, 1.0) \\
       Recombination rate & 0.7 \\
       \bottomrule
-    \end{tabular}
+    \end{tabularx}
   \end{subtable}
   \begin{subtable}[t]{0.48\textwidth}
     \centering
     \caption{Static3S}
-    \begin{tabular}{ll}
+    \small
+    \begin{tabularx}{\linewidth}{@{}>{\RaggedRight\arraybackslash}X >{\RaggedRight\arraybackslash}X@{}}
       \toprule
       Hyperparameter & Value \\
       \midrule
       Max cand. sched.  &  50 \\
       \bottomrule
-    \end{tabular}
+    \end{tabularx}
   \end{subtable}
   \hfill
   \begin{subtable}[t]{0.48\textwidth}
     \centering
     \caption{Aspeed}
-    \begin{tabular}{ll}
+    \small
+    \begin{tabularx}{\linewidth}{@{}>{\RaggedRight\arraybackslash}X >{\RaggedRight\arraybackslash}X@{}}
       \toprule
       Hyperparameter & Value \\
       \midrule
       Clingo cutoff & 60 s \\
       cores & 1 \\
       \bottomrule
-    \end{tabular}
+    \end{tabularx}
   \end{subtable}
 \end{table*}
 
@@ -948,15 +970,16 @@ The ASlib selector benchmark tunes learned selectors with SMAC for 50 trials usi
     \centering
     \caption{Selector pipeline}
     \resizebox{\linewidth}{!}{
-    \begin{tabular}{ll}
+    \small
+    \begin{tabularx}{\linewidth}{@{}>{\RaggedRight\arraybackslash}X >{\RaggedRight\arraybackslash}X@{}}
       \toprule
       Hyperparameter & Search space \\
       \midrule
       Use presolver & Yes/No \\
       Presolver & 3S \\
-      Algorithm pre-selector & MarginalContribution (forward)\\
+      Algorithm pre-selector & Marginal\allowbreak Contribution (forward)\\
       \bottomrule
-    \end{tabular}
+    \end{tabularx}
     }
   \end{subtable}
   \hfill
@@ -964,14 +987,15 @@ The ASlib selector benchmark tunes learned selectors with SMAC for 50 trials usi
     \centering
     \caption{Feature processing}
     \resizebox{\linewidth}{!}{
-    \begin{tabular}{ll}
+    \small
+    \begin{tabularx}{\linewidth}{@{}>{\RaggedRight\arraybackslash}X >{\RaggedRight\arraybackslash}X@{}}
       \toprule
       Hyperparameter & Search space \\
       \midrule
       Feature group $g$ & true/false for each ASlib feature group \\
       Max feature time & $[0,\mathrm{budget}]$ \\
       \bottomrule
-    \end{tabular}
+    \end{tabularx}
     }
   \end{subtable}
 
@@ -979,7 +1003,8 @@ The ASlib selector benchmark tunes learned selectors with SMAC for 50 trials usi
   \begin{subtable}[t]{0.48\textwidth}
     \centering
     \caption{RF classifier/regressor}
-    \begin{tabular}{ll}
+    \small
+    \begin{tabularx}{\linewidth}{@{}>{\RaggedRight\arraybackslash}X >{\RaggedRight\arraybackslash}X@{}}
       \toprule
       Hyperparameter & Search space \\
       \midrule
@@ -989,13 +1014,14 @@ The ASlib selector benchmark tunes learned selectors with SMAC for 50 trials usi
       Max features & continuous $[0.1,1.0]$ \\
       Bootstrap & true/false \\
       \bottomrule
-    \end{tabular}
+    \end{tabularx}
   \end{subtable}
   \hfill
   \begin{subtable}[t]{0.48\textwidth}
     \centering
     \caption{XGBoost classifier/regressor/ranker}
-    \begin{tabular}{ll}
+    \small
+    \begin{tabularx}{\linewidth}{@{}>{\RaggedRight\arraybackslash}X >{\RaggedRight\arraybackslash}X@{}}
       \toprule
       Hyperparameter & Search space \\
       \midrule
@@ -1006,7 +1032,7 @@ The ASlib selector benchmark tunes learned selectors with SMAC for 50 trials usi
       Colsample tree / level & $[0,1]$ \\
       $\lambda$, $\alpha$ & $[10^{-3},10^3]$ \\
       \bottomrule
-    \end{tabular}
+    \end{tabularx}
   \end{subtable}
 \end{table*}
 
@@ -1017,45 +1043,49 @@ The ASlib selector benchmark tunes learned selectors with SMAC for 50 trials usi
   \begin{subtable}[t]{0.48\textwidth}
     \centering
     \caption{ISAC}
-    \begin{tabular}{ll}
+    \small
+    \begin{tabularx}{\linewidth}{@{}>{\RaggedRight\arraybackslash}X >{\RaggedRight\arraybackslash}X@{}}
       \toprule
       Hyperparameter & Search space \\
       \midrule
       clusterer & GMeans or KMeans \\
       KMeans clusters & $[2,20]$ \\
       \bottomrule
-    \end{tabular}
+    \end{tabularx}
   \end{subtable}
 
   \begin{subtable}[t]{0.48\textwidth}
     \centering
     \caption{SNNAP}
-    \begin{tabular}{ll}
+    \small
+    \begin{tabularx}{\linewidth}{@{}>{\RaggedRight\arraybackslash}X >{\RaggedRight\arraybackslash}X@{}}
       \toprule
       Hyperparameter & Search space \\
       \midrule
       $k$ & $[1,50]$ \\
       top-$n$ & $[1,20]$\\
       \bottomrule
-    \end{tabular}
+    \end{tabularx}
   \end{subtable}
   \hfill
   \begin{subtable}[t]{0.48\textwidth}
     \centering
     \caption{SUNNY}
-    \begin{tabular}{ll}
+    \small
+    \begin{tabularx}{\linewidth}{@{}>{\RaggedRight\arraybackslash}X >{\RaggedRight\arraybackslash}X@{}}
       \toprule
       Hyperparameter & Search space \\
       \midrule
       Use v2 & True/False; \\
       $k$ & $[1,50]$ \\
       \bottomrule
-    \end{tabular}
+    \end{tabularx}
   \end{subtable}
   \begin{subtable}[t]{0.48\textwidth}
     \centering
     \caption{OSLLinearSelector}
-    \begin{tabular}{ll}
+    \small
+    \begin{tabularx}{\linewidth}{@{}>{\RaggedRight\arraybackslash}X >{\RaggedRight\arraybackslash}X@{}}
       \toprule
       Hyperparameter & Search space \\
       \midrule
@@ -1064,7 +1094,7 @@ The ASlib selector benchmark tunes learned selectors with SMAC for 50 trials usi
       max iterations & $[100,5000]$\\
       tolerance & $[10^{-6},10^{-2}]$ \\
       \bottomrule
-    \end{tabular}
+    \end{tabularx}
   \end{subtable}
 
 \end{table*}

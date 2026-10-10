@@ -358,7 +358,7 @@ At the same time, they emphasise the importance dimensionality reduction methods
     }
     \label{tab:ch04:dimensionality reduction-methods}
     \small{
-    \begin{tabular}{cccc} 
+    \begin{tabularx}{\linewidth}{@{}>{\RaggedRight\arraybackslash}X l l@{}}
         \toprule
          Method&  Citation&  Type \\ \midrule
          PLS Regression& \citet{DeeEtAl90} &Supervised \\
@@ -391,7 +391,7 @@ At the same time, they emphasise the importance dimensionality reduction methods
          
 
          \bottomrule
-    \end{tabular}
+    \end{tabularx}
     }
     
 \end{table*}
@@ -840,7 +840,7 @@ functions with high conditioning and unimodal structure (f10-f14), multimodal fu
 In this work, we focus on the first 31 instances of each BBOB problem 
 
 
-in seven different original dimensionalities, $D \in \{ 20,40,60,120,240,500,1000 \}$.
+in seven different original dimensionalities, $D \in \{ 20,\allowbreak 40,\allowbreak 60,\allowbreak 120,\allowbreak 240,\allowbreak 500,\allowbreak 1000 \}$.
 On each instance, we use a different pseudo-random seed for the data sampling 
 
 conducted in the context of 
@@ -965,35 +965,36 @@ thereby retaining the same assignment of elements to clusters both in the origin
 \begin{figure}
 \centering
     \begin{subfigure}{0.24\textwidth}
-        \includegraphics[width=\textwidth]{figures/04/ml/agg_5_homogeneity.pdf}
+        \includegraphics[width=\linewidth]{figures/04/ml/agg_5_homogeneity.pdf}
         \caption{\footnotesize{$k = 5$; homogeneity}}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}{0.24\textwidth}
-        \includegraphics[width=\textwidth]{figures/04/ml/agg_10_homogeneity.pdf}
+        \includegraphics[width=\linewidth]{figures/04/ml/agg_10_homogeneity.pdf}
         \caption{\footnotesize{$k = 10$; homogeneity}}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}{0.24\textwidth}
-        \includegraphics[width=\textwidth]{figures/04/ml/agg_20_homogeneity.pdf}
+        \includegraphics[width=\linewidth]{figures/04/ml/agg_20_homogeneity.pdf}
         \caption{\footnotesize{$k = 20$; homogeneity}}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}{0.24\textwidth}
-        \includegraphics[width=\textwidth]{figures/04/ml/agg_40_homogeneity.pdf}
+        \includegraphics[width=\linewidth]{figures/04/ml/agg_40_homogeneity.pdf}
         \caption{\footnotesize{$k = 40$; homogeneity}}
     \end{subfigure}
+    \par\medskip
     \begin{subfigure}{0.24\textwidth}
-        \includegraphics[width=\textwidth]{figures/04/ml/agg_5_completeness.pdf}
+        \includegraphics[width=\linewidth]{figures/04/ml/agg_5_completeness.pdf}
         \caption{\footnotesize{$k = 5$; completeness}}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}{0.24\textwidth}
-        \includegraphics[width=\textwidth]{figures/04/ml/agg_10_completeness.pdf}
+        \includegraphics[width=\linewidth]{figures/04/ml/agg_10_completeness.pdf}
         \caption{\footnotesize{$k = 10$; completeness}}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}{0.24\textwidth}
-        \includegraphics[width=\textwidth]{figures/04/ml/agg_20_completeness.pdf}
+        \includegraphics[width=\linewidth]{figures/04/ml/agg_20_completeness.pdf}
         \caption{\footnotesize{$k = 20$; completeness}}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}{0.24\textwidth}
-        \includegraphics[width=\textwidth]{figures/04/ml/agg_40_completeness.pdf}
+        \includegraphics[width=\linewidth]{figures/04/ml/agg_40_completeness.pdf}
         \caption{\footnotesize{$k = 40$; completeness}}
     \end{subfigure}
 
@@ -1039,29 +1040,31 @@ Furthermore, dense Gaussian random projections handle large feature spaces bette
 \begin{figure}
 \centering
     \begin{subfigure}{0.32\textwidth}
-        \includegraphics[width=\textwidth]{figures/04/ml/agg_small_5_homogeneity.pdf}
+        \includegraphics[width=\linewidth]{figures/04/ml/agg_small_5_homogeneity.pdf}
         \caption{Small $D$; homogeneity}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}{0.32\textwidth}
-        \includegraphics[width=\textwidth]{figures/04/ml/agg_medium_5_homogeneity.pdf}
+        \includegraphics[width=\linewidth]{figures/04/ml/agg_medium_5_homogeneity.pdf}
         \caption{Medium $D$; homogeneity}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}{0.32\textwidth}
-        \includegraphics[width=\textwidth]{figures/04/ml/agg_large_5_homogeneity.pdf}
+        \includegraphics[width=\linewidth]{figures/04/ml/agg_large_5_homogeneity.pdf}
         \caption{Large $D$; homogeneity}
     \end{subfigure}
+    \par\medskip
     \begin{subfigure}{0.32\textwidth}
-        \includegraphics[width=\textwidth]{figures/04/ml/agg_small_5_completeness.pdf}
+        \includegraphics[width=\linewidth]{figures/04/ml/agg_small_5_completeness.pdf}
         \caption{Small $D$; completeness}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}{0.32\textwidth}
-        \includegraphics[width=\textwidth]{figures/04/ml/agg_medium_5_completeness.pdf}
+        \includegraphics[width=\linewidth]{figures/04/ml/agg_medium_5_completeness.pdf}
         \caption{Medium $D$; completeness}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}{0.32\textwidth}
-        \includegraphics[width=\textwidth]{figures/04/ml/agg_large_5_completeness.pdf}
+        \includegraphics[width=\linewidth]{figures/04/ml/agg_large_5_completeness.pdf}
         \caption{Large $D$; completeness}
     \end{subfigure}
+    \par\medskip
     \begin{subfigure}{0.32\textwidth}
 
 
@@ -1112,51 +1115,53 @@ Overall, while most methods achieve comparable accuracy, LoLP consistently perfo
 \begin{figure}
 \centering
     \begin{subfigure}{0.24\textwidth}
-        \includegraphics[width=\textwidth]{figures/04/ml/agg_5_rf_acc.pdf}
+        \includegraphics[width=\linewidth]{figures/04/ml/agg_5_rf_acc.pdf}
         \caption{\footnotesize Random Forest; $k = 5$}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}{0.24\textwidth}
-        \includegraphics[width=\textwidth]{figures/04/ml/agg_10_rf_acc.pdf}
+        \includegraphics[width=\linewidth]{figures/04/ml/agg_10_rf_acc.pdf}
         \caption{\footnotesize Random Forest; $k = 10$}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}{0.24\textwidth}
-        \includegraphics[width=\textwidth]{figures/04/ml/agg_20_rf_acc.pdf}
+        \includegraphics[width=\linewidth]{figures/04/ml/agg_20_rf_acc.pdf}
         \caption{\footnotesize Random Forest; $k = 20$}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}{0.24\textwidth}
-        \includegraphics[width=\textwidth]{figures/04/ml/agg_40_rf_acc.pdf}
+        \includegraphics[width=\linewidth]{figures/04/ml/agg_40_rf_acc.pdf}
         \caption{\footnotesize Random Forest; $k = 40$}
     \end{subfigure}
+    \par\medskip
     \begin{subfigure}{0.24\textwidth}
-        \includegraphics[width=\textwidth]{figures/04/ml/agg_5_gb_acc.pdf}
+        \includegraphics[width=\linewidth]{figures/04/ml/agg_5_gb_acc.pdf}
         \caption{\footnotesize Gradient Boosting; $k = 5$}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}{0.24\textwidth}
-        \includegraphics[width=\textwidth]{figures/04/ml/agg_10_gb_acc.pdf}
+        \includegraphics[width=\linewidth]{figures/04/ml/agg_10_gb_acc.pdf}
         \caption{\footnotesize Gradient Boosting; $k = 10$}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}{0.24\textwidth}
-        \includegraphics[width=\textwidth]{figures/04/ml/agg_20_gb_acc.pdf}
+        \includegraphics[width=\linewidth]{figures/04/ml/agg_20_gb_acc.pdf}
         \caption{\footnotesize Gradient Boosting; $k = 20$}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}{0.24\textwidth}
-        \includegraphics[width=\textwidth]{figures/04/ml/agg_40_gb_acc.pdf}
+        \includegraphics[width=\linewidth]{figures/04/ml/agg_40_gb_acc.pdf}
         \caption{\footnotesize Gradient Boosting; $k = 40$}
     \end{subfigure}
+    \par\medskip
     \begin{subfigure}{0.24\textwidth}
-        \includegraphics[width=\textwidth]{figures/04/ml/agg_5_mlp_acc.pdf}
+        \includegraphics[width=\linewidth]{figures/04/ml/agg_5_mlp_acc.pdf}
         \caption{\footnotesize \gls{mlp}; $k = 5$}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}{0.24\textwidth}
-        \includegraphics[width=\textwidth]{figures/04/ml/agg_10_mlp_acc.pdf}
+        \includegraphics[width=\linewidth]{figures/04/ml/agg_10_mlp_acc.pdf}
         \caption{\footnotesize \gls{mlp}; $k = 10$}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}{0.24\textwidth}
-        \includegraphics[width=\textwidth]{figures/04/ml/agg_20_mlp_acc.pdf}
+        \includegraphics[width=\linewidth]{figures/04/ml/agg_20_mlp_acc.pdf}
         \caption{\footnotesize \gls{mlp}; $k = 20$}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}{0.24\textwidth}
-        \includegraphics[width=\textwidth]{figures/04/ml/agg_40_mlp_acc.pdf}
+        \includegraphics[width=\linewidth]{figures/04/ml/agg_40_mlp_acc.pdf}
         \caption{\footnotesize \gls{mlp}; $k = 40$}
     \end{subfigure}
 
@@ -1179,39 +1184,41 @@ In contrast, PCA (Linear) and PCA (Polynomial) perform better than other PCA var
 \begin{figure}
 \centering
     \begin{subfigure}{0.32\textwidth}
-        \includegraphics[width=\textwidth]{figures/04/ml/agg_small_5_rf_acc.pdf}
+        \includegraphics[width=\linewidth]{figures/04/ml/agg_small_5_rf_acc.pdf}
         \caption{Small $D$; Random Forest}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}{0.32\textwidth}
-        \includegraphics[width=\textwidth]{figures/04/ml/agg_medium_5_rf_acc.pdf}
+        \includegraphics[width=\linewidth]{figures/04/ml/agg_medium_5_rf_acc.pdf}
         \caption{Medium $D$; Random Forest}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}{0.32\textwidth}
-        \includegraphics[width=\textwidth]{figures/04/ml/agg_large_5_rf_acc.pdf}
+        \includegraphics[width=\linewidth]{figures/04/ml/agg_large_5_rf_acc.pdf}
         \caption{Large $D$; Random Forest}
     \end{subfigure}
+    \par\medskip
     \begin{subfigure}{0.32\textwidth}
-        \includegraphics[width=\textwidth]{figures/04/ml/agg_small_5_gb_acc.pdf}
+        \includegraphics[width=\linewidth]{figures/04/ml/agg_small_5_gb_acc.pdf}
         \caption{Small $D$; Gradient Boosting}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}{0.32\textwidth}
-        \includegraphics[width=\textwidth]{figures/04/ml/agg_medium_5_gb_acc.pdf}
+        \includegraphics[width=\linewidth]{figures/04/ml/agg_medium_5_gb_acc.pdf}
         \caption{Medium $D$; Gradient Boosting}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}{0.32\textwidth}
-        \includegraphics[width=\textwidth]{figures/04/ml/agg_large_5_gb_acc.pdf}
+        \includegraphics[width=\linewidth]{figures/04/ml/agg_large_5_gb_acc.pdf}
         \caption{Large $D$; Gradient Boosting}
     \end{subfigure}
+    \par\medskip
     \begin{subfigure}{0.32\textwidth}
-        \includegraphics[width=\textwidth]{figures/04/ml/agg_small_5_mlp_acc.pdf}
+        \includegraphics[width=\linewidth]{figures/04/ml/agg_small_5_mlp_acc.pdf}
         \caption{Small $D$; \gls{mlp}}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}{0.32\textwidth}
-        \includegraphics[width=\textwidth]{figures/04/ml/agg_medium_5_mlp_acc.pdf}
+        \includegraphics[width=\linewidth]{figures/04/ml/agg_medium_5_mlp_acc.pdf}
         \caption{Medium $D$; \gls{mlp}}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}{0.32\textwidth}
-        \includegraphics[width=\textwidth]{figures/04/ml/agg_large_5_mlp_acc.pdf}
+        \includegraphics[width=\linewidth]{figures/04/ml/agg_large_5_mlp_acc.pdf}
         \caption{Large $D$; \gls{mlp}}
     \end{subfigure}
 
@@ -1242,22 +1249,22 @@ Performance of different dimensionality reduction methods on low-, medium- and h
     \centering
     \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/epm/agg_sample_red_inpt_100_120_5.pdf}
+        \includegraphics[width=\linewidth]{figures/04/epm/agg_sample_red_inpt_100_120_5.pdf}
         \caption{$k=5$}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/epm/agg_sample_red_inpt_100_120_10.pdf}
+        \includegraphics[width=\linewidth]{figures/04/epm/agg_sample_red_inpt_100_120_10.pdf}
         \caption{$k=10$}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/epm/agg_sample_red_inpt_100_120_20.pdf}
+        \includegraphics[width=\linewidth]{figures/04/epm/agg_sample_red_inpt_100_120_20.pdf}
         \caption{$k=20$}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/epm/agg_sample_red_inpt_100_120_40.pdf}
+        \includegraphics[width=\linewidth]{figures/04/epm/agg_sample_red_inpt_100_120_40.pdf}
         \caption{$k=40$}
     \end{subfigure}
     \caption[Target function approximation on BBO task 1]{
@@ -1287,38 +1294,39 @@ As the target dimensionality increases, PCA (RBF) gradually catches up and event
 \begin{figure}
 \begin{subfigure}[t]{0.32\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/epm/agg_sample_red_inpt_100_40_20.pdf}
+        \includegraphics[width=\linewidth]{figures/04/epm/agg_sample_red_inpt_100_40_20.pdf}
         \caption{$D=40$}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.32\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/epm/agg_sample_red_inpt_100_60_20.pdf}
+        \includegraphics[width=\linewidth]{figures/04/epm/agg_sample_red_inpt_100_60_20.pdf}
         \caption{$D=60$}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.32\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/epm/agg_sample_red_inpt_100_120_20.pdf}
+        \includegraphics[width=\linewidth]{figures/04/epm/agg_sample_red_inpt_100_120_20.pdf}
         \caption{$D=120$}
     \end{subfigure}
+    \par\medskip
     \begin{subfigure}[t]{0.32\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/epm/agg_sample_red_inpt_100_240_20.pdf}
+        \includegraphics[width=\linewidth]{figures/04/epm/agg_sample_red_inpt_100_240_20.pdf}
         \caption{$D=240$}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.32\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/epm/agg_sample_red_inpt_100_500_20.pdf}
+        \includegraphics[width=\linewidth]{figures/04/epm/agg_sample_red_inpt_100_500_20.pdf}
         \caption{$D=500$}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.32\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/epm/agg_sample_red_inpt_100_1000_20.pdf}
+        \includegraphics[width=\linewidth]{figures/04/epm/agg_sample_red_inpt_100_1000_20.pdf}
         \caption{$D=1000$}
     \end{subfigure}
     \hspace{0.2cm}
     \begin{subfigure}[t]{0.8\textwidth}
         \centering
-        \includegraphics[width=1.0\textwidth,trim={1.5cm 4cm 3.7cm 0.0cm},clip]{figures/04/legend.pdf}
+        \includegraphics[width=\linewidth,trim={1.5cm 4cm 3.7cm 0.0cm},clip]{figures/04/legend.pdf}
     \end{subfigure}
     \caption[Target function approximation on BBO task 1 for real-world benchmarks]{
 
@@ -1343,48 +1351,49 @@ As expected, the variance of all methods decreases with lower input dimensionali
     \centering
     \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/epm/agg_sample_red_inpt_100_40_5}
+        \includegraphics[width=\linewidth]{figures/04/epm/agg_sample_red_inpt_100_40_5}
         \caption{\footnotesize$D = 40, k = 5, N = 100$}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/epm/agg_sample_red_inpt_200_40_5.pdf}
+        \includegraphics[width=\linewidth]{figures/04/epm/agg_sample_red_inpt_200_40_5.pdf}
         \caption{\footnotesize$D = 40, k = 5, N = 200$}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/epm/agg_sample_red_inpt_500_40_5.pdf}
+        \includegraphics[width=\linewidth]{figures/04/epm/agg_sample_red_inpt_500_40_5.pdf}
         \caption{\footnotesize$D = 40, k = 5, N = 500$}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/epm/agg_sample_red_inpt_1000_40_5.pdf}
+        \includegraphics[width=\linewidth]{figures/04/epm/agg_sample_red_inpt_1000_40_5.pdf}
         \caption{\footnotesize$D = 40, k = 5, N = 1000$}
     \end{subfigure}
+    \par\medskip
     \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/epm/agg_sample_red_inpt_100_1000_40.pdf}
+        \includegraphics[width=\linewidth]{figures/04/epm/agg_sample_red_inpt_100_1000_40.pdf}
         \caption{\footnotesize$D = 1000, k = 40, N = 100$}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/epm/agg_sample_red_inpt_200_1000_40.pdf}
+        \includegraphics[width=\linewidth]{figures/04/epm/agg_sample_red_inpt_200_1000_40.pdf}
         \caption{\footnotesize$D = 1000, k = 40, N = 200$}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/epm/agg_sample_red_inpt_500_1000_40.pdf}
+        \includegraphics[width=\linewidth]{figures/04/epm/agg_sample_red_inpt_500_1000_40.pdf}
         \caption{\footnotesize$D = 1000, k = 40, N = 500$}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/epm/agg_sample_red_inpt_1000_1000_40.pdf}
+        \includegraphics[width=\linewidth]{figures/04/epm/agg_sample_red_inpt_1000_1000_40.pdf}
         \caption{\footnotesize$D = 1000, k = 40, N = 1000$}
     \end{subfigure}
     \hspace{0.2cm}
     \begin{subfigure}[t]{0.8\textwidth}
         \centering
-        \includegraphics[width=1.0\textwidth,trim={1.5cm 4cm 3.7cm 0.0cm},clip]{figures/04/legend.pdf}
+        \includegraphics[width=\linewidth,trim={1.5cm 4cm 3.7cm 0.0cm},clip]{figures/04/legend.pdf}
     \end{subfigure}
     \caption[Target function approximation quality by dimensionality]{
 
@@ -1407,42 +1416,43 @@ In contrast, for high-dimensional inputs ($D = 1000$), variance decreases notice
     \centering
     \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/epm/real_agg_sample_red_dim_1000_5.pdf}
+        \includegraphics[width=\linewidth]{figures/04/epm/real_agg_sample_red_dim_1000_5.pdf}
         \caption{$N = 100, k=5$}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/epm/real_agg_sample_red_dim_1000_10.pdf}
+        \includegraphics[width=\linewidth]{figures/04/epm/real_agg_sample_red_dim_1000_10.pdf}
         \caption{$N = 100, k=10$}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/epm/real_agg_sample_red_dim_1000_20.pdf}
+        \includegraphics[width=\linewidth]{figures/04/epm/real_agg_sample_red_dim_1000_20.pdf}
         \caption{$N = 100, k=20$}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/epm/real_agg_sample_red_dim_1000_40.pdf}
+        \includegraphics[width=\linewidth]{figures/04/epm/real_agg_sample_red_dim_1000_40.pdf}
         \caption{$N = 100, k=40$}
     \end{subfigure}
+    \par\medskip
     \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/epm/real_agg_sample_red_dim_100_5.pdf}
+        \includegraphics[width=\linewidth]{figures/04/epm/real_agg_sample_red_dim_100_5.pdf}
         \caption{$k = 5, N = 100$}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/epm/real_agg_sample_red_dim_200_5.pdf}
+        \includegraphics[width=\linewidth]{figures/04/epm/real_agg_sample_red_dim_200_5.pdf}
         \caption{$k = 5, N = 200$}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/epm/real_agg_sample_red_dim_500_5.pdf}
+        \includegraphics[width=\linewidth]{figures/04/epm/real_agg_sample_red_dim_500_5.pdf}
         \caption{$k = 5, N = 500$}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/epm/real_agg_sample_red_dim_1000_5.pdf}
+        \includegraphics[width=\linewidth]{figures/04/epm/real_agg_sample_red_dim_1000_5.pdf}
         \caption{$k = 5, N = 1000$}
     \end{subfigure}
 
@@ -1480,27 +1490,28 @@ In contrast to relatively good performance of LLE in the machine learning task 1
     \centering
     \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/bop/rank_100_120_5.pdf}
+        \includegraphics[width=\linewidth]{figures/04/bop/rank_100_120_5.pdf}
         \caption{$k=5$}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/bop/rank_100_120_10.pdf}
+        \includegraphics[width=\linewidth]{figures/04/bop/rank_100_120_10.pdf}
         \caption{$k=10$}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/bop/rank_100_120_20.pdf}
+        \includegraphics[width=\linewidth]{figures/04/bop/rank_100_120_20.pdf}
         \caption{$k=20$}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/bop/rank_100_120_40.pdf}
+        \includegraphics[width=\linewidth]{figures/04/bop/rank_100_120_40.pdf}
         \caption{$k=40$}
     \end{subfigure}
+    \par\medskip
     \begin{subfigure}[t]{0.8\textwidth}
         \centering
-        \includegraphics[width=1.0\textwidth,trim={1.5cm 4cm 3.7cm 0.0cm},clip]{figures/04/legend.pdf}
+        \includegraphics[width=\linewidth,trim={1.5cm 4cm 3.7cm 0.0cm},clip]{figures/04/legend.pdf}
     \end{subfigure}
     \caption[Optimiser performance ranks on BBO task 2]{
 
@@ -1523,38 +1534,39 @@ Last, LLE exhibits consistent poor performance, in line with the previous findin
 \begin{figure}
     \begin{subfigure}[t]{0.32\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/bop/rank_100_40_20.pdf}
+        \includegraphics[width=\linewidth]{figures/04/bop/rank_100_40_20.pdf}
         \caption{$D=40$}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.32\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/bop/rank_100_60_20.pdf}
+        \includegraphics[width=\linewidth]{figures/04/bop/rank_100_60_20.pdf}
         \caption{$D=60$}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.32\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/bop/rank_100_120_20.pdf}
+        \includegraphics[width=\linewidth]{figures/04/bop/rank_100_120_20.pdf}
         \caption{$D=120$}
     \end{subfigure}
+    \par\medskip
     \begin{subfigure}[t]{0.32\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/bop/rank_100_240_20.pdf}
+        \includegraphics[width=\linewidth]{figures/04/bop/rank_100_240_20.pdf}
         \caption{$D=240$}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.32\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/bop/rank_100_500_20.pdf}
+        \includegraphics[width=\linewidth]{figures/04/bop/rank_100_500_20.pdf}
         \caption{$D=500$}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.32\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/bop/rank_100_1000_20.pdf}
+        \includegraphics[width=\linewidth]{figures/04/bop/rank_100_1000_20.pdf}
         \caption{$D=1000$}
     \end{subfigure}
     \hspace{0.2cm}
     \begin{subfigure}[t]{0.8\textwidth}
         \centering
-        \includegraphics[width=1.0\textwidth,trim={1.5cm 4cm 3.7cm 0.0cm},clip]{figures/04/legend.pdf}
+        \includegraphics[width=\linewidth,trim={1.5cm 4cm 3.7cm 0.0cm},clip]{figures/04/legend.pdf}
     \end{subfigure}
     \caption[Optimiser performance ranks on BBO task 2 by dimensionality]{
 
@@ -1574,48 +1586,49 @@ Figures (e–h) show the results for high-dimensional inputs ($D = 1000$) with t
     \centering
     \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/bop/rank_100_40_5.pdf}
+        \includegraphics[width=\linewidth]{figures/04/bop/rank_100_40_5.pdf}
         \caption{\footnotesize$D = 40, k = 5, N = 100$}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/bop/rank_200_40_5.pdf}
+        \includegraphics[width=\linewidth]{figures/04/bop/rank_200_40_5.pdf}
         \caption{\footnotesize$D = 40, k = 5, N = 200$}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/bop/rank_500_40_5.pdf}
+        \includegraphics[width=\linewidth]{figures/04/bop/rank_500_40_5.pdf}
         \caption{\footnotesize$D = 40, k = 5, N = 500$}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/bop/rank_1000_40_5.pdf}
+        \includegraphics[width=\linewidth]{figures/04/bop/rank_1000_40_5.pdf}
         \caption{\footnotesize$D = 40, k = 5, N = 1000$}
     \end{subfigure}
+    \par\medskip
     \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/bop/rank_100_1000_40.pdf}
+        \includegraphics[width=\linewidth]{figures/04/bop/rank_100_1000_40.pdf}
         \caption{\footnotesize$D = 1000, k = 40, N = 100$}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/bop/rank_200_1000_40.pdf}
+        \includegraphics[width=\linewidth]{figures/04/bop/rank_200_1000_40.pdf}
         \caption{\footnotesize$D = 1000, k = 40, N = 200$}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/bop/rank_500_1000_40.pdf}
+        \includegraphics[width=\linewidth]{figures/04/bop/rank_500_1000_40.pdf}
         \caption{\footnotesize$D = 1000, k = 40, N = 500$}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/bop/rank_1000_1000_40.pdf}
+        \includegraphics[width=\linewidth]{figures/04/bop/rank_1000_1000_40.pdf}
         \caption{\footnotesize$D = 1000, k = 40, N = 1000$}
     \end{subfigure}
     \hspace{0.2cm}
     \begin{subfigure}[t]{0.8\textwidth}
         \centering
-        \includegraphics[width=1.0\textwidth,trim={1.5cm 4cm 3.7cm 0.0cm},clip]{figures/04/legend.pdf}
+        \includegraphics[width=\linewidth,trim={1.5cm 4cm 3.7cm 0.0cm},clip]{figures/04/legend.pdf}
     \end{subfigure}
     \caption[Optimiser performance ranks on BBO task 2 for low- and high-dimensional benchmarks]{
 
@@ -1659,48 +1672,49 @@ Finally, through high variability of observed behaviours across all settings, we
     \centering
     \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/bop/rank_real_100_5.pdf}
+        \includegraphics[width=\linewidth]{figures/04/bop/rank_real_100_5.pdf}
         \caption{$N = 100, k = 5$}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/bop/rank_real_100_10.pdf}
+        \includegraphics[width=\linewidth]{figures/04/bop/rank_real_100_10.pdf}
         \caption{$N = 100, k = 10$}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/bop/rank_real_100_20.pdf}
+        \includegraphics[width=\linewidth]{figures/04/bop/rank_real_100_20.pdf}
         \caption{$N = 100, k = 20$}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/bop/rank_real_100_40.pdf}
+        \includegraphics[width=\linewidth]{figures/04/bop/rank_real_100_40.pdf}
         \caption{$N = 100, k = 40$}
     \end{subfigure}
+    \par\medskip
     \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/bop/rank_real_100_5.pdf}
+        \includegraphics[width=\linewidth]{figures/04/bop/rank_real_100_5.pdf}
         \caption{$k = 5, N = 100$}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/bop/rank_real_200_5.pdf}
+        \includegraphics[width=\linewidth]{figures/04/bop/rank_real_200_5.pdf}
         \caption{$k = 5, N = 200$}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/bop/rank_real_500_5.pdf}
+        \includegraphics[width=\linewidth]{figures/04/bop/rank_real_500_5.pdf}
         \caption{$k = 5, N = 500$}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/bop/rank_real_1000_5.pdf}
+        \includegraphics[width=\linewidth]{figures/04/bop/rank_real_1000_5.pdf}
         \caption{$k = 5, N = 1000$}
     \end{subfigure}
     \hspace{0.2cm}
     \begin{subfigure}[t]{0.8\textwidth}
         \centering
-        \includegraphics[width=1.0\textwidth,trim={1.5cm 4cm 3.7cm 0.0cm},clip]{figures/04/legend.pdf}
+        \includegraphics[width=\linewidth,trim={1.5cm 4cm 3.7cm 0.0cm},clip]{figures/04/legend.pdf}
     \end{subfigure}
     \caption[Optimiser performance ranks on BBO task 2 for real-world benchmarks]{
 
@@ -1751,22 +1765,22 @@ We observe that Gaussian and sparse random projections consistently incur low ru
     \centering
     \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/time/9985_train_time.pdf}
+        \includegraphics[width=\linewidth]{figures/04/time/9985_train_time.pdf}
         \caption{Training on dataset 9985}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/time/9985_transform_time.pdf}
+        \includegraphics[width=\linewidth]{figures/04/time/9985_transform_time.pdf}
         \caption{Transform on dataset 9985}
-    \end{subfigure}
-        \begin{subfigure}[t]{0.24\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{figures/04/time/9981_train_time.pdf}
-        \caption{Train on dataset 9981}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/04/time/9981_transform_time.pdf}
+        \includegraphics[width=\linewidth]{figures/04/time/9981_train_time.pdf}
+        \caption{Train on dataset 9981}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.24\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/04/time/9981_transform_time.pdf}
         \caption{Transform on dataset 9981}
     \end{subfigure}
     \caption[CPU hours for training and transformation]{

@@ -113,22 +113,22 @@ While other metrics to quantify surrogate models exist, such as log-likelihood a
 \begin{figure}
     \centering
     \hfill
-    \begin{subfigure}[c]{0.30\textwidth}
+    \begin{subfigure}[c]{0.3\textwidth}
         \centering 
-        \includegraphics[width=0.8\textwidth]{figures/08/figures/schedule_functions_scaled.pdf}
+        \includegraphics[width=\linewidth]{figures/08/figures/schedule_functions_scaled.pdf}
         \caption{}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[c]{0.30\textwidth}
+    \begin{subfigure}[c]{0.3\textwidth}
         \centering 
-        \includegraphics[width=0.8\textwidth]{figures/08/figures/schedule_functions_scaled_integral.pdf}
+        \includegraphics[width=\linewidth]{figures/08/figures/schedule_functions_scaled_integral.pdf}
         \caption{}
     \end{subfigure}
     \hfill
     \begin{subfigure}[c]{0.38\textwidth}
         \centering
 
-        \includegraphics[width=1.0\textwidth]{figures/08/figures/schedule_functions_scaled_integral_legend_square.pdf}
+        \includegraphics[width=\linewidth]{figures/08/figures/schedule_functions_scaled_integral_legend_square.pdf}
 
 
     \end{subfigure}
@@ -247,35 +247,35 @@ We performed our experiments on a compute cluster with 19 nodes; each node is eq
 
 \begin{figure}
     \centering
-    \begin{subfigure}{0.24\textwidth}
-        \includegraphics[]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_2_0.01_ei_rank.pdf}
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_2_0.01_ei_rank.pdf}
         \caption{0.01}
-    \end{subfigure}
-    \begin{subfigure}{0.24\textwidth}
-        \includegraphics[]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_2_0.05_ei_rank.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_2_0.05_ei_rank.pdf}
         \caption{0.05}
-    \end{subfigure}
-    \begin{subfigure}{0.24\textwidth}
-        \includegraphics[]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_2_0.1_ei_rank.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_2_0.1_ei_rank.pdf}
         \caption{0.1}
     \end{subfigure}
-    \begin{subfigure}{0.24\textwidth}
-        \includegraphics[]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_2_0.2_ei_rank.pdf}
+    \par\medskip
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_2_0.2_ei_rank.pdf}
         \caption{0.2}
-    \end{subfigure}
-    \begin{subfigure}{0.24\textwidth}
-        \includegraphics[]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_2_0.3_ei_rank.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_2_0.3_ei_rank.pdf}
         \caption{0.3}
-    \end{subfigure}
-
-    \begin{subfigure}{0.24\textwidth}
-        \includegraphics[]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_2_0.5_ei_rank.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_2_0.5_ei_rank.pdf}
         \caption{0.5}
     \end{subfigure}
-
+    \par\medskip
     \begin{subfigure}{\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_2_0.3_ei_rank_legend.pdf}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_2_0.3_ei_rank_legend.pdf}
     \end{subfigure}
     \caption[Value-based noise ranks on BBOB]{Mean ranks of regret resulting from running Bayesian optimisation with different value-based noise functions over different noise levels on the BBOB functions. For noise levels up to $0.1$, noise functions that give an advantage to larger areas around the optimum, at the expense of being more inaccurate far from it perform best. For higher noise levels, constant noise performs better.}
     \label{fig:ch08:value_based}
@@ -293,33 +293,35 @@ As the noise level increases ($0.2$--$0.5$), constant noise becomes the best noi
 
 \begin{figure}
     \centering
-    \begin{subfigure}{0.24\textwidth}
-        \includegraphics[]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_0.01_ei_rank_pd1.pdf}
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_0.01_ei_rank_pd1.pdf}
         \caption{0.01}
-    \end{subfigure}
-    \begin{subfigure}{0.24\textwidth}
-        \includegraphics[]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_0.05_ei_rank_pd1.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_0.05_ei_rank_pd1.pdf}
         \caption{0.05}
-    \end{subfigure}
-    \begin{subfigure}{0.24\textwidth}
-        \includegraphics[]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_0.1_ei_rank_pd1.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_0.1_ei_rank_pd1.pdf}
         \caption{0.1}
     \end{subfigure}
-    \begin{subfigure}{0.24\textwidth}
-        \includegraphics[]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_0.2_ei_rank_pd1.pdf}
+    \par\medskip
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_0.2_ei_rank_pd1.pdf}
         \caption{0.2}
-    \end{subfigure}
-    \begin{subfigure}{0.24\textwidth}
-        \includegraphics[]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_0.3_ei_rank_pd1.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_0.3_ei_rank_pd1.pdf}
         \caption{0.3}
-    \end{subfigure}
-    \begin{subfigure}{0.24\textwidth}
-        \includegraphics[]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_0.5_ei_rank_pd1.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_0.5_ei_rank_pd1.pdf}
         \caption{0.5}
     \end{subfigure}
+    \par\medskip
     \begin{subfigure}{\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_0.3_ei_rank_pd1_legend.pdf}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_0.3_ei_rank_pd1_legend.pdf}
     \end{subfigure}
     \caption[Value-based noise ranks on PD1]{Mean ranks of regret resulting from running Bayesian optimisation with different value-based noise functions over different noise levels on the real-world PD1 benchmark. Similar to the synthetic benchmark results, polynomial noise functions perform well at lower noise levels, whereas constant noise struggles significantly.}
     \label{fig:ch08:value_based_pd1}
@@ -332,34 +334,35 @@ The PD1 results in \cref{fig:ch08:value_based_pd1} show a similar transition. At
 \subsection{Distance-based noise}
 \begin{figure}
     \centering
-    \begin{subfigure}{0.24\textwidth}
-        \includegraphics[]{figures/08/figures/noise_types_levels/rs_BBOBDistanceToOptimum_2_0.01_ei_rank.pdf}
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/rs_BBOBDistanceToOptimum_2_0.01_ei_rank.pdf}
         \caption{$N_\text{base}=0.01$}
-    \end{subfigure}
-    \begin{subfigure}{0.24\textwidth}
-        \includegraphics[]{figures/08/figures/noise_types_levels/rs_BBOBDistanceToOptimum_2_0.05_ei_rank.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/rs_BBOBDistanceToOptimum_2_0.05_ei_rank.pdf}
         \caption{$N_\text{base}=0.05$}
-    \end{subfigure}
-    \begin{subfigure}{0.24\textwidth}
-        \includegraphics[]{figures/08/figures/noise_types_levels/rs_BBOBDistanceToOptimum_2_0.1_ei_rank.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/rs_BBOBDistanceToOptimum_2_0.1_ei_rank.pdf}
         \caption{$N_\text{base}=0.1$}
     \end{subfigure}
-    \begin{subfigure}{0.24\textwidth}
-        \includegraphics[]{figures/08/figures/noise_types_levels/rs_BBOBDistanceToOptimum_2_0.2_ei_rank.pdf}
+    \par\medskip
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/rs_BBOBDistanceToOptimum_2_0.2_ei_rank.pdf}
         \caption{$N_\text{base}=0.2$}
-    \end{subfigure}
-    \begin{subfigure}{0.24\textwidth}
-        \includegraphics[]{figures/08/figures/noise_types_levels/rs_BBOBDistanceToOptimum_2_0.3_ei_rank.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/rs_BBOBDistanceToOptimum_2_0.3_ei_rank.pdf}
         \caption{$N_\text{base}=0.3$}
-    \end{subfigure}
-    \begin{subfigure}{0.24\textwidth}
-        \includegraphics[]{figures/08/figures/noise_types_levels/rs_BBOBDistanceToOptimum_2_0.5_ei_rank.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/rs_BBOBDistanceToOptimum_2_0.5_ei_rank.pdf}
         \caption{$N_\text{base}=0.5$}
     \end{subfigure}
-
+    \par\medskip
     \begin{subfigure}{\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/08/figures/noise_types_levels/rs_BBOBDistanceToOptimum_2_0.5_ei_rank_legend.pdf}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/rs_BBOBDistanceToOptimum_2_0.5_ei_rank_legend.pdf}
     \end{subfigure}
     \caption[Distance-based noise ranks on BBOB]{Mean ranks of regret resulting from running Bayesian optimisation with different distance-based noise functions over different noise levels. For all noise levels, constant noise 
     gives the best performance, with the margin increasing with the noise level.}
@@ -368,33 +371,35 @@ The PD1 results in \cref{fig:ch08:value_based_pd1} show a similar transition. At
 
 \begin{figure}
     \centering
-    \begin{subfigure}{0.24\textwidth}
-        \includegraphics[]{figures/08/figures/noise_types_levels/rs_BBOBDistanceToOptimum_0.01_ei_rank_pd1.pdf}
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/rs_BBOBDistanceToOptimum_0.01_ei_rank_pd1.pdf}
         \caption{$N_\text{base}=0.01$}
-    \end{subfigure}
-    \begin{subfigure}{0.24\textwidth}
-        \includegraphics[]{figures/08/figures/noise_types_levels/rs_BBOBDistanceToOptimum_0.05_ei_rank_pd1.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/rs_BBOBDistanceToOptimum_0.05_ei_rank_pd1.pdf}
         \caption{$N_\text{base}=0.05$}
-    \end{subfigure}
-    \begin{subfigure}{0.24\textwidth}
-        \includegraphics[]{figures/08/figures/noise_types_levels/rs_BBOBDistanceToOptimum_0.1_ei_rank_pd1.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/rs_BBOBDistanceToOptimum_0.1_ei_rank_pd1.pdf}
         \caption{$N_\text{base}=0.1$}
     \end{subfigure}
-    \begin{subfigure}{0.24\textwidth}
-        \includegraphics[]{figures/08/figures/noise_types_levels/rs_BBOBDistanceToOptimum_0.2_ei_rank_pd1.pdf}
+    \par\medskip
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/rs_BBOBDistanceToOptimum_0.2_ei_rank_pd1.pdf}
         \caption{$N_\text{base}=0.2$}
-    \end{subfigure}
-    \begin{subfigure}{0.24\textwidth}
-        \includegraphics[]{figures/08/figures/noise_types_levels/rs_BBOBDistanceToOptimum_0.3_ei_rank_pd1.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/rs_BBOBDistanceToOptimum_0.3_ei_rank_pd1.pdf}
         \caption{$N_\text{base}=0.3$}
-    \end{subfigure}
-    \begin{subfigure}{0.24\textwidth}
-        \includegraphics[]{figures/08/figures/noise_types_levels/rs_BBOBDistanceToOptimum_0.5_ei_rank_pd1.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/rs_BBOBDistanceToOptimum_0.5_ei_rank_pd1.pdf}
         \caption{$N_\text{base}=0.5$}
     \end{subfigure}
+    \par\medskip
     \begin{subfigure}{\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/08/figures/noise_types_levels/rs_BBOBDistanceToOptimum_0.5_ei_rank_pd1_legend.pdf}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/rs_BBOBDistanceToOptimum_0.5_ei_rank_pd1_legend.pdf}
     \end{subfigure}
     \caption[Distance-based noise ranks on PD1]{Mean ranks of regret resulting from running Bayesian optimisation with different distance-based noise functions over different noise levels on the PD1 benchmark. Constant noise achieves best performance, unless the noise level is minimal.}
     \label{fig:ch08:dist_opt_pd1}
@@ -407,35 +412,36 @@ Taken together with the results from the previous sub-section, these results ind
 
 \begin{figure}
     \centering
-    \begin{subfigure}{0.24\textwidth}
-        \includegraphics[]{figures/08/figures/conv/1_rs_BBOBDistanceToOptimum_2_0.01_ei_cov.pdf}
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/conv/1_rs_BBOBDistanceToOptimum_2_0.01_ei_cov.pdf}
         \caption{F1 $N_\text{base}=0.01$}
-    \end{subfigure}
-    \begin{subfigure}{0.24\textwidth}
-        \includegraphics[]{figures/08/figures/conv/1_rs_BBOBDistanceToOptimum_2_0.05_ei_cov.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/conv/1_rs_BBOBDistanceToOptimum_2_0.05_ei_cov.pdf}
         \caption{F1 $N_\text{base}=0.05$}
-    \end{subfigure}
-    \begin{subfigure}{0.24\textwidth}
-        \includegraphics[]{figures/08/figures/conv/1_rs_BBOBDistanceToOptimum_2_0.1_ei_cov.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/conv/1_rs_BBOBDistanceToOptimum_2_0.1_ei_cov.pdf}
         \caption{F1 $N_\text{base}=0.1$}
     \end{subfigure}
-    \begin{subfigure}{0.24\textwidth}
-        \includegraphics[]{figures/08/figures/conv/20_rs_BBOBDistanceToOptimum_2_0.01_ei_cov.pdf}
+    \par\medskip
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/conv/20_rs_BBOBDistanceToOptimum_2_0.01_ei_cov.pdf}
         \caption{F20 $N_\text{base}=0.01$}
-    \end{subfigure}
-    \begin{subfigure}{0.24\textwidth}
-        \includegraphics[]{figures/08/figures/conv/20_rs_BBOBDistanceToOptimum_2_0.05_ei_cov.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/conv/20_rs_BBOBDistanceToOptimum_2_0.05_ei_cov.pdf}
         \caption{F20 $N_\text{base}=0.05$}
-    \end{subfigure}
-    \begin{subfigure}{0.24\textwidth}
-        \includegraphics[]{figures/08/figures/conv/20_rs_BBOBDistanceToOptimum_2_0.1_ei_cov.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/conv/20_rs_BBOBDistanceToOptimum_2_0.1_ei_cov.pdf}
         \caption{F20 $N_\text{base}=0.1$}
     \end{subfigure}
-
-    \begin{subfigure}[c]{1.0\textwidth}
+    \par\medskip
+    \begin{subfigure}[c]{\textwidth}
         \centering
 
-        \includegraphics[scale=0.33]{figures/08/figures/conv/20_rs_BBOBDistanceToOptimum_2_0.1_ei_cov_legend.pdf}
+        \includegraphics[width=\linewidth]{figures/08/figures/conv/20_rs_BBOBDistanceToOptimum_2_0.1_ei_cov_legend.pdf}
 
 
     \end{subfigure}
@@ -455,44 +461,47 @@ These results challenge the common assumption that being accurate around the opt
 \subsection{Comparing value-based and distance-based noise within each schedule}
 \begin{figure}[!htbp]
     \centering
-    \begin{subfigure}{0.19\textwidth}
-        \includegraphics[]{figures/08/figures/noise_type_comp/rs_linear_2_ei_rank.pdf}
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_type_comp/rs_linear_2_ei_rank.pdf}
         \caption{Linear}
-    \end{subfigure}
-    \begin{subfigure}{0.19\textwidth}
-        \includegraphics[]{figures/08/figures/noise_type_comp/rs_exp_0.1_2_ei_rank.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_type_comp/rs_exp_0.1_2_ei_rank.pdf}
         \caption{Exp 0.1}
-    \end{subfigure}
-    \begin{subfigure}{0.19\textwidth}
-        \includegraphics[]{figures/08/figures/noise_type_comp/rs_exp_0.01_2_ei_rank.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_type_comp/rs_exp_0.01_2_ei_rank.pdf}
         \caption{Exp 0.01}
     \end{subfigure}
-    \begin{subfigure}{0.19\textwidth}
-        \includegraphics[]{figures/08/figures/noise_type_comp/rs_exp_0.001_2_ei_rank.pdf}
+    \par\medskip
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_type_comp/rs_exp_0.001_2_ei_rank.pdf}
         \caption{Exp 0.001}
-    \end{subfigure}
-    \begin{subfigure}{0.19\textwidth}
-        \includegraphics[]{figures/08/figures/noise_type_comp/rs_poly_2_2_ei_rank.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_type_comp/rs_poly_2_2_ei_rank.pdf}
         \caption{Poly 2}
-    \end{subfigure}
-    \begin{subfigure}{0.19\textwidth}
-        \includegraphics[]{figures/08/figures/noise_type_comp/rs_poly_4_2_ei_rank.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_type_comp/rs_poly_4_2_ei_rank.pdf}
         \caption{Poly 4}
     \end{subfigure}
-    \begin{subfigure}{0.19\textwidth}
-        \includegraphics[]{figures/08/figures/noise_type_comp/rs_poly_8_2_ei_rank.pdf}
+    \par\medskip
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_type_comp/rs_poly_8_2_ei_rank.pdf}
         \caption{Poly 8}
-    \end{subfigure}
-    \begin{subfigure}{0.19\textwidth}
-        \includegraphics[]{figures/08/figures/noise_type_comp/rs_cosine_2_ei_rank.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_type_comp/rs_cosine_2_ei_rank.pdf}
         \caption{Cosine}
-    \end{subfigure}
-    \begin{subfigure}{0.19\textwidth}
-        \includegraphics[]{figures/08/figures/noise_type_comp/rs_tanh_2_ei_rank.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_type_comp/rs_tanh_2_ei_rank.pdf}
         \caption{TanH}
     \end{subfigure}
+    \par\medskip
     \begin{subfigure}{\textwidth}
-        \includegraphics[scale=0.33]{figures/08/figures/noise_type_comp/rs_tanh_2_ei_rank_legend.pdf}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_type_comp/rs_tanh_2_ei_rank_legend.pdf}
 
     \end{subfigure}
     \caption[Noise type and level comparison on BBOB]{Mean ranks of the regret resulting from running Bayesian optimisation with different noise types and levels. Each plot represents one noise function. For polynomial noise functions, value-based noise is superior to distance-based noise.}
@@ -504,44 +513,47 @@ We compare value-based and distance-based noise within each schedule family. In 
 
 \begin{figure}[!htbp]
     \centering
-    \begin{subfigure}{0.19\textwidth}
-        \includegraphics[]{figures/08/figures/noise_type_comp/rs_linear_ei_rank_pd1.pdf}
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_type_comp/rs_linear_ei_rank_pd1.pdf}
         \caption{Linear}
-    \end{subfigure}
-    \begin{subfigure}{0.19\textwidth}
-        \includegraphics[]{figures/08/figures/noise_type_comp/rs_exp_0.1_ei_rank_pd1.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_type_comp/rs_exp_0.1_ei_rank_pd1.pdf}
         \caption{Exp 0.1}
-    \end{subfigure}
-    \begin{subfigure}{0.19\textwidth}
-        \includegraphics[]{figures/08/figures/noise_type_comp/rs_exp_0.01_ei_rank_pd1.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_type_comp/rs_exp_0.01_ei_rank_pd1.pdf}
         \caption{Exp 0.01}
     \end{subfigure}
-    \begin{subfigure}{0.19\textwidth}
-        \includegraphics[]{figures/08/figures/noise_type_comp/rs_exp_0.001_ei_rank_pd1.pdf}
+    \par\medskip
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_type_comp/rs_exp_0.001_ei_rank_pd1.pdf}
         \caption{Exp 0.001}
-    \end{subfigure}
-    \begin{subfigure}{0.19\textwidth}
-        \includegraphics[]{figures/08/figures/noise_type_comp/rs_poly_2_ei_rank_pd1.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_type_comp/rs_poly_2_ei_rank_pd1.pdf}
         \caption{Poly 2}
-    \end{subfigure}
-    \begin{subfigure}{0.19\textwidth}
-        \includegraphics[]{figures/08/figures/noise_type_comp/rs_poly_4_ei_rank_pd1.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_type_comp/rs_poly_4_ei_rank_pd1.pdf}
         \caption{Poly 4}
     \end{subfigure}
-    \begin{subfigure}{0.19\textwidth}
-        \includegraphics[]{figures/08/figures/noise_type_comp/rs_poly_8_ei_rank_pd1.pdf}
+    \par\medskip
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_type_comp/rs_poly_8_ei_rank_pd1.pdf}
         \caption{Poly 8}
-    \end{subfigure}
-    \begin{subfigure}{0.19\textwidth}
-        \includegraphics[]{figures/08/figures/noise_type_comp/rs_cosine_ei_rank_pd1.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_type_comp/rs_cosine_ei_rank_pd1.pdf}
         \caption{Cosine}
-    \end{subfigure}
-    \begin{subfigure}{0.19\textwidth}
-        \includegraphics[]{figures/08/figures/noise_type_comp/rs_tanh_ei_rank_pd1.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_type_comp/rs_tanh_ei_rank_pd1.pdf}
         \caption{TanH}
     \end{subfigure}
+    \par\medskip
     \begin{subfigure}{\textwidth}
-        \includegraphics[scale=0.33]{figures/08/figures/noise_type_comp/rs_tanh_ei_rank_pd1_legend.pdf}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_type_comp/rs_tanh_ei_rank_pd1_legend.pdf}
 
     \end{subfigure}
     \caption[Noise type and level comparison on PD1]{Mean ranks of regret resulting from evaluating different noise types and levels on the PD1 benchmark. Each plot represents a specific noise function, comparing its value-based and distance-based variants across noise levels.}
@@ -558,18 +570,18 @@ The results are shown in \cref{fig:ch08:diff_acqs}.
 
 \begin{figure}
     \centering
-    \begin{subfigure}[c]{0.24\textwidth}
-        \includegraphics[]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_2_0.1_pi_rank.pdf}
+    \begin{subfigure}[c]{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_2_0.1_pi_rank.pdf}
         \caption{PI}
-    \end{subfigure}
-    \begin{subfigure}[c]{0.24\textwidth}
-        \includegraphics[]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_2_0.1_lcb_rank.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}[c]{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_2_0.1_lcb_rank.pdf}
         \caption{LCB}
     \end{subfigure}
     \hspace{0.5cm}
     \begin{subfigure}[c]{\textwidth} 
         \centering
-        \includegraphics[scale=0.33]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_2_0.1_lcb_rank_legend.pdf}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_2_0.1_lcb_rank_legend.pdf}
     \end{subfigure}
     \caption[Acquisition function comparison on BBOB]{Mean ranks of regret resulting from running Bayesian optimisation with value-based noise functions with different acquisition functions and noise level of $0.1$. (a) PI. (b) LCB. The best performing noise functions remain similar to using EI as an acquisition.}
     \label{fig:ch08:diff_acqs}
@@ -577,18 +589,18 @@ The results are shown in \cref{fig:ch08:diff_acqs}.
 
 \begin{figure}
     \centering
-    \begin{subfigure}[c]{0.24\textwidth}
-        \includegraphics[]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_0.1_pi_rank_pd1.pdf}
+    \begin{subfigure}[c]{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_0.1_pi_rank_pd1.pdf}
         \caption{PI}
-    \end{subfigure}
-    \begin{subfigure}[c]{0.24\textwidth}
-        \includegraphics[]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_0.1_lcb_rank_pd1.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}[c]{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_0.1_lcb_rank_pd1.pdf}
         \caption{LCB}
     \end{subfigure}
     \hspace{0.5cm}
     \begin{subfigure}[c]{\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_0.1_lcb_rank_pd1_legend.pdf}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_0.1_lcb_rank_pd1_legend.pdf}
     \end{subfigure}
     \caption[Acquisition function comparison on PD1]{Mean ranks of regret on the PD1 benchmark using value-based noise with (a) PI and (b) LCB acquisition functions at a noise level of $0.1$. The relative performance of the noise functions remains consistent with EI.}
     \label{fig:ch08:diff_acqs_pd1}
@@ -600,15 +612,15 @@ The rankings under PI and LCB (\cref{fig:ch08:diff_acqs,fig:ch08:diff_acqs_pd1})
 In the next step, we also check whether different acquisition function optimisers are required. We compare local and random search as acquisition optimisers on BBOB in \cref{fig:ch08:acq_opts}.
 \begin{figure}
     \centering
-    \begin{subfigure}[c]{0.24\textwidth}
-        \includegraphics[]{figures/08/figures/noise_types_levels/default_BBOBValueBased_2_0.1_ei_rank.pdf}
+    \begin{subfigure}[c]{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/default_BBOBValueBased_2_0.1_ei_rank.pdf}
 
     \end{subfigure}
     \hspace{0.5cm}
     \begin{subfigure}[c]{\textwidth}
         \centering
 
-        \includegraphics[scale=0.33]{figures/08/figures/noise_types_levels/default_BBOBValueBased_2_0.1_ei_rank_legend.pdf}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/default_BBOBValueBased_2_0.1_ei_rank_legend.pdf}
 
 
     \end{subfigure}
@@ -618,13 +630,13 @@ In the next step, we also check whether different acquisition function optimiser
 
 \begin{figure}
     \centering
-    \begin{subfigure}[c]{0.24\textwidth}
-        \includegraphics[]{figures/08/figures/noise_types_levels/default_BBOBValueBased_0.1_ei_rank_pd1.pdf}
+    \begin{subfigure}[c]{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/default_BBOBValueBased_0.1_ei_rank_pd1.pdf}
     \end{subfigure}
     \hspace{0.5cm}
     \begin{subfigure}[c]{\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/08/figures/noise_types_levels/default_BBOBValueBased_0.1_ei_rank_pd1_legend.pdf}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/default_BBOBValueBased_0.1_ei_rank_pd1_legend.pdf}
     \end{subfigure}
     \caption[Local search optimisation comparison on PD1]{Mean ranks of regret on the PD1 benchmark using value-based noise and local search for acquisition function optimisation at a noise level of $0.1$.}
     \label{fig:ch08:acq_opts_pd1}
@@ -636,18 +648,18 @@ Changing the acquisition optimiser from random search to local search (\cref{fig
 We check whether our results hold across different dimensionalities of the BBOB suite. We present results for value-based noise functions with EI as the acquisition function and a noise level of $0.1$, on dimensions $4$ and $8$, in \cref{fig:ch08:dims}. 
 \begin{figure}
     \centering
-    \begin{subfigure}[c]{0.24\textwidth}
-        \includegraphics[]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_4_0.1_ei_rank.pdf}
+    \begin{subfigure}[c]{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_4_0.1_ei_rank.pdf}
         \caption{4}
-    \end{subfigure}
-    \begin{subfigure}[c]{0.24\textwidth}
-        \includegraphics[]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_8_0.1_ei_rank.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}[c]{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_8_0.1_ei_rank.pdf}
         \caption{8}
     \end{subfigure}
     \hspace{0.5cm}
     \begin{subfigure}[c]{\textwidth}
         \centering 
-        \includegraphics[scale=0.33]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_8_0.1_ei_rank_legend.pdf}
+        \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_8_0.1_ei_rank_legend.pdf}
     \end{subfigure}
     \caption[Combined noise analysis on BBOB]{Mean ranks of resulting regrets of running Bayesian optimisation with EI as an acquisition function with different value-based noise functions over different noise levels. With a noise level of $0.1$ on dimensions 4 and 8. With higher dimensions, more noise functions perform well. However, constant noise performs worse than other noise levels for both cases.}
     \label{fig:ch08:dims}
@@ -665,24 +677,25 @@ The convergence comparison on F1 versus F20 further suggests that landscape stru
 \section{Comparison to real-world surrogate models}
 \begin{figure}[tbp]
     \centering
-    \begin{subfigure}{0.25\textwidth}
-        \includegraphics[]{figures/08/figures/contours/gp_10.pdf}
+    \begin{subfigure}{0.24\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/contours/gp_10.pdf}
         \caption{10}
-    \end{subfigure}
-    \begin{subfigure}{0.25\textwidth}
-        \includegraphics[]{figures/08/figures/contours/gp_25.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.24\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/contours/gp_25.pdf}
         \caption{25}
-    \end{subfigure}
-    \begin{subfigure}{0.25\textwidth}
-        \includegraphics[]{figures/08/figures/contours/gp_50.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.24\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/contours/gp_50.pdf}
         \caption{50}
-    \end{subfigure}
-    \begin{subfigure}{0.25\textwidth}
-        \includegraphics[]{figures/08/figures/contours/gp_100.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.24\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/contours/gp_100.pdf}
         \caption{100}
     \end{subfigure}
-    \begin{subfigure}{0.25\textwidth}
-        \includegraphics[]{figures/08/figures/contours/ground_truth.pdf}
+    \par\medskip
+    \begin{subfigure}{0.24\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/contours/ground_truth.pdf}
         \caption{Ground truth}
     \end{subfigure}
     \caption[GP error analysis on BBOB F3]{Error of GP trained on different subsets of solutions from a trajectory of \gls{bo} on BBOB F3 (a-d). (e) ground truth values of the function. When the optimisation progresses, better predictions are made in high-performance regions, at the expense of low-performance regions.}
@@ -698,24 +711,25 @@ The convergence comparison on F1 versus F20 further suggests that landscape stru
 \changed{\cref{fig:ch08:rfs_accs} shows the corresponding behaviour for random forest. We again observe that the model is more accurate in regions with better objective values, similarly to the GP. Compared to the GP, however, the random forest tends to concentrate its lower-error predictions in smaller regions. This makes the random-forest result consistent with the same qualitative story, while also illustrating that different surrogate classes may realize this behaviour in different geometric ways.}
 \begin{figure}[tbp]
     \centering
-    \begin{subfigure}{0.25\textwidth}
-        \includegraphics[]{figures/08/figures/contours/rf_10.pdf}
+    \begin{subfigure}{0.24\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/contours/rf_10.pdf}
         \caption{10}
-    \end{subfigure}
-    \begin{subfigure}{0.25\textwidth}
-        \includegraphics[]{figures/08/figures/contours/rf_25.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.24\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/contours/rf_25.pdf}
         \caption{25}
-    \end{subfigure}
-    \begin{subfigure}{0.25\textwidth}
-        \includegraphics[]{figures/08/figures/contours/rf_50.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.24\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/contours/rf_50.pdf}
         \caption{50}
-    \end{subfigure}
-    \begin{subfigure}{0.25\textwidth}
-        \includegraphics[]{figures/08/figures/contours/rf_100.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.24\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/contours/rf_100.pdf}
         \caption{100}
     \end{subfigure}
-    \begin{subfigure}{0.25\textwidth}
-        \includegraphics[]{figures/08/figures/contours/ground_truth.pdf}
+    \par\medskip
+    \begin{subfigure}{0.24\textwidth}
+        \includegraphics[width=\linewidth]{figures/08/figures/contours/ground_truth.pdf}
         \caption{Ground truth}
     \end{subfigure}
     \caption[Random forest error analysis on BBOB F3]{Error of random forest trained on different subsets of solutions from a trajectory of \gls{bo} on BBOB F3 (a-d). (e) ground truth values of the function. When the optimisation progresses, better predictions are made in high-performance regions, at the expense of low-performance regions.}
@@ -765,8 +779,14 @@ then the EI acquisition function is guaranteed to be misled.
 \begin{proof}
 We first evaluate the expected improvement at the optimum $x^*$. We calculate the $z$ value at $x^*$, denoted as $z_{x^*}$:
 \begin{equation}
-    \label{eq:ch08:z_xstar}
-    z_{x^*} = \frac{f(x_{best}) - \mu_S(x^*)}{\sigma_S(x^*)} = \frac{f(x_{best}) - f(x^*)+ N_{\min}}{\sigma(x^*)}=\frac{I_{x^*} + N_{\min}}{\sigma(x^*)}
+  \label{eq:ch08:z_xstar}
+  \begin{aligned}
+    z_{x^*} &= \frac{f(x_{best}) - \mu_S(x^*)}{\sigma_S(x^*)}
+    \\
+    &= \frac{f(x_{best}) - f(x^*)+ N_{\min}}{\sigma(x^*)}
+    \\
+    &= \frac{I_{x^*} + N_{\min}}{\sigma(x^*)}
+  \end{aligned}
 \end{equation}
 Since $I_{x^*},N_{\min},\sigma(x^*) \ge 0$, we have $z_{x^*} \ge 0$, and therefore $\Phi(z_{x^*}) \le 1$ and $\phi(z_{x^*}) \le 0.399$. This gives the upper bound for the expected improvement at the optimum:
 \begin{equation}
@@ -776,8 +796,14 @@ Since $I_{x^*},N_{\min},\sigma(x^*) \ge 0$, we have $z_{x^*} \ge 0$, and therefo
 
 Next, we evaluate the expected improvement at the suboptimal solution $x_L$. We first calculate the $z$ value at $x_L$:
 \begin{equation}
-    \label{eq:ch08:z_xl}
-    z_{x_L} = \frac{f(x_{best}) - \mu_S(x_L)}{\sigma_S(x_L)}=\frac{f(x_{best}) - f(x^*) - l + N(x_L)}{\sigma(x_L)}=\frac{I_{x^*}-l+N(x_L)}{\sigma(x_L)}
+  \label{eq:ch08:z_xl}
+  \begin{aligned}
+    z_{x_L} &= \frac{f(x_{best}) - \mu_S(x_L)}{\sigma_S(x_L)}
+    \\
+    &= \frac{f(x_{best}) - f(x^*) - l + N(x_L)}{\sigma(x_L)}
+    \\
+    &= \frac{I_{x^*}-l+N(x_L)}{\sigma(x_L)}
+  \end{aligned}
 \end{equation}
 
 The acquisition function is misled if $\mathrm{EI}(x_L) > \mathrm{EI}(x^*)$. We analyse a sufficient condition for this by deriving a lower bound for $\mathrm{EI}(x_L)$ and comparing it to the upper bound of $\mathrm{EI}(x^*)$. The expected improvement at $x_L$ is:
@@ -937,10 +963,22 @@ The LCB acquisition function is misled if $\mathrm{LCB}(x_L) > \mathrm{LCB}(x^*)
 
 First, we evaluate the LCB at $x^*$ and $x_L$
 \begin{equation*}
-    \mathrm{LCB}(x^*) = - \mu_S(x^*) + \lambda \sigma_S(x^*) = - (f(x^*) - N_{\min}) + \lambda \sigma(x^*) = - f(x^*) + N_{\min} + \lambda \sigma(x^*)
+  \begin{aligned}
+    \mathrm{LCB}(x^*) &= - \mu_S(x^*) + \lambda \sigma_S(x^*)
+    \\
+    &= - (f(x^*) - N_{\min}) + \lambda \sigma(x^*)
+    \\
+    &= - f(x^*) + N_{\min} + \lambda \sigma(x^*)
+  \end{aligned}
 \end{equation*}
 \begin{equation*}
-    \mathrm{LCB}(x_L) = - \mu_S(x_L) + \lambda \sigma_S(x_L) = - (f(x^*) + l - N(x_L)) + \lambda \sigma(x_L) = - f(x^*) - l + N(x_L) + \lambda \sigma(x_L)
+  \begin{aligned}
+    \mathrm{LCB}(x_L) &= - \mu_S(x_L) + \lambda \sigma_S(x_L)
+    \\
+    &= - (f(x^*) + l - N(x_L)) + \lambda \sigma(x_L)
+    \\
+    &= - f(x^*) - l + N(x_L) + \lambda \sigma(x_L)
+  \end{aligned}
 \end{equation*}
 
 The acquisition function is misled if

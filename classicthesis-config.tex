@@ -187,6 +187,8 @@
 % 4. Setup floats: tables, (sub)figures, and captions
 % ****************************************************************************************************
 \usepackage{tabularx} % better tables
+\usepackage{ragged2e}
+\usepackage{xurl} % permit URL breaks inside long bibliography links
 \usepackage{multirow}
     \setlength{\extrarowheight}{3pt} % increase table row height
 \newcommand{\tableheadline}[1]{\multicolumn{1}{c}{\spacedlowsmallcaps{#1}}}
@@ -362,3 +364,33 @@
 %\usepackage[default,osfigures]{opensans} % scale=0.95 
 %\usepackage[sfdefault]{FiraSans}
 % ****************************************************************************************************
+
+% Keep prose and running marks inside the thesis's narrow text block.
+\AtBeginDocument{%
+  \setlength{\emergencystretch}{3em}%
+  \KOMAoptions{headheight=32pt}%
+  \lehead{\llap{\small\thepage\kern2em}%
+    \parbox[b]{\textwidth}{\small\raggedright\headmark}}%
+  \rohead{\parbox[b]{\textwidth}{\small\raggedleft\headmark}%
+    \rlap{\small\kern2em\thepage}}%
+}
+\AtBeginBibliography{\RaggedRight}
+\captionsetup{justification=RaggedRight}
+\DeclareTOCStyleEntries[raggedentrytext=true]{tocline}%
+  {part,chapter,section,subsection,subsubsection,figure,table,lstlisting}
+
+% Listings installs its own TOC style at begin-document; restore the label width afterwards.
+\newcommand{\thesisheadergeometry}{%
+  \addtolength{\topmargin}{\headheight}%
+  \setlength{\headheight}{32pt}%
+  \addtolength{\topmargin}{-\headheight}%
+}
+% The dedication restores the geometry saved before the header adjustment.
+\AddToHook{cmd/restoregeometry/after}{\thesisheadergeometry}
+\AddToHook{begindocument/end}{%
+  % Increase header clearance without moving the body text down the page.
+  \thesisheadergeometry
+  \DeclareTOCStyleEntry[level=1,indent=0pt,numwidth=\figurelabelwidth,
+    entryformat=\normalfont,entrynumberformat=\cttoclisting,
+    raggedentrytext=true,pagenumberformat=\normalfont]{tocline}{lstlisting}%
+}

@@ -5,7 +5,7 @@
 
 \begin{figure}[t]
 	\centering
-	\includegraphics[width=0.75\textwidth]{figures/06/sat.pdf}
+	\includegraphics[width=\linewidth]{figures/06/sat.pdf}
 	\caption[Overview of SAT graph types]{Overview of the three graph types generated from a given \gls{sat} formula.
 		\label{fig:ch06:sat}}
 \end{figure}
@@ -40,7 +40,9 @@ We add node features to provide the \gls{gnn} with additional information about 
 	\centering
 	\caption[VCG node features]{Node features for the variable-clause graph (VCG). Variable nodes carry 12 features, and clause nodes carry 22 features. Edges between variables and clauses are attributed with the literal polarity ($+1$/$-1$); reverse edges are included.}
 	\label{tab:ch06:vcg_features}
-	\renewcommand{\arraystretch}{1.2}
+	\small
+	\setlength{\extrarowheight}{0pt}
+	\renewcommand{\arraystretch}{1.0}
 	\resizebox{\columnwidth}{!}{
 		\begin{tabular}{@{} p{0.22\textwidth} c p{0.62\textwidth} @{}}
 			\toprule
@@ -81,7 +83,9 @@ We add node features to provide the \gls{gnn} with additional information about 
 	\centering
 	\caption[LCG node features]{Node features for the literal-clause graph (LCG). Literal nodes carry 12 features, and clause nodes carry 22 features. Literal-to-clause edges carry a polarity attribute ($+1$/$-1$); reverse and complement edges (linking each literal to its negation) are also included.}
 	\label{tab:ch06:lcg_features}
-	\renewcommand{\arraystretch}{1.2}
+	\small
+	\setlength{\extrarowheight}{0pt}
+	\renewcommand{\arraystretch}{1.0}
 	\resizebox{\columnwidth}{!}{
 		\begin{tabular}{@{} p{0.22\textwidth} c p{0.62\textwidth} @{}}
 			\toprule
@@ -123,7 +127,9 @@ We add node features to provide the \gls{gnn} with additional information about 
 	\centering
 	\caption[VG node features]{Node features for the variable graph (VG). Each variable node carries 12 features. Edges connect co-occurring variables and carry no attributes.}
 	\label{tab:ch06:vg_features}
-	\renewcommand{\arraystretch}{1.2}
+	\small
+	\setlength{\extrarowheight}{0pt}
+	\renewcommand{\arraystretch}{1.0}
 	\resizebox{\columnwidth}{!}{
 		\begin{tabular}{@{} p{0.22\textwidth} c p{0.62\textwidth} @{}}
 			\toprule
@@ -284,15 +290,27 @@ Unless otherwise specified, we use mean pooling for graph-level tasks at the end
 In addition to the graph transformer and GINE baseline methods, we use current state-of-the-art GNN methods originally proposed by \citet{LuoEtAl25} as an extension to existing GNN baselines. Following the approach from their paper, we include the GIN+, GatedGCN+, and GCN+ baselines throughout our experiments. Specifically, layer updates are given by the following, with node representations $h_v^{(l)}$ updated. \\
 GIN+:
 \begin{equation*}
-    \boldsymbol{h}_v^l = \text{FFN}(\text{Dropout}(\sigma(\text{BN}( \text{MLP}^l((1 + \epsilon) \cdot \boldsymbol{h}_v^{l-1} + \sum_{u \in \mathcal{N}(v)} \boldsymbol{h}_u^{l-1}) + \boldsymbol{e}_{uv} \boldsymbol{W}_e^l)))) + \boldsymbol{h}_v^{l-1})
+  \begin{aligned}
+    \boldsymbol{h}_v^l &= \text{FFN}(\text{Dropout}(\sigma(\text{BN}( \\
+ &\qquad \text{MLP}^l((1 + \epsilon) \cdot \boldsymbol{h}_v^{l-1} + \sum_{u \in \mathcal{N}(v)} \boldsymbol{h}_u^{l-1}) \\
+ &\qquad + \boldsymbol{e}_{uv} \boldsymbol{W}_e^l)))) + \boldsymbol{h}_v^{l-1})
+  \end{aligned}
 \end{equation*} \\
 GatedGCN+:
 \begin{equation*}
-    \boldsymbol{h}_v^l = \text{FFN}(\text{Dropout}(\sigma(\text{BN}(\sum_{u \in \mathcal{N}(v) \cup \{v\}} \frac{1}{\sqrt{\hat{d}_u \hat{d}_v}} \boldsymbol{h}_u^{l-1} \boldsymbol{W}^l + \boldsymbol{e}_{uv} \boldsymbol{W}_e^l)))) + \boldsymbol{h}_v^{l-1})
+  \begin{aligned}
+    \boldsymbol{h}_v^l &= \text{FFN}(\text{Dropout}(\sigma(\text{BN}(\\
+ &\qquad \sum_{u \in \mathcal{N}(v) \cup \{v\}} \frac{1}{\sqrt{\hat{d}_u \hat{d}_v}} \boldsymbol{h}_u^{l-1} \boldsymbol{W}^l \\
+ &\qquad + \boldsymbol{e}_{uv} \boldsymbol{W}_e^l)))) + \boldsymbol{h}_v^{l-1})
+  \end{aligned}
 \end{equation*} \\
 GCN+
 \begin{equation*}
-    \boldsymbol{h}_v^l = \text{FFN}(\text{Dropout}(\sigma(\text{BN}( \boldsymbol{h}_v^{l-1}\boldsymbol{W}_1^l + \sum_{u \in \mathcal{N}(v)} \eta_{v,u} \odot \boldsymbol{h}_u^{l-1} \boldsymbol{W}_2^l + \boldsymbol{e}_{uv} \boldsymbol{W}_e^l)))) + \boldsymbol{h}_v^{l-1})
+  \begin{aligned}
+    \boldsymbol{h}_v^l &= \text{FFN}(\text{Dropout}(\sigma(\text{BN}( \boldsymbol{h}_v^{l-1}\boldsymbol{W}_1^l + \\
+ &\qquad \sum_{u \in \mathcal{N}(v)} \eta_{v,u} \odot \boldsymbol{h}_u^{l-1} \boldsymbol{W}_2^l \\
+ &\qquad + \boldsymbol{e}_{uv} \boldsymbol{W}_e^l)))) + \boldsymbol{h}_v^{l-1})
+  \end{aligned}
 \end{equation*}
 
 where $\sigma$ denotes an activation function, FFN and MLP denote a fully connected linear layer and an $l$ layer MLP, respectively. Furthermore, $\eta= \sigma(\boldsymbol{h}_{u}^{l-1}\boldsymbol{W}_3 + \boldsymbol{h}_{v}^{l-1}\boldsymbol{W}_4)$, $\hat{d}_u$ denotes the degree of node $u$ and $\boldsymbol{W}$ denote weight matrices. Edge features are included via $e_{uv}$

@@ -172,7 +172,7 @@ We provide the code, instructions for reproducibility, as well as all figures in
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.5\linewidth]{figures/05/figs/figs/ranks/main_ranks_intro_box_plot_rank.pdf}
+    \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/main_ranks_intro_box_plot_rank.pdf}
     \caption{
     % \changed{
     Box plot showing the ranks of various methods across 859 benchmark functions from YAHPO Gym and JAHS-Bench-201. \texttt{DyMBO} outperforms all baselines.
@@ -738,27 +738,29 @@ We observe that for cheap benchmarks, the selection variant ($\alpha=1.0$) works
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/alpha_ablation_all.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/alpha_ablation_all.pdf}
         \caption{All target functions}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/alpha_ablation_cheap.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/alpha_ablation_cheap.pdf}
         \caption{Cheap (up to 10 minutes)}
     \end{subfigure}
+    \par\medskip
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/alpha_ablation_medium.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/alpha_ablation_medium.pdf}
         \caption{Medium-cost (more than 10 minutes, up to \mbox{1 hour})}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/alpha_ablation_expensive.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/alpha_ablation_expensive.pdf}
         \caption{Expensive (more than 1 hour)}
     \end{subfigure}
+    \par\medskip
     \begin{subfigure}[t]{\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/alpha_ablation_all_legend.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/alpha_ablation_all_legend.pdf}
     \end{subfigure}
     \caption{
     % \hs{
@@ -777,27 +779,29 @@ We observe that for cheap benchmarks, the selection variant ($\alpha=1.0$) works
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/main_ranks_simple2_all.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/main_ranks_simple2_all.pdf}
         \caption{All target functions}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/main_ranks_simple2_cheap.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/main_ranks_simple2_cheap.pdf}
         \caption{Cheap (up to 10 minutes)}
     \end{subfigure}
+    \par\medskip
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/main_ranks_simple2_medium.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/main_ranks_simple2_medium.pdf}
         \caption{Medium-cost (more than 10 minutes, up to \mbox{1 hour})}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/main_ranks_simple2_expensive.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/main_ranks_simple2_expensive.pdf}
         \caption{Expensive (more than 1 hour)}
     \end{subfigure}
+    \par\medskip
     \begin{subfigure}[t]{\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/main_ranks_simple2_all_legend.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/main_ranks_simple2_all_legend.pdf}
     \end{subfigure}
     \caption{
     % \hs{
@@ -811,27 +815,29 @@ We observe that for cheap benchmarks, the selection variant ($\alpha=1.0$) works
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/main_ranks_other_baselines2_all.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/main_ranks_other_baselines2_all.pdf}
         \caption{All target functions}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/main_ranks_other_baselines2_cheap.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/main_ranks_other_baselines2_cheap.pdf}
         \caption{Cheap (up to 10 minutes)}
     \end{subfigure}
+    \par\medskip
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/main_ranks_other_baselines2_medium.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/main_ranks_other_baselines2_medium.pdf}
         \caption{Medium-cost (more than 10 minutes, up to \mbox{1 hour})}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/main_ranks_other_baselines2_expensive.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/main_ranks_other_baselines2_expensive.pdf}
         \caption{Expensive (more than 1 hour)}
     \end{subfigure}
+    \par\medskip
     \begin{subfigure}[t]{\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/main_ranks_other_baselines2_all_legend.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/main_ranks_other_baselines2_all_legend.pdf}
     \end{subfigure}
     \caption{
     Mean rank of \texttt{DyMBO} with ($\alpha=1.0$), SMAC, Optuna AutoSampler, Optuna TPE, and random search on YAHPO Gym and JAHS-Bench-201 as a function of the fraction of the wall-clock time budget of each task. Results are shown for (a) all target functions, (b) cheap functions with budgets of up to 10 minutes, (c) medium-cost functions with budgets between 10 minutes and 1 hour, and (d) expensive functions with budgets exceeding 1 hour. Lower ranks indicate better performance. \texttt{DyMBO} achieves the best mean rank throughout the optimisation across all budget groups.
@@ -853,27 +859,29 @@ The results demonstrate that \texttt{DyMBO} achieves a better mean rank compared
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/main_ranks_simple2_all_val.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/main_ranks_simple2_all_val.pdf}
         \caption{}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/main_ranks_other_baselines2_all_val.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/main_ranks_other_baselines2_all_val.pdf}
         \caption{}
     \end{subfigure}
+    \par\medskip
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/alpha_ablation_all_val.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/alpha_ablation_all_val.pdf}
         \caption{}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/box_plot.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/box_plot.pdf}
         \caption{}
     \end{subfigure}
+    \par\medskip
     \begin{subfigure}[t]{\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/main_ranks_all_val_legend.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/main_ranks_all_val_legend.pdf}
         % \caption{}
     \end{subfigure}
     % \includegraphics[scale=0.33]{figures/06/figs/figs/ranks/main_ranks_all_val.pdf}
@@ -959,62 +967,66 @@ Additionally, we provide results for raw benchmarks (such as HPOBench) and synth
    
 \begin{subfigure}[t]{0.32\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/co/co_8_init_srbv2\_rparti40499_time.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/co/co_8_init_srbv2\_rparti40499_time.pdf}
         \caption{rbv2\_rpart 40499}
-    \end{subfigure}
-\begin{subfigure}[t]{0.32\textwidth}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.32\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/co/co_8_init_srbv2\_superi1053_time.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/co/co_8_init_srbv2\_superi1053_time.pdf}
         \caption{rbv2\_super 1053}
-    \end{subfigure}
-\begin{subfigure}[t]{0.32\textwidth}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.32\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/co/co_8_init_srbv2\_superi1457_time.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/co/co_8_init_srbv2\_superi1457_time.pdf}
         \caption{rbv2\_super 1457}
     \end{subfigure}
-\begin{subfigure}[t]{0.32\textwidth}
+    \par\medskip
+    \begin{subfigure}[t]{0.32\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/co/co_8_init_srbv2\_superi1063_time.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/co/co_8_init_srbv2\_superi1063_time.pdf}
         \caption{rbv2\_super 1063}
-    \end{subfigure}
-\begin{subfigure}[t]{0.32\textwidth}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.32\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/co/co_8_init_srbv2\_superi1479_time.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/co/co_8_init_srbv2\_superi1479_time.pdf}
         \caption{rbv2\_super 1479}
-    \end{subfigure}
-\begin{subfigure}[t]{0.32\textwidth}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.32\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/co/co_8_init_srbv2\_superi15_time.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/co/co_8_init_srbv2\_superi15_time.pdf}
         \caption{rbv2\_super 15}
     \end{subfigure}
-\begin{subfigure}[t]{0.32\textwidth}
+    \par\medskip
+    \begin{subfigure}[t]{0.32\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/co/co_8_init_srbv2\_superi1468_time.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/co/co_8_init_srbv2\_superi1468_time.pdf}
         \caption{rbv2\_super 1468}
-    \end{subfigure}
-\begin{subfigure}[t]{0.32\textwidth}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.32\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/co/co_8_init_srbv2\_xgboosti12_time.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/co/co_8_init_srbv2\_xgboosti12_time.pdf}
         \caption{rbv2\_xgboost 12}
-    \end{subfigure}
-\begin{subfigure}[t]{0.32\textwidth}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.32\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/co/co_8_init_srbv2\_xgboosti1501_time.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/co/co_8_init_srbv2\_xgboosti1501_time.pdf}
         \caption{rbv2\_xgboost 1501}
     \end{subfigure}
-\begin{subfigure}[t]{0.32\textwidth}
+    \par\medskip
+    \begin{subfigure}[t]{0.32\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/co/co_8_init_srbv2\_xgboosti16_time.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/co/co_8_init_srbv2\_xgboosti16_time.pdf}
         \caption{rbv2\_xgboost 16}
-    \end{subfigure}
-\begin{subfigure}[t]{0.32\textwidth}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.32\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/co/co_8_init_srbv2\_xgboosti40499_time.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/co/co_8_init_srbv2\_xgboosti40499_time.pdf}
         \caption{rbv2\_xgboost 40499}
     \end{subfigure}
-    \begin{subfigure}[t]{1.0\textwidth}
+    \par\medskip
+    \begin{subfigure}[t]{\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/co/co_8_init_srbv2\_xgboosti40499_time_legend.pdf.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/co/co_8_init_srbv2\_xgboosti40499_time_legend.pdf.pdf}
     \end{subfigure}
     \caption{Convergence plots of \texttt{DyMBO}, HEBO with GP, HEBO with RF, and random search for the YAHPO-SO subset, as a function of the fraction of the wall-clock time budget for each task. 
     }
@@ -1027,54 +1039,55 @@ Additionally, we provide results for raw benchmarks (such as HPOBench) and synth
     \centering
     \begin{subfigure}[t]{0.32\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/co/co_8_init_slcbenchi167168_time.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/co/co_8_init_slcbenchi167168_time.pdf}
         \caption{lcbench 167168}
-    \end{subfigure}
-\begin{subfigure}[t]{0.32\textwidth}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.32\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/co/co_8_init_slcbenchi189873_time.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/co/co_8_init_slcbenchi189873_time.pdf}
         \caption{lcbench 189873}
-    \end{subfigure}
-\begin{subfigure}[t]{0.32\textwidth}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.32\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/co/co_8_init_slcbenchi189906_time.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/co/co_8_init_slcbenchi189906_time.pdf}
         \caption{lcbench 189906}
     \end{subfigure}
-\begin{subfigure}[t]{0.32\textwidth}
+    \par\medskip
+    \begin{subfigure}[t]{0.32\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/co/co_8_init_snb301iCIFAR10_time.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/co/co_8_init_snb301iCIFAR10_time.pdf}
         \caption{nb301 CIFAR10}
-    \end{subfigure}
-\begin{subfigure}[t]{0.32\textwidth}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.32\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/co/co_8_init_srbv2\_glmneti375_time.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/co/co_8_init_srbv2\_glmneti375_time.pdf}
         \caption{rbv2\_glmnet 375}
-    \end{subfigure}
-\begin{subfigure}[t]{0.32\textwidth}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.32\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/co/co_8_init_srbv2\_glmneti458_time.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/co/co_8_init_srbv2\_glmneti458_time.pdf}
         \caption{rbv2\_glmnet 458}
     \end{subfigure}
-\begin{subfigure}[t]{0.32\textwidth}
+    \par\medskip
+    \begin{subfigure}[t]{0.32\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/co/co_8_init_srbv2\_rangeri16_time.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/co/co_8_init_srbv2\_rangeri16_time.pdf}
         \caption{rbv2\_ranger 16}
-    \end{subfigure}
-\begin{subfigure}[t]{0.32\textwidth}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.32\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/co/co_8_init_srbv2\_rangeri42_time.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/co/co_8_init_srbv2\_rangeri42_time.pdf}
         \caption{rbv2\_ranger 42}
-    \end{subfigure}
-\begin{subfigure}[t]{0.32\textwidth}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.32\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/co/co_8_init_srbv2\_rparti14_time.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/co/co_8_init_srbv2\_rparti14_time.pdf}
         \caption{rbv2\_rpart 14}
     \end{subfigure}
-
-
-    \begin{subfigure}[t]{1.0\textwidth}
+    \par\medskip
+    \begin{subfigure}[t]{\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/co/co_8_init_srbv2\_xgboosti40499_time_legend.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/co/co_8_init_srbv2\_xgboosti40499_time_legend.pdf}
     \end{subfigure}
     \caption{Convergence plots of \texttt{DyMBO}, HEBO with GP, HEBO with RF, and random search for the YAHPO-SO subset, as a function of the fraction of the wall-clock time budget for each task (continued from~\cref{fig:ch05:full_res}).
     % \er{In the x-axis label, the g of budget is often cut. This actually happens in many other figures too (like Fig. 6)}.
@@ -1094,17 +1107,17 @@ Additionally, we provide results for raw benchmarks (such as HPOBench) and synth
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/05/figs/figs/time_percent.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/time_percent.pdf}
         \caption{Fraction of budget (in seconds)}
         \label{fig:ch05:rt_frac_of_bud}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/05/figs/figs/time/nb301_time.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/time/nb301_time.pdf}
         \caption{Absolute running time}
         \label{fig:ch05:rt_absolute}
     \end{subfigure}
-\includegraphics[width=\textwidth]{figures/05/figs/figs/time/nb301_time_legend.pdf}
+\includegraphics[width=\linewidth]{figures/05/figs/figs/time/nb301_time_legend.pdf}
     \caption{
     Running time of the optimisation with \texttt{DyMBO} (excluding the time needed to evaluate the target function): (a) as a fraction of optimisation budget, and (b) as absolute running time relative to the number of target function evaluations. Ensembles generally require a higher fraction of the budget compared to single surrogates and take the longest to run in absolute terms, with a notable exception of the ensemble with $\alpha=1.0$, which 
     consumes less budget by an order of magnitude, and which is the fastest to run, due to dynamic pruning. 
@@ -1159,102 +1172,106 @@ Furthermore, the onset of switching behaviour varies substantially depending on 
     \centering
     \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/05/figs/figs/weights/w_2d_init_slcbenchi167168_smens_ranking_loss_rf_gp_init_orf_eval_all.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/weights/w_2d_init_slcbenchi167168_smens_ranking_loss_rf_gp_init_orf_eval_all.pdf}
         \caption{lcbench 167168}
-    \end{subfigure}
-\begin{subfigure}[t]{0.24\textwidth}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/05/figs/figs/weights/w_2d_init_slcbenchi189873_smens_ranking_loss_rf_gp_init_orf_eval_all.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/weights/w_2d_init_slcbenchi189873_smens_ranking_loss_rf_gp_init_orf_eval_all.pdf}
         \caption{lcbench 189873}
-    \end{subfigure}
-\begin{subfigure}[t]{0.24\textwidth}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/05/figs/figs/weights/w_2d_init_slcbenchi189906_smens_ranking_loss_rf_gp_init_orf_eval_all.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/weights/w_2d_init_slcbenchi189906_smens_ranking_loss_rf_gp_init_orf_eval_all.pdf}
         \caption{lcbench 189906}
-    \end{subfigure}
-\begin{subfigure}[t]{0.24\textwidth}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/05/figs/figs/weights/w_2d_init_snb301iCIFAR10_smens_ranking_loss_rf_gp_init_orf_eval_all.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/weights/w_2d_init_snb301iCIFAR10_smens_ranking_loss_rf_gp_init_orf_eval_all.pdf}
         \caption{nb301 CIFAR10}
     \end{subfigure}
-\begin{subfigure}[t]{0.24\textwidth}
+    \par\medskip
+    \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/05/figs/figs/weights/w_2d_init_srbv2\_glmneti375_smens_ranking_loss_rf_gp_init_orf_eval_all.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/weights/w_2d_init_srbv2\_glmneti375_smens_ranking_loss_rf_gp_init_orf_eval_all.pdf}
         \caption{rbv2\_glmnet 375}
-    \end{subfigure}
-\begin{subfigure}[t]{0.24\textwidth}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/05/figs/figs/weights/w_2d_init_srbv2\_glmneti458_smens_ranking_loss_rf_gp_init_orf_eval_all.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/weights/w_2d_init_srbv2\_glmneti458_smens_ranking_loss_rf_gp_init_orf_eval_all.pdf}
         \caption{rbv2\_glmnet 458}
-    \end{subfigure}
-\begin{subfigure}[t]{0.24\textwidth}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/05/figs/figs/weights/w_2d_init_srbv2\_rangeri16_smens_ranking_loss_rf_gp_init_orf_eval_all.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/weights/w_2d_init_srbv2\_rangeri16_smens_ranking_loss_rf_gp_init_orf_eval_all.pdf}
         \caption{rbv2\_ranger 16}
-    \end{subfigure}
-\begin{subfigure}[t]{0.24\textwidth}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/05/figs/figs/weights/w_2d_init_srbv2\_rangeri42_smens_ranking_loss_rf_gp_init_orf_eval_all.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/weights/w_2d_init_srbv2\_rangeri42_smens_ranking_loss_rf_gp_init_orf_eval_all.pdf}
         \caption{rbv2\_ranger 42}
     \end{subfigure}
-\begin{subfigure}[t]{0.24\textwidth}
+    \par\medskip
+    \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/05/figs/figs/weights/w_2d_init_srbv2\_rparti14_smens_ranking_loss_rf_gp_init_orf_eval_all.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/weights/w_2d_init_srbv2\_rparti14_smens_ranking_loss_rf_gp_init_orf_eval_all.pdf}
         \caption{rbv2\_rpart 14}
-    \end{subfigure}
-\begin{subfigure}[t]{0.24\textwidth}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/05/figs/figs/weights/w_2d_init_srbv2\_rparti40499_smens_ranking_loss_rf_gp_init_orf_eval_all.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/weights/w_2d_init_srbv2\_rparti40499_smens_ranking_loss_rf_gp_init_orf_eval_all.pdf}
         \caption{rbv2\_rpart 40499}
-    \end{subfigure}
-\begin{subfigure}[t]{0.24\textwidth}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/05/figs/figs/weights/w_2d_init_srbv2\_superi1053_smens_ranking_loss_rf_gp_init_orf_eval_all.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/weights/w_2d_init_srbv2\_superi1053_smens_ranking_loss_rf_gp_init_orf_eval_all.pdf}
         \caption{rbv2\_super 1053}
-    \end{subfigure}
-\begin{subfigure}[t]{0.24\textwidth}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/05/figs/figs/weights/w_2d_init_srbv2\_superi1457_smens_ranking_loss_rf_gp_init_orf_eval_all.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/weights/w_2d_init_srbv2\_superi1457_smens_ranking_loss_rf_gp_init_orf_eval_all.pdf}
         \caption{rbv2\_super 1457}
     \end{subfigure}
-\begin{subfigure}[t]{0.24\textwidth}
+    \par\medskip
+    \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/05/figs/figs/weights/w_2d_init_srbv2\_superi1063_smens_ranking_loss_rf_gp_init_orf_eval_all.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/weights/w_2d_init_srbv2\_superi1063_smens_ranking_loss_rf_gp_init_orf_eval_all.pdf}
         \caption{rbv2\_super 1063}
-    \end{subfigure}
-\begin{subfigure}[t]{0.24\textwidth}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/05/figs/figs/weights/w_2d_init_srbv2\_superi1479_smens_ranking_loss_rf_gp_init_orf_eval_all.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/weights/w_2d_init_srbv2\_superi1479_smens_ranking_loss_rf_gp_init_orf_eval_all.pdf}
         \caption{rbv2\_super 1479}
-    \end{subfigure}
-\begin{subfigure}[t]{0.24\textwidth}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/05/figs/figs/weights/w_2d_init_srbv2\_superi15_smens_ranking_loss_rf_gp_init_orf_eval_all.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/weights/w_2d_init_srbv2\_superi15_smens_ranking_loss_rf_gp_init_orf_eval_all.pdf}
         \caption{rbv2\_super 15}
-    \end{subfigure}
-\begin{subfigure}[t]{0.24\textwidth}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/05/figs/figs/weights/w_2d_init_srbv2\_superi1468_smens_ranking_loss_rf_gp_init_orf_eval_all.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/weights/w_2d_init_srbv2\_superi1468_smens_ranking_loss_rf_gp_init_orf_eval_all.pdf}
         \caption{rbv2\_super 1468}
     \end{subfigure}
-\begin{subfigure}[t]{0.24\textwidth}
+    \par\medskip
+    \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/05/figs/figs/weights/w_2d_init_srbv2\_xgboosti12_smens_ranking_loss_rf_gp_init_orf_eval_all.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/weights/w_2d_init_srbv2\_xgboosti12_smens_ranking_loss_rf_gp_init_orf_eval_all.pdf}
         \caption{rbv2\_xgboost 12}
-    \end{subfigure}
-\begin{subfigure}[t]{0.24\textwidth}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/05/figs/figs/weights/w_2d_init_srbv2\_xgboosti1501_smens_ranking_loss_rf_gp_init_orf_eval_all.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/weights/w_2d_init_srbv2\_xgboosti1501_smens_ranking_loss_rf_gp_init_orf_eval_all.pdf}
         \caption{rbv2\_xgboost 1501}
-    \end{subfigure}
-\begin{subfigure}[t]{0.24\textwidth}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/05/figs/figs/weights/w_2d_init_srbv2\_xgboosti16_smens_ranking_loss_rf_gp_init_orf_eval_all.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/weights/w_2d_init_srbv2\_xgboosti16_smens_ranking_loss_rf_gp_init_orf_eval_all.pdf}
         \caption{rbv2\_xgboost 16}
-    \end{subfigure}
-\begin{subfigure}[t]{0.24\textwidth}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.24\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/05/figs/figs/weights/w_2d_init_srbv2\_xgboosti40499_smens_ranking_loss_rf_gp_init_orf_eval_all.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/weights/w_2d_init_srbv2\_xgboosti40499_smens_ranking_loss_rf_gp_init_orf_eval_all.pdf}
         \caption{rbv2\_xgboost 40499}
     \end{subfigure}
 
@@ -1292,26 +1309,27 @@ We furthermore looked into the pairwise distance between the sampled points, whi
     \centering
     \begin{subfigure}{0.49\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/model_acc.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/model_acc.pdf}
         \caption{All}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}{0.49\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/model_acc_best50.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/model_acc_best50.pdf}
         \caption{Top 50\%}
     \end{subfigure}
+    \par\medskip
     \begin{subfigure}{0.49\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/model_acc_best25.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/model_acc_best25.pdf}
         \caption{Top 25\%}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}{0.49\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/model_acc_best10.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/model_acc_best10.pdf}
         \caption{Top 10\%}
     \end{subfigure}
     
-    \includegraphics[scale=0.33]{figures/05/figs/figs/model_acc_legend.pdf}
+    \includegraphics[width=\linewidth]{figures/05/figs/figs/model_acc_legend.pdf}
     \caption{Ranking loss as a measure of surrogate accuracy of \texttt{DyMBO} (with different values of $\alpha$) and single-surrogate HEBO variants with RF and GP. The ranking loss is measured on randomly sampled configurations: (a) ranking on all configurations; (b) ranking on the top 50\% of configurations; (c) ranking on the top 25\% of configurations; and (d) ranking on the top 10\% of configurations. All \texttt{DyMBO} variants exhibit substantially better ranking loss than single-surrogate baselines. 
     }
     \label{fig:ch05:surrogate-accuracy}
@@ -1330,27 +1348,29 @@ We describe additional baselines against which we compared our method. We note t
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/main_ranks_all_surrogates2_all.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/main_ranks_all_surrogates2_all.pdf}
         \caption{All target functions}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/main_ranks_all_surrogates2_cheap.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/main_ranks_all_surrogates2_cheap.pdf}
         \caption{Cheap (up to 10 minutes)}
     \end{subfigure}
+    \par\medskip
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/main_ranks_all_surrogates2_medium.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/main_ranks_all_surrogates2_medium.pdf}
         \caption{Medium-cost (more than 10 minutes, up to \mbox{1 hour})}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/main_ranks_all_surrogates2_expensive.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/main_ranks_all_surrogates2_expensive.pdf}
         \caption{Expensive (more than 1 hour)}
     \end{subfigure}
+    \par\medskip
     \begin{subfigure}[t]{\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/main_ranks_all_surrogates2_all_legend.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/main_ranks_all_surrogates2_all_legend.pdf}
     \end{subfigure}
     \caption{
     Mean rank of DyMBO with $\alpha=1.0$, single-surrogate HEBO variants using RF, GP, ET, or GB, and random search on YAHPO Gym and JAHS-Bench-201 as a function of the fraction of the wall-clock time budget for each task. Results are shown for (a) all target functions, (b) cheap functions with budgets of up to 10 minutes, (c) medium-cost functions with budgets between 10 minutes and 1 hour, and (d) expensive functions with budgets exceeding 1 hour. Smaller numbers indicate a better rank, thus better performance. \texttt{DyMBO} achieves the best mean rank in every budget group, while the relative performance of the individual surrogate models varies with target function cost.
@@ -1366,8 +1386,8 @@ It should be noted that Squirrel was specifically designed to meet the rules of 
 
 \begin{figure*}
     \centering
-    \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/additional_baselines_squirrel_all.pdf}
-    \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/additional_baselines_squirrel_all_legend.pdf}
+    \includegraphics[width=0.6\linewidth]{figures/05/figs/figs/ranks/additional_baselines_squirrel_all.pdf}
+    \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/additional_baselines_squirrel_all_legend.pdf}
     \caption{Comparison of \texttt{DyMBO} to Squirrel as a function of the fraction of the wall-clock time budget on YAHPO Gym. Our method outperforms Squirrel on almost all benchmarks. 
     }
     \label{fig:ch05:squirrel}
@@ -1378,9 +1398,9 @@ It should be noted that Squirrel was specifically designed to meet the rules of 
     \centering
     \begin{subfigure}[t]{\textwidth}
     \centering
-    \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/additional_baselines_all.pdf}
+    \includegraphics[width=0.6\linewidth]{figures/05/figs/figs/ranks/additional_baselines_all.pdf}
     \end{subfigure}
-    \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/additional_baselines_all_legend.pdf}
+    \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/additional_baselines_all_legend.pdf}
     \caption{Comparison of \texttt{DyMBO} to simple selection and equal weights baselines as a function of the fraction of the wall-clock time budget on YAHPO Gym and JAHS-Bench-201. Our method outperforms both baselines.
     % \todo{missing line in te label}
     }
@@ -1406,17 +1426,16 @@ In this experiment, we used RF and GP as surrogate models with 8 initial samples
 \begin{figure}
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
-        \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/comp_rnd_choice2_all.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/comp_rnd_choice2_all.pdf}
         \caption{}
         \label{fig:ch05:rnd_sel_rnk}
-    \end{subfigure}
-    
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.49\textwidth}
-        \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/comp_rnd_choice_final_regret_log_ratio_ecdf.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/comp_rnd_choice_final_regret_log_ratio_ecdf.pdf}
         \caption{}
         \label{fig:ch05:rnd_sel_ecdf}
     \end{subfigure}
-    \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/comp_rnd_choice2_all_legend.pdf}
+    \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/comp_rnd_choice2_all_legend.pdf}
     \caption{Comparison of \texttt{DyMBO} with $\alpha=1.0$ against a baseline that randomly selects between the RF and GP surrogates at every iteration, evaluated on YAHPO Gym and JAHS-Bench-201. (a) Mean rank as a function of the fraction of  wall-clock time budget for each task; lower ranks indicate better performance. (b) Empirical cumulative distribution (ECDF) across tasks of the log-ratio between the final objective values obtained by random selection and \texttt{DyMBO}. Positive values favour \texttt{DyMBO}, negative values favour random selection, and zero indicates equal performance. \texttt{DyMBO} performs better on 406 of the 859 tasks, random selection performs better on 262 tasks, and the remaining 191 tasks are tied.
     }
     \label{fig:ch05:random-surrogates}
@@ -1444,15 +1463,15 @@ We see that \texttt{DyMBO} outranks the single-surrogate baselines when budget i
     \centering
     % \begin{subfigure}[t]{0.49\textwidth}
         % \centering
-    \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/main_ranks_all_fixed.pdf}
+    \includegraphics[width=0.6\linewidth]{figures/05/figs/figs/ranks/main_ranks_all_fixed.pdf}
     % \end{subfigure}
     % \begin{subfigure}[t]{0.49\textwidth}
     %     \centering
     %     \includegraphics[scale=0.33]{figures/06/figs/figs/ranks/main_ranks_8_32_all.pdf}
     %     \caption{32}
     % \end{subfigure}
-    \includegraphics
-    [scale=0.33]{figures/05/figs/figs/ranks/main_ranks_all_fixed_legend.pdf}
+    \par\medskip
+    \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/main_ranks_all_fixed_legend.pdf}
     \caption{Mean ranks of the different methods on YAHPO Gym and JAHS-Bench-201 as a function of the number of evaluations, with a total budget of 512 evaluations. \texttt{DyMBO} exhibits the best performance.
     }
     \label{fig:ch05:ranks512}
@@ -1467,17 +1486,18 @@ We evaluated the performance of our method with different numbers of initial ran
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/main_ranks_8_16_all.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/main_ranks_8_16_all.pdf}
         \caption{16 initial samples}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/main_ranks_8_32_all.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/main_ranks_8_32_all.pdf}
         \caption{32 initial samples}
     \end{subfigure}
+    \par\medskip
     \begin{subfigure}[t]{\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/main_ranks_8_32_all_legend.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/main_ranks_8_32_all_legend.pdf}
         % \caption{32 initial samples}
     \end{subfigure}
     
@@ -1497,15 +1517,15 @@ We evaluated the performance of our method with different batch sizes. We used b
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/05/figs/figs/ranks/main_ranks_1_8_all.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/main_ranks_1_8_all.pdf}
         \caption{Batch size 1 (fully sequential)}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/05/figs/figs/ranks/main_ranks_4_8_all.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/main_ranks_4_8_all.pdf}
         \caption{Batch size 4}
     \end{subfigure}
-    \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/main_ranks_4_8_all_legend.pdf}
+    \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/main_ranks_4_8_all_legend.pdf}
     \caption{Mean ranks with different batch sizes as a function of the fraction of the wall-clock time budget on YAHPO Gym and JAHS-Bench-201. \texttt{DyMBO} has the best mean rank in both cases.
     % \todo{legend?}
     }
@@ -1540,10 +1560,10 @@ We ran \texttt{DyMBO} with EI, PI and UCB separately on YAHPO Gym and JAHS-Bench
     \centering
     % \begin{subfigure}[t]{0.49\textwidth}
         % \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/act_all.pdf}
+        \includegraphics[width=0.6\linewidth]{figures/05/figs/figs/ranks/act_all.pdf}
         % \caption{32}
     % \end{subfigure}
-    \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/act_all_legend.pdf}
+    \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/act_all_legend.pdf}
     \caption{Mean ranks of \texttt{DyMBO} with different acquisition functions as a function of the fraction of the wall-clock time budget on YAHPO Gym and JAHS-Bench-201. Using MACE yields the best performance.}
     \label{fig:ch05:acqs}
 \end{figure}
@@ -1560,7 +1580,10 @@ we introduce variance error (VE) as a non-probabilistic measure of calibration t
 We define VE for a model $m\in M$ as follows:
 % \todo{Could any references for the variance error be included?}
 \begin{equation}
-    \text{VE}_m(\lambda_t) = \frac{1}{k}\sum_{i=1}^{k} \min \{|(\mu_m(\lambda_t^{(i)}) - \sigma_m(\lambda_t^{(i)}))- c(\lambda_t^{(i)})|,  |(\mu_m(\lambda_t^{(i)}) + \sigma_m(\lambda_t^{(i)}))- c(\lambda_t^{(i)})|\}
+  \begin{aligned}
+    \text{VE}_m(\lambda_t) &= \frac{1}{k}\sum_{i=1}^{k} \min \{|(\mu_m(\lambda_t^{(i)}) - \sigma_m(\lambda_t^{(i)}))- c(\lambda_t^{(i)})|,\\
+      &\qquad |(\mu_m(\lambda_t^{(i)}) + \sigma_m(\lambda_t^{(i)}))- c(\lambda_t^{(i)})|\}
+  \end{aligned}
 \end{equation}
 Intuitively, it is the distance to the closest variance bound, as can be seen in~\cref{fig:ch05:gen_res_var}. 
 Since computing $\text{VE}_m(\lambda_t)$ relies on the true function value $c(\lambda_t)$, this error can only be calculated post-hoc on points that have already been fully evaluated.
@@ -1599,22 +1622,23 @@ We see in~\cref{fig:ch05:diff_var_w} that using different weights for variance r
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/05/figs/variance/ens_var_error_1.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/variance/ens_var_error_1.pdf}
         \caption{}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/05/figs/variance/ens_var_error_2.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/variance/ens_var_error_2.pdf}
         \caption{}
     \end{subfigure}
+    \par\medskip
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/05/figs/variance/ens_var_error_3.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/variance/ens_var_error_3.pdf}
         \caption{}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/05/figs/variance/ens_var_error_4.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/variance/ens_var_error_4.pdf}
         \caption{)}
     \end{subfigure}
     \caption{Illustration of the calculation of the variance error. The white dot is the predicted mean, and the blue dot is the actual value of the target function.
@@ -1628,8 +1652,8 @@ We see in~\cref{fig:ch05:diff_var_w} that using different weights for variance r
 \begin{figure}
     \centering
     % \begin{subfigure}[t]{0.49\textwidth}
-    \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/diff_var_w_all.pdf}
-    \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/diff_var_w_all_legend.pdf}
+    \includegraphics[width=0.6\linewidth]{figures/05/figs/figs/ranks/diff_var_w_all.pdf}
+    \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/diff_var_w_all_legend.pdf}
     \caption{Comparison of \texttt{DyMBO} with same weights for means and variances and \texttt{DyMBO} with different weights for means and variances as a function of the fraction of the wall-clock time budget on YAHPO Gym and JAHS-Bench-201. Same weights for means and variances yield better performance.}
     \label{fig:ch05:diff_var_w}
 \end{figure}
@@ -1648,11 +1672,12 @@ By using the rule of total variance, we add the measure of the correlation betwe
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
     \centering
-    \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/total_variance_all.pdf}
+    \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/total_variance_all.pdf}
     \end{subfigure}
-    \begin{subfigure}[t]{1\textwidth}
+    \par\medskip
+    \begin{subfigure}[t]{\textwidth}
         \centering
-    \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/total_variance_all_legend.pdf}
+    \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/total_variance_all_legend.pdf}
     \end{subfigure}
 
     \caption{Comparison of \texttt{DyMBO} which computes the variance using the rule of total variance to \texttt{DyMBO} which computes the variance as a weighted sum of the variances as a function of the fraction of the wall-clock time budget on YAHPO Gym and JAHS-Bench-201. Weighted sum of variances yields better performance.}
@@ -1672,8 +1697,8 @@ The predictive power of a model is better reflected by more common loss function
 We ran \texttt{DyMBO} with MSE as a loss function on YAHPO Gym and JAHS-Bench-201 with a budget of $100\times$ mean evaluation time per target function. We present the results in~\cref{fig:ch05:loss_ablation}. We see that \texttt{DyMBO} using ranking loss performs slightly better than \texttt{DyMBO} using MSE.
 \begin{figure}
     \centering
-    \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/loss_all.pdf}
-    \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/loss_all_legend.pdf}
+    \includegraphics[width=0.6\linewidth]{figures/05/figs/figs/ranks/loss_all.pdf}
+    \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/loss_all_legend.pdf}
 
     \caption{Mean ranks of \texttt{DyMBO} with different loss functions (ranking loss vs. MSE) as a function of the fraction of the wall-clock time budget on YAHPO Gym and JAHS-Bench-201. Ranking loss performs better than MSE, especially in low budgets.}
     \label{fig:ch05:loss_ablation}
@@ -1686,8 +1711,8 @@ We evaluated the performance of \texttt{DyMBO} with different surrogate models a
 as the ensemble can choose the best model for each target function. However, including more models also increases the risk of choosing a model that performs poorly. We ran \texttt{DyMBO} with different combinations of 4 surrogate models: RF, GP, GB, and ET. We used a budget of $100\times$ mean evaluation time per target function. We present the results in~\cref{fig:ch05:models_choice}. We observe best performance by using only RF and GP, followed by using RF, GP and ET.
 \begin{figure}
     \centering
-    \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/models_choice_all.pdf}
-    \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/models_choice_all_legend.pdf}
+    \includegraphics[width=0.6\linewidth]{figures/05/figs/figs/ranks/models_choice_all.pdf}
+    \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/models_choice_all_legend.pdf}
     \caption{Mean ranks of \texttt{DyMBO} with different surrogate models as a function of the fraction of the wall-clock time budget on YAHPO Gym and JAHS-Bench-201. Using the combination of RF and GP yields the best performance.}
     \label{fig:ch05:models_choice}
 \end{figure}
@@ -1701,8 +1726,8 @@ We ran \texttt{DyMBO} with different weight initialisation schemes on YAHPO Gym 
 
 \begin{figure}
     \centering
-    \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/init_ablation_all.pdf}
-    \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/init_ablation_all_legend.pdf}
+    \includegraphics[width=0.6\linewidth]{figures/05/figs/figs/ranks/init_ablation_all.pdf}
+    \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/init_ablation_all_legend.pdf}
     \caption{Mean ranks of \texttt{DyMBO} with different initialisation schemes as a function of the fraction of the wall-clock time budget on YAHPO Gym and JAHS-Bench-201.  Initialising with RF yields the best performance, although the differences are small.}
     \label{fig:ch05:init-ablation}
 \end{figure}
@@ -1714,8 +1739,8 @@ We tested whether evaluating the model accuracy on all previously sampled points
 \begin{figure}
     \centering
     \centering
-    \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/eval_all_all.pdf}
-    \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/eval_all_all_legend.pdf}
+    \includegraphics[width=0.6\linewidth]{figures/05/figs/figs/ranks/eval_all_all.pdf}
+    \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/eval_all_all_legend.pdf}
     \caption{Comparison of original \texttt{DyMBO} (which evaluates on all points) to \texttt{DyMBO} which evaluates only on the last batch of points as a function of the fraction of the wall-clock time budget on YAHPO Gym and JAHS-Bench-201.
     % \todo{legend}
     }
@@ -1738,29 +1763,30 @@ For numerical-only search space in~\cref{fig:ch05:lcbench}, all \texttt{DyMBO} v
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/main_ranks_rbv2_aknn.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/main_ranks_rbv2_aknn.pdf}
         \caption{rbv2\_aknn: $6D$ mixed discrete-continuous search space}
         \label{fig:ch05:rbv2_aknn}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/main_ranks_rbv2_glmnet.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/main_ranks_rbv2_glmnet.pdf}
         \caption{rbv2\_glmnet: $3D$ mixed discrete-continuous search space}
         \label{fig:ch05:rbv2_glmnet}
     \end{subfigure}
-        \begin{subfigure}[t]{0.49\textwidth}
+    \par\medskip
+    \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/main_ranks_rbv2_ranger.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/main_ranks_rbv2_ranger.pdf}
         \caption{rbv2\_ranger: $8D$ mixed discrete-continuous search space}
         \label{fig:ch05:rbv2_ranger}
-    \end{subfigure}
-        \begin{subfigure}[t]{0.49\textwidth}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/main_ranks_rbv2_rpart.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/main_ranks_rbv2_rpart.pdf}
         \caption{rbv2\_rpart: $5D$ mixed discrete-continuous search space}
         \label{fig:ch05:rbv2_rpart}
     \end{subfigure}
-    \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/main_ranks_rbv2_xgboost_legend.pdf}
+    \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/main_ranks_rbv2_xgboost_legend.pdf}
     \caption{Mean ranks of \texttt{DyMBO} (with different values of $\alpha$), HEBO with different surrogate models, and other HPO methods, as a function of the fraction of the wall-clock time budget on benchmarks from YAHPO Gym, split by search space characteristics (mixed discrete-continuous or numerical only). Variants of \texttt{DyMBO} are consistently top-ranked across different types of search spaces and different dimensionalities.
     }
     \label{fig:ch05:search-spaces1}
@@ -1770,29 +1796,30 @@ For numerical-only search space in~\cref{fig:ch05:lcbench}, all \texttt{DyMBO} v
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/main_ranks_rbv2_super.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/main_ranks_rbv2_super.pdf}
         \caption{rbv2\_super: $38D$ mixed discrete-continuous search space}
         \label{fig:ch05:rbv2_super}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/main_ranks_rbv2_svm.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/main_ranks_rbv2_svm.pdf}
         \caption{rbv2\_svm: $6D$ mixed discrete-continuous search space}
         \label{fig:ch05:rbv2_svm}
     \end{subfigure}
+    \par\medskip
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/main_ranks_rbv2_xgboost.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/main_ranks_rbv2_xgboost.pdf}
         \caption{rbv2\_xgboost: $14D$ mixed discrete-continuous search space}
         \label{fig:ch05:rbv2_xgboost}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/main_ranks_lcbench.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/main_ranks_lcbench.pdf}
         \caption{lcbench: $7D$ numerical search space}
         \label{fig:ch05:lcbench}
     \end{subfigure}
-    \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/main_ranks_rbv2_xgboost_legend.pdf}
+    \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/main_ranks_rbv2_xgboost_legend.pdf}
     \caption{Mean ranks of \texttt{DyMBO} (with different values of $\alpha$), HEBO with different surrogate models, and other HPO methods, as a function of the fraction of the wall-clock time budget on benchmarks from YAHPO Gym, split by search space characteristics (mixed discrete-continuous or numerical only). Variants of \texttt{DyMBO} are consistently top-ranked across different types of search spaces and different dimensionalities.
     }
     \label{fig:ch05:search-spaces2}
@@ -1880,37 +1907,40 @@ Among the single-surrogate baselines, GP tends to perform competitively on smoot
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/continuous/co_8_init_fackley_time.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/continuous/co_8_init_fackley_time.pdf}
         \caption{Ackley}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/continuous/co_8_init_fbohachevsky_time.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/continuous/co_8_init_fbohachevsky_time.pdf}
         \caption{Hachevsky}
     \end{subfigure}
+    \par\medskip
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/continuous/co_8_init_fgriewank_time.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/continuous/co_8_init_fgriewank_time.pdf}
         \caption{Griewank}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/continuous/co_8_init_fhimmelblau_time.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/continuous/co_8_init_fhimmelblau_time.pdf}
         \caption{Himmelblau}
     \end{subfigure}
+    \par\medskip
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/continuous/co_8_init_fschaffer_time.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/continuous/co_8_init_fschaffer_time.pdf}
         \caption{Schaffer}
-    \end{subfigure}
+    \end{subfigure}\hfill
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/continuous/co_8_init_fschwefel_time.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/continuous/co_8_init_fschwefel_time.pdf}
         \caption{Schwefel}
     \end{subfigure}
-        \begin{subfigure}[t]{\textwidth}
+    \par\medskip
+    \begin{subfigure}[t]{\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/continuous/cont_legend.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/continuous/cont_legend.pdf}
         % \caption{}
     \end{subfigure}
     \caption{Convergence plots of \texttt{DyMBO} and single-surrogate HEBO baselines as a function of the number of evaluations on synthetic continuous functions in dimension $10$. \texttt{DyMBO} exhibits faster or competitive convergence, and an overall lower or comparable final regret.
@@ -1942,12 +1972,13 @@ These results emphasise that \texttt{DyMBO} consistently performs well across va
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/hpobench_all.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/hpobench_all.pdf}
         % \caption{}
     \end{subfigure}
-        \begin{subfigure}[t]{1.0\textwidth}
+    \par\medskip
+    \begin{subfigure}[t]{\textwidth}
         \centering
-        \includegraphics[scale=0.33]{figures/05/figs/figs/ranks/hpobench_all_legend.pdf}
+        \includegraphics[width=\linewidth]{figures/05/figs/figs/ranks/hpobench_all_legend.pdf}
         % \caption{}
     \end{subfigure}
     \caption{

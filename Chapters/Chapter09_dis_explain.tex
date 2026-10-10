@@ -414,55 +414,57 @@ To verify the robustness of our approach across different distributional assumpt
 
 \begin{figure}[htbp]
     \centering
-    \begin{subfigure}{0.3\linewidth}
-        \includegraphics[]{figures/09/figures/performances/clasp_factoring_lognorm_val_ks_d_vs_obs.pdf}
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/09/figures/performances/clasp_factoring_lognorm_val_ks_d_vs_obs.pdf}
         \caption{Clasp-Factoring}
         \label{fig:ch09:clasp_factoring_ks_d_vs_obs}
-    \end{subfigure}
-    \begin{subfigure}{0.3\linewidth}
-        \includegraphics[]{figures/09/figures/performances/saps-CVVAR_lognorm_val_ks_d_vs_obs.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/09/figures/performances/saps-CVVAR_lognorm_val_ks_d_vs_obs.pdf}
         \caption{Saps-CV-VAR}
         \label{fig:ch09:saps_cvvar_ks_d_vs_obs}
-    \end{subfigure}
-    \begin{subfigure}{0.3\linewidth}
-        \includegraphics[]{figures/09/figures/performances/spear_qcp_lognorm_val_ks_d_vs_obs.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/09/figures/performances/spear_qcp_lognorm_val_ks_d_vs_obs.pdf}
         \caption{Spear-QCP}
         \label{fig:ch09:spear_qcp_ks_d_vs_obs}
     \end{subfigure}
-    \begin{subfigure}{0.3\linewidth}
-        \includegraphics[]{figures/09/figures/performances/yalsat_qcp_lognorm_val_ks_d_vs_obs.pdf}
+    \par\medskip
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/09/figures/performances/yalsat_qcp_lognorm_val_ks_d_vs_obs.pdf}
         \caption{YalSAT-QCP}
         \label{fig:ch09:yalsat_qcp_ks_d_vs_obs}
-    \end{subfigure}
-    \begin{subfigure}{0.3\linewidth}
-        \includegraphics[]{figures/09/figures/performances/spear_swgcp_lognorm_val_ks_d_vs_obs.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/09/figures/performances/spear_swgcp_lognorm_val_ks_d_vs_obs.pdf}
         \caption{Spear-SWGCP}
         \label{fig:ch09:spear_swgcp_ks_d_vs_obs}
-    \end{subfigure}
-    \begin{subfigure}{0.3\linewidth}
-        \includegraphics[]{figures/09/figures/performances/yalsat_swgcp_lognorm_val_ks_d_vs_obs.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/09/figures/performances/yalsat_swgcp_lognorm_val_ks_d_vs_obs.pdf}
         \caption{YalSAT-SWGCP}
         \label{fig:ch09:yalsat_swgcp_ks_d_vs_obs}
     \end{subfigure}
-    \begin{subfigure}{0.3\linewidth}
-        \includegraphics[]{figures/09/figures/performances/lpg-zeno_lognorm_val_ks_d_vs_obs.pdf}
+    \par\medskip
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/09/figures/performances/lpg-zeno_lognorm_val_ks_d_vs_obs.pdf}
         \caption{LPG-Zenotravel}
         \label{fig:ch09:lpg_zeno_ks_d_vs_obs}
-    \end{subfigure}
-    \begin{subfigure}{0.3\linewidth}
-        \includegraphics[]{figures/09/figures/performances/saps-CVVAR_lognorm_cpu_training_time_vs_obs.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/09/figures/performances/saps-CVVAR_lognorm_cpu_training_time_vs_obs.pdf}
         \caption{Saps-CV-VAR (time)}
         \label{fig:ch09:saps_cvvar_cpu_training_time_vs_obs}
-    \end{subfigure}
-    \begin{subfigure}{0.3\linewidth}
-        \includegraphics[]{figures/09/figures/performances/lpg-zeno_lognorm_cpu_training_time_vs_obs.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/09/figures/performances/lpg-zeno_lognorm_cpu_training_time_vs_obs.pdf}
         \caption{LPG-Zenotravel (time)}
         \label{fig:ch09:lpg_zeno_cpu_training_time_vs_obs}
     \end{subfigure}
-    
-    \begin{subfigure}{1.0\linewidth}
+    \par\medskip
+    \begin{subfigure}{\textwidth}
     \centering
-        \includegraphics[trim={6.2cm 4.3cm 0cm 0.0cm},clip]{figures/09/figures/performances/legend.pdf}
+        \includegraphics[width=0.45\linewidth,trim={6.2cm 4.3cm 0cm 0.0cm},clip]{figures/09/figures/performances/legend.pdf}
 
     \end{subfigure}
     \caption[XGBoost vs DistNet prediction quality]{Prediction quality and training efficiency of XGBoost \emph{vs} DistNet. (a--g) KS distance between predicted and observed running time distributions as a function of the number of training observations per instance, across seven scenarios, predicting the parameters of a \emph{log-normal} distribution; lower is better. XGBoost (blue) performs on par with DistNet (red) across all scenarios, with notable exceptions in the low-data regime, where DistNet retains a performance edge. Both methods improve with more observations added. (h--i) CPU training time comparison on one \gls{sat} and one automated planning scenario. XGBoost requires orders of magnitude less 
@@ -489,28 +491,30 @@ The results reveal a clear structure: the most influential features for the scal
 \begin{figure}[!tbp]
     \centering
 
-    \begin{subfigure}{0.3\linewidth}
-        \includegraphics{figures/09/figures/explainability/spear_swgcp_xgb_dist_lognorm_100_fold0_mean_permutation_importance.pdf}
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\linewidth]{figures/09/figures/explainability/spear_swgcp_xgb_dist_lognorm_100_fold0_mean_permutation_importance.pdf}
         \caption{Mean}
         \label{fig:ch09:spear_swgcp_mean_permutation_importance}
-    \end{subfigure}
-    \begin{subfigure}{0.3\linewidth}
-        \includegraphics{figures/09/figures/explainability/spear_swgcp_xgb_dist_lognorm_100_fold0_variance_permutation_importance.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\linewidth]{figures/09/figures/explainability/spear_swgcp_xgb_dist_lognorm_100_fold0_variance_permutation_importance.pdf}
         \caption{Variance}
         \label{fig:ch09:spear_swgcp_variance_permutation_importance}
     \end{subfigure}
-    \begin{subfigure}{0.3\linewidth}
-        \includegraphics{figures/09/figures/explainability/spear_swgcp_xgb_dist_lognorm_100_fold0_iqr_permutation_importance.pdf}
+    \par\medskip
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\linewidth]{figures/09/figures/explainability/spear_swgcp_xgb_dist_lognorm_100_fold0_iqr_permutation_importance.pdf}
         \caption{IQR}
         \label{fig:ch09:spear_swgcp_iqr_permutation_importance}
-    \end{subfigure}
-    \begin{subfigure}{0.3\linewidth}
-        \includegraphics{figures/09/figures/explainability/spear_swgcp_xgb_dist_lognorm_100_fold0_skewness_permutation_importance.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\linewidth]{figures/09/figures/explainability/spear_swgcp_xgb_dist_lognorm_100_fold0_skewness_permutation_importance.pdf}
         \caption{Skewness}
         \label{fig:ch09:spear_swgcp_skewness_permutation_importance}
     \end{subfigure}
-    \begin{subfigure}{0.3\linewidth}
-        \includegraphics{figures/09/figures/explainability/spear_swgcp_xgb_dist_lognorm_100_fold0_kurtosis_permutation_importance.pdf}
+    \par\medskip
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\linewidth]{figures/09/figures/explainability/spear_swgcp_xgb_dist_lognorm_100_fold0_kurtosis_permutation_importance.pdf}
         \caption{Kurtosis}
         \label{fig:ch09:spear_swgcp_kurtosis_permutation_importance}
     \end{subfigure}
@@ -533,28 +537,30 @@ Skewness is highest for intermediate fractions of remaining variables, whereas k
 \begin{figure}[!tbp]
     \centering
 
-    \begin{subfigure}{0.3\linewidth}
-        \includegraphics{figures/09/figures/explainability/spear_swgcp_xgb_dist_lognorm_100_fold0_mean_ice_feature59.pdf}
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\linewidth]{figures/09/figures/explainability/spear_swgcp_xgb_dist_lognorm_100_fold0_mean_ice_feature59.pdf}
         \caption{Mean }
         \label{fig:ch09:spear_swgcp_mean_ice}
-    \end{subfigure}
-    \begin{subfigure}{0.3\linewidth}
-        \includegraphics{figures/09/figures/explainability/spear_swgcp_xgb_dist_lognorm_100_fold0_variance_ice_feature60.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\linewidth]{figures/09/figures/explainability/spear_swgcp_xgb_dist_lognorm_100_fold0_variance_ice_feature60.pdf}
         \caption{\footnotesize Variance}
         \label{fig:ch09:spear_swgcp_variance_ice}
     \end{subfigure}
-    \begin{subfigure}{0.3\linewidth}
-        \includegraphics{figures/09/figures/explainability/spear_swgcp_xgb_dist_lognorm_100_fold0_iqr_ice_feature59.pdf}
+    \par\medskip
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\linewidth]{figures/09/figures/explainability/spear_swgcp_xgb_dist_lognorm_100_fold0_iqr_ice_feature59.pdf}
         \caption{\footnotesize IQR}
         \label{fig:ch09:spear_swgcp_iqr_ice}
-    \end{subfigure}
-    \begin{subfigure}{0.3\linewidth}
-        \includegraphics{figures/09/figures/explainability/spear_swgcp_xgb_dist_lognorm_100_fold0_skewness_ice_feature46.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\linewidth]{figures/09/figures/explainability/spear_swgcp_xgb_dist_lognorm_100_fold0_skewness_ice_feature46.pdf}
         \caption{\footnotesize Skewness}
         \label{fig:ch09:spear_swgcp_skewness_ice}
     \end{subfigure}
-    \begin{subfigure}{0.3\linewidth}
-        \includegraphics{figures/09/figures/explainability/spear_swgcp_xgb_dist_lognorm_100_fold0_kurtosis_ice_feature46.pdf}
+    \par\medskip
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\linewidth]{figures/09/figures/explainability/spear_swgcp_xgb_dist_lognorm_100_fold0_kurtosis_ice_feature46.pdf}
         \caption{Kurtosis}
         \label{fig:ch09:spear_swgcp_kurtosis_ice}
     \end{subfigure}
@@ -596,28 +602,30 @@ In this scenario, the scale statistics (mean, variance, IQR) are driven mainly b
 \begin{figure}[!tbp]
     \centering
 
-    \begin{subfigure}{0.3\linewidth}
-        \includegraphics{figures/09/figures/explainability/lpg-zeno_xgb_dist_lognorm_100_fold0_mean_permutation_importance.pdf}
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\linewidth]{figures/09/figures/explainability/lpg-zeno_xgb_dist_lognorm_100_fold0_mean_permutation_importance.pdf}
         \caption{Mean}
         \label{fig:ch09:lpg_zeno_mean_permutation_importance}
-    \end{subfigure}
-    \begin{subfigure}{0.3\linewidth}
-        \includegraphics{figures/09/figures/explainability/lpg-zeno_xgb_dist_lognorm_100_fold0_variance_permutation_importance.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\linewidth]{figures/09/figures/explainability/lpg-zeno_xgb_dist_lognorm_100_fold0_variance_permutation_importance.pdf}
         \caption{Variance}
         \label{fig:ch09:lpg_zeno_variance_permutation_importance}
     \end{subfigure}
-    \begin{subfigure}{0.3\linewidth}
-        \includegraphics{figures/09/figures/explainability/lpg-zeno_xgb_dist_lognorm_100_fold0_iqr_permutation_importance.pdf}
+    \par\medskip
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\linewidth]{figures/09/figures/explainability/lpg-zeno_xgb_dist_lognorm_100_fold0_iqr_permutation_importance.pdf}
         \caption{IQR}
         \label{fig:ch09:lpg_zeno_iqr_permutation_importance}
-    \end{subfigure}
-    \begin{subfigure}{0.3\linewidth}
-        \includegraphics{figures/09/figures/explainability/lpg-zeno_xgb_dist_lognorm_100_fold0_skewness_permutation_importance.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\linewidth]{figures/09/figures/explainability/lpg-zeno_xgb_dist_lognorm_100_fold0_skewness_permutation_importance.pdf}
         \caption{Skewness}
         \label{fig:ch09:lpg_zeno_skewness_permutation_importance}
     \end{subfigure}
-    \begin{subfigure}{0.3\linewidth}
-        \includegraphics{figures/09/figures/explainability/lpg-zeno_xgb_dist_lognorm_100_fold0_kurtosis_permutation_importance.pdf}
+    \par\medskip
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\linewidth]{figures/09/figures/explainability/lpg-zeno_xgb_dist_lognorm_100_fold0_kurtosis_permutation_importance.pdf}
         \caption{Kurtosis}
         \label{fig:ch09:lpg_zeno_kurtosis_permutation_importance}
     \end{subfigure}
@@ -647,28 +655,30 @@ This suggests that tail behaviour for LPG-Zenotravel is tied to the size of the 
 \begin{figure}[!tbp]
     \centering
 
-    \begin{subfigure}{0.3\linewidth}
-        \includegraphics{figures/09/figures/explainability/lpg-zeno_xgb_dist_lognorm_100_fold0_mean_ice_feature2.pdf}
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\linewidth]{figures/09/figures/explainability/lpg-zeno_xgb_dist_lognorm_100_fold0_mean_ice_feature2.pdf}
         \caption{Mean}
         \label{fig:ch09:lpg_zeno_mean_ice}
-    \end{subfigure}
-    \begin{subfigure}{0.3\linewidth}
-        \includegraphics{figures/09/figures/explainability/lpg-zeno_xgb_dist_lognorm_100_fold0_variance_ice_feature62.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\linewidth]{figures/09/figures/explainability/lpg-zeno_xgb_dist_lognorm_100_fold0_variance_ice_feature62.pdf}
         \caption{Variance}
         \label{fig:ch09:lpg_zeno_variance_ice}
     \end{subfigure}
-    \begin{subfigure}{0.3\linewidth}
-        \includegraphics{figures/09/figures/explainability/lpg-zeno_xgb_dist_lognorm_100_fold0_iqr_ice_feature62.pdf}
+    \par\medskip
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\linewidth]{figures/09/figures/explainability/lpg-zeno_xgb_dist_lognorm_100_fold0_iqr_ice_feature62.pdf}
         \caption{IQR }
         \label{fig:ch09:lpg_zeno_iqr_ice}
-    \end{subfigure}
-    \begin{subfigure}{0.3\linewidth}
-        \includegraphics{figures/09/figures/explainability/lpg-zeno_xgb_dist_lognorm_100_fold0_skewness_ice_feature135.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\linewidth]{figures/09/figures/explainability/lpg-zeno_xgb_dist_lognorm_100_fold0_skewness_ice_feature135.pdf}
         \caption{Skewness}
         \label{fig:ch09:lpg_zeno_skewness_ice}
     \end{subfigure}
-    \begin{subfigure}{0.3\linewidth}
-        \includegraphics{figures/09/figures/explainability/lpg-zeno_xgb_dist_lognorm_100_fold0_kurtosis_ice_feature135.pdf}
+    \par\medskip
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\linewidth]{figures/09/figures/explainability/lpg-zeno_xgb_dist_lognorm_100_fold0_kurtosis_ice_feature135.pdf}
         \caption{Kurtosis}
         \label{fig:ch09:lpg_zeno_kurtosis_ice}
     \end{subfigure}
