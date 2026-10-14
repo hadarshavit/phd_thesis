@@ -962,7 +962,7 @@ thereby retaining the same assignment of elements to clusters both in the origin
 
 
 
-Boxplot tick numbers identify methods in \cref{fig:ch04:method-key}; the method IDs and colours are fixed across this chapter.
+Reducer names are shown beneath each box plot; colours and rank-plot line styles are listed in \cref{fig:ch04:method-key}.
 
 \begin{figure}[tbp]
 \centering
@@ -973,56 +973,64 @@ Boxplot tick numbers identify methods in \cref{fig:ch04:method-key}; the method 
 
 \begin{figure}[tbp]
 \centering
-\begin{subfigure}{0.49\textwidth}
+\begin{subfigure}{1.0\textwidth}
         \includegraphics{figures/04/ml/agg_5_homogeneity.pdf}
         \caption{\footnotesize{$k = 5$; homogeneity}}
     \end{subfigure}
-\hfill
-\begin{subfigure}{0.49\textwidth}
+\par\medskip
+\begin{subfigure}{1.0\textwidth}
         \includegraphics{figures/04/ml/agg_10_homogeneity.pdf}
         \caption{\footnotesize{$k = 10$; homogeneity}}
-    \end{subfigure}
-
-\par\medskip
-
-\begin{subfigure}{0.49\textwidth}
-        \includegraphics{figures/04/ml/agg_20_homogeneity.pdf}
-        \caption{\footnotesize{$k = 20$; homogeneity}}
-    \end{subfigure}
-\hfill
-\begin{subfigure}{0.49\textwidth}
-        \includegraphics{figures/04/ml/agg_40_homogeneity.pdf}
-        \caption{\footnotesize{$k = 40$; homogeneity}}
     \end{subfigure}
 \caption[Clustering homogeneity on ML task 1]{Cluster homogeneity across OpenML~CC-18 datasets at different target dimensionalities $k$ on \textbf{machine learning task 1: clustering ability}; higher is better. The methods differ only slightly in homogeneity.}
 \label{fig:ch04:cluster_all_agg}
 \end{figure}
 
 \begin{figure}[tbp]
+\ContinuedFloat
 \centering
-\begin{subfigure}{0.49\textwidth}
+\begin{subfigure}{1.0\textwidth}
+        \includegraphics{figures/04/ml/agg_20_homogeneity.pdf}
+        \caption{\footnotesize{$k = 20$; homogeneity}}
+    \end{subfigure}
+\par\medskip
+\begin{subfigure}{1.0\textwidth}
+        \includegraphics{figures/04/ml/agg_40_homogeneity.pdf}
+        \caption{\footnotesize{$k = 40$; homogeneity}}
+    \end{subfigure}
+\caption[Clustering homogeneity on ML task 1 (continued)]{Cluster homogeneity across OpenML~CC-18 datasets at different target dimensionalities $k$ on \textbf{machine learning task 1: clustering ability}; higher is better. The methods differ only slightly in homogeneity. (continued)}
+\label{fig:ch04:cluster_all_agg-part2}
+\end{figure}
+
+\begin{figure}[tbp]
+\centering
+\begin{subfigure}{1.0\textwidth}
         \includegraphics{figures/04/ml/agg_5_completeness.pdf}
         \caption{\footnotesize{$k = 5$; completeness}}
     \end{subfigure}
-\hfill
-\begin{subfigure}{0.49\textwidth}
+\par\medskip
+\begin{subfigure}{1.0\textwidth}
         \includegraphics{figures/04/ml/agg_10_completeness.pdf}
         \caption{\footnotesize{$k = 10$; completeness}}
     \end{subfigure}
+\caption[Clustering completeness on ML task 1]{Cluster completeness across OpenML~CC-18 datasets at different target dimensionalities $k$ on \textbf{machine learning task 1: clustering ability}; higher is better. Completeness improves slightly as $k$ increases.}
+\label{fig:ch04:cluster_all_completeness}
+\end{figure}
 
-\par\medskip
-
-\begin{subfigure}{0.49\textwidth}
+\begin{figure}[tbp]
+\ContinuedFloat
+\centering
+\begin{subfigure}{1.0\textwidth}
         \includegraphics{figures/04/ml/agg_20_completeness.pdf}
         \caption{\footnotesize{$k = 20$; completeness}}
     \end{subfigure}
-\hfill
-\begin{subfigure}{0.49\textwidth}
+\par\medskip
+\begin{subfigure}{1.0\textwidth}
         \includegraphics{figures/04/ml/agg_40_completeness.pdf}
         \caption{\footnotesize{$k = 40$; completeness}}
     \end{subfigure}
-\caption[Clustering completeness on ML task 1]{Cluster completeness across OpenML~CC-18 datasets at different target dimensionalities $k$ on \textbf{machine learning task 1: clustering ability}; higher is better. Completeness improves slightly as $k$ increases.}
-\label{fig:ch04:cluster_all_completeness}
+\caption[Clustering completeness on ML task 1 (continued)]{Cluster completeness across OpenML~CC-18 datasets at different target dimensionalities $k$ on \textbf{machine learning task 1: clustering ability}; higher is better. Completeness improves slightly as $k$ increases. (continued)}
+\label{fig:ch04:cluster_all_completeness-part2}
 \end{figure}
 
 We now investigate the effect of input dimensionality by grouping the datasets into three categories based on their number of features: low- (up to 60 features), medium- (60–200 features), and high-dimensional datasets (more than 200 features). The results are presented in \cref{fig:ch04:cluster_homogeneity_dataset_sizes}.
@@ -1039,42 +1047,49 @@ Furthermore, dense Gaussian random projections handle large feature spaces bette
 
 \begin{figure}[tbp]
 \centering
-\begin{subfigure}{0.49\textwidth}
+\begin{subfigure}{1.0\textwidth}
         \includegraphics{figures/04/ml/agg_small_5_homogeneity.pdf}
         \caption{Small $D$; homogeneity}
     \end{subfigure}
-\hfill
-\begin{subfigure}{0.49\textwidth}
+\par\medskip
+\begin{subfigure}{1.0\textwidth}
         \includegraphics{figures/04/ml/agg_medium_5_homogeneity.pdf}
         \caption{Medium $D$; homogeneity}
     \end{subfigure}
+\caption[Clustering on ML task 1 by dataset category]{Performance of different dimensionality reduction methods on low-, medium- and high-dimensional OpenML~CC-18 datasets, all reduced to target dimensionality $k = 5$, in terms of (a-c) cluster homogeneity and (d-f) cluster completeness on \textbf{machine learning task 1: clustering ability}; higher is better. We observe a slightly larger improvement in completeness than in homogeneity as the dataset dimensionality increases.}
+\label{fig:ch04:cluster_homogeneity_dataset_sizes}
+\end{figure}
 
-\par\medskip
-
-\begin{subfigure}{0.49\textwidth}
+\begin{figure}[tbp]
+\ContinuedFloat
+\centering
+\begin{subfigure}{1.0\textwidth}
         \includegraphics{figures/04/ml/agg_large_5_homogeneity.pdf}
         \caption{Large $D$; homogeneity}
     \end{subfigure}
-\hfill
-\begin{subfigure}{0.49\textwidth}
+\par\medskip
+\begin{subfigure}{1.0\textwidth}
         \includegraphics{figures/04/ml/agg_small_5_completeness.pdf}
         \caption{Small $D$; completeness}
     \end{subfigure}
+\caption[Clustering on ML task 1 by dataset category (continued)]{Performance of different dimensionality reduction methods on low-, medium- and high-dimensional OpenML~CC-18 datasets, all reduced to target dimensionality $k = 5$, in terms of (a-c) cluster homogeneity and (d-f) cluster completeness on \textbf{machine learning task 1: clustering ability}; higher is better. We observe a slightly larger improvement in completeness than in homogeneity as the dataset dimensionality increases. (continued)}
+\label{fig:ch04:cluster_homogeneity_dataset_sizes-part2}
+\end{figure}
 
-\par\medskip
-
-\begin{subfigure}{0.49\textwidth}
+\begin{figure}[tbp]
+\ContinuedFloat
+\centering
+\begin{subfigure}{1.0\textwidth}
         \includegraphics{figures/04/ml/agg_medium_5_completeness.pdf}
         \caption{Medium $D$; completeness}
     \end{subfigure}
-\hfill
-\begin{subfigure}{0.49\textwidth}
+\par\medskip
+\begin{subfigure}{1.0\textwidth}
         \includegraphics{figures/04/ml/agg_large_5_completeness.pdf}
         \caption{Large $D$; completeness}
     \end{subfigure}
-
-\caption[Clustering on ML task 1 by dataset category]{Performance of different dimensionality reduction methods on low-, medium- and high-dimensional OpenML~CC-18 datasets, all reduced to target dimensionality $k = 5$, in terms of (a-c) cluster homogeneity and (d-f) cluster completeness on \textbf{machine learning task 1: clustering ability}; higher is better. We observe a slightly larger improvement in completeness than in homogeneity as the dataset dimensionality increases.}
-\label{fig:ch04:cluster_homogeneity_dataset_sizes}
+\caption[Clustering on ML task 1 by dataset category (continued)]{Performance of different dimensionality reduction methods on low-, medium- and high-dimensional OpenML~CC-18 datasets, all reduced to target dimensionality $k = 5$, in terms of (a-c) cluster homogeneity and (d-f) cluster completeness on \textbf{machine learning task 1: clustering ability}; higher is better. We observe a slightly larger improvement in completeness than in homogeneity as the dataset dimensionality increases. (continued)}
+\label{fig:ch04:cluster_homogeneity_dataset_sizes-part3}
 \end{figure}
 
 
@@ -1101,83 +1116,95 @@ Overall, while most methods achieve comparable accuracy, LoLP consistently perfo
 
 \begin{figure}[tbp]
 \centering
-\begin{subfigure}{0.49\textwidth}
+\begin{subfigure}{1.0\textwidth}
         \includegraphics{figures/04/ml/agg_5_rf_acc.pdf}
         \caption{\footnotesize Random Forest; $k = 5$}
     \end{subfigure}
-\hfill
-\begin{subfigure}{0.49\textwidth}
+\par\medskip
+\begin{subfigure}{1.0\textwidth}
         \includegraphics{figures/04/ml/agg_10_rf_acc.pdf}
         \caption{\footnotesize Random Forest; $k = 10$}
-    \end{subfigure}
-
-\par\medskip
-
-\begin{subfigure}{0.49\textwidth}
-        \includegraphics{figures/04/ml/agg_20_rf_acc.pdf}
-        \caption{\footnotesize Random Forest; $k = 20$}
-    \end{subfigure}
-\hfill
-\begin{subfigure}{0.49\textwidth}
-        \includegraphics{figures/04/ml/agg_40_rf_acc.pdf}
-        \caption{\footnotesize Random Forest; $k = 40$}
     \end{subfigure}
 \caption[Random-forest classification accuracy]{Accuracy of random-forest classification across OpenML~CC-18 datasets at target dimensionalities $k \in \{5,10,20,40\}$ on \textbf{machine learning task 2}; higher is better. Bernoulli RBM and random projections tend to perform poorly, while LoLP has a slight advantage.}
 \label{fig:ch04:ml_pred_all}
 \end{figure}
 
 \begin{figure}[tbp]
+\ContinuedFloat
 \centering
-\begin{subfigure}{0.49\textwidth}
+\begin{subfigure}{1.0\textwidth}
+        \includegraphics{figures/04/ml/agg_20_rf_acc.pdf}
+        \caption{\footnotesize Random Forest; $k = 20$}
+    \end{subfigure}
+\par\medskip
+\begin{subfigure}{1.0\textwidth}
+        \includegraphics{figures/04/ml/agg_40_rf_acc.pdf}
+        \caption{\footnotesize Random Forest; $k = 40$}
+    \end{subfigure}
+\caption[Random-forest classification accuracy (continued)]{Accuracy of random-forest classification across OpenML~CC-18 datasets at target dimensionalities $k \in \{5,10,20,40\}$ on \textbf{machine learning task 2}; higher is better. Bernoulli RBM and random projections tend to perform poorly, while LoLP has a slight advantage. (continued)}
+\label{fig:ch04:ml_pred_all-part2}
+\end{figure}
+
+\begin{figure}[tbp]
+\centering
+\begin{subfigure}{1.0\textwidth}
         \includegraphics{figures/04/ml/agg_5_gb_acc.pdf}
         \caption{\footnotesize Gradient Boosting; $k = 5$}
     \end{subfigure}
-\hfill
-\begin{subfigure}{0.49\textwidth}
+\par\medskip
+\begin{subfigure}{1.0\textwidth}
         \includegraphics{figures/04/ml/agg_10_gb_acc.pdf}
         \caption{\footnotesize Gradient Boosting; $k = 10$}
-    \end{subfigure}
-
-\par\medskip
-
-\begin{subfigure}{0.49\textwidth}
-        \includegraphics{figures/04/ml/agg_20_gb_acc.pdf}
-        \caption{\footnotesize Gradient Boosting; $k = 20$}
-    \end{subfigure}
-\hfill
-\begin{subfigure}{0.49\textwidth}
-        \includegraphics{figures/04/ml/agg_40_gb_acc.pdf}
-        \caption{\footnotesize Gradient Boosting; $k = 40$}
     \end{subfigure}
 \caption[Gradient-boosting classification accuracy]{Accuracy of gradient-boosting classification across OpenML~CC-18 datasets at target dimensionalities $k \in \{5,10,20,40\}$ on \textbf{machine learning task 2}; higher is better. Bernoulli RBM and random projections tend to perform poorly, while LoLP has a slight advantage.}
 \label{fig:ch04:ml_pred_all_gb}
 \end{figure}
 
 \begin{figure}[tbp]
+\ContinuedFloat
 \centering
-\begin{subfigure}{0.49\textwidth}
+\begin{subfigure}{1.0\textwidth}
+        \includegraphics{figures/04/ml/agg_20_gb_acc.pdf}
+        \caption{\footnotesize Gradient Boosting; $k = 20$}
+    \end{subfigure}
+\par\medskip
+\begin{subfigure}{1.0\textwidth}
+        \includegraphics{figures/04/ml/agg_40_gb_acc.pdf}
+        \caption{\footnotesize Gradient Boosting; $k = 40$}
+    \end{subfigure}
+\caption[Gradient-boosting classification accuracy (continued)]{Accuracy of gradient-boosting classification across OpenML~CC-18 datasets at target dimensionalities $k \in \{5,10,20,40\}$ on \textbf{machine learning task 2}; higher is better. Bernoulli RBM and random projections tend to perform poorly, while LoLP has a slight advantage. (continued)}
+\label{fig:ch04:ml_pred_all_gb-part2}
+\end{figure}
+
+\begin{figure}[tbp]
+\centering
+\begin{subfigure}{1.0\textwidth}
         \includegraphics{figures/04/ml/agg_5_mlp_acc.pdf}
         \caption{\footnotesize \gls{mlp}; $k = 5$}
     \end{subfigure}
-\hfill
-\begin{subfigure}{0.49\textwidth}
+\par\medskip
+\begin{subfigure}{1.0\textwidth}
         \includegraphics{figures/04/ml/agg_10_mlp_acc.pdf}
         \caption{\footnotesize \gls{mlp}; $k = 10$}
     \end{subfigure}
+\caption[MLP classification accuracy]{Accuracy of \gls{mlp} classification across OpenML~CC-18 datasets at target dimensionalities $k \in \{5,10,20,40\}$ on \textbf{machine learning task 2}; higher is better. Bernoulli RBM and random projections tend to perform poorly, while LoLP has a slight advantage.}
+\label{fig:ch04:ml_pred_all_mlp}
+\end{figure}
 
-\par\medskip
-
-\begin{subfigure}{0.49\textwidth}
+\begin{figure}[tbp]
+\ContinuedFloat
+\centering
+\begin{subfigure}{1.0\textwidth}
         \includegraphics{figures/04/ml/agg_20_mlp_acc.pdf}
         \caption{\footnotesize \gls{mlp}; $k = 20$}
     \end{subfigure}
-\hfill
-\begin{subfigure}{0.49\textwidth}
+\par\medskip
+\begin{subfigure}{1.0\textwidth}
         \includegraphics{figures/04/ml/agg_40_mlp_acc.pdf}
         \caption{\footnotesize \gls{mlp}; $k = 40$}
     \end{subfigure}
-\caption[MLP classification accuracy]{Accuracy of \gls{mlp} classification across OpenML~CC-18 datasets at target dimensionalities $k \in \{5,10,20,40\}$ on \textbf{machine learning task 2}; higher is better. Bernoulli RBM and random projections tend to perform poorly, while LoLP has a slight advantage.}
-\label{fig:ch04:ml_pred_all_mlp}
+\caption[MLP classification accuracy (continued)]{Accuracy of \gls{mlp} classification across OpenML~CC-18 datasets at target dimensionalities $k \in \{5,10,20,40\}$ on \textbf{machine learning task 2}; higher is better. Bernoulli RBM and random projections tend to perform poorly, while LoLP has a slight advantage. (continued)}
+\label{fig:ch04:ml_pred_all_mlp-part2}
 \end{figure}
 
 We conclude our analysis of the machine learning tasks by examining the results of the prediction task across different dataset sizes, following the same procedure as for the clustering task. We fix the target dimensionality to $k=5$ and show the three classifiers separately in \cref{fig:ch04:ml_pred_sizes,fig:ch04:ml_pred_sizes_gb,fig:ch04:ml_pred_sizes_mlp}.
@@ -1187,68 +1214,80 @@ In contrast, PCA (Linear) and PCA (Polynomial) perform better than other PCA var
 
 \begin{figure}[tbp]
 \centering
-\begin{subfigure}{0.49\textwidth}
+\begin{subfigure}{1.0\textwidth}
         \includegraphics{figures/04/ml/agg_small_5_rf_acc.pdf}
         \caption{Small $D$; Random Forest}
     \end{subfigure}
-\hfill
-\begin{subfigure}{0.49\textwidth}
+\par\medskip
+\begin{subfigure}{1.0\textwidth}
         \includegraphics{figures/04/ml/agg_medium_5_rf_acc.pdf}
         \caption{Medium $D$; Random Forest}
-    \end{subfigure}
-
-\par\medskip
-
-\begin{subfigure}{0.49\textwidth}
-        \includegraphics{figures/04/ml/agg_large_5_rf_acc.pdf}
-        \caption{Large $D$; Random Forest}
     \end{subfigure}
 \caption[Random-forest accuracy by dataset size]{Random-forest classification accuracy on low-, medium- and high-dimensional OpenML~CC-18 datasets reduced to $k=5$; higher is better. Bernoulli RBM and random projections degrade as input dimensionality increases.}
 \label{fig:ch04:ml_pred_sizes}
 \end{figure}
 
 \begin{figure}[tbp]
+\ContinuedFloat
 \centering
-\begin{subfigure}{0.49\textwidth}
+\begin{subfigure}{1.0\textwidth}
+        \includegraphics{figures/04/ml/agg_large_5_rf_acc.pdf}
+        \caption{Large $D$; Random Forest}
+    \end{subfigure}
+\caption[Random-forest accuracy by dataset size (continued)]{Random-forest classification accuracy on low-, medium- and high-dimensional OpenML~CC-18 datasets reduced to $k=5$; higher is better. Bernoulli RBM and random projections degrade as input dimensionality increases. (continued)}
+\label{fig:ch04:ml_pred_sizes-part2}
+\end{figure}
+
+\begin{figure}[tbp]
+\centering
+\begin{subfigure}{1.0\textwidth}
         \includegraphics{figures/04/ml/agg_small_5_gb_acc.pdf}
         \caption{Small $D$; Gradient Boosting}
     \end{subfigure}
-\hfill
-\begin{subfigure}{0.49\textwidth}
+\par\medskip
+\begin{subfigure}{1.0\textwidth}
         \includegraphics{figures/04/ml/agg_medium_5_gb_acc.pdf}
         \caption{Medium $D$; Gradient Boosting}
-    \end{subfigure}
-
-\par\medskip
-
-\begin{subfigure}{0.49\textwidth}
-        \includegraphics{figures/04/ml/agg_large_5_gb_acc.pdf}
-        \caption{Large $D$; Gradient Boosting}
     \end{subfigure}
 \caption[Gradient-boosting accuracy by dataset size]{Gradient-boosting classification accuracy on low-, medium- and high-dimensional OpenML~CC-18 datasets reduced to $k=5$; higher is better. Bernoulli RBM and random projections degrade as input dimensionality increases.}
 \label{fig:ch04:ml_pred_sizes_gb}
 \end{figure}
 
 \begin{figure}[tbp]
+\ContinuedFloat
 \centering
-\begin{subfigure}{0.49\textwidth}
+\begin{subfigure}{1.0\textwidth}
+        \includegraphics{figures/04/ml/agg_large_5_gb_acc.pdf}
+        \caption{Large $D$; Gradient Boosting}
+    \end{subfigure}
+\caption[Gradient-boosting accuracy by dataset size (continued)]{Gradient-boosting classification accuracy on low-, medium- and high-dimensional OpenML~CC-18 datasets reduced to $k=5$; higher is better. Bernoulli RBM and random projections degrade as input dimensionality increases. (continued)}
+\label{fig:ch04:ml_pred_sizes_gb-part2}
+\end{figure}
+
+\begin{figure}[tbp]
+\centering
+\begin{subfigure}{1.0\textwidth}
         \includegraphics{figures/04/ml/agg_small_5_mlp_acc.pdf}
         \caption{Small $D$; \gls{mlp}}
     \end{subfigure}
-\hfill
-\begin{subfigure}{0.49\textwidth}
+\par\medskip
+\begin{subfigure}{1.0\textwidth}
         \includegraphics{figures/04/ml/agg_medium_5_mlp_acc.pdf}
         \caption{Medium $D$; \gls{mlp}}
     \end{subfigure}
+\caption[MLP accuracy by dataset size]{\gls{mlp} classification accuracy on low-, medium- and high-dimensional OpenML~CC-18 datasets reduced to $k=5$; higher is better. Bernoulli RBM and random projections degrade as input dimensionality increases.}
+\label{fig:ch04:ml_pred_sizes_mlp}
+\end{figure}
 
-\par\medskip
-
-\begin{subfigure}{0.49\textwidth}
+\begin{figure}[tbp]
+\ContinuedFloat
+\centering
+\begin{subfigure}{1.0\textwidth}
         \includegraphics{figures/04/ml/agg_large_5_mlp_acc.pdf}
         \caption{Large $D$; \gls{mlp}}
     \end{subfigure}
-\caption[MLP accuracy by dataset size]{\gls{mlp} classification accuracy on low-, medium- and high-dimensional OpenML~CC-18 datasets reduced to $k=5$; higher is better. Bernoulli RBM and random projections degrade as input dimensionality increases.}
-\label{fig:ch04:ml_pred_sizes_mlp}
+\caption[MLP accuracy by dataset size (continued)]{\gls{mlp} classification accuracy on low-, medium- and high-dimensional OpenML~CC-18 datasets reduced to $k=5$; higher is better. Bernoulli RBM and random projections degrade as input dimensionality increases. (continued)}
+\label{fig:ch04:ml_pred_sizes_mlp-part2}
 \end{figure}
 
 
@@ -1264,34 +1303,39 @@ In contrast, PCA (Linear) and PCA (Polynomial) perform better than other PCA var
 
 \begin{figure}[tbp]
 \centering
-\begin{subfigure}[t]{0.49\textwidth}
+\begin{subfigure}[t]{1.0\textwidth}
         \centering
         \includegraphics{figures/04/epm/agg_sample_red_inpt_100_120_5.pdf}
         \caption{$k=5$}
     \end{subfigure}
-\hfill
-\begin{subfigure}[t]{0.49\textwidth}
+\par\medskip
+\begin{subfigure}[t]{1.0\textwidth}
         \centering
         \includegraphics{figures/04/epm/agg_sample_red_inpt_100_120_10.pdf}
         \caption{$k=10$}
     \end{subfigure}
+\caption[Target function approximation on BBO task 1]{Performance of different dimensionality reduction methods aggregated across synthetic benchmark problems for different target dimensionalities $k$, with input dimensionality $D = 120$ and initial sample size $N = 100$, in terms of min-max normalised mean \gls{rmse} on \textbf{black-box optimisation task 1: target function approximation}; lower is better.
+    PLS regression consistently performs best across different target dimensionalities, and is closely followed by PCA (RBF) for the highest target dimensionality.}
+\label{fig:ch04:res-bbo-task1_red_dim_inpt_dim}
+\end{figure}
 
-\par\medskip
-
-\begin{subfigure}[t]{0.49\textwidth}
+\begin{figure}[tbp]
+\ContinuedFloat
+\centering
+\begin{subfigure}[t]{1.0\textwidth}
         \centering
         \includegraphics{figures/04/epm/agg_sample_red_inpt_100_120_20.pdf}
         \caption{$k=20$}
     \end{subfigure}
-\hfill
-\begin{subfigure}[t]{0.49\textwidth}
+\par\medskip
+\begin{subfigure}[t]{1.0\textwidth}
         \centering
         \includegraphics{figures/04/epm/agg_sample_red_inpt_100_120_40.pdf}
         \caption{$k=40$}
     \end{subfigure}
-\caption[Target function approximation on BBO task 1]{Performance of different dimensionality reduction methods aggregated across synthetic benchmark problems for different target dimensionalities $k$, with input dimensionality $D = 120$ and initial sample size $N = 100$, in terms of min-max normalised mean \gls{rmse} on \textbf{black-box optimisation task 1: target function approximation}; lower is better.
-    PLS regression consistently performs best across different target dimensionalities, and is closely followed by PCA (RBF) for the highest target dimensionality.}
-\label{fig:ch04:res-bbo-task1_red_dim_inpt_dim}
+\caption[Target function approximation on BBO task 1 (continued)]{Performance of different dimensionality reduction methods aggregated across synthetic benchmark problems for different target dimensionalities $k$, with input dimensionality $D = 120$ and initial sample size $N = 100$, in terms of min-max normalised mean \gls{rmse} on \textbf{black-box optimisation task 1: target function approximation}; lower is better.
+    PLS regression consistently performs best across different target dimensionalities, and is closely followed by PCA (RBF) for the highest target dimensionality. (continued)}
+\label{fig:ch04:res-bbo-task1_red_dim_inpt_dim-part2}
 \end{figure}
 
 
@@ -1309,48 +1353,58 @@ As the target dimensionality increases, PCA (RBF) gradually catches up and event
 
 \begin{figure}[tbp]
 \centering
-\begin{subfigure}[t]{0.49\textwidth}
+\begin{subfigure}[t]{1.0\textwidth}
         \centering
         \includegraphics{figures/04/epm/agg_sample_red_inpt_100_40_20.pdf}
         \caption{$D=40$}
     \end{subfigure}
-\hfill
-\begin{subfigure}[t]{0.49\textwidth}
+\par\medskip
+\begin{subfigure}[t]{1.0\textwidth}
         \centering
         \includegraphics{figures/04/epm/agg_sample_red_inpt_100_60_20.pdf}
         \caption{$D=60$}
     \end{subfigure}
+\caption[Target function approximation on BBO task 1 for real-world benchmarks]{Performance of different dimensionality reduction methods aggregated across synthetic benchmark problems for different input dimensionalities $D$, with target dimensionality $k = 20$ and initial sample size $N = 100$, in terms of min-max normalised mean \gls{rmse} on \textbf{black-box optimisation task 1: target function approximation}; lower is better.
+    The variance increases with input dimensionality; PLS regression is a dominant method for lower-dimensional inputs (a-c), but is outperformed by PCA (RBF) for higher-dimensional inputs (d-f).}
+\label{fig:ch04:res-bbo-task1_inpt_dim}
+\end{figure}
 
-\par\medskip
-
-\begin{subfigure}[t]{0.49\textwidth}
+\begin{figure}[tbp]
+\ContinuedFloat
+\centering
+\begin{subfigure}[t]{1.0\textwidth}
         \centering
         \includegraphics{figures/04/epm/agg_sample_red_inpt_100_120_20.pdf}
         \caption{$D=120$}
     \end{subfigure}
-\hfill
-\begin{subfigure}[t]{0.49\textwidth}
+\par\medskip
+\begin{subfigure}[t]{1.0\textwidth}
         \centering
         \includegraphics{figures/04/epm/agg_sample_red_inpt_100_240_20.pdf}
         \caption{$D=240$}
     \end{subfigure}
+\caption[Target function approximation on BBO task 1 for real-world benchmarks (continued)]{Performance of different dimensionality reduction methods aggregated across synthetic benchmark problems for different input dimensionalities $D$, with target dimensionality $k = 20$ and initial sample size $N = 100$, in terms of min-max normalised mean \gls{rmse} on \textbf{black-box optimisation task 1: target function approximation}; lower is better.
+    The variance increases with input dimensionality; PLS regression is a dominant method for lower-dimensional inputs (a-c), but is outperformed by PCA (RBF) for higher-dimensional inputs (d-f). (continued)}
+\label{fig:ch04:res-bbo-task1_inpt_dim-part2}
+\end{figure}
 
-\par\medskip
-
-\begin{subfigure}[t]{0.49\textwidth}
+\begin{figure}[tbp]
+\ContinuedFloat
+\centering
+\begin{subfigure}[t]{1.0\textwidth}
         \centering
         \includegraphics{figures/04/epm/agg_sample_red_inpt_100_500_20.pdf}
         \caption{$D=500$}
     \end{subfigure}
-\hfill
-\begin{subfigure}[t]{0.49\textwidth}
+\par\medskip
+\begin{subfigure}[t]{1.0\textwidth}
         \centering
         \includegraphics{figures/04/epm/agg_sample_red_inpt_100_1000_20.pdf}
         \caption{$D=1000$}
     \end{subfigure}
-\caption[Target function approximation on BBO task 1 for real-world benchmarks]{Performance of different dimensionality reduction methods aggregated across synthetic benchmark problems for different input dimensionalities $D$, with target dimensionality $k = 20$ and initial sample size $N = 100$, in terms of min-max normalised mean \gls{rmse} on \textbf{black-box optimisation task 1: target function approximation}; lower is better.
-    The variance increases with input dimensionality; PLS regression is a dominant method for lower-dimensional inputs (a-c), but is outperformed by PCA (RBF) for higher-dimensional inputs (d-f).}
-\label{fig:ch04:res-bbo-task1_inpt_dim}
+\caption[Target function approximation on BBO task 1 for real-world benchmarks (continued)]{Performance of different dimensionality reduction methods aggregated across synthetic benchmark problems for different input dimensionalities $D$, with target dimensionality $k = 20$ and initial sample size $N = 100$, in terms of min-max normalised mean \gls{rmse} on \textbf{black-box optimisation task 1: target function approximation}; lower is better.
+    The variance increases with input dimensionality; PLS regression is a dominant method for lower-dimensional inputs (a-c), but is outperformed by PCA (RBF) for higher-dimensional inputs (d-f). (continued)}
+\label{fig:ch04:res-bbo-task1_inpt_dim-part3}
 \end{figure}
 
 
@@ -1364,64 +1418,72 @@ As expected, the variance of all methods decreases with lower input dimensionali
 
 \begin{figure}[tbp]
 \centering
-\begin{subfigure}[t]{0.49\textwidth}
+\begin{subfigure}[t]{1.0\textwidth}
         \centering
         \includegraphics{figures/04/epm/agg_sample_red_inpt_100_40_5}
         \caption{\footnotesize$D = 40, k = 5, N = 100$}
     \end{subfigure}
-\hfill
-\begin{subfigure}[t]{0.49\textwidth}
+\par\medskip
+\begin{subfigure}[t]{1.0\textwidth}
         \centering
         \includegraphics{figures/04/epm/agg_sample_red_inpt_200_40_5.pdf}
         \caption{\footnotesize$D = 40, k = 5, N = 200$}
-    \end{subfigure}
-
-\par\medskip
-
-\begin{subfigure}[t]{0.49\textwidth}
-        \centering
-        \includegraphics{figures/04/epm/agg_sample_red_inpt_500_40_5.pdf}
-        \caption{\footnotesize$D = 40, k = 5, N = 500$}
-    \end{subfigure}
-\hfill
-\begin{subfigure}[t]{0.49\textwidth}
-        \centering
-        \includegraphics{figures/04/epm/agg_sample_red_inpt_1000_40_5.pdf}
-        \caption{\footnotesize$D = 40, k = 5, N = 1000$}
     \end{subfigure}
 \caption[Target approximation by sample size, low-dimensional input]{Min-max normalised mean \gls{rmse} on \textbf{black-box optimisation task 1} for initial sample sizes $N \in \{100,200,500,1000\}$, input dimensionality $D=40$ and target dimensionality $k=5$; lower is better. Initial sample size has little effect in this setting.}
 \label{fig:ch04:res-bbo-task2_samp_sizes}
 \end{figure}
 
 \begin{figure}[tbp]
+\ContinuedFloat
 \centering
-\begin{subfigure}[t]{0.49\textwidth}
+\begin{subfigure}[t]{1.0\textwidth}
+        \centering
+        \includegraphics{figures/04/epm/agg_sample_red_inpt_500_40_5.pdf}
+        \caption{\footnotesize$D = 40, k = 5, N = 500$}
+    \end{subfigure}
+\par\medskip
+\begin{subfigure}[t]{1.0\textwidth}
+        \centering
+        \includegraphics{figures/04/epm/agg_sample_red_inpt_1000_40_5.pdf}
+        \caption{\footnotesize$D = 40, k = 5, N = 1000$}
+    \end{subfigure}
+\caption[Target approximation by sample size, low-dimensional input (continued)]{Min-max normalised mean \gls{rmse} on \textbf{black-box optimisation task 1} for initial sample sizes $N \in \{100,200,500,1000\}$, input dimensionality $D=40$ and target dimensionality $k=5$; lower is better. Initial sample size has little effect in this setting. (continued)}
+\label{fig:ch04:res-bbo-task2_samp_sizes-part2}
+\end{figure}
+
+\begin{figure}[tbp]
+\centering
+\begin{subfigure}[t]{1.0\textwidth}
         \centering
         \includegraphics{figures/04/epm/agg_sample_red_inpt_100_1000_40.pdf}
         \caption{\footnotesize$D = 1000, k = 40, N = 100$}
     \end{subfigure}
-\hfill
-\begin{subfigure}[t]{0.49\textwidth}
+\par\medskip
+\begin{subfigure}[t]{1.0\textwidth}
         \centering
         \includegraphics{figures/04/epm/agg_sample_red_inpt_200_1000_40.pdf}
         \caption{\footnotesize$D = 1000, k = 40, N = 200$}
     \end{subfigure}
+\caption[Target approximation by sample size, high-dimensional input]{Min-max normalised mean \gls{rmse} on \textbf{black-box optimisation task 1} for initial sample sizes $N \in \{100,200,500,1000\}$, input dimensionality $D=1000$ and target dimensionality $k=40$; lower is better. Larger initial samples improve approximation in this setting.}
+\label{fig:ch04:res-bbo-task2_samp_sizes_high}
+\end{figure}
 
-\par\medskip
-
-\begin{subfigure}[t]{0.49\textwidth}
+\begin{figure}[tbp]
+\ContinuedFloat
+\centering
+\begin{subfigure}[t]{1.0\textwidth}
         \centering
         \includegraphics{figures/04/epm/agg_sample_red_inpt_500_1000_40.pdf}
         \caption{\footnotesize$D = 1000, k = 40, N = 500$}
     \end{subfigure}
-\hfill
-\begin{subfigure}[t]{0.49\textwidth}
+\par\medskip
+\begin{subfigure}[t]{1.0\textwidth}
         \centering
         \includegraphics{figures/04/epm/agg_sample_red_inpt_1000_1000_40.pdf}
         \caption{\footnotesize$D = 1000, k = 40, N = 1000$}
     \end{subfigure}
-\caption[Target approximation by sample size, high-dimensional input]{Min-max normalised mean \gls{rmse} on \textbf{black-box optimisation task 1} for initial sample sizes $N \in \{100,200,500,1000\}$, input dimensionality $D=1000$ and target dimensionality $k=40$; lower is better. Larger initial samples improve approximation in this setting.}
-\label{fig:ch04:res-bbo-task2_samp_sizes_high}
+\caption[Target approximation by sample size, high-dimensional input (continued)]{Min-max normalised mean \gls{rmse} on \textbf{black-box optimisation task 1} for initial sample sizes $N \in \{100,200,500,1000\}$, input dimensionality $D=1000$ and target dimensionality $k=40$; lower is better. Larger initial samples improve approximation in this setting. (continued)}
+\label{fig:ch04:res-bbo-task2_samp_sizes_high-part2}
 \end{figure}
 
 
@@ -1432,64 +1494,72 @@ In contrast, for high-dimensional inputs ($D = 1000$), variance decreases notice
 
 \begin{figure}[tbp]
 \centering
-\begin{subfigure}[t]{0.49\textwidth}
+\begin{subfigure}[t]{1.0\textwidth}
         \centering
         \includegraphics{figures/04/epm/real_agg_sample_red_dim_1000_5.pdf}
         \caption{$N = 100, k=5$}
     \end{subfigure}
-\hfill
-\begin{subfigure}[t]{0.49\textwidth}
+\par\medskip
+\begin{subfigure}[t]{1.0\textwidth}
         \centering
         \includegraphics{figures/04/epm/real_agg_sample_red_dim_1000_10.pdf}
         \caption{$N = 100, k=10$}
-    \end{subfigure}
-
-\par\medskip
-
-\begin{subfigure}[t]{0.49\textwidth}
-        \centering
-        \includegraphics{figures/04/epm/real_agg_sample_red_dim_1000_20.pdf}
-        \caption{$N = 100, k=20$}
-    \end{subfigure}
-\hfill
-\begin{subfigure}[t]{0.49\textwidth}
-        \centering
-        \includegraphics{figures/04/epm/real_agg_sample_red_dim_1000_40.pdf}
-        \caption{$N = 100, k=40$}
     \end{subfigure}
 \caption[Target approximation on real benchmarks by target dimension]{Min-max normalised mean \gls{rmse} on real-world benchmark problems for different target dimensionalities $k$ with initial sample size $N=100$ on \textbf{black-box optimisation task 1}; lower is better. PLS regression performs best across target dimensionalities.}
 \label{fig:ch04:res-bbo-task1_real}
 \end{figure}
 
 \begin{figure}[tbp]
+\ContinuedFloat
 \centering
-\begin{subfigure}[t]{0.49\textwidth}
+\begin{subfigure}[t]{1.0\textwidth}
+        \centering
+        \includegraphics{figures/04/epm/real_agg_sample_red_dim_1000_20.pdf}
+        \caption{$N = 100, k=20$}
+    \end{subfigure}
+\par\medskip
+\begin{subfigure}[t]{1.0\textwidth}
+        \centering
+        \includegraphics{figures/04/epm/real_agg_sample_red_dim_1000_40.pdf}
+        \caption{$N = 100, k=40$}
+    \end{subfigure}
+\caption[Target approximation on real benchmarks by target dimension (continued)]{Min-max normalised mean \gls{rmse} on real-world benchmark problems for different target dimensionalities $k$ with initial sample size $N=100$ on \textbf{black-box optimisation task 1}; lower is better. PLS regression performs best across target dimensionalities. (continued)}
+\label{fig:ch04:res-bbo-task1_real-part2}
+\end{figure}
+
+\begin{figure}[tbp]
+\centering
+\begin{subfigure}[t]{1.0\textwidth}
         \centering
         \includegraphics{figures/04/epm/real_agg_sample_red_dim_100_5.pdf}
         \caption{$k = 5, N = 100$}
     \end{subfigure}
-\hfill
-\begin{subfigure}[t]{0.49\textwidth}
+\par\medskip
+\begin{subfigure}[t]{1.0\textwidth}
         \centering
         \includegraphics{figures/04/epm/real_agg_sample_red_dim_200_5.pdf}
         \caption{$k = 5, N = 200$}
     \end{subfigure}
+\caption[Target approximation on real benchmarks by sample size]{Min-max normalised mean \gls{rmse} on real-world benchmark problems for different initial sample sizes $N$ with target dimensionality $k=5$ on \textbf{black-box optimisation task 1}; lower is better. PLS regression remains strong even at small sample sizes.}
+\label{fig:ch04:res-bbo-task1_real_samples}
+\end{figure}
 
-\par\medskip
-
-\begin{subfigure}[t]{0.49\textwidth}
+\begin{figure}[tbp]
+\ContinuedFloat
+\centering
+\begin{subfigure}[t]{1.0\textwidth}
         \centering
         \includegraphics{figures/04/epm/real_agg_sample_red_dim_500_5.pdf}
         \caption{$k = 5, N = 500$}
     \end{subfigure}
-\hfill
-\begin{subfigure}[t]{0.49\textwidth}
+\par\medskip
+\begin{subfigure}[t]{1.0\textwidth}
         \centering
         \includegraphics{figures/04/epm/real_agg_sample_red_dim_1000_5.pdf}
         \caption{$k = 5, N = 1000$}
     \end{subfigure}
-\caption[Target approximation on real benchmarks by sample size]{Min-max normalised mean \gls{rmse} on real-world benchmark problems for different initial sample sizes $N$ with target dimensionality $k=5$ on \textbf{black-box optimisation task 1}; lower is better. PLS regression remains strong even at small sample sizes.}
-\label{fig:ch04:res-bbo-task1_real_samples}
+\caption[Target approximation on real benchmarks by sample size (continued)]{Min-max normalised mean \gls{rmse} on real-world benchmark problems for different initial sample sizes $N$ with target dimensionality $k=5$ on \textbf{black-box optimisation task 1}; lower is better. PLS regression remains strong even at small sample sizes. (continued)}
+\label{fig:ch04:res-bbo-task1_real_samples-part2}
 \end{figure}
 
 So far, our assessment has focused on synthetic benchmarks for black-box optimisation. \cref{fig:ch04:res-bbo-task1_real,fig:ch04:res-bbo-task1_real_samples} show the results on real-world benchmarks. The first figure illustrates performance across varying target dimensionalities, with the initial sample size fixed at $N = 100$ (note that input dimensionality is determined by the benchmark and cannot be controlled). Across all target dimensionalities, PLS regression consistently outperforms other methods, reflecting its ability to extract components that are directly predictive of the target variables.
@@ -1779,33 +1849,37 @@ We observe that Gaussian and sparse random projections consistently incur low ru
 
 \begin{figure}[tbp]
 \centering
-\begin{subfigure}[t]{0.49\textwidth}
+\begin{subfigure}[t]{1.0\textwidth}
         \centering
         \includegraphics{figures/04/time/9985_train_time.pdf}
         \caption{Training on dataset 9985}
     \end{subfigure}
-\hfill
-\begin{subfigure}[t]{0.49\textwidth}
+\par\medskip
+\begin{subfigure}[t]{1.0\textwidth}
         \centering
         \includegraphics{figures/04/time/9985_transform_time.pdf}
         \caption{Transform on dataset 9985}
     \end{subfigure}
+\caption[CPU hours for training and transformation]{Running times in terms of CPU hours for dimensionality reduction training (a, c) and transformation (b, d) of OpenML datasets 9985 (51 features and 6618 elements) and 9981 (856 features and 1080 elements).}
+\label{fig:ch04:res-rt}
+\end{figure}
 
-\par\medskip
-
-\begin{subfigure}[t]{0.49\textwidth}
+\begin{figure}[tbp]
+\ContinuedFloat
+\centering
+\begin{subfigure}[t]{1.0\textwidth}
         \centering
         \includegraphics{figures/04/time/9981_train_time.pdf}
         \caption{Train on dataset 9981}
     \end{subfigure}
-\hfill
-\begin{subfigure}[t]{0.49\textwidth}
+\par\medskip
+\begin{subfigure}[t]{1.0\textwidth}
         \centering
         \includegraphics{figures/04/time/9981_transform_time.pdf}
         \caption{Transform on dataset 9981}
     \end{subfigure}
-\caption[CPU hours for training and transformation]{Running times in terms of CPU hours for dimensionality reduction training (a, c) and transformation (b, d) of OpenML datasets 9985 (51 features and 6618 elements) and 9981 (856 features and 1080 elements).}
-\label{fig:ch04:res-rt}
+\caption[CPU hours for training and transformation (continued)]{Running times in terms of CPU hours for dimensionality reduction training (a, c) and transformation (b, d) of OpenML datasets 9985 (51 features and 6618 elements) and 9981 (856 features and 1080 elements). (continued)}
+\label{fig:ch04:res-rt-part2}
 \end{figure}
 
 

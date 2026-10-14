@@ -59,9 +59,9 @@ def method_order(frame):
 
 def canvas(name, tall=False):
     width_pt = TEXT_WIDTH_PT * refs[name]
-    height_pt = 146 if tall else 128
+    height_pt = 242 if tall else 128
     fig, ax = plt.subplots(figsize=(width_pt / 72.27, height_pt / 72.27))
-    fig.subplots_adjust(left=.20, right=.94, top=.96, bottom=.27 if tall else .26)
+    fig.subplots_adjust(left=.12 if tall else .20, right=.98 if tall else .94, top=.96, bottom=.60 if tall else .26)
     ax.spines[['top', 'right']].set_visible(False)
     ax.tick_params(length=2.5, width=.6, pad=2, labelsize=8)
     ax.yaxis.grid(True)
@@ -72,6 +72,15 @@ def canvas(name, tall=False):
 def save(fig, name):
     path = THESIS / 'figures/04' / f'{name}.pdf'
     assert path.is_file(), f'Unexpected output: {path}'
+    fig.canvas.draw()
+    renderer = fig.canvas.get_renderer()
+    labels = list(fig.texts)
+    for ax in fig.axes:
+        labels.extend(ax.get_xticklabels() + [ax.xaxis.label, ax.yaxis.label])
+    for label in labels:
+        if label.get_visible() and label.get_text():
+            bounds = label.get_window_extent(renderer)
+            assert bounds.x0 >= -1 and bounds.y0 >= -1 and bounds.x1 <= fig.bbox.width + 1 and bounds.y1 <= fig.bbox.height + 1, f'Clipped label in {name}: {label.get_text()}'
     fig.savefig(path, dpi=300)
     plt.close(fig)
     print(path.relative_to(THESIS), flush=True)
@@ -80,7 +89,12 @@ def save(fig, name):
 def box(frame, value, ylabel, name, log=False):
     assert not frame.empty, f'No data for {name}'
     column, order = method_order(frame)
+    order = ([method for method in order if method in common.UNSUPERVISED_METHODS]
+             + [method for method in order if method not in common.UNSUPERVISED_METHODS])
     fig, ax = canvas(name, tall=True)
+    n_unsupervised = sum(method in common.UNSUPERVISED_METHODS for method in order)
+    if 0 < n_unsupervised < len(order):
+        ax.axvline(n_unsupervised + .5, color='#aaaaaa', linestyle='--', linewidth=.7)
     values = [frame.loc[frame[column] == method, value].dropna().to_numpy() for method in order]
     assert all(len(v) for v in values), f'Missing method data in {name}'
     artists = ax.boxplot(values, patch_artist=True, widths=.65,
@@ -92,10 +106,8 @@ def box(frame, value, ylabel, name, log=False):
         patch.set_edgecolor(COLORS.get(method, '#999933'))
         patch.set_alpha(.55)
         patch.set_linewidth(.7)
-    ticks = list(range(1, len(order) + 1, 3))
-    ax.set_xticks(ticks, [str(common.METHODS.index(order[i - 1]) + 1) for i in ticks],
-                  fontsize=8)
-    ax.set_xlabel('Reducer ID', fontsize=9, labelpad=2)
+    ax.set_xticks(range(1, len(order) + 1), [common.display_name(method) for method in order],
+                  rotation=90, fontsize=8)
     ax.set_ylabel(ylabel, fontsize=9, labelpad=2)
     ax.tick_params(axis='x', length=1, pad=1)
     if log:
@@ -132,11 +144,10 @@ def legend():
         x = .02 + col * .49
         y = .965 - row * .054
         dash = ('-', '--', ':', '-.')[i // len(PALETTE) % 4]
-        fig.text(x, y, f'{i + 1:2d}', fontsize=8, va='center')
-        fig.add_artist(Line2D([x + .047, x + .115], [y, y], transform=fig.transFigure,
+        fig.add_artist(Line2D([x, x + .068], [y, y], transform=fig.transFigure,
                               color=COLORS[method], linestyle=dash, linewidth=1))
-        fig.text(x + .13, y, common.display_name(method), fontsize=8, va='center')
-    fig.text(.02, .025, 'Reducer IDs label box plots; each rank-plot line uses its colour and dash.',
+        fig.text(x + .083, y, common.display_name(method), fontsize=8, va='center')
+    fig.text(.02, .025, 'Each rank-plot line uses the colour and dash shown beside its reducer name.',
              fontsize=8)
     save(fig, name)
 
