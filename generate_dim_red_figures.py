@@ -14,6 +14,7 @@ import duckdb
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
 
 THESIS = Path(__file__).resolve().parent
 ROOT = THESIS.parents[1]
@@ -40,8 +41,13 @@ for width, body in re.findall(
 ):
     match = re.search(r'figures/04/([^}]+)', body)
     if match:
-        refs[match.group(1).removesuffix('.pdf')] = float(width)
+        name = match.group(1).removesuffix('.pdf')
+        if name in refs:
+            assert refs[name] == float(width), f'{name} occurs at two placement widths'
+        refs[name] = float(width)
+refs['legend'] = 1.0
 assert len(refs) == 88, f'Expected 88 chapter figures, found {len(refs)}'
+assert set(refs.values()) == {0.49, 1.0}, set(refs.values())
 
 
 def method_order(frame):
@@ -53,11 +59,11 @@ def method_order(frame):
 
 def canvas(name, tall=False):
     width_pt = TEXT_WIDTH_PT * refs[name]
-    height_pt = (112 if tall else 83) if refs[name] <= .24 else (118 if tall else 97)
+    height_pt = 146 if tall else 128
     fig, ax = plt.subplots(figsize=(width_pt / 72.27, height_pt / 72.27))
-    fig.subplots_adjust(left=.29 if tall else .27, right=.92, top=.96, bottom=.30 if tall else .32)
+    fig.subplots_adjust(left=.20, right=.94, top=.96, bottom=.27 if tall else .26)
     ax.spines[['top', 'right']].set_visible(False)
-    ax.tick_params(length=2, width=.5, pad=1.5, labelsize=6)
+    ax.tick_params(length=2.5, width=.6, pad=2, labelsize=8)
     ax.yaxis.grid(True)
     ax.set_axisbelow(True)
     return fig, ax
@@ -78,18 +84,19 @@ def box(frame, value, ylabel, name, log=False):
     values = [frame.loc[frame[column] == method, value].dropna().to_numpy() for method in order]
     assert all(len(v) for v in values), f'Missing method data in {name}'
     artists = ax.boxplot(values, patch_artist=True, widths=.65,
-                         flierprops={'marker': '.', 'markersize': 1, 'markeredgecolor': '#606060'},
-                         medianprops={'color': '#262626', 'linewidth': .6},
-                         whiskerprops={'linewidth': .5}, capprops={'linewidth': .5})
+                         flierprops={'marker': '.', 'markersize': 1.2, 'markeredgecolor': '#606060'},
+                         medianprops={'color': '#262626', 'linewidth': .8},
+                         whiskerprops={'linewidth': .7}, capprops={'linewidth': .7})
     for method, patch in zip(order, artists['boxes']):
         patch.set_facecolor(COLORS.get(method, '#999933'))
         patch.set_edgecolor(COLORS.get(method, '#999933'))
         patch.set_alpha(.55)
-        patch.set_linewidth(.5)
-    ticks = list(range(1, len(order) + 1, 5))
+        patch.set_linewidth(.7)
+    ticks = list(range(1, len(order) + 1, 3))
     ax.set_xticks(ticks, [str(common.METHODS.index(order[i - 1]) + 1) for i in ticks],
-                  fontsize=5)
-    ax.set_ylabel(ylabel, fontsize=6.5, labelpad=1)
+                  fontsize=8)
+    ax.set_xlabel('Reducer ID', fontsize=9, labelpad=2)
+    ax.set_ylabel(ylabel, fontsize=9, labelpad=2)
     ax.tick_params(axis='x', length=1, pad=1)
     if log:
         ax.set_yscale('log')
@@ -102,15 +109,15 @@ def line(frame, name):
     assert not frame.empty, f'No data for {name}'
     column, order = method_order(frame)
     fig, ax = canvas(name)
-    fig.subplots_adjust(left=.28, right=.85, top=.95, bottom=.34)
+    fig.subplots_adjust(left=.20, right=.92, top=.96, bottom=.26)
     for i, method in enumerate(order):
         part = frame[frame[column] == method].sort_values('evaluation')
         ax.plot(part.evaluation, part.mean_rank,
-                color=COLORS.get(method, '#999933'), linewidth=.75,
+                color=COLORS.get(method, '#999933'), linewidth=.95,
                 linestyle=('-', '--', ':', '-.')[common.METHODS.index(method) // len(PALETTE) % 4],
                 label=common.display_name(method))
-    ax.set_xlabel('Evaluations', fontsize=6.5, labelpad=1)
-    ax.set_ylabel('Mean rank', fontsize=6.5, labelpad=1)
+    ax.set_xlabel('Evaluations', fontsize=9, labelpad=2)
+    ax.set_ylabel('Mean rank', fontsize=9, labelpad=2)
     ax.set_ylim(.5, len(order) + .5)
     ax.margins(x=0)
     save(fig, name)
@@ -119,28 +126,18 @@ def line(frame, name):
 def legend():
     name = 'legend'
     width_pt = TEXT_WIDTH_PT * refs[name]
-    fig = plt.figure(figsize=(width_pt / 72.27, 116 / 72.27))
-    short = {
-        'GaussianRandomProjection': 'Gaussian Random Proj.',
-        'SparseRandomProjection': 'Sparse Random Proj.',
-        'parametric_UMAP_unsupervised': 'Param. UMAP (unsup.)',
-        'parametric_UMAP': 'Parametric UMAP',
-        'DenoisingAutoencoder_2layer': 'Denoising AE (2 layer)',
-        'DenoisingAutoencoder': 'Denoising AE',
-        'Autoencoder_2layer': 'Autoencoder (2 layer)',
-        'VAE_2layer': 'VAE (2 layer)',
-        'UMAP_unsupervised': 'UMAP (unsup.)',
-    }
+    fig = plt.figure(figsize=(width_pt / 72.27, 250 / 72.27))
     for i, method in enumerate(common.METHODS):
-        col, row = divmod(i, 11)
-        x = .015 + col * .33
-        y = .975 - row * .081
-        fig.text(x, y, f'{i + 1:2d}', fontsize=5.8, va='top')
-        fig.text(x + .035, y, '■', color=COLORS[method], fontsize=6, va='top')
-        fig.text(x + .060, y, short.get(method, common.display_name(method)),
-                 fontsize=5.5, va='top')
-    fig.text(.015, .018, 'Boxplot ticks use these method IDs; line dashes distinguish repeated colours.',
-             fontsize=5.5)
+        col, row = divmod(i, 17)
+        x = .02 + col * .49
+        y = .965 - row * .054
+        dash = ('-', '--', ':', '-.')[i // len(PALETTE) % 4]
+        fig.text(x, y, f'{i + 1:2d}', fontsize=8, va='center')
+        fig.add_artist(Line2D([x + .047, x + .115], [y, y], transform=fig.transFigure,
+                              color=COLORS[method], linestyle=dash, linewidth=1))
+        fig.text(x + .13, y, common.display_name(method), fontsize=8, va='center')
+    fig.text(.02, .025, 'Reducer IDs label box plots; each rank-plot line uses its colour and dash.',
+             fontsize=8)
     save(fig, name)
 
 
