@@ -53,11 +53,11 @@ Further details are provided in~\cref{sec:ch10:add_background}.
         >=Stealth, font=\fontsize{9}{10.5}\selectfont,
         box/.style={rounded corners=3pt, line width=.6pt,
             text width=2.7cm, minimum height=.72cm, inner sep=4pt,
-            align=center, draw=blue!35!black, fill=blue!5},
+            align=center, draw=tolIndigo, fill=tolIndigo!5},
         input/.style={box, draw=black!25, fill=white},
-        process/.style={box, fill=blue!12, font=\fontsize{9}{10.5}\selectfont\bfseries},
-        metric/.style={box, draw=green!35!black, fill=green!5},
-        result/.style={box, draw=green!35!black, fill=green!12,
+        process/.style={box, fill=tolIndigo!12, font=\fontsize{9}{10.5}\selectfont\bfseries},
+        metric/.style={box, draw=tolTeal!70!black, fill=tolTeal!5},
+        result/.style={box, draw=tolTeal!70!black, fill=tolTeal!12,
             font=\fontsize{9}{10.5}\selectfont\bfseries},
         arrow/.style={->, line width=.65pt, draw=black!60,
             rounded corners=2pt},
@@ -67,7 +67,7 @@ Further details are provided in~\cref{sec:ch10:add_background}.
     ]
         \fill[black!3, rounded corners=5pt]
             (-5.05,1.05) rectangle (5.05,-4.65);
-        \fill[blue!3, rounded corners=5pt]
+        \fill[tolIndigo!3, rounded corners=5pt]
             (-5.05,-4.85) rectangle (5.05,-9.0);
         \node[stage] at (-4.8,.8) {Prepare inputs};
         \node[stage] at (-4.8,-5.1) {Learn and evaluate};

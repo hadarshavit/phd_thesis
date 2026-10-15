@@ -62,19 +62,19 @@ One natural way to achieve this is via ensemble methods, which have demonstrated
     \resizebox{\textwidth}{!}{%
     \begin{tikzpicture}[
         >=stealth,
-        myybox/.style={rectangle, rounded corners, draw=black, thick, fill=myyellow, align=center, text width=2.8cm, minimum height=1.8cm, font=\small\bfseries},
-        myrbox/.style={rectangle, rounded corners, draw=black, thick, fill=mypink, align=center, text width=2.8cm, minimum height=1.8cm, font=\small\bfseries},
-        mybbox/.style={rectangle, rounded corners, draw=black, thick, fill=mypurple, align=center, text width=2.6cm, minimum height=1.8cm, font=\small\bfseries},
+        myybox/.style={rectangle, rounded corners, draw=tolSand!65!black, thick, fill=tolSand!35, align=center, text width=2.8cm, minimum height=1.8cm, font=\small\bfseries},
+        myrbox/.style={rectangle, rounded corners, draw=tolRose, thick, fill=tolRose!25, align=center, text width=2.8cm, minimum height=1.8cm, font=\small\bfseries},
+        mybbox/.style={rectangle, rounded corners, draw=tolIndigo, thick, fill=tolIndigo!15, align=center, text width=2.6cm, minimum height=1.8cm, font=\small\bfseries},
         mydiamond/.style={diamond, draw=black, thick, fill=black, text=white, align=center, aspect=1.5, font=\small\bfseries, inner sep=2pt}
     ]
     
     % Group 1: Init
-    \draw[fill=mygray, draw=mygray, rounded corners, thick] (-1.8, -2.2) rectangle (1.8, 2.2);
+    \draw[fill=black!5, draw=black!25, rounded corners, thick] (-1.8, -2.2) rectangle (1.8, 2.2);
     \node[myybox, minimum height=1.4cm] (init1) at (0, 1.1) {Initial Design};
     \node[myrbox, minimum height=1.4cm] (init2) at (0, -1.1) {Weight\\Initialisation};
     
     % Group 2: Surrogate Model Fitting
-    \draw[fill=mypinkbg, draw=mypinkbg, rounded corners, thick] (2.4, -1.6) rectangle (6.2, 2.5);
+    \draw[fill=tolRose!7, draw=tolRose!35, rounded corners, thick] (2.4, -1.6) rectangle (6.2, 2.5);
     \node[myybox, minimum height=2.0cm, text width=2.6cm] (surrn) at (4.7, 1.1) {};
     \node[myybox, minimum height=2.0cm, text width=2.6cm] (surr2) at (4.4, 0.6) {};
     \node[myybox, minimum height=2.0cm, text width=2.6cm] (surr1) at (4.1, 0.1) {Surrogate\\Model\\Fitting};
@@ -134,7 +134,7 @@ One natural way to achieve this is via ensemble methods, which have demonstrated
     }
     \caption{
     % \changed{
-    Bayesian optimisation pipeline with dynamic ensembling and selection of surrogate models (\texttt{DyMBO}). In red, the blocks for the ensembling and selection strategy that have been plugged into the standard BO procedure. 
+    Bayesian optimisation pipeline with dynamic ensembling and selection of surrogate models (\texttt{DyMBO}). In rose, the blocks for the ensembling and selection strategy that have been plugged into the standard BO procedure.
     % }
     We start by sampling an initial set of hyperparameter configurations and initialising the weights for surrogate models used to construct the ensemble. Within the BO loop, all surrogates are separately fitted to the past observations and then combined in the weighted ensemble, 
     which can be composed of only a single surrogate in case of greedy selection. The acquisition function is derived from the model ensemble and optimised to determine the next points to sample. The target function is evaluated on the points identified by optimising the acquisition function. The accuracy of the surrogate models is then evaluated on all sampled points, and surrogates are assigned new weights. Finally, the weighting scheme for the next iteration is obtained via an exponential moving average between the old and new weights, which is parametrised by a smoothing factor $\alpha$ in order to determine how much historical information is retained: 

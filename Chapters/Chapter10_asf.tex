@@ -16,14 +16,14 @@ This is a well-known phenomenon that can be exploited using \textit{automated al
     >=Stealth,
     font=\sffamily\small,
 %
-    asf-internal/.style={draw=green!60!black, thick, fill=green!10, text width=2.4cm, align=center, minimum height=0.55cm, rounded corners=2pt},
+    asf-internal/.style={draw=tolTeal!70!black, thick, fill=tolTeal!10, text width=2.4cm, align=center, minimum height=0.55cm, rounded corners=2pt},
 %
-    sat-box/.style={draw=red!80!black, thick, fill=red!10, text width=2.0cm, align=center, minimum height=0.9cm, rounded corners=2pt},
-    sat-out/.style={draw=red!80!black, thick, fill=red!10, text width=2.3cm, align=center, minimum height=0.7cm, rounded corners=2pt},
-    automl-box/.style={draw=blue!80!black, thick, fill=blue!10, text width=2.0cm, align=center, minimum height=0.9cm, rounded corners=2pt},
-    automl-out/.style={draw=blue!80!black, thick, fill=blue!10, text width=2.3cm, align=center, minimum height=0.7cm, rounded corners=2pt},
-    bbo-box/.style={draw=orange!80!black, thick, fill=orange!10, text width=2.0cm, align=center, minimum height=0.9cm, rounded corners=2pt},
-    bbo-out/.style={draw=orange!80!black, thick, fill=orange!10, text width=2.3cm, align=center, minimum height=0.7cm, rounded corners=2pt}
+    sat-box/.style={draw=tolRose, thick, fill=tolRose!10, text width=2.0cm, align=center, minimum height=0.9cm, rounded corners=2pt},
+    sat-out/.style={draw=tolRose, thick, fill=tolRose!10, text width=2.3cm, align=center, minimum height=0.7cm, rounded corners=2pt},
+    automl-box/.style={draw=tolIndigo, thick, fill=tolIndigo!10, text width=2.0cm, align=center, minimum height=0.9cm, rounded corners=2pt},
+    automl-out/.style={draw=tolIndigo, thick, fill=tolIndigo!10, text width=2.3cm, align=center, minimum height=0.7cm, rounded corners=2pt},
+    bbo-box/.style={draw=tolOlive!80!black, thick, fill=tolOlive!12, text width=2.0cm, align=center, minimum height=0.9cm, rounded corners=2pt},
+    bbo-out/.style={draw=tolOlive!80!black, thick, fill=tolOlive!12, text width=2.3cm, align=center, minimum height=0.7cm, rounded corners=2pt}
 ]
 
 
@@ -42,14 +42,14 @@ This is a well-known phenomenon that can be exploited using \textit{automated al
 
 
     \begin{scope}[on background layer]
-        \node[draw=green!60!black, thick, fill=green!15, rounded corners=6pt, inner sep=6pt, 
+        \node[draw=tolTeal!70!black, thick, fill=tolTeal!15, rounded corners=6pt, inner sep=6pt,
               fit=(title) (presol) (tune)] (asf-core) {};
     \end{scope}
 
 
-    \draw[ultra thick, draw=blue!80!black, ->] (automl.east) -- (asf-core.west |- automl.east) node[midway, above, font=\tiny, text=black!80] {Feature Extraction};
-    \draw[ultra thick, draw=orange!80!black, ->] (bbo.east) -- (asf-core.west |- bbo.east) node[midway, above, font=\tiny, text=black!80] {Feature Extraction};
-    \draw[ultra thick, draw=red!80!black, ->] (sat.east) -- (asf-core.west |- sat.east) node[midway, above, font=\tiny, text=black!80] {Feature Extraction};
+    \draw[ultra thick, draw=tolIndigo, ->] (automl.east) -- (asf-core.west |- automl.east) node[midway, above, font=\tiny, text=black!80] {Feature Extraction};
+    \draw[ultra thick, draw=tolOlive!80!black, ->] (bbo.east) -- (asf-core.west |- bbo.east) node[midway, above, font=\tiny, text=black!80] {Feature Extraction};
+    \draw[ultra thick, draw=tolRose, ->] (sat.east) -- (asf-core.west |- sat.east) node[midway, above, font=\tiny, text=black!80] {Feature Extraction};
 
 
     \node[automl-out, right=1.8cm of asf-core.east |- automl] (out-automl) {\textbf{Accuracy}\\ \scriptsize(\gls{automl})};
@@ -57,9 +57,9 @@ This is a well-known phenomenon that can be exploited using \textit{automated al
     \node[sat-out, right=1.8cm of asf-core.east |- sat] (out-sat) {\textbf{Running Time}\\ \scriptsize(\gls{sat})};
 
 
-    \draw[->, ultra thick, draw=red!80!black] (asf-core.east |- out-sat.west) -- (out-sat.west) node[midway, above, font=\tiny, text=black!80] {Assessment};
-    \draw[->, ultra thick, draw=blue!80!black] (asf-core.east |- out-automl.west) -- (out-automl.west) node[midway, above, font=\tiny, text=black!80] {Assessment};
-    \draw[->, ultra thick, draw=orange!80!black] (asf-core.east |- out-bbo.west) -- (out-bbo.west) node[midway, above, font=\tiny, text=black!80] {Assessment};
+    \draw[->, ultra thick, draw=tolRose] (asf-core.east |- out-sat.west) -- (out-sat.west) node[midway, above, font=\tiny, text=black!80] {Assessment};
+    \draw[->, ultra thick, draw=tolIndigo] (asf-core.east |- out-automl.west) -- (out-automl.west) node[midway, above, font=\tiny, text=black!80] {Assessment};
+    \draw[->, ultra thick, draw=tolOlive!80!black] (asf-core.east |- out-bbo.west) -- (out-bbo.west) node[midway, above, font=\tiny, text=black!80] {Assessment};
 
 \end{tikzpicture}}
   \caption[ASF library overview]{Overview of the \gls{asf} library which provides problem-agnostic implementations of algorithm selection methods, which can be used for various domains, such as \gls{automl}, \gls{bbo}, \gls{sat}, and others.

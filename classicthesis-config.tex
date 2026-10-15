@@ -171,12 +171,18 @@
 \acrodef{sbs}[SBS]{Single Best Solver}
 \acrodef{vbs}[VBS]{Virtual Best Solver}
 \usepackage{tikz}
-\usetikzlibrary{shapes.geometric,arrows,arrows.meta,positioning,fit,backgrounds}
-\definecolor{myyellow}{RGB}{251,210,87}
-\definecolor{mypink}{RGB}{229,122,122}
-\definecolor{mygray}{RGB}{96,96,96}
-\definecolor{mypinkbg}{RGB}{240,195,195}
-\definecolor{mypurple}{RGB}{155,142,246}
+\usetikzlibrary{shapes.geometric,arrows,arrows.meta,positioning,fit,backgrounds,decorations.pathmorphing}
+% Paul Tol's Muted palette. Use full colours for outlines and arrows,
+% and white-mixed tints (e.g. tolIndigo!15) for diagram backgrounds.
+\definecolor{tolRose}{HTML}{CC6677}
+\definecolor{tolIndigo}{HTML}{332288}
+\definecolor{tolSand}{HTML}{DDCC77}
+\definecolor{tolGreen}{HTML}{117733}
+\definecolor{tolCyan}{HTML}{88CCEE}
+\definecolor{tolWine}{HTML}{882255}
+\definecolor{tolTeal}{HTML}{44AA99}
+\definecolor{tolOlive}{HTML}{999933}
+\definecolor{tolPurple}{HTML}{AA4499}
 \usepackage{algorithm}
 \usepackage{algorithmic}
 \usepackage{placeins}
@@ -337,6 +343,10 @@
 % Last, but not least...
 % ********************************************************************
 \usepackage{classicthesis} 
+% Number figures and tables within each chapter (e.g. Figure 1.5).
+% Apply after classicthesis, which otherwise makes these counters continuous.
+\counterwithin{figure}{chapter}
+\counterwithin{table}{chapter}
 % ****************************************************************************************************
 
 
