@@ -134,13 +134,13 @@ The part starts with modernising hand-crafted \gls{sat} features, then studies d
 
 \noindent
 Once useful representations are available, the next question is how to build models that make better decisions from them.
-This part studies empirical performance models and surrogate models from complementary perspectives: learning directly from graph-structured instances, applying performance prediction ideas in automated machine learning, and analysing where surrogate accuracy matters in Bayesian optimisation.
+This part studies empirical performance models and surrogate models from complementary perspectives: learning directly from graph-structured instances and analysing where surrogate accuracy matters in Bayesian optimisation.
 Together, these chapters move from improving the inputs to improving the predictive mechanisms themselves.
 
 \include{Chapters/Chapter07_graphbench}
 
-% \include{Chapters/Chapter08_automl}
-\include{Chapters/Chapter09_noisy_oracle}
+
+\include{Chapters/Chapter08_noisy_oracle}
 
 \part{Better Insights and Adaptivity of Empirical Performance Prediction}
 
@@ -149,8 +149,8 @@ The final technical part asks how empirical performance prediction can be made m
 Accurate predictions are valuable, but they are more useful when they explain which instance properties matter, expose uncertainty in algorithm behaviour, and can be deployed through common software interfaces.
 The chapters in this part therefore study distribution-level explanations of randomised algorithm performance and a general-purpose library for algorithm selection workflows.
 
-\include{Chapters/Chapter10_dis_explain}
-\include{Chapters/Chapter11_asf}
+\include{Chapters/Chapter09_dis_explain}
+\include{Chapters/Chapter10_asf}
 
 
 \part{Conclusions and Future Directions}
@@ -159,7 +159,7 @@ The chapters in this part therefore study distribution-level explanations of ran
 The final part synthesises the dissertation's contributions across representations, models, explanations, and software infrastructure.
 It draws out the common design principles that emerge from the technical chapters and discusses open directions for empirical performance prediction as a practical tool for adaptive \gls{ai}.
 
-\include{Chapters/Chapter13_conclusions}
+\include{Chapters/Chapter12_conclusions}
 
 % ********************************************************************
 % Backmatter
