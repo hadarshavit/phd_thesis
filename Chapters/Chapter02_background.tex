@@ -14,20 +14,20 @@ where the input $\modelInput$ depends on the observation type. There are three c
 
 \begin{itemize}
   \item \textbf{Per-instance.} The algorithm is executed with a fixed (usually the default) configuration, and performance is predicted from instance features alone: $\modelInput = \instanceFeatures$. Such setting is commonly is in algorithm selectors such as SATzilla~\citep{XuEtAl08}.
-  \item \textbf{Per-configuration.} The algorithm is evaluated on a fixed instance or a fixed set of instances, and performance is predicted from the configuration parameters: $\modelInput = \configuration$. This is the case in HPO~\citep{FeuEtAl19} and NAS~\citep{ElsEtAl19}.
-  \item \textbf{Per-configuration-and-instance.} The input for the model consists of both configuration and instance features: $\modelInput = (\configuration, \instanceFeatures)$. This most general setting and is used, for example, in algorithm configuration~\citep{HutEtAl14,EggEtAl18a}.
+%   \item \textbf{Per-configuration.} The algorithm is evaluated on a fixed instance or a fixed set of instances, and performance is predicted from the configuration parameters: $\modelInput = \configuration$. This is the case in HPO~\citep{FeuEtAl19} and NAS~\citep{ElsEtAl19}.
+%   \item \textbf{Per-configuration-and-instance.} The input for the model consists of both configuration and instance features: $\modelInput = (\configuration, \instanceFeatures)$. This most general setting and is used, for example, in algorithm configuration~\citep{HutEtAl14,EggEtAl18}.
 \end{itemize}
 
-A key challenge that distinguishes EPMs from standard regression problems is the structure of the observed data. Performance observations are usually not independent: multiple configurations may be evaluated on the same problem instance (or vice versa), introducing group structure that violates the i.i.d.\ assumption. Additionally, a common performance metric, running time, frequently exhibit heavy-tailed, right-skewed distributions, requiring special treatment. 
-The problem becomes more severe, as running time observations have a cutoff, meaning that the algorithms are ran until a certain time limit. 
-This means that, for some runs of the algorithm, we don't know the exact running time, but simply that it is larger than the cutoff.
-Moreover, performance data is usually noisy, as many algorithms use randomness, and, as data is scarce, it is necessary to learn a meaningful predictor from few observations. Performance observations are usually not independent: multiple configurations may be evaluated on the same problem instance (or vice versa), introducing group structure that violates the i.i.d.\ assumption. 
-Finally, across different scenarios, the scale of the performance target can vary by many orders of magnitude, so preprocessing choices that are beneficial in one scenario may be harmful in another. 
+% A key challenge that distinguishes EPMs from standard regression problems is the structure of the observed data. Performance observations are usually not independent: multiple configurations may be evaluated on the same problem instance (or vice versa), introducing group structure that violates the i.i.d.\ assumption. Additionally, a common performance metric, running time, frequently exhibit heavy-tailed, right-skewed distributions, requiring special treatment. 
+% The problem becomes more severe, as running time observations have a cutoff, meaning that the algorithms are ran until a certain time limit. 
+% This means that, for some runs of the algorithm, we don't know the exact running time, but simply that it is larger than the cutoff.
+% Moreover, performance data is usually noisy, as many algorithms use randomness, and, as data is scarce, it is necessary to learn a meaningful predictor from few observations. Performance observations are usually not independent: multiple configurations may be evaluated on the same problem instance (or vice versa), introducing group structure that violates the i.i.d.\ assumption. 
+% Finally, across different scenarios, the scale of the performance target can vary by many orders of magnitude, so preprocessing choices that are beneficial in one scenario may be harmful in another. 
 
 
 
 
-The predict performance can be a single number per metric, showing the mean or median value. Alternatively, it is also possible to predict the full performance distribution distribution $p(y \mid \modelInput)$ rather than a single value to obtain a distributional EPM~\citep{EggEtAl18a}, which is particularly valuable for capturing more subtle details of the performance of the algorithm, such as its variance and skewness.
+% The predict performance can be a single number per metric, showing the mean or median value. Alternatively, it is also possible to predict the full performance distribution distribution $p(y \mid \modelInput)$ rather than a single value to obtain a distributional EPM~\citep{EggEtAl18a}, which is particularly valuable for capturing more subtle details of the performance of the algorithm, such as its variance and skewness.
 
 
 \section{Algorithm selection}
@@ -43,7 +43,6 @@ In algorithm selection, the ideal goal is to reach the performance of the \gls{v
 
 
 
-Further details are provided in~\cref{sec:ch09:add_background}.
 
 \subsection{Algorithm selection pipelines}
 \begin{figure}[tbp]
@@ -169,7 +168,7 @@ can therefore be seen as performing a multi-class prediction task, training it a
 To see why, consider an instance where the performance gap between the best and the second-best algorithm is small.
 In that case, selecting the second-best algorithm is a reasonable error.
 A plain multi-class classifier, however, treats this outcome as equally wrong as choosing an algorithm that performs very poorly on the instance.
-As we show in our ASlib experiments (\cref{sec:ch09:aslib_appendix}), multi-class classifiers can indeed perform far below the other methods in practice.
+As we show in our ASlib experiments (\cref{sec:ch10:aslib_appendix}), multi-class classifiers can indeed perform far below the other methods in practice.
 
 
 \section{Bayesian optimisation}
