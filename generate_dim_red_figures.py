@@ -34,12 +34,12 @@ plt.rcParams.update({
     'savefig.facecolor': 'white',
 })
 
-chapter = (THESIS / 'Chapters/Chapter04_dim_red.tex').read_text()
+chapter = (THESIS / 'Chapters/Chapter05_dim_red.tex').read_text()
 refs = {}
 for width, body in re.findall(
     r'\\begin\{subfigure\}(?:\[[^]]+\])?\{([.0-9]+)\\textwidth\}(.+?)\\end\{subfigure\}', chapter, re.S
 ):
-    match = re.search(r'figures/04/([^}]+)', body)
+    match = re.search(r'figures/05/([^}]+)', body)
     if match:
         name = match.group(1).removesuffix('.pdf')
         if name in refs:
