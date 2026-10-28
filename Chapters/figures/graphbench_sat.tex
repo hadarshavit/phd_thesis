@@ -1,0 +1,68 @@
+% Thesis-owned counterpart of figures/07/sat.pdf; preserve its graph structure.
+\begin{tikzpicture}[
+    gb variable/.style={circle, fill=tolTeal!75!black, text=white,
+        minimum size=6mm, inner sep=0pt, font=\sffamily\small},
+    gb clause/.style={rectangle, rounded corners=1.5pt, fill=tolIndigo,
+        text=white, minimum width=9mm, minimum height=6mm,
+        inner sep=1pt, font=\sffamily\small},
+    gb variable edge/.style={draw=tolTeal!75!black, line width=.8pt},
+    gb clause edge/.style={draw=tolIndigo, line width=.8pt},
+    gb complement edge/.style={gb variable edge, decorate,
+        decoration={snake, amplitude=.45mm, segment length=2.5mm,
+            pre length=.5mm, post length=.5mm}},
+    gb panel label/.style={font=\normalsize, anchor=north}
+]
+    \node[font=\normalsize] at (6.5,4.55)
+        {$(a\lor\neg b\lor c)\land(a\lor b\lor\neg c)\land(a\lor c)$};
+
+    % Variable graph: all three variables co-occur.
+    \node[gb variable] (vg-a) at (.6,2.7) {$a$};
+    \node[gb variable] (vg-b) at (2.1,2.7) {$b$};
+    \node[gb variable] (vg-c) at (1.35,1.4) {$c$};
+    \draw[gb variable edge] (vg-a) -- (vg-b) -- (vg-c) -- (vg-a);
+    \node[gb panel label] at (1.35,.05) {Variable graph};
+
+    % Variable-clause graph, including the variable links in the original.
+    \node[gb clause] (vcg-cl1) at (4.6,3.5) {$\mathrm{cl}_1$};
+    \node[gb clause] (vcg-cl2) at (7.3,3.5) {$\mathrm{cl}_2$};
+    \node[gb variable] (vcg-a) at (5.35,2.7) {$a$};
+    \node[gb variable] (vcg-b) at (6.5,2.7) {$b$};
+    \node[gb variable] (vcg-c) at (5.95,1.85) {$c$};
+    \node[gb clause] (vcg-cl3) at (5.95,.95) {$\mathrm{cl}_3$};
+    \draw[gb variable edge] (vcg-a) -- (vcg-b) -- (vcg-c) -- (vcg-a);
+    \draw[gb clause edge] (vcg-cl1) -- (vcg-a);
+    \draw[gb clause edge] (vcg-cl1) -- (vcg-b);
+    \draw[gb clause edge] (vcg-cl1.south) to[bend right=30] (vcg-c.west);
+    \draw[gb clause edge] (vcg-cl2) -- (vcg-a);
+    \draw[gb clause edge] (vcg-cl2) -- (vcg-b);
+    \draw[gb clause edge] (vcg-cl2.south) to[bend left=30] (vcg-c.east);
+    \draw[gb clause edge] (vcg-a.south west) to[bend right=25] (vcg-cl3.west);
+    \draw[gb clause edge] (vcg-c) -- (vcg-cl3);
+    \node[gb panel label] at (5.95,.05) {Variable clause graph};
+
+    % Literal-clause graph: solid incidence links and wavy complements.
+    \node[gb variable] (lcg-na) at (9.55,3.25) {$\neg a$};
+    \node[gb variable] (lcg-nb) at (9.55,2.2) {$\neg b$};
+    \node[gb variable] (lcg-nc) at (9.55,1.15) {$\neg c$};
+    \node[gb clause] (lcg-cl1) at (11.1,3.25) {$\mathrm{cl}_1$};
+    \node[gb clause] (lcg-cl2) at (11.1,2.2) {$\mathrm{cl}_2$};
+    \node[gb clause] (lcg-cl3) at (11.1,1.15) {$\mathrm{cl}_3$};
+    \node[gb variable] (lcg-a) at (12.65,3.25) {$a$};
+    \node[gb variable] (lcg-b) at (12.65,2.2) {$b$};
+    \node[gb variable] (lcg-c) at (12.65,1.15) {$c$};
+    \draw[gb clause edge] (lcg-cl1) -- (lcg-a);
+    \draw[gb clause edge] (lcg-cl1) -- (lcg-nb);
+    \draw[gb clause edge] (lcg-cl1) -- (lcg-c);
+    \draw[gb clause edge] (lcg-cl2) -- (lcg-a);
+    \draw[gb clause edge] (lcg-cl2) -- (lcg-b);
+    \draw[gb clause edge] (lcg-cl2) -- (lcg-nc);
+    \draw[gb clause edge] (lcg-cl3) -- (lcg-a);
+    \draw[gb clause edge] (lcg-cl3) -- (lcg-c);
+    \draw[gb complement edge] (lcg-na.north east)
+        to[bend left=28] (lcg-a.north west);
+    \draw[gb complement edge] (lcg-nb.south east)
+        to[bend right=28] (lcg-b.south west);
+    \draw[gb complement edge] (lcg-nc.south east)
+        to[bend right=28] (lcg-c.south west);
+    \node[gb panel label] at (11.1,.05) {Literal clause graph};
+\end{tikzpicture}

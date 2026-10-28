@@ -1,0 +1,542 @@
+
+\chapter{Graph Neural Networks as EPMs}
+\label{ch:ch07:gnns_epms}
+\providecommand{\gb}{GraphBench}
+
+\begin{figure}[t]
+	\centering
+	\resizebox{\linewidth}{!}{\input{Chapters/figures/graphbench_sat.tex}}
+	\caption[Overview of SAT graph types]{Overview of the three graph types generated from a given \gls{sat} formula.
+		\label{fig:ch07:sat}}
+\end{figure}
+
+
+The \new{Boolean satisfiability problem} (SAT) is a central and longstanding \textsf{NP}-complete problem~\citep{Karp72,BieEtAl21b}. It asks whether there exists a truth assignment that satisfies a Boolean formula $\varphi$ over variables $v_1,\ldots,v_r$, typically expressed in \new{conjunctive normal form} (CNF):
+\begin{equation*}
+	\varphi = \bigwedge_{i=1}^n c_i, \quad \text{where each } c_i = \bigvee_{j=1}^{m_i} l_{i, j}.
+\end{equation*}
+Here, each $l_{i,j}$ is a literal, i.e., either a variable $v_p$ or its negation $\lnot v_p$. The task is to decide whether an assignment $a$ exists such that $\varphi(a) = \text{true}$. SAT is theoretically important as one of the first problems proven \textsf{NP}-complete~\citep{Cook71}, and it underpins numerous practical applications in hardware and software verification~\citep{BieEtAl09}, automated planning~\citep{KauSel96}, and operations research~\citep{GomEtAl08}. Its significance has led to the development of a wide range of solvers, systematically benchmarked in annual SAT competitions (e.g.,~\citealp{FroEtAl21,BalEtAl17,HeuEtAl19}). A key property of modern SAT solvers is \textit{performance complementarity}: no single solver dominates across all instances. This motivates the study of \emph{algorithm selection}~\citep{Rice76b,XuEtAl08b}, which aims to choose the most effective solver for a given instance. \new{Empirical performance prediction} is a closely related problem, which seeks to forecast the computation time (or another performance metric) of a solver on a given instance. Such predictions can support algorithm selection, configuration, scheduling, and explainability~\citep{HutEtAl14e}. State-of-the-art methods for algorithm selection and performance prediction rely on \textit{hand-crafted features} extracted from SAT instances. The most widely adopted feature set is that of the \textsc{SATzilla} family of algorithm selectors~\citep{NudEtAl04b,HutEtAl14e,ShaHoo24}. These features include basic structural properties (e.g., number of clauses and variables), graph-based descriptors derived from instance structure, and probing features obtained by briefly running a solver to collect computation-time statistics. Machine learning models, most often tabular models, are then trained on these features for prediction or selection tasks.
+
+SAT instances can be naturally represented as graphs, reflecting their permutation-invariant structure that arises from the commutativity and associativity of logical conjunction and disjunction. Indeed, many of the hand-crafted \textsc{SATzilla} features are derived from such graph representations, including the
+\begin{itemize}
+	\item \new{Variable-clause graph}: a bipartite, undirected graph with a node for each variable $v$ and each clause $c$, where an edge connects a variable to a clause if and only if the variable appears in that clause.
+
+	\item \new{Variable graph}: an undirected graph with one node per variable, where two variables $v_i$ and $v_j$ are connected if they co-occur in at least one clause.
+
+	\item \new{Clause graph}: an undirected graph with one node per clause, where two clauses $c_i$ and $c_j$ are connected if they share at least one negated literal.
+\end{itemize}
+
+\textsc{SATzilla} extracts statistical properties of these graphs, such as mean degree, coefficient of variation, clustering coefficient, and graph diameter, and uses them as features for downstream learning tasks.
+
+Several studies have explored using GNNs or MPNNs to predict formula satisfiability, e.g.,~\citet{SelEtAl19}. Some of this work employs an additional representation, the \new{literal-clause graph}, a bipartite graph with one node per literal (a variable or its negation) and one node per clause, with edges linking literals to the clauses they appear in. However, many such approaches are \emph{unsound}, they can produce incorrect results, or cannot guarantee valid satisfying assignments or proofs of unsatisfiability, limiting their practical usefulness~\citep{SelEtAl19,LiEtAl24c}.  Other research has integrated MPNNs into existing SAT solvers to replace or guide solver heuristics~\citep{WanEtAl24,TonGro25}. These approaches retain the soundness and completeness guarantees of classical solvers while potentially accelerating solving. Nonetheless, benchmarking novel MPNN architectures in this setting is challenging because it requires extensive pretraining and large-scale evaluation.  A complementary line of work applies MPNNs to algorithm selection in SAT~\citep{ZhaEtAl24b,Shavit23}, predicting the most effective solver for a given instance directly from graph-based representations. \cref{fig:ch07:sat} provides an overview of how the three graph types are constructed from a given Boolean formula.
+
+
+In addition to the graph structure, we add node features to provide the GNN with additional information about the formula's structure. Our node embeddings draw on the hand-crafted features used in \textsc{SATzilla}~\citep{NudEtAl04b} and the node-level encodings proposed in \textsc{GraSS}~\citep{ZhaEtAl24b}. These features capture local syntactic properties (e.g., polarity counts, clause membership statistics), normalized and relational quantities (e.g., positive-to-negative ratio, normalized frequency), and sinusoidal positional encodings for clause nodes. \cref{tab:ch07:vcg_features,tab:ch07:lcg_features,tab:ch07:vg_features} summarize the node features for each graph type. We compute all features during graph construction and store them as floating-point node attributes.
+
+\begin{table}[htbp]
+	\centering
+	\caption{Node features for the variable-clause graph (VCG). Variable nodes carry 12 features, and clause nodes carry 22 features. Edges between variables and clauses are attributed with the literal polarity ($+1$/$-1$); reverse edges are included.}
+	\label{tab:ch07:vcg_features}
+	\renewcommand{\arraystretch}{1.2}
+	\maxsizebox{\linewidth}{!}{%
+		\begin{tabular}{@{} p{0.22\textwidth} c p{0.62\textwidth} @{}}
+			\toprule
+			\textbf{Node type} & \textbf{Dim.} & \textbf{Feature description}                                              \\
+			\midrule
+			\multirow{11}{=}{\textbf{Variable}\newline(12 features)}
+			                   & 1--2          & Constant placeholders (reserved, set to zero)                             \\
+			                   & 3             & Number of Horn clauses in which this variable appears                     \\
+			                   & 4             & Number of occurrences as a positive literal                               \\
+			                   & 5             & Number of occurrences as a negative literal                               \\
+			                   & 6             & Total number of clause appearances (degree)                               \\
+			                   & 7             & Ratio of positive to negative occurrences                                 \\
+			                   & 8             & Number of appearances in binary clauses (length two)                      \\
+			                   & 9             & Number of appearances in unit clauses (length one)                        \\
+			                   & 10            & Number of appearances in ternary clauses (length three)                   \\
+			                   & 11            & Normalised frequency (degree divided by the total number of clauses)      \\
+			                   & 12            & Mean length of clauses containing this variable                           \\
+			\midrule
+			\multirow{13}{=}{\textbf{Clause}\newline(22 features)}
+			                   & 1--10         & Sinusoidal positional encoding (10 dimensions)                            \\
+			                   & 11            & Number of positive literals                                               \\
+			                   & 12            & Number of negative literals                                               \\
+			                   & 13            & Ratio of positive to negative literals                                    \\
+			                   & 14            & Clause length (number of literals)                                        \\
+			                   & 15            & Indicator: unit clause (length one)                                       \\
+			                   & 16            & Indicator: binary clause (length two)                                     \\
+			                   & 17            & Indicator: ternary clause (length three)                                  \\
+			                   & 18            & Indicator: Horn clause (at most one positive literal)                     \\
+			                   & 19            & Normalized clause length (divided by the maximum clause length)           \\
+			                   & 20            & Normalized clause position (index divided by the total number of clauses) \\
+			                   & 21            & Indicator: definite Horn clause (exactly one positive literal)            \\
+			                   & 22            & Indicator: negative clause (all literals are negative)                    \\
+			\bottomrule
+		\end{tabular}}
+\end{table}
+
+\begin{table}[htbp]
+	\centering
+	\caption{Node features for the literal-clause graph (LCG). Literal nodes carry 12 features, and clause nodes carry 22 features. Literal-to-clause edges carry a polarity attribute ($+1$/$-1$); reverse and complement edges (linking each literal to its negation) are also included.}
+	\label{tab:ch07:lcg_features}
+	\renewcommand{\arraystretch}{1.2}
+	\maxsizebox{\linewidth}{!}{%
+		\begin{tabular}{@{} p{0.22\textwidth} c p{0.62\textwidth} @{}}
+			\toprule
+			\textbf{Node type} & \textbf{Dim.} & \textbf{Feature description}                                              \\
+			\midrule
+			\multirow{12}{=}{\textbf{Literal}\newline(12 features)}
+			                   & 1             & Indicator: positive literal                                               \\
+			                   & 2             & Indicator: negative literal                                               \\
+			                   & 3             & Number of Horn clauses in which this literal appears                      \\
+			                   & 4             & Total number of clause occurrences                                        \\
+			                   & 5             & Number of clause occurrences of the complementary literal                 \\
+			                   & 6             & Degree (equal to the occurrence count)                                    \\
+			                   & 7             & Ratio of this literal's occurrences to those of its complement            \\
+			                   & 8             & Number of appearances in binary clauses (length two)                      \\
+			                   & 9             & Number of appearances in unit clauses (length one)                        \\
+			                   & 10            & Number of appearances in ternary clauses (length three)                   \\
+			                   & 11            & Normalized frequency (occurrences divided by the total number of clauses) \\
+			                   & 12            & Mean length of clauses containing this literal                            \\
+			\midrule
+			\multirow{13}{=}{\textbf{Clause}\newline(22 features)}
+			                   & 1--10         & Sinusoidal positional encoding (10 dimensions)                            \\
+			                   & 11            & Number of positive literals                                               \\
+			                   & 12            & Number of negative literals                                               \\
+			                   & 13            & Ratio of positive to negative literals                                    \\
+			                   & 14            & Clause length (number of literals)                                        \\
+			                   & 15            & Indicator: unit clause (length one)                                       \\
+			                   & 16            & Indicator: binary clause (length two)                                     \\
+			                   & 17            & Indicator: ternary clause (length three)                                  \\
+			                   & 18            & Indicator: Horn clause (at most one positive literal)                     \\
+			                   & 19            & Normalized clause length (divided by the maximum clause length)           \\
+			                   & 20            & Normalized clause position (index divided by the total number of clauses) \\
+			                   & 21            & Indicator: definite Horn clause (exactly one positive literal)            \\
+			                   & 22            & Indicator: negative clause (all literals are negative)                    \\
+			\bottomrule
+		\end{tabular}}
+\end{table}
+
+\begin{table}[htbp]
+	\centering
+	\caption{Node features for the variable graph (VG). Each variable node carries 12 features. Edges connect co-occurring variables and carry no attributes.}
+	\label{tab:ch07:vg_features}
+	\renewcommand{\arraystretch}{1.2}
+	\maxsizebox{\linewidth}{!}{%
+		\begin{tabular}{@{} p{0.22\textwidth} c p{0.62\textwidth} @{}}
+			\toprule
+			\textbf{Node type} & \textbf{Dim.} & \textbf{Feature description}                                                                \\
+			\midrule
+			\multirow{12}{=}{\textbf{Variable}\newline(12 features)}
+			                   & 1             & Number of Horn clauses in which this variable appears                                       \\
+			                   & 2             & Number of occurrences as a positive literal                                                 \\
+			                   & 3             & Number of occurrences as a negative literal                                                 \\
+			                   & 4             & Total co-occurrence count (degree in the variable graph)                                    \\
+			                   & 5             & Ratio of positive to negative occurrences                                                   \\
+			                   & 6             & Number of appearances in binary clauses (length two)                                        \\
+			                   & 7             & Number of appearances in unit clauses (length one)                                          \\
+			                   & 8             & Number of appearances in ternary clauses (length three)                                     \\
+			                   & 9             & Normalized frequency (clause appearances divided by the total number of clauses)            \\
+			                   & 10            & Mean length of clauses containing this variable                                             \\
+			                   & 11            & Total number of distinct clauses containing this variable                                   \\
+			                   & 12            & Mean co-occurrence degree (co-occurrence count divided by the number of containing clauses) \\
+			\bottomrule
+		\end{tabular}}
+\end{table}
+
+In \gb, we introduce, to the best of our knowledge, the largest algorithm-selection benchmark for SAT solvers, covering eleven solvers and more than 100\,000 instances. Our benchmark supports multiple graph representations of SAT formulae and also provides the \textsc{SATzilla} 2024 feature set~\citep{ShaHoo24}, enabling their combination with MPNNs. Unlike existing GNN benchmarks for SAT~\citep{LiEtAl24c}, which primarily focus on satisfiability prediction or assignment generation, our benchmark targets practical downstream tasks in SAT solving, specifically, algorithm selection and performance prediction.
+
+
+\paragraph{Related work}~
+Because using MPNNs for algorithm selection is a relatively new research direction, no benchmarks exist for this task. Previously, \citet{Shavit23} used a dataset of 3\,000 synthetically generated SAT instances, while \citet{ZhaEtAl24b} used a proprietary dataset and the 2022 Anniversary track of the SAT Competition, after removing large instances. Outside of the graph domain, the \textsc{ASlib} benchmark suite is used to benchmark algorithm selection methods~\citep{BisEtAl16b}. \textsc{ASlib} contains multiple algorithm-selection datasets across various domains, including SAT and TSP. Each dataset contains features extracted from instances (such as \textsc{SATzilla}) as well as the computation times of several algorithms on those instances. \textsc{ASlib} provides SAT scenarios based on a subset of SAT competitions, including instances and solvers from specific years. In contrast, our dataset comprises all available SAT competition instances, as well as numerous instances from other sources.
+
+\paragraph{Description of the learning task}~
+We introduce two learning tasks. \new{Performance prediction} is a regression problem that predicts the computation time of SAT solvers on unseen instances, arising in applications such as algorithm selection \citep{Rice76b} and algorithm configuration \citep[e.g.][]{LinEtAl22b}. \new{Algorithm selection} is a multi-class classification problem that selects the best algorithm for a given instance.
+While algorithm selection can be reduced to performance prediction by choosing the solver with the lowest predicted computation time, we treat them as distinct problems, as algorithm selection can be solved in other ways, without predicting the exact performance of the solvers. For algorithm selection, we adopt the loss function proposed by~\citet{ZhaEtAl24b}, which penalizes the predicted probabilities in proportion to the solver's computation time. Intuitively, a solver that only slightly underperforms on an instance incurs a small penalty, while poor selections are penalized more heavily, i.e.,
+\begin{equation*}
+	\frac{1}{N} \sum_{i=1}^N \left( \sum_{k=1}^K p_i^k \cdot t_i^k - t_i^* \right)^2,
+\end{equation*}
+where $p_i^k$ is the predicted probability of selecting solver $k$ for instance $i$, $t_i^k$ is the computation time of solver $k$ on instance $i$, and $t_i^* = \min_k t_i^k$ is the computation time of the \new{virtual best solver} (VBS). Each instance is provided with
+three graph-based representations VG, VCG, and LCG, described above.
+In all cases, \textsc{SATzilla} features can be integrated as node attributes to enrich the graph representation.
+
+The performance of a solver $s$ on an instance set $\Pi=\{\pi_1, \pi_2, \dots, \pi_n\}$ is measured using the widely adopted \new{penalized average computation time} ($\text{PAR}_k$) metric, where $k$ denotes the penalty factor for unsolved instances under a cutoff time $c$. The $\text{PAR}_k(s, \Pi)$ score is the mean computation time of $s$ across $\Pi$, where each unsolved instance contributes $k \cdot c$ to the total time. Lower $\text{PAR}_k$ values indicate better performance. For algorithm selectors, the total solving time includes both feature extraction and model inference time, implying that MPNN inference must be efficient to be practically helpful.
+
+For the performance prediction task, the model output is the base-10 logarithm of the $\text{PAR}_{10}$ score of solver $s$,
+\begin{equation*}
+	\log_{10}(\text{PAR}_{10}(s, \Pi)),
+\end{equation*}
+a transformation shown to improve predictive accuracy in prior work~\citep{HutEtAl14e}. We evaluate model performance using the \new{root mean-squared error} (RMSE) between predicted and actual log-scaled computation times.
+
+For algorithm selection, we use the \new{closed gap} (CG) metric, which quantifies how close a selector comes to VBS performance relative to the single best solver (SBS). Formally,
+\begin{equation*}
+	\text{CG}(\Pi) = \frac{\text{PAR}_{10}(\text{SBS}, \Pi) - \text{PAR}_{10}(s, \Pi)}{\text{PAR}_{10}(\text{SBS}, \Pi) - \text{PAR}_{10}(\text{VBS}, \Pi)}.
+\end{equation*}
+A higher CG score indicates stronger selection performance, with CG $=1$ corresponding to VBS performance and CG $=0$ to SBS performance.
+
+\paragraph{Details on the datasets}~
+We created the largest algorithm-selection scenario for SAT solvers to date. We collected all SAT Competition instances via GBD~\citep{IseJab24} and added all SAT instances from the AClib benchmark for algorithm configuration~\citep{HutEtAl14d}. Together, these sources include SAT formulae from diverse real-world applications and synthetically generated instances. To further enrich the dataset, we generated additional formulae using three well-established SAT instance generators, i.e.,
+
+\begin{itemize}
+	\item \new{FuzzSAT}~\citep{BruEtAl10} produces CNF fuzzing instances originally designed to identify issues in digital circuits. It generates random Boolean circuits as DAGs and converts them into CNF via the Tseitin transformation~\citep{Tseitin83}. To construct the DAG, we used $v \in [50,150]$ input variables; we randomly paired and connected operands with randomly chosen operator nodes until each input was referenced at least $t \in [1,5]$ times. Finally, we added random clauses of length $s \in [3,8]$ to increase complexity.
+
+	\item \new{Cryptography}~\citep{NejEtAl17,AlaEtAl24} generates SAT instances encoding preimage attacks on MD4, SHA-1, and SHA-256. Each encoding applies multiple \emph{rounds} of operations; higher numbers of rounds yield harder instances. We set the number of rounds to $d \in [16,30]$, which yields formulae that are challenging for modern solvers but not unsolvable. Additionally, we fixed $i \in [0,384]$ of the 512 input bits; fixing more bits results in easier instances.
+
+	\item \new{Community attachment}~\citep{GirLev16} produces pseudo-random SAT formulae with community structure, a property often observed in real-world SAT encodings (e.g., hardware and software verification tasks~\citep{AnsEtAl12}). The generator can create relatively small but difficult instances. We used $n \in [1\,000, 3\,000]$ variables, $c \in [5,100]$ communities, a clause-to-variable ratio of $[3{.}7, 4{.}5]$, and modularity factor $q \in [0{.}3,0{.}9]$. Higher modularity values enforce stronger community structure.
+\end{itemize}
+
+For each generator, we chose parameter ranges to yield challenging but still solvable instances.  To ensure this, we excluded ranges that yielded no instances solvable by \solver{Kissat}, the winner of the 2024 SAT Competition, between 1 and 5\,000 seconds. After generation, we applied the \textsc{Satellite} preprocessor to remove redundant clauses and variables. A summary of all generated instances is provided in \cref{tab:ch07:sat_generatred_instances}.
+
+We pre-selected solvers for the benchmark by constructing a portfolio of $m$ complementary state-of-the-art SAT solvers, based on the results of the 2024 SAT Competition. We built portfolios using beam search to identify the set of $m$ solvers achieving the VBS performance. To determine $m$, we evaluated portfolios of all possible sizes and plotted portfolio size against achieved VBS. We then identified the inflection point (the ``knee'') of this curve using the Kneedle algorithm~\citep{SatEtAl11} and adopted the corresponding portfolio. We used the ASF library\footnote{\url{https://github.com/hadarshavit/asf}} to perform the selection procedure. We repeated the same procedure on the SAT Competition 2023.
+
+In total, our dataset includes the following solvers. From the 2024 SAT Competition: Kissat~\citep{BieEtAl24}, BreadIdKissat~\citep{BogEtAl24}, AMSAT~\citep{LiEtAl24d}, and KissatMABDC~\citep{LiuEtAl24b}. From the 2023 SAT Competition: SBVA CadiCal~\citep{HabGre23}, Reencode Kissat~\citep{ReeBry23}, Minisat XOR, KissatMAB Prop PR~\citep{Gao23}, hKissatInc~\citep{TchDja23}, CadiCal vivinst~\citep{BieEtAl23}, and BreakID Kissat~\citep{BogEtAl23}. We measured solver computation times in CPU time using \texttt{runsolver}~\citep{Roussel11c} and generic wrapper tools~\citep{EggEtAl19} to ensure accurate, consistent performance measurements.
+
+
+\begin{table}
+	\centering
+	\caption{Overview of the instances for the SAT solving benchmark.}
+	\maxsizebox{\linewidth}{!}{
+		\begin{tabular}{ll@{\hskip 0.5in}llll@{\hskip 0.5in}llll}
+			\toprule
+			\textbf{Source}      & \textbf{\# of Instances} & \multicolumn{4}{c}{\textbf{\# of Variables}} & \multicolumn{4}{c}{\textbf{\# of Clauses}}                                                                                   \\
+			                     &                          & min                                          & max                                        & avg        & median     & min    & max           & avg            & median      \\
+			\midrule
+			SAT Competition      & 31\,024                  & 3                                            & 25\,870\,369                               & 69\,190.77 & 13\,168.50 & 7      & 871\,935\,536 & 1\,022\,025.50 & 118\,526.00 \\
+            AClib                & 33\,955                  & 6                                            & 248\,738                                   & 3\,319.65  & 1\,270.00  & 24     & 103\,670\,100 & 136\,471.03    & 10\,000.00  \\
+
+			Community Attachment & 29\,994                  & 922                                          & 2\,956                                     & 1\,931.05  & 1\,928.00  & 3\,566 & 13\,413       & 8\,088.71      & 8\,041.00   \\
+			FuzzSAT              & 8\,020                   & 2                                            & 944\,685                                   & 10\,217.75 & 1\,820.00  & 1      & 4\,094\,516   & 45\,638.30     & 8\,074.50   \\
+			Cryptography         & 4\,873                   & 6                                            & 12\,415                                    & 4\,264.89  & 3\,225.00  & 24     & 185\,006      & 55\,309.63     & 45\,316.00  \\\midrule
+			\textbf{Total}       & 107\,866                 & 2                                            & 25\,870\,369                               & 22\,434.71 & 1\,879.00  & 1      & 871\,935\,536 & 345\,051.72    & 10\,177.50  \\
+			\bottomrule
+		\end{tabular}
+	}
+	\label{tab:ch07:sat_generatred_instances}
+\end{table}
+We provide three datasets: \dataset{small}, which includes only small formulae with up to 3\,000 variables and 15\,000 clauses; \dataset{medium}, which consists of the small formulae with additional medium-sized formulae with up to 20\,000 variables and 80\,000 clauses; and \dataset{large}, which includes all formulae. This way, we provide datasets with varying levels of hardness, as formula size can pose hurdles for training time and GPU memory. While the \dataset{large} and \dataset{medium} datasets are unlikely to be accessible on current available hardware, we include them to keep the benchmark relevant long term.
+
+
+\paragraph{Dataset challenges:} Algorithm selection and performance prediction are particularly challenging in this setting for several reasons. First, solver performance is inherently stochastic: repeated runs of the same solver on the same instance can result in substantially different running times. This induces noisy target values that the learning algorithm must account for. Second, the targets are right-censored because of solver cutoffs: when a solver does not terminate before the cutoff, its true running time is only known to exceed the cutoff. Third, the SAT instances can be very large, with corresponding graphs containing thousands to millions of variable nodes, making scalable graph processing a major challenge. Finally, accurate prediction requires the GNN to capture both local structural patterns and the formula's global properties.
+
+\paragraph{Experimental evaluation and baselines}~
+All SAT solving tasks in the benchmark are graph-level. For the GNN baselines, we employ an encoder-processor-decoder pipeline, as described in~\cref{Section:ExpSetup}. We used the following architectures: GIN, GCN, GIN+, GCN+, Gated GCN+, and, with node features on \dataset{LCG} only, GraSS. While we considered GT for the tasks, we encountered high computational costs in calculating the positional embeddings (more than a CPU day) and therefore excluded them from the evaluation. To evaluate the capacity of GNNs to extract information purely from the formula's topology, we ran experiments both without and with the supplied node-level features. Furthermore, when training on medium- and large-sized graphs, we encountered out-of-memory errors even on an H100. Consequently, we only consider small formulae for MPNNs. Similarly, we observed out-of-memory issues with the clause graphs and therefore excluded them from the evaluation. We optimized these models' hyperparameters using SMAC3~\citep{LinEtAl22b} with a multi-fidelity facade, running 200 trials per setting with bfloat16 mixed precision and batch size 16. We evaluated the selected configuration over three seeds. Full details of the hyperparameter configuration space and tuning procedure are in~\cref{sec:ch07:hpo}.
+
+We note that algorithm selection datasets are traditionally evaluated using cross-validation, primarily because of limited data availability. In contrast, our new dataset contains tens of thousands of formulas. Since it is also intended for deep learning approaches, which are computationally expensive and thus impractical to evaluate using 10-fold cross-validation, we instead provide a fixed train–validation–test split and report results across 3 random seeds.
+
+For the performance prediction task, we compare the MPNNs against traditional baselines, which use the \solver{SATzilla} features and a (tabular) machine learning model. We use random forest~\citep{Breiman01b} and XGBoost~\citep{CheGue16b}, which are commonly used as empirical performance models (EPM) (see, e.g., \citet{BanEtAl22b,EggEtAl15b,HutEtAl14c}).
+We use the \solver{SATzilla} 2024 features as input and predict the log10-scaled computation time. We implement these baselines using the ASF library.
+For algorithm selection, we provide several well-known baselines. First, we use pairwise regression~\citep{KerEtAl18b} (PR; predicts performance differences between each pair of solvers, then picks the solver with the best sum), pairwise classification~\citep{XuEtAl12b} (PC; predicts the better solver in each pair, then uses majority vote, %\mia{
+winner of the ICON challenge on algorithm selection~\citep{LinEtAl19c}%}
+) as well as a simple multi-class classification~\citep{Kotthoff13b} (MC; directly predicts the best solver). Similar to the EPM baselines, these baselines use the \solver{SATzilla} 2024 features with a random forest. We tune these baselines using SMAC3~\citep{LinEtAl22b} for 50 trials.
+\begin{table}[htbp]
+  \tabledefaults
+  \centering
+  \caption{\textbf{SAT Solving.} RMSE (log\textsubscript{10} time) for performance prediction on \dataset{small} SAT instances without node features. Mean and sample standard deviation over three seeds; lower is better. SATzilla baselines are reproduced from the original table.}
+  \label{tab:ch07:sat_epm_res_small_no_feat}
+  \maxsizebox{\linewidth}{!}{%
+  \begin{tabular}{llcccc}
+    \toprule
+    \textbf{Solver} & \textbf{Method} & \dataset{VG} & \dataset{VCG} & \dataset{LCG} & \dataset{SATzilla} \\
+    \midrule
+    \multirow{7}{*}{\solver{Kissat}}
+      & GIN & \meanstd{0.60}{0.01} & \meanstd{0.69}{0.03} & \meanstd{0.71}{0.02} & \\
+      & GCN & \meanstd{1.24}{0.07} & \meanstd{0.71}{0.02} & \meanstd{0.65}{0.03} & \\
+      & GCN+ & \meanstd{0.74}{0.21} & \meanstd{0.54}{0.04} & \meanstd{0.59}{0.03} & \\
+      & GIN+ & \meanstd{0.76}{0.02} & \meanstd{0.91}{0.02} & \meanstd{0.92}{0.06} & \\
+      & Gated GCN+ & \meanstd{1.04}{0.07} & \meanstd{0.97}{0.01} & \meanstd{0.68}{0.12} & \\
+      & RF & & & & \meanstd{0.65}{0.00} \\
+      & XGB & & & & \meanstd{0.64}{0.00} \\
+    \midrule
+    \multirow{7}{*}{\solver{BreakIDKissat}}
+      & GIN & \meanstd{0.58}{0.02} & \meanstd{0.60}{0.08} & \meanstd{0.66}{0.02} & \\
+      & GCN & \meanstd{0.96}{0.00} & \meanstd{0.60}{0.01} & \meanstd{0.70}{0.02} & \\
+      & GCN+ & \meanstd{0.59}{0.02} & \meanstd{0.51}{0.01} & \meanstd{0.62}{0.06} & \\
+      & GIN+ & \meanstd{0.76}{0.06} & \meanstd{0.87}{0.05} & \meanstd{0.91}{0.01} & \\
+      & Gated GCN+ & \meanstd{1.03}{0.07} & \meanstd{0.91}{0.07} & \meanstd{0.86}{0.15} & \\
+      & RF & & & & \meanstd{0.68}{0.00} \\
+      & XGB & & & & \meanstd{0.67}{0.00} \\
+    \midrule
+    \multirow{7}{*}{\solver{KissatMABDC}}
+      & GIN & \meanstd{0.60}{0.04} & \meanstd{0.66}{0.03} & \meanstd{0.69}{0.02} & \\
+      & GCN & \meanstd{0.99}{0.00} & \meanstd{0.71}{0.05} & \meanstd{0.72}{0.01} & \\
+      & GCN+ & \meanstd{0.71}{0.20} & \meanstd{0.59}{0.03} & \meanstd{0.63}{0.04} & \\
+      & GIN+ & \meanstd{0.76}{0.04} & \meanstd{0.95}{0.02} & \meanstd{0.87}{0.19} & \\
+      & Gated GCN+ & \meanstd{1.00}{0.00} & \meanstd{0.98}{0.02} & \meanstd{0.85}{0.03} & \\
+      & RF & & & & \meanstd{0.70}{0.00} \\
+      & XGB & & & & \meanstd{0.69}{0.00} \\
+    \midrule
+    \multirow{7}{*}{\solver{AMSAT}}
+      & GIN & \meanstd{0.68}{0.02} & \meanstd{0.74}{0.03} & \meanstd{0.74}{0.01} & \\
+      & GCN & \meanstd{1.01}{0.00} & \meanstd{0.75}{0.02} & \meanstd{0.71}{0.02} & \\
+      & GCN+ & \meanstd{0.89}{0.09} & \meanstd{0.73}{0.05} & \meanstd{0.64}{0.03} & \\
+      & GIN+ & \meanstd{0.88}{0.08} & \meanstd{0.98}{0.02} & \meanstd{0.93}{0.03} & \\
+      & Gated GCN+ & \meanstd{1.09}{0.10} & \meanstd{0.99}{0.02} & \meanstd{0.98}{0.03} & \\
+      & RF & & & & \meanstd{0.74}{0.00} \\
+      & XGB & & & & \meanstd{0.74}{0.00} \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+\begin{table}[htbp]
+  \tabledefaults
+  \centering
+  \caption{\textbf{SAT Solving.} Algorithm selection results on \dataset{small} SAT instances without node features (gap closed; mean and sample standard deviation over three seeds; higher is better). SATzilla baselines for all instance sizes are reproduced from the original table.}
+  \label{tab:ch07:sat_as_res_no_feat}
+  \maxsizebox{\linewidth}{!}{%
+  \begin{tabular}{llcccc}
+    \toprule
+    \textbf{Instances} & \textbf{Method} & \dataset{VG} & \dataset{VCG} & \dataset{LCG} & \dataset{SATzilla} \\
+    \midrule
+    \multirow{8}{*}{\dataset{Small}}
+      & GIN & \meanstd{0.29}{0.25} & \meanstd{0.34}{0.08} & \meanstd{0.41}{0.06} & \\
+      & GCN & \meanstd{0.00}{0.00} & \meanstd{0.29}{0.18} & \meanstd{0.42}{0.01} & \\
+      & GCN+ & \meanstd{0.28}{0.08} & \meanstd{0.49}{0.02} & \meanstd{0.47}{0.02} & \\
+      & GIN+ & \meanstd{0.34}{0.08} & \meanstd{-0.16}{0.62} & \meanstd{0.03}{0.15} & \\
+      & Gated GCN+ & \meanstd{0.28}{0.05} & \meanstd{0.30}{0.02} & \meanstd{0.47}{0.02} & \\
+      & PR & & & & \meanstd{0.38}{0.02} \\
+      & MC & & & & \meanstd{-0.44}{0.01} \\
+      & PC & & & & \meanstd{-0.26}{0.00} \\
+    \midrule
+    \multirow{3}{*}{\dataset{Medium}}
+      & PR & & & & \meanstd{0.35}{0.01} \\
+      & MC & & & & \meanstd{-0.43}{0.04} \\
+      & PC & & & & \meanstd{0.01}{0.01} \\
+    \midrule
+    \multirow{3}{*}{\dataset{Large}}
+      & PR & & & & \meanstd{0.51}{0.01} \\
+      & MC & & & & \meanstd{-0.05}{0.01} \\
+      & PC & & & & \meanstd{0.21}{0.01} \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+\begin{table}[htbp]
+  \tabledefaults
+  \centering
+  \caption{\textbf{SAT Solving.} RMSE (log\textsubscript{10} time) for performance prediction on \dataset{small} SAT instances with node features. Mean and sample standard deviation over three seeds; lower is better. SATzilla baselines are reproduced from the original table.}
+  \label{tab:ch07:sat_epm_res_small_with_feat}
+  \maxsizebox{\linewidth}{!}{%
+  \begin{tabular}{llcccc}
+    \toprule
+    \textbf{Solver} & \textbf{Method} & \dataset{VG} & \dataset{VCG} & \dataset{LCG} & \dataset{SATzilla} \\
+    \midrule
+    \multirow{8}{*}{\solver{Kissat}}
+      & GIN & \meanstd{0.41}{0.00} & \meanstd{0.47}{0.03} & \meanstd{0.58}{0.06} & \\
+      & GCN & \meanstd{0.42}{0.00} & \meanstd{0.38}{0.01} & \meanstd{0.39}{0.01} & \\
+      & GCN+ & \meanstd{0.59}{0.03} & \meanstd{0.68}{0.21} & \meanstd{0.61}{0.14} & \\
+      & GIN+ & \meanstd{0.47}{0.02} & \meanstd{0.66}{0.03} & \meanstd{0.57}{0.03} & \\
+      & Gated GCN+ & \meanstd{0.88}{0.19} & \meanstd{0.57}{0.04} & \meanstd{0.56}{0.02} & \\
+      & GraSS & -- & -- & \meanstd{0.49}{0.01} & \\
+      & RF & & & & \meanstd{0.65}{0.00} \\
+      & XGB & & & & \meanstd{0.64}{0.00} \\
+    \midrule
+    \multirow{8}{*}{\solver{BreakIDKissat}}
+      & GIN & \meanstd{0.41}{0.00} & \meanstd{0.46}{0.01} & \meanstd{0.48}{0.01} & \\
+      & GCN & \meanstd{0.43}{0.00} & \meanstd{0.39}{0.00} & \meanstd{0.40}{0.01} & \\
+      & GCN+ & \meanstd{0.69}{0.14} & \meanstd{0.83}{0.10} & \meanstd{0.64}{0.08} & \\
+      & GIN+ & \meanstd{0.45}{0.02} & \meanstd{0.70}{0.06} & \meanstd{0.69}{0.02} & \\
+      & Gated GCN+ & \meanstd{0.44}{0.01} & \meanstd{0.54}{0.03} & \meanstd{0.57}{0.04} & \\
+      & GraSS & -- & -- & \meanstd{0.49}{0.00} & \\
+      & RF & & & & \meanstd{0.68}{0.00} \\
+      & XGB & & & & \meanstd{0.67}{0.00} \\
+    \midrule
+    \multirow{8}{*}{\solver{KissatMABDC}}
+      & GIN & \meanstd{0.43}{0.01} & \meanstd{0.46}{0.04} & \meanstd{0.46}{0.03} & \\
+      & GCN & \meanstd{0.43}{0.01} & \meanstd{0.38}{0.00} & \meanstd{0.39}{0.00} & \\
+      & GCN+ & \meanstd{0.65}{0.08} & \meanstd{0.74}{0.21} & \meanstd{0.60}{0.00} & \\
+      & GIN+ & \meanstd{0.46}{0.02} & \meanstd{0.75}{0.10} & \meanstd{0.59}{0.00} & \\
+      & Gated GCN+ & \meanstd{0.56}{0.03} & \meanstd{0.53}{0.06} & \meanstd{0.64}{0.06} & \\
+      & GraSS & -- & -- & \meanstd{0.49}{0.00} & \\
+      & RF & & & & \meanstd{0.70}{0.00} \\
+      & XGB & & & & \meanstd{0.69}{0.00} \\
+    \midrule
+    \multirow{8}{*}{\solver{AMSAT}}
+      & GIN & \meanstd{0.47}{0.00} & \meanstd{0.56}{0.09} & \meanstd{0.56}{0.03} & \\
+      & GCN & \meanstd{0.48}{0.00} & \meanstd{0.42}{0.00} & \meanstd{0.43}{0.00} & \\
+      & GCN+ & \meanstd{0.59}{0.05} & \meanstd{0.71}{0.08} & \meanstd{0.66}{0.04} & \\
+      & GIN+ & \meanstd{0.52}{0.01} & \meanstd{0.76}{0.15} & \meanstd{0.77}{0.03} & \\
+      & Gated GCN+ & \meanstd{0.83}{0.18} & \meanstd{0.63}{0.03} & \meanstd{0.64}{0.03} & \\
+      & GraSS & -- & -- & \meanstd{0.55}{0.00} & \\
+      & RF & & & & \meanstd{0.74}{0.00} \\
+      & XGB & & & & \meanstd{0.74}{0.00} \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+\begin{table}[htbp]
+  \tabledefaults
+  \centering
+  \caption{\textbf{SAT Solving.} Algorithm selection results on \dataset{small} SAT instances with node features (gap closed; mean and sample standard deviation over three seeds; higher is better). SATzilla baselines for all instance sizes are reproduced from the original table.}
+  \label{tab:ch07:sat_as_res_with_feat}
+  \maxsizebox{\linewidth}{!}{%
+  \begin{tabular}{llcccc}
+    \toprule
+    \textbf{Instances} & \textbf{Method} & \dataset{VG} & \dataset{VCG} & \dataset{LCG} & \dataset{SATzilla} \\
+    \midrule
+    \multirow{9}{*}{\dataset{Small}}
+      & GIN & \meanstd{0.54}{0.01} & \meanstd{0.47}{0.00} & \meanstd{0.48}{0.01} & \\
+      & GCN & \meanstd{0.52}{0.00} & \meanstd{0.55}{0.01} & \meanstd{0.59}{0.00} & \\
+      & GCN+ & \meanstd{0.41}{0.13} & \meanstd{0.44}{0.01} & \meanstd{0.30}{0.03} & \\
+      & GIN+ & \meanstd{0.54}{0.01} & \meanstd{0.42}{0.01} & \meanstd{0.36}{0.17} & \\
+      & Gated GCN+ & \meanstd{0.07}{0.12} & \meanstd{0.53}{0.01} & \meanstd{0.51}{0.01} & \\
+      & GraSS & -- & -- & \meanstd{0.48}{0.02} & \\
+      & PR & & & & \meanstd{0.38}{0.02} \\
+      & MC & & & & \meanstd{-0.44}{0.01} \\
+      & PC & & & & \meanstd{-0.26}{0.00} \\
+    \midrule
+    \multirow{3}{*}{\dataset{Medium}}
+      & PR & & & & \meanstd{0.35}{0.01} \\
+      & MC & & & & \meanstd{-0.43}{0.04} \\
+      & PC & & & & \meanstd{0.01}{0.01} \\
+    \midrule
+    \multirow{3}{*}{\dataset{Large}}
+      & PR & & & & \meanstd{0.51}{0.01} \\
+      & MC & & & & \meanstd{-0.05}{0.01} \\
+      & PC & & & & \meanstd{0.21}{0.01} \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+
+\begin{table}[htbp]
+  \tabledefaults
+  \centering
+  \caption{\textbf{SAT Solving.} RMSE (log\textsubscript{10} time) for performance prediction on \dataset{medium} and \dataset{large} SAT instances. Lower is better.}
+  \label{tab:ch07:sat_epm_res_med_large}
+  \begin{minipage}{0.48\textwidth}
+    \centering
+    \subcaption{Medium-size SAT instances}
+    \resizebox{0.8\linewidth}{!}{%
+    \begin{tabular}{llc}
+      \toprule
+      \textbf{Solver} & \textbf{Method} & \dataset{SATzilla} \\
+      \midrule
+      \multirow{2}{*}{\solver{Kissat}}
+      & RF  & \meanstd{0.63}{0.00} \\
+      & XGB & \meanstd{0.62}{0.00} \\
+      \midrule
+      \multirow{2}{*}{\solver{BreakIDKissat}}
+         & RF  & \meanstd{0.66}{0.00} \\
+      & XGB & \meanstd{0.65}{0.00} \\
+      \midrule
+      \multirow{2}{*}{\solver{KissatMABDC}}
+      & RF  & \meanstd{0.68}{0.00} \\
+      & XGB & \meanstd{0.67}{0.00} \\
+      \midrule
+      \multirow{2}{*}{\solver{AMSAT}}
+    & RF  & \meanstd{0.70}{0.00} \\
+      & XGB & \meanstd{0.69}{0.00} \\
+      \bottomrule
+    \end{tabular}}
+    \label{tab:ch07:sat_epm_res_med}
+  \end{minipage}
+  \hfill
+  \begin{minipage}{0.48\textwidth}
+    \centering
+    \subcaption{Large SAT instances}
+    \resizebox{0.8\linewidth}{!}{%
+    \begin{tabular}{llc}
+      \toprule
+      \textbf{Solver} & \textbf{Method} & \dataset{SATzilla} \\
+      \midrule
+      \multirow{2}{*}{\solver{Kissat}}
+        & RF  & \meanstd{0.64}{0.00} \\
+      & XGB & \meanstd{0.64}{0.00} \\
+      \midrule
+      \multirow{2}{*}{\solver{BreakIDKissat}}
+      & RF  & \meanstd{0.66}{0.00} \\
+      & XGB & \meanstd{0.65}{0.00} \\
+      \midrule
+      \multirow{2}{*}{\solver{KissatMABDC}}
+      & RF  & \meanstd{0.67}{0.00} \\
+      & XGB & \meanstd{0.66}{0.00} \\
+      \midrule
+      \multirow{2}{*}{\solver{AMSAT}}
+     & RF  & \meanstd{0.69}{0.00} \\
+      & XGB & \meanstd{0.69}{0.00} \\
+      \bottomrule
+    \end{tabular}}
+    \label{tab:ch07:sat_epm_res_large}
+  \end{minipage}
+\end{table}
+
+\subsection{Automated hyperparameter optimization}
+\label{sec:ch07:hpo}
+
+\gb{} also integrates automated hyperparameter optimization (HPO) to make it easier to tune new models, improve performance, and enhance reproducibility. Deep graph learning architectures are notoriously sensitive to hyperparameter settings, from learning rates and weight decay to structural choices such as the number of layers and hidden dimensions. To address this, \gb{} uses the \textsc{SMAC3}~\citep{LinEtAl22b} package for hyperparameter optimization, a versatile framework that leverages Bayesian Optimization (BO) to efficiently explore the configuration space.
+
+At its core, standard Bayesian Optimization constructs a probabilistic surrogate model that maps a hyperparameter configuration to its observed performance. The BO loop proceeds iteratively: first, it evaluates an initial set of configurations. Then, the surrogate model is fitted to this historical data. To decide which configuration to evaluate next, BO employs an acquisition function, such as Expected Improvement (EI)~\citep{Mockus89b}. The acquisition function evaluates the utility of candidate configurations by balancing \emph{exploitation} (proposing configurations where the surrogate model predicts high performance) and \emph{exploration} (proposing configurations where the surrogate model is highly uncertain). After maximizing the acquisition function, the best candidate configuration is evaluated on the target task, and the resulting performance updates the surrogate model.
+In \textsc{SMAC3}, the default surrogate model is a random forest (RF). Random Forests are particularly well-suited for HPO because they natively handle mixed continuous, categorical, and conditional hyperparameter spaces, and they can estimate predictive variance (uncertainty) empirically from the variance across the individual regression trees.
+
+While standard BO is vastly more efficient than random search, evaluating every proposed configuration to completion (e.g., training a GNN for 100\,000 steps) remains too costly. To address this, we use the \new{multi-fidelity facade} provided by \textsc{SMAC3}. Multi-fidelity optimization accelerates the search by evaluating configurations on cheaper, approximate versions of the target task, known as \emph{fidelities}. Fidelities can be defined by the number of training steps, epochs, or the size of the dataset subset. A well-known algorithm for multi-fidelity optimization is Hyperband~\citep{LiEtAl17b}. Hyperband samples configurations randomly, evaluates them on a low fidelity, and prunes unpromising configurations using a tournament-like strategy. Hyperband repeats this process multiple times, with increasing minimum fidelities, to give slow-learning configurations a chance to show their performance.
+
+The scheduling algorithm underlying the \textsc{SMAC3} multi-fidelity facade is based on BOHB~\citep{FalEtAl18}, which combines the strengths of Hyperband for early-stage elimination of unpromising configurations with those of BO for late-stage convergence toward the global optimum. In short, BOHB samples new configurations using BO and prunes unpromising configurations using a Hyperband-style strategy.
+
+Because of limited computational resources, we could not run HPO on all datasets and domains. For the SAT graph-model configurations, we used the multi-fidelity procedure described below, separately with and without node features. Tabular algorithm-selection baselines have their own tuning protocol in TODO. For the graph models, we used the \textsc{SMAC3} multi-fidelity facade with 200 trials per run, bfloat16 mixed precision, and batch size 16. We chose the number of training steps as the fidelity metric: we defined the minimum budget as 3\,000 steps and the maximum budget as 100\,000 steps. This multi-fidelity approach let us explore a vast configuration space---evaluating many architectures and hyperparameter combinations at 3\,000 steps---while training only the best candidates to the full 100\,000 steps. \cref{tab:ch07:hpo_cs} shows the full configuration space used for this process.
+
+\begin{table}[htbp]
+	\centering
+	\caption{Configuration space used in the hyperparameter optimization.}
+
+	\label{tab:ch07:hpo_cs}
+	\begin{tabular}{lc}
+		\toprule
+		\textbf{Hyperparameter} & \textbf{Range}    \\
+
+		\midrule
+		Learning rate           & [1e-5, 5e-2]      \\
+		Weight decay            & [1e-8, 1e-1]      \\
+		Warmup iters            & [1\,000, 20\,000] \\
+		Dropout                 & [0.0, 0.5]        \\
+		Num layers              & [4, 10]           \\
+		Hidden dim              & \{256, 384, 512\} \\
+
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+
+\paragraph{Results}~
+We start by presenting the results for the performance prediction task. We report the RMSE of the log-scaled computation time for the solvers from SAT Competition 2024 (\solver{Kissat}, \solver{BreakIDKissat}, \solver{KissatMABDC}, \solver{AMSAT}) on small formulae in~\cref{tab:ch07:sat_epm_res_small_no_feat,tab:ch07:sat_epm_res_small_with_feat}. We note that GraSS is evaluated only on \dataset{LCG} with node features as the method requires them.
+Without node features, GCN+ performs best for all four solvers, using \dataset{VCG} for three and \dataset{LCG} for \solver{AMSAT}. With node features, GCN on \dataset{VCG} performs best for all four solvers. The best with features result outperforms the best featureless result for each solver, indicating that node features provide useful information for performance prediction. 
+For the small-instance performance prediction task, graph-based models outperform the SATzilla-feature baselines. We also present random forest and XGBoost results on medium-size and large formulae in~\cref{tab:ch07:sat_epm_res_med,tab:ch07:sat_epm_res_large}, so they can be compared against graph machine learning solutions in the future. Overall, we observe similar performance between XGBoost and random forest, with a slight advantage to XGBoost.
+
+For the algorithm selection task, we report the
+closed gap metric of different selectors in~\cref{tab:ch07:sat_as_res_no_feat,tab:ch07:sat_as_res_with_feat}.
+For small instances, GCN+ on \dataset{VCG} achieves the highest mean closed gap without features, while GCN on \dataset{LCG} performs best with features. Both outperform the feature-based baselines. The task-specific GraSS method performs worse than the general-purpose GCN.
+Among the three baselines based on hand-crafted features, we observe that multi-class classification underperforms both pairwise classification and regression, leaving a negative gap on the small and medium-sized datasets. This highlights that algorithm selection is not a simple multi-class classification problem. In that formulation, the model loses valuable information about the performance of algorithms other than the best one.
+Finally, we find a larger closed gap for the large dataset across all three baselines, as it includes harder instances. As solving time increases, the benefit of algorithm selection grows because feature computation accounts for a smaller fraction of the total computation time. Moreover, for harder instances, multiple solvers frequently time out, so choosing a solver that successfully solves the instance becomes especially valuable, given the additional penalty imposed by the PAR score.
+
+
+
+
+\section{Experimental setup}\label{Section:ExpSetup}
+Similar to~\cite{BecEtAl25, StoEtAl25}, we use an encoder-processor-decoder architecture for all tasks, which we detail below. While the task-specific components vary, we provide a general architecture to measure the performance of selected baselines on our tasks. For the chip design and weather forecast dataset, we adapt this architecture to provide the necessary task-dependent encoder and decoder functionality.
+
+\paragraph{Encoder}~
+For each task, we provide a task-specific encoder that derives node- and edge-level feature encodings with a common dimension $d \in \mathbb{R}^+$. These features are then passed to the processor as node and/or edge features. For models that require tokenized input, we provide node-level tokens. For missing node or edge features, we use a learnable vector of dimension $d$ in their place. For the graph transformer baseline, we add a \texttt{[cls]} token for graph-level representations, following ~\cite{BecEtAl25, StoEtAl25}.
+
+\paragraph{Processor}~
+As our processor, we select one of the baseline models we evaluate. These consist of two dummy baselines: an MLP and a DeepSet architecture; a GNN baseline using a GIN architecture; and a Graph Transformer baseline. Independent of the selected baseline, we compute updated node and graph representations at each layer as follows, given a graph $G$ with node representations $\vec{X}$,
+\begin{equation}\label{eq:processor_eq}
+	\vec{X} = \phi(\textsf{LayerNorm}(\vec{X}), G)
+\end{equation}
+\begin{equation*}
+	\vec{X} = \vec{X} + \textsf{MLP}(\textsf{LayerNorm}(\vec{X}))
+\end{equation*}
+with the following MLP layer:
+\begin{equation*}
+	\textsf{MLP}(\vec{x}) \coloneqq \sigma(\textsf{LayerNorm}(\vec{x})\vec{W}_1)\vec{W}_2,
+\end{equation*}
+where $\sigma$ denotes the GeLU nonlinearity and $\vec{W}_1, \vec{W}_2$ are weight matrices.
+Further, $\phi$ is the selected baseline, and \textsf{MLP} denotes a two-layer multilayer perceptron with GELU non-linearity~\citep{HenGim16}. For the graph transformer baseline, we used biased attention as described in~\cite{BecEtAl25, StoEtAl25}. Furthermore, we incorporate RWSE~\citep{DwiEtAl22} and LPE~\citep{MulMor24} as node positional encodings for our GNN and graph transformer baselines.
+
+\paragraph{Decoder}~
+Since each task requires task-specific predictions, we provide a decoder for each task. Across all functions, we use the same decoder layout, differing only in the predictions. We propose a two-layer decoder multilayer perceptron for our baseline models consisting of two linear layers $\vec{W}_1 \in \mathbb{R}^{d \times d}, \vec{W}_2 \in \mathbb{R}^{d \times o}$ as well as GELU non-linearity, with $o$ denoting the task-specific output dimension, i.e.,
+\begin{equation*}
+	\vec{W}_2\bigl(\textsf{LayerNorm}(\textsf{GELU}(\vec{W}_1 x))\bigr).
+\end{equation*}
+Optionally, you can add a bias term to the decoder.
+
+\paragraph{Pretraining}~
+In addition to training models with our encoder-processor-decoder architecture, we support evaluating pretrained models on specific tasks. We specify these further in each subsection on additional evaluation benchmarks.
+
+\paragraph{Evaluation protocol}~
+For the learned baselines with repeated-run results, we report means and standard deviations across three random seeds, subject to the task-specific descriptions. The size-generalization study reuses a single selected seed for each pretrained model; we report domain-specific reference methods such as ABC and Persistence separately. For out-of-distribution evaluations using pretrained models, we use models obtained from the corresponding baseline experiments.
+

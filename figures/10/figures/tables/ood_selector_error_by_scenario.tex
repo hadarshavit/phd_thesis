@@ -1,0 +1,15 @@
+\scriptsize
+\begin{tabular}{lllcccc}
+\toprule
+Train Data & Eval Data & Model & MLP & PairwiseClassifier & PairwiseRegressor & PerformanceModel \\
+\midrule
+CelebA & CelebA & CLIP & 38.6 $\pm$ 0.1 & \textbf{37.0 $\pm$ 0.1} & \textbf{37.1 $\pm$ 0.0} & \textbf{37.2 $\pm$ 0.1} \\
+CelebA & CelebA & ResNet & 47.5 $\pm$ 0.1 & \textbf{45.8 $\pm$ 0.1} & \textbf{45.9 $\pm$ 0.1} & \textbf{46.0 $\pm$ 0.1} \\
+CelebA & MetaShift & CLIP & \textbf{27.4 $\pm$ 0.1} & \textbf{27.5 $\pm$ 0.1} & \textbf{27.2 $\pm$ 0.3} & 28.1 $\pm$ 0.1 \\
+CelebA & MetaShift & ResNet & \textbf{39.3 $\pm$ 0.2} & \textbf{39.5 $\pm$ 0.2} & \textbf{39.5 $\pm$ 0.1} & 40.1 $\pm$ 0.2 \\
+CivilComments & CivilComments & BERT & 56.1 $\pm$ 0.0 & \textbf{54.8 $\pm$ 0.1} & \textbf{54.9 $\pm$ 0.1} & \textbf{55.0 $\pm$ 0.1} \\
+CivilComments & CivilComments & BERT-FT & 20.9 $\pm$ 0.0 & \textbf{19.8 $\pm$ 0.1} & \textbf{19.8 $\pm$ 0.1} & \textbf{19.9 $\pm$ 0.0} \\
+CivilComments & MultiNLI & BERT & \textbf{58.9 $\pm$ 0.6} & \textbf{59.2 $\pm$ 0.2} & \textbf{59.2 $\pm$ 0.3} & 59.7 $\pm$ 0.5 \\
+CivilComments & MultiNLI & BERT-FT & \textbf{56.9 $\pm$ 0.2} & 57.9 $\pm$ 0.6 & \textbf{57.1 $\pm$ 0.1} & \textbf{57.3 $\pm$ 0.2} \\
+\bottomrule
+\end{tabular}
