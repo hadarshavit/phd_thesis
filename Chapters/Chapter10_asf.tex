@@ -570,7 +570,7 @@ We use HPOBench~\citep{EggEtAl21}, which provides performance data for tradition
     \includegraphics{figures/10/figures/analysis/hpobench_runtime_box_k25.pdf}
     \caption{$k=25$}
   \end{subfigure}
-  \caption{HPOBench portfolio pre-selection by portfolio size. The top row reports normalised pre-selection score over held-out datasets, where 0 corresponds to SBS and 1 corresponds to VBS; higher is better. The bottom row reports pre-selector running time in seconds on a logarithmic scale; lower is better.}
+  \caption{HPOBench portfolio pre-selection by portfolio size. The top row reports normalised pre-selection score over held-out datasets, where 0 corresponds to SBS and 1 corresponds to VBS; higher is better. The score axes are linear between $-1$ and $1$ and logarithmic outside this interval, retaining extreme negative observations. The bottom row reports pre-selector running time in seconds on a logarithmic scale; lower is better.}
   \label{fig:ch10:hpobench_normalized_score_box}
 \end{figure*}
 
@@ -792,7 +792,7 @@ We evaluated portfolio pre-selectors on each ASlib scenario using the pre-define
     \includegraphics{figures/10/figures/analysis/preselection_normalized_score_k50.pdf}
     \caption{$k=50$}
   \end{subfigure}
-  \caption{ASlib pre-selection quality by portfolio size. Each box summarizes normalised held-out pre-selection score over folds and scenarios; higher is better.}
+  \caption{ASlib pre-selection quality by portfolio size. Each box summarizes normalised held-out pre-selection score over folds and scenarios; higher is better. For $k=2,5$, the score axes are linear between $-1$ and $1$ and logarithmic outside this interval to retain extreme negative observations.}
   \label{fig:ch10:aslib_preselection_a}
 \end{figure*}
 
