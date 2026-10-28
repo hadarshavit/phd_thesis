@@ -9,7 +9,7 @@
 Empirical performance models (EPMs) are data-driven predictive models that learn the relationship between problem instance features and an algorithm performance metric, such as expected running time or solution quality. They serve as critical components in automated algorithm selection, configuration, and parameter tuning across various domains, including compiler optimisation, database query optimisation, and machine learning.
 
 While traditional EPMs predict a single expected value (typically mean running time), they fail to account for the stochastic nature of modern randomised algorithms. For combinatorial search and optimisation, state-of-the-art solvers rely heavily on randomisation to navigate vast search spaces, resulting in running times that vary substantially across runs on the same instance~\citep{HooStu04, EggEtAl18}. Consequently, capturing and explaining the full performance distribution, rather than just the mean, can reveal important aspects of the target algorithm which are overlooked when looking at the mean alone.
-To address this, approaches such as DistNet~\citep{EggEtAl18} model full per-instance running time distributions. 
+To address this, approaches such as DistNet~\citep{EggEtAl18} model full per-instance running time distributions.
 
 However, while EPMs have traditionally been used to analyse algorithm behaviour (see, \emph{e.g.},~\citealp{HutEtAl13}), these techniques are restricted to single-value predictors and analyse algorithm performance based on the mean or single runs only. This creates a fundamental discrepancy: the algorithms of interest exhibit complex, stochastic distributions, yet their explanations are derived from simplified, deterministic approximations. As a result, critical behaviours like tail risks and performance variance remain obscure.
 
@@ -28,16 +28,16 @@ In this section, we formally define empirical performance models, review existin
 \subsection{Empirical performance models}
 \label{sec:ch09:epm}
 
-Given an algorithm $\mathcal{A}$ that operates on 
+Given an algorithm $\mathcal{A}$ that operates on
 % \hh{slightly modified:}
-instances $I\in\mathcal{I}$, with an associated feature vector $\mathbf{z}_{I}\in\mathcal{F}$ that describes $I$, and a measured performance $p_I\in\mathcal{P}$ (\emph{e.g.}, running time, solution quality or accuracy), an empirical performance model (EPM) is a predictor 
+instances $I\in\mathcal{I}$, with an associated feature vector $\mathbf{z}_{I}\in\mathcal{F}$ that describes $I$, and a measured performance $p_I\in\mathcal{P}$ (\emph{e.g.}, running time, solution quality or accuracy), an empirical performance model (EPM) is a predictor
 $f: \mathcal{F} \to \mathcal{P}$ %\aj{inline to save space}
 % \begin{equation}
 %     f: \mathcal{F} \to \mathcal{P}
 % \end{equation}
-that generalises from a set of observed pairs $\mathcal{D}_\text{train}=\{(\mathbf{z}_{I},p_I) \mid I\in\mathcal{I}_\text{train}\}$ to unseen instances $\mathcal{D}_\text{test}=\{(\mathbf{z}_{I},p_I) \mid I\in\mathcal{I}_\text{test}\}$. 
+that generalises from a set of observed pairs $\mathcal{D}_\text{train}=\{(\mathbf{z}_{I},p_I) \mid I\in\mathcal{I}_\text{train}\}$ to unseen instances $\mathcal{D}_\text{test}=\{(\mathbf{z}_{I},p_I) \mid I\in\mathcal{I}_\text{test}\}$.
 
-EPMs have been developed for a wide range of tasks, including automated algorithm selection~\citep{XuEtAl08, Kotthoff16}, algorithm configuration and parameter tuning~\citep{HutEtAl12, HutEtAl06}, data centre and cloud scheduling~\citep{LeeEtAl25, IslEtAl12, SaxEtAl23, PhaEtAl20}, compiler optimisation~\citep{YotEtAl03, AshEtAl19}, and database query optimisation~\citep{WuEtAl13}. EPMs require a set of features describing instances as an input to the model. For $\mathcal{NP}$-complete problems, high-level properties of instances are encoded to serve as an instance identifier, such as the SATzilla features for propositional satisfiability (SAT)~\citep{HutEtAl14,ShaHoo24} and causal-graph or planning-graph features for automated planning~\citep{FawEtAl14}. 
+EPMs have been developed for a wide range of tasks, including automated algorithm selection~\citep{XuEtAl08, Kotthoff16}, algorithm configuration and parameter tuning~\citep{HutEtAl12, HutEtAl06}, data centre and cloud scheduling~\citep{LeeEtAl25, IslEtAl12, SaxEtAl23, PhaEtAl20}, compiler optimisation~\citep{YotEtAl03, AshEtAl19}, and database query optimisation~\citep{WuEtAl13}. EPMs require a set of features describing instances as an input to the model. For $\mathcal{NP}$-complete problems, high-level properties of instances are encoded to serve as an instance identifier, such as the SATzilla features for propositional satisfiability (SAT)~\citep{HutEtAl14,ShaHoo24} and causal-graph or planning-graph features for automated planning~\citep{FawEtAl14}.
 
 For stochastic algorithms, the performance of $\mathcal{A}$ on a fixed instance $I$ is a random variable. Traditional EPMs handle this stochasticity by either modelling an aggregate statistic calculated from repeated runs (\emph{e.g.}, the empirical mean or median) or training directly on noisy, single-run observations. In both cases, the EPM outputs a single scalar value, discarding all information about the variance and shape of the underlying distribution.
 
@@ -54,12 +54,12 @@ Crucially, all of these techniques assume a scalar-valued prediction target. Bec
 \section{Explainability of performance distribution predictions}
 \label{sec:ch09:explainability}
 
-Our EPM predicts the parameters $\boldsymbol\theta$ of a given parametric family (\emph{e.g.,} log-normal or inverse Gaussian) as a function of instance features, \emph{i.e.}, $\boldsymbol\theta=f(\mathbf{z}_I)$. Each summary statistic $s$ is then a function of these parameters, $s=h_s(\boldsymbol\theta)$. 
+Our EPM predicts the parameters $\boldsymbol\theta$ of a given parametric family (\emph{e.g.,} log-normal or inverse Gaussian) as a function of instance features, \emph{i.e.}, $\boldsymbol\theta=f(\mathbf{z}_I)$. Each summary statistic $s$ is then a function of these parameters, $s=h_s(\boldsymbol\theta)$.
 % \aj{Shouldn't we explicitly define/introduce the hat variants of symbols as estimators of the true values?}
 Therefore, we can represent the summary statistic function $g_s$ given instance features $\mathbf{z}_I$ as
 % \begin{equation*}
     $g_s(\mathbf{z}_I) = h_s(f(\mathbf{z}_I))$.
-To explain the distribution predictions, we analyse how instance features affect the following summary statistics of the predicted distribution: 
+To explain the distribution predictions, we analyse how instance features affect the following summary statistics of the predicted distribution:
 \begin{itemize}
     \item \emph{mean:} the expected (average) performance (\emph{e.g.,} running time).
     \item \emph{variance:} how strongly performance fluctuates around the mean, \emph{i.e.,} overall spread.
@@ -68,7 +68,7 @@ To explain the distribution predictions, we analyse how instance features affect
     \item \emph{interquartile range (IQR):} the spread between the $25^{th}$ and $75^{th}$ percentiles, robust to extreme runs.
 \end{itemize}
 % \hh{should we stick to performance here and in the remainder of Section 3 + 4 and switch to running time in Section 5?}\aj{done}
-Together, these five statistics provide a compact and complementary characterisation of a predicted performance distribution: mean captures typical performance (location), variance captures overall uncertainty (scale), skewness and kurtosis describe asymmetry and tail heaviness (possibility for outliers), and the IQR provides a robust spread measure that is less sensitive to extreme runs. 
+Together, these five statistics provide a compact and complementary characterisation of a predicted performance distribution: mean captures typical performance (location), variance captures overall uncertainty (scale), skewness and kurtosis describe asymmetry and tail heaviness (possibility for outliers), and the IQR provides a robust spread measure that is less sensitive to extreme runs.
 
 Focusing on summary statistics serves two purposes. First, it yields explanations that are directly actionable: for example, practitioners may prefer algorithms whose predicted mean is low \emph{and} whose predicted upper-tail behaviour is mild, even if the average performance is similar. Second, it makes the explanation problem well-posed across different distribution families: regardless of whether we predict a log-normal, inverse Gaussian, or another parametric family, the statistics above provide a common interface for interpretation.
 
@@ -109,8 +109,8 @@ In other words, the usage of statistics allows for a higher degree of explainabi
 % \end{itemize}
 % \hh{the following is very good; if we are pressed for space, IMO, the paragraph before can be condensed into one sentence mentioning the (widely used) summary statistics.}
 % Using this low-dimensional set of metrics allows us to apply
-% % \aj{allows us to apply} 
-% % lets us apply 
+% % \aj{allows us to apply}
+% % lets us apply
 % standard, model-agnostic explainability tools to interpretable quantities, rather than attempting to directly attribute effects on the full predicted distribution to instance features.
 % \hh{attribute to what? instance features or characteristics?}
 
@@ -120,7 +120,7 @@ In other words, the usage of statistics allows for a higher degree of explainabi
 \subsection{Permutation importance}
 \label{sec:ch09:perm_importance}
 
-% Our EPM predicts the parameters $\boldsymbol\theta$ of a given parametric family (\emph{e.g.,} log-normal or inverse Gaussian) as a function of instance features, \emph{i.e.}, $\boldsymbol\theta=f(\mathbf{z}_I)$. Each summary statistic $s$ (such as the mean and variance) is then a function of these parameters, $s=h_s(\boldsymbol\theta)$. 
+% Our EPM predicts the parameters $\boldsymbol\theta$ of a given parametric family (\emph{e.g.,} log-normal or inverse Gaussian) as a function of instance features, \emph{i.e.}, $\boldsymbol\theta=f(\mathbf{z}_I)$. Each summary statistic $s$ (such as the mean and variance) is then a function of these parameters, $s=h_s(\boldsymbol\theta)$.
 % % \aj{Shouldn't we explicitly define/introduce the hat variants of symbols as estimators of the true values?}
 % Therefore, we can represent the summary statistic function $g_s$ given instance features $\mathbf{z}_I$ as
 % % \begin{equation*}
@@ -128,28 +128,28 @@ In other words, the usage of statistics allows for a higher degree of explainabi
 % \end{equation*}
 
 
-% The first explainability property we look at is feature importance: for each statistic, we would like to know \emph{which features} are the most influential. For this purpose, 
-To understand \emph{which features} are the most influential for each statistic, we apply permutation importance~\citep{Breiman01} to $g_s$. 
+% The first explainability property we look at is feature importance: for each statistic, we would like to know \emph{which features} are the most influential. For this purpose,
+To understand \emph{which features} are the most influential for each statistic, we apply permutation importance~\citep{Breiman01} to $g_s$.
 The method randomly shuffles the values of one feature across instances, breaking any association between that feature and the statistic-specific target, and measures the resulting increase in the target metric.
 As a target metric, we use mean squared error (MSE): for a statistic $s$, we measure predictive accuracy by the mean squared error between the predicted statistic $g_s(\mathbf{z}_I)$ and the corresponding statistic estimated from the observed running time distribution of instance $I$.
 Using this metric, important features yield a substantially larger increase in MSE, while irrelevant features cause negligible changes.
-% The method operates by randomly shuffling the values of a single feature across observations while keeping all other features fixed, thereby breaking any associations between that feature and the target without altering its marginal distribution. 
-% The resulting decrease in EPM performance reflects the importance of the feature: features essential for accurate predictions yield substantial performance drops when permuted, while irrelevant features cause negligible changes. 
-% We define the EPM performance as a mean squared error (MSE) loss function. 
+% The method operates by randomly shuffling the values of a single feature across observations while keeping all other features fixed, thereby breaking any associations between that feature and the target without altering its marginal distribution.
+% The resulting decrease in EPM performance reflects the importance of the feature: features essential for accurate predictions yield substantial performance drops when permuted, while irrelevant features cause negligible changes.
+% We define the EPM performance as a mean squared error (MSE) loss function.
 This approach yields one importance ranking per statistic, allowing us to separate drivers of central tendency (mean) from drivers of uncertainty and tail behaviour (variance, IQR, skewness, kurtosis).
-Although permutation importance has been used previously for single-value EPMs, adjusting it to be applicable to performance distribution prediction is novel. 
+Although permutation importance has been used previously for single-value EPMs, adjusting it to be applicable to performance distribution prediction is novel.
 % Moreover, to provide richer explanations, we introduce the usage of statistics instead of simply explaining the output of the model.
 
 % statistics of the predicted distributions is novel and provides richer explanations of algorithm behaviour.
 % }
 % On a held-out set $\mathcal{D}_{\text{test}}$ we compute a baseline loss as mean squared error
-% % \aj{as mean squared error} 
+% % \aj{as mean squared error}
 % (MSE):
 % \begin{equation*}
 % \mathcal{L}_s = \frac{1}{|\mathcal{D}_{\text{test}}|}\sum_{(\mathbf{z}_I, s_I)\in \mathcal{D}_{\text{test}}} \bigl(g_s(\mathbf{z}_I) - s_I\bigr)^2,
 % \end{equation*}
-% where $s_I$ is the observed statistic (computed from runs by first fitting distribution parameters for instance $I$ 
-% % \aj{instance is $i$ here and $I$ in Sec 2.1, check for consistency later} 
+% where $s_I$ is the observed statistic (computed from runs by first fitting distribution parameters for instance $I$
+% % \aj{instance is $i$ here and $I$ in Sec 2.1, check for consistency later}
 % and then applying $h_s$). Then, for each feature $z_{I,j}$ (\emph{i.e.,} feature with position $j$ in the feature vector $\mathbf{z}_I$), we draw a random permutation $\pi$ of the test instances, replace $z_{I,j}$ by $z_{\pi(I),j}$ (while keeping $\mathbf{z}_{I,-j}$, \emph{i.e.,} all features except $z_{I,j}$, fixed),
 % % \aj{I would replace $z$ by $\mathbf{z}$ everywhere, unless $z$ is only one feature within the feature vector $\mathbf{z}$, but then why do we use $j$ as one feature? We need to check this together tomorrow.}
 % and recompute the loss:
@@ -158,7 +158,7 @@ Although permutation importance has been used previously for single-value EPMs, 
 % \end{equation*}
 % We define the permutation importance as $\Delta_{s,j}=\mathcal{L}_{s,j}^{\text{perm}}-\mathcal{L}_s$, averaged over multiple permutations. This yields one importance ranking per statistic, allowing us to separate drivers of central tendency (mean) from drivers of uncertainty and tail behaviour (variance, IQR, skewness, kurtosis).
 % We use permutation importance to obtain a global ranking of influential features for each statistic, and ICE plots to visualise potentially non-linear and heterogeneous effects at the instance level. We do not use SHAP in this work because computing Shapley-value explanations would require substantially more model evaluations per statistic (and per instance) and is therefore prohibitively expensive in our setting.
-% Additionally, 
+% Additionally,
 % We note that, although permutation importance has been used before to quantify the importance of features on the direct prediction of models, here, we use it for the first time to quantify the effect on a statistic of the distribution, hence providing a more effective explanation of the predictions.
 
 
@@ -166,14 +166,14 @@ Although permutation importance has been used previously for single-value EPMs, 
 \label{sec:ch09:ice_plots}
 
 To understand \emph{how} a feature affects a statistic through the predicted distribution parameters, we use individual conditional expectation (ICE) curves~\citep{GolEtAl15} for $g_s$.
-% the statistic predictor $g_s(\mathbf{z}_I)=h_s(f(\mathbf{z}_I))$. 
+% the statistic predictor $g_s(\mathbf{z}_I)=h_s(f(\mathbf{z}_I))$.
 ICE curves trace the predicted statistic per observation as one feature varies across its domain while all others remain fixed, preserving instance-level heterogeneity, which partial dependence plots (PDPs) would aggregate over.
-We use permutation importance for global feature importance ranking per statistic, and ICE curves as an exploratory tool to characterise the shape and heterogeneity of feature effects at an instance level, since varying one feature while keeping all others fixed may produce feature combinations that are unlikely under the data distribution when features are strongly correlated. 
+We use permutation importance for global feature importance ranking per statistic, and ICE curves as an exploratory tool to characterise the shape and heterogeneity of feature effects at an instance level, since varying one feature while keeping all others fixed may produce feature combinations that are unlikely under the data distribution when features are strongly correlated.
 As the statistics can vary widely across instances, we use centred ICE curves to facilitate visual comparison, subtracting the predicted value at the minimum observed feature value.
 We do not use SHAP since we explain a statistic $s = h_s(\boldsymbol\theta)$ that is a post-processed function of the predicted distribution parameters rather than the raw model predictions themselves. Optimised tree-based estimators, like TreeSHAP~\citep{LunEtAl20}, cannot be applied in such cases. Consequently, computing Shapley values would require sample-heavy model-agnostic estimators, such as KernelSHAP~\citep{StrKon14}, which require a prohibitively large number of model evaluations per statistic and instance in our setting.
 % \changed{
-% ICE curves visualise how a prediction of the EPM for a specific instance changes as a single feature is varied across its domain while all other features remain fixed at their observed values. 
-% For each observation, an ICE curve traces the predicted outcome as a function of one feature, effectively plotting the partial dependence of the prediction of that instance on the feature of interest. 
+% ICE curves visualise how a prediction of the EPM for a specific instance changes as a single feature is varied across its domain while all other features remain fixed at their observed values.
+% For each observation, an ICE curve traces the predicted outcome as a function of one feature, effectively plotting the partial dependence of the prediction of that instance on the feature of interest.
 % Unlike partial dependence plots (PDPs), which aggregate these relationships by averaging across all instances, ICE curves preserve the heterogeneity in feature effects, revealing whether the influence of the feature is uniform across instances or varies substantially depending on the values of other covariates.
 
 % \hh{slightly modified (for conciseness):}
@@ -216,12 +216,12 @@ We do not use SHAP since we explain a statistic $s = h_s(\boldsymbol\theta)$ tha
 Preliminary experiments showed that applying permutation importance and ICE curves to DistNet produced numerical instabilities (such as \textsc{Inf} and \textsc{Nan} predictions), motivating a more robust and reliable predictor.
 To this end, we adopt XGBoost~\citep{CheGue16} due to its strong performance on tabular data and its support for custom objectives.
 Conceptually, our approach follows distributional regression, as in GAMLSS~\citep{RigSta05}, where each distribution parameter is modelled as a function of instance features; it is also closely related to the general probabilistic predictor XGBoostLSS~\citep{Marz19}.
-% During preliminary experiments, we have found that using DistNet with 
+% During preliminary experiments, we have found that using DistNet with
 % permutation importance and ICE curves
 % % the aforementioned methods
 % % \hh{better to mention them again -- permutation importance and ICE curves?}
 % resulted in numerical instabilities.
-% % infinite predictions \aj{infinite predictions is a bit weird, might need to clarify} 
+% % infinite predictions \aj{infinite predictions is a bit weird, might need to clarify}
 % Therefore, we needed to create a more robust and reliable performance distribution predictor for our task.
 % We decided to use XGBoost~\citep{CheGue16} as a machine learning model, due to its wide success for tabular data and its flexibility in supporting custom objectives. Conceptually, our approach follows the idea of distributional regression, as in GAMLSS~\citep{RigSta05}, where each distribution parameter is modelled as a function of covariates; it is also closely related to XGBoostLSS~\citep{Mrz2019}.
 
@@ -230,7 +230,7 @@ Let $\mathcal{D}$ denote a parametric family with density (or mass) function $p_
 % \changed{
 % performance values of individual runs.
 % }
-% the individual runs. 
+% the individual runs.
 % \hh{running times? performance scores of individual runs?}
 % \aj{In the following, I assume $i$ is an instance, but will wait to discuss this before modifying.}
 For an observed performance value $y_{I,t}\in\mathcal{Y}$ on run $t$ of instance $I$ with predicted parameters $\boldsymbol\theta_I=\boldsymbol\theta(\mathbf{z}_I)$, we minimise the empirical mean over the training set of the per-observation loss, defined as:
@@ -242,8 +242,8 @@ For an observed performance value $y_{I,t}\in\mathcal{Y}$ on run $t$ of instance
 Positive distribution parameters are enforced via the exponential transform applied to model outputs.
 We found the optimisation sensitive to the initial parameter predictions and therefore initialise each parameter with a constant $\boldsymbol\theta_0$ obtained by directly minimising the negative log-likelihood on the training data with respect to $\boldsymbol\theta$ (no feature dependence), using L-BFGS~\citep{LiuNoc89}.
 This per-parameter base score allows for improved convergence.
-% with respect to $\boldsymbol\theta$ (no dependence on $\mathbf{z}_I$). We solve this low-dimensional problem with L-BFGS~\citep{LiuEtAl89} and use the resulting $\boldsymbol\theta_0$ as 
-% the initial prediction (base score) of the model 
+% with respect to $\boldsymbol\theta$ (no dependence on $\mathbf{z}_I$). We solve this low-dimensional problem with L-BFGS~\citep{LiuEtAl89} and use the resulting $\boldsymbol\theta_0$ as
+% the initial prediction (base score) of the model
 % for all instances.
 
 % \paragraph{Separate trees per parameter.}
@@ -251,8 +251,8 @@ This per-parameter base score allows for improved convergence.
 
 % XGBoost requires first- and second-order derivatives of the objective with respect to the predicted outputs. Since different distribution parameters can induce gradients on very different scales (and can become extreme in the tails), we normalise the per-parameter derivatives using a robust scale estimate: for each parameter component $k$, we divide $g_{I,k}$ and $h_{I,k}$ by $\mathrm{MAD}(\{g_{\cdot,k}\})+\varepsilon$, where $\mathrm{MAD}$ \aj{I don't think the $\cdot$ reflects well in the formula. Shouldn't it be $I$?} denotes the median absolute deviation and $\varepsilon$ is a small constant for numerical stability. We note that DistNet utilised gradient clipping, small batches and small learning rates to cope with the unstable gradients.
 
-% We found the optimisation to be sensitive to the initial parameter predictions. We therefore initialise the model for each parameter with constant starting values $\boldsymbol\theta_0$ obtained by directly minimising the negative log-likelihood on the training data with respect to $\boldsymbol\theta$ (no dependence on $\mathbf{z}_I$). We solve this low-dimensional problem with L-BFGS~\citep{LiuEtAl89} and use the resulting $\boldsymbol\theta_0$ as 
-% the initial prediction (base score) of the model 
+% We found the optimisation to be sensitive to the initial parameter predictions. We therefore initialise the model for each parameter with constant starting values $\boldsymbol\theta_0$ obtained by directly minimising the negative log-likelihood on the training data with respect to $\boldsymbol\theta$ (no dependence on $\mathbf{z}_I$). We solve this low-dimensional problem with L-BFGS~\citep{LiuEtAl89} and use the resulting $\boldsymbol\theta_0$ as
+% the initial prediction (base score) of the model
 % for all instances.
 % \section{Experimental evaluation}
 
@@ -263,7 +263,7 @@ This per-parameter base score allows for improved convergence.
 We empirically evaluated our approach on seven scenarios introduced by~\citet{EggEtAl18}: six from SAT solving and one from the automated planning domain, each with 2\,000--12\,000 instances and 100 solver runs per instance.
 The performance metric is the running time of the solver; running times, instance features, and preprocessing steps follow~\citet{EggEtAl18}.
 Models predict log-normal distribution parameters;
-% found by~\citet{EggEtAl18} to be well-suited for the scenarios at hand; 
+% found by~\citet{EggEtAl18} to be well-suited for the scenarios at hand;
 results for other parametric distribution families, such as inverse Gaussian, can be found in our GitHub repository.
 % \begin{itemize}
 %     \item CLASP-Factoring
@@ -276,7 +276,7 @@ results for other parametric distribution families, such as inverse Gaussian, ca
 % \changed{
 % As in previous work, we considered running time of the respective solver as performance metric.
 % }
-% the target metric is 
+% the target metric is
 % running time of the solver.
 % \hh{better: as in previous work, we considered running time of the respective solver as performance metric. (this is then the point where we switch from performance to running time.)}
 % We used the running times and instance features provided by \citet{EggEtAl18} and applied the same preprocessing.
@@ -285,16 +285,14 @@ Predictive performance was estimated by 10-fold cross-validation over instances 
 % \aj{add here log-normal dist info}
 
 % \hh{modified -- check:}
-% To optimise the hyperparameters of XGBoost, we used 
-XGBoost hyperparameters were optimised with SMAC3~\citep{LinEtAl22b} with a budget of 100 evaluated configurations, minimising the negative log-likelihood
-% negative log-likelihood (NLL) 
-on a validation set obtained from randomly sampling 20\% of the instances. 
-The configuration space, along with additional details on the XGBoost training, %\hh{why plural?} 
+% To optimise the hyperparameters of XGBoost, we used
+\changed{We optimised XGBoost hyperparameters with SMAC3~\citep{LinEtAl22b}, evaluating 100 configurations and minimising negative log-likelihood on a validation set containing a random 20\% of the instances.}
+The configuration space, along with additional details on the XGBoost training, %\hh{why plural?}
 can be found in our GitHub repository.
 % in the appendix.
 % We trained XGBoost using 1 CPU core for 1, 2, 4, 8 and 16 runs per instance; 4 cores for 32 and 64 runs; and 8 cores for 100 runs.
 % The Kolmogorov-Smirnov (KS) distance was computed as the maximum absolute difference between the predicted and empirical cumulative distribution functions, evaluated on the test set observations.
-DistNet was run with default hyperparameters, as tuning would require approximately $100$ hours per fold per scenario and was infeasible. 
+DistNet was run with default hyperparameters, as tuning would require approximately $100$ hours per fold per scenario and was infeasible.
 We used 1000 random permutations per feature to compute permutation importance, averaging the resulting importance scores.
 In our feature importance analysis, we used the models trained on 100 runs per instance on the first cross-validation fold.
 The ICE curves were computed on a 50-point equally spaced grid over the observed feature range.
@@ -303,14 +301,14 @@ We conducted our experiments on a 19-node compute cluster (2 AMD EPYC 7543 32-co
 
 % For DistNet, we used default hyperparameters, since training typically requires up to one hour, therefore tuning it with 100 experiments takes 100 hours for one fold with one scenario, which would have been infeasible. Moreover, DistNet cannot be parallelised, due to the batch-size requirement of 16, as noted by \citet{EggEtAl18}.
 
-% We implemented all algorithms in Python using PyTorch and XGBoost within the ASF library~\citep{ShaHoo25}. 
+% We implemented all algorithms in Python using PyTorch and XGBoost within the ASF library~\citep{ShaHoo25}.
 
-% For permutation importance, we used 10 random permutations per feature and averaged the resulting importance scores. 
+% For permutation importance, we used 10 random permutations per feature and averaged the resulting importance scores.
 % Importance analysis is based on models trained on 100 samples on the first fold of the cross-validation data over instances.
-% ICE curves were computed on a grid of 50 equally spaced points spanning the observed feature range. 
+% ICE curves were computed on a grid of 50 equally spaced points spanning the observed feature range.
 % For better visualisation, we present centred ICE curves: for each instance, we subtracted the predicted value at the minimum observed feature value from all points along that instance, so that all curves start at zero at the leftmost point. This transformation preserves the shape of each curve, while making relative changes across the feature range more visible and facilitating comparison of heterogeneous effects across instances.
 
-% We implemented all algorithms in Python, using PyTorch and XGBoost within the ASF library~\citep{ShaHoo25}. 
+% We implemented all algorithms in Python, using PyTorch and XGBoost within the ASF library~\citep{ShaHoo25}.
 % All experiments were conducted on a compute cluster with 19 nodes; each node comprises two AMD EPYC 7543 32-core processors (512\,MB L3 cache) and 1\,TB RAM, running Rocky Linux 9.
 
 % \hs{we need to write somewhere that the importance analysis is based on the models trained on 100 samples on the first fold}
@@ -318,9 +316,9 @@ We conducted our experiments on a 19-node compute cluster (2 AMD EPYC 7543 32-co
 \label{sec:ch09:results}
 % \changed{
 In this section, we present the results of our experiments.
-First, we present evidence that, across the seven scenarios, DistNet achieves lower KS distances in the low-data regime (1–8 runs per instance), whereas XGBoost achieves comparable prediction quality with 16 or more runs per instance. At 100 runs per instance, XGBoost outperforms DistNet on four of the seven scenarios.
+\changed{First, we compare XGBoost and DistNet across all seven scenarios, examining both prediction quality and final-fit CPU time under log-normal and inverse-Gaussian distribution assumptions. The relative performance depends on the scenario, observation budget, and distribution family.}
 % \hh{minor rewording:}
-% First, we present evidence that, across the seven scenarios we considered, XGBoost performs on par with DistNet in terms of distribution prediction quality, although DistNet exhibits stronger performance in low-data regimes. 
+% First, we present evidence that, across the seven scenarios we considered, XGBoost performs on par with DistNet in terms of distribution prediction quality, although DistNet exhibits stronger performance in low-data regimes.
 % \hh{does this mean `stronger' than XGBoost? If so, is this offset by XGBoost outperforming DistNet elsewhere? I recommend to preview the results in a little bit more nuance here, while keeping it brief.}
 % \hh{could we not rather say here already what our main observation is? as it stands, this intro sounds pretty boring. same for the next sentence}
 Then, we analyse the explainability of the models on two selected scenarios in detail, Spear-SWGCP (SAT) and LPG-Zenotravel (automated planning), each exhibiting a distinct performance profile and being governed by very different instance features.
@@ -329,164 +327,331 @@ In both scenarios, different features drive the shape and scale statistics of th
 
 \subsection{Prediction quality}
 
-% CAS uses the pos key for float placement.
-\begin{figure}[!htbp]
+\changed{\cref{fig:ch09:genperf} shows log-normal prediction quality over ten instance-level cross-validation folds. Boxes summarise the fold-level scores, rather than individual solver runs. We retain one benchmark result per fold and training budget; repeated fold-zero runs used for explanation experiments are excluded. At 100 observations per instance, XGBoost has a lower median KS distance on six of the seven scenarios; DistNet has the lower median on Spear-QCP. The differences are generally modest: for example, the medians are 0.254 versus 0.281 on Clasp-Factoring and 0.176 versus 0.177 on LPG-Zenotravel, for XGBoost and DistNet respectively. DistNet often has an advantage with few observations, particularly on Spear-QCP and YalSAT-QCP, although Clasp-Factoring is an exception. More observations therefore help in several scenarios, but neither improvement nor the model ranking is uniform across scenarios and budgets.}
+
+\changed{\cref{fig:ch09:lognorm_time} compares the CPU cost of the final model fits. At 100 observations, the median XGBoost fit takes approximately 1934 CPU seconds on Saps-CV-VAR and 1299 CPU seconds on LPG-Zenotravel, compared with 3591 and 3588 CPU seconds for DistNet. These correspond to speedups of approximately $1.9\times$ and $2.8\times$. These timings exclude hyperparameter optimisation and explanation computation; they do not measure the cost of the complete experimental pipeline.}
+
+\begin{figure}[p]
     \centering
-    \begin{subfigure}{0.3\linewidth}
-        \includegraphics[width=\linewidth]{figures/09/figures/performances/clasp_factoring_lognorm_val_ks_d_vs_obs.pdf}
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics{figures/09/figures/performances/clasp_factoring_lognorm_val_ks_d_vs_obs.pdf}
         \caption{Clasp-Factoring}
         \label{fig:ch09:clasp_factoring_ks_d_vs_obs}
-    \end{subfigure}
-    \begin{subfigure}{0.3\linewidth}
-        \includegraphics[width=\linewidth]{figures/09/figures/performances/saps-CVVAR_lognorm_val_ks_d_vs_obs.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics{figures/09/figures/performances/saps-CVVAR_lognorm_val_ks_d_vs_obs.pdf}
         \caption{Saps-CV-VAR}
         \label{fig:ch09:saps_cvvar_ks_d_vs_obs}
     \end{subfigure}
-    \begin{subfigure}{0.3\linewidth}
-        \includegraphics[width=\linewidth]{figures/09/figures/performances/spear_qcp_lognorm_val_ks_d_vs_obs.pdf}
+    \par\smallskip
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics{figures/09/figures/performances/spear_qcp_lognorm_val_ks_d_vs_obs.pdf}
         \caption{Spear-QCP}
         \label{fig:ch09:spear_qcp_ks_d_vs_obs}
-    \end{subfigure}
-    \begin{subfigure}{0.3\linewidth}
-        \includegraphics[width=\linewidth]{figures/09/figures/performances/yalsat_qcp_lognorm_val_ks_d_vs_obs.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics{figures/09/figures/performances/yalsat_qcp_lognorm_val_ks_d_vs_obs.pdf}
         \caption{YalSAT-QCP}
         \label{fig:ch09:yalsat_qcp_ks_d_vs_obs}
     \end{subfigure}
-    \begin{subfigure}{0.3\linewidth}
-        \includegraphics[width=\linewidth]{figures/09/figures/performances/spear_swgcp_lognorm_val_ks_d_vs_obs.pdf}
+    \par\smallskip
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics{figures/09/figures/performances/spear_swgcp_lognorm_val_ks_d_vs_obs.pdf}
         \caption{Spear-SWGCP}
         \label{fig:ch09:spear_swgcp_ks_d_vs_obs}
-    \end{subfigure}
-    \begin{subfigure}{0.3\linewidth}
-        \includegraphics[width=\linewidth]{figures/09/figures/performances/yalsat_swgcp_lognorm_val_ks_d_vs_obs.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics{figures/09/figures/performances/yalsat_swgcp_lognorm_val_ks_d_vs_obs.pdf}
         \caption{YalSAT-SWGCP}
         \label{fig:ch09:yalsat_swgcp_ks_d_vs_obs}
     \end{subfigure}
-    \begin{subfigure}{0.3\linewidth}
-        \includegraphics[width=\linewidth]{figures/09/figures/performances/lpg-zeno_lognorm_val_ks_d_vs_obs.pdf}
+    \par\smallskip
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics{figures/09/figures/performances/lpg-zeno_lognorm_val_ks_d_vs_obs.pdf}
         \caption{LPG-Zenotravel}
         \label{fig:ch09:lpg_zeno_ks_d_vs_obs}
     \end{subfigure}
-    \begin{subfigure}{0.3\linewidth}
-        \includegraphics[width=\linewidth]{figures/09/figures/performances/saps-CVVAR_lognorm_cpu_training_time_vs_obs.pdf}
-        \caption{Saps-CV-VAR (time)}
-        \label{fig:ch09:saps_cvvar_cpu_training_time_vs_obs}
-    \end{subfigure}
-    \begin{subfigure}{0.3\linewidth}
-        \includegraphics[width=\linewidth]{figures/09/figures/performances/lpg-zeno_lognorm_cpu_training_time_vs_obs.pdf}
-        \caption{LPG-Zenotravel (time)}
-        \label{fig:ch09:lpg_zeno_cpu_training_time_vs_obs}
-    \end{subfigure}
-
-    \begin{subfigure}{1.0\linewidth}
-    \centering
-        \includegraphics[trim={6.2cm 4.3cm 0cm 0.0cm},clip]{figures/09/figures/performances/legend.pdf}
-        % \caption{Caption}
-    \end{subfigure}
-    \caption{Prediction quality and training efficiency of XGBoost \emph{vs} DistNet. (a--g) KS distance between predicted and observed running time distributions as a function of the number of training observations per instance, across seven scenarios, predicting the parameters of a \emph{log-normal} distribution; lower is better. XGBoost (blue) performs on par with DistNet (red) across all scenarios, with notable exceptions in the low-data regime, where DistNet retains a performance edge. Both methods improve with more observations added. (h--i) CPU training time comparison on one SAT and one automated planning scenario. XGBoost requires less CPU training time than DistNet. 
-    % \hh{I would swap subfigures h and i, for consistency with the order in which they appear earlier.}
-    }
+    \par\smallskip
+    \includegraphics{figures/09/figures/performances/legend.pdf}
+    \caption[Log-normal prediction quality]{\changed{Log-normal prediction quality across seven scenarios. Boxes show variation over ten cross-validation folds, with medians, interquartile ranges, whiskers up to $1.5$ interquartile ranges, and individual outliers. Lower KS distance is better. Indigo, solid boxes denote XGBoost; rose, hatched boxes denote DistNet. All panels share a linear KS axis from 0 to 0.5.}}
     \label{fig:ch09:genperf}
 \end{figure}
 
-\crefrange{fig:ch09:clasp_factoring_ks_d_vs_obs}{fig:ch09:lpg_zeno_ks_d_vs_obs} show the predictive performance (in terms of KS distance) as a function of the number of training observations per instance for both XGBoost and DistNet across all seven scenarios.
-XGBoost achieves comparable KS distances to DistNet in the abundant-data regime ($\geq 16$ observations per instance), ultimately outperforming DistNet in four out of seven scenarios (Clasp-Factoring, Spear-QCP, YalSAT-QCP, and LPG-Zenotravel) by up to 12\% in terms of KS distance at 100 observations.
-DistNet retains an advantage in the low-data regime (1--8 observations per instance).
-Both methods improve steadily as more observations become available, with the largest gains between 1 and 16 runs per instance, after which performance begins to stagnate.
-The baseline difficulty varies across scenarios, with YalSAT-QCP and LPG-Zenotravel being easier to model (KS $< 0.20$ at 100 observations), while Saps-CV-VAR and Spear-SWGCP are more challenging (KS $\approx 0.28$--$0.32$ even at 100 observations).
+\FloatBarrier
 
-\crefrange{fig:ch09:saps_cvvar_cpu_training_time_vs_obs}{fig:ch09:lpg_zeno_cpu_training_time_vs_obs} show training time (in terms of CPU seconds over all used cores).
-XGBoost completes training with lower median CPU time than DistNet in both scenarios across all evaluated observation counts while achieving competitive prediction quality in the full-data regime.
-At 100 observations per instance, XGBoost uses 53.9\% and 36.7\% of the median CPU time required to train DistNet on Saps-CV-VAR and LPG-Zenotravel, respectively, corresponding to speedups of $1.86\times$ and $2.72\times$.
-% This computational efficiency is crucial, as it makes XGBoost compelling for applications where rapid model iteration is required, and enables the application of computationally intensive explainability methods that would be impractical with DistNet.
-
-To verify the robustness of our method across different distributional assumptions, we also evaluated it using the inverse Gaussian distribution as the target parametric distribution. The results (provided in the GitHub repository) show that the relative performance of XGBoost and DistNet remains highly consistent under this alternative family. When more data per instance is available (16 observations or more), XGBoost matches or slightly exceeds the predictive quality of DistNet on the same four scenarios.
-% XGBoost requires substantially less time to train compared to DistNet; while DistNet requires close to the full one-hour budget to train even with 8 observations per instance, XGBoost is far more efficient, completing training in up to 65\% of the DistNet time while achieving equivalent prediction quality.
-% \hh{can the previous statement  be made more precise (quantitative)?}
-% This computational efficiency makes XGBoost particularly attractive for practical applications where rapid model iteration is required, and critically enables the application of computationally intensive explainability methods that would be impractical with models with higher training effort.
-% \begin{figure*}[t]
-%     \centering
-%     \begin{subfigure}{0.195\linewidth}
-%         \includegraphics[width=\linewidth]{figures/performances/clasp_factoring_lognorm_val_nllh_vs_obs.pdf}
-%         \caption{Caption}
-%     \end{subfigure}
-%     \begin{subfigure}{0.195\linewidth}
-%         \includegraphics[width=\linewidth]{figures/performances/saps-CVVAR_lognorm_val_nllh_vs_obs.pdf}
-%         \caption{Caption}
-%     \end{subfigure}
-%     \begin{subfigure}{0.195\linewidth}
-%         \includegraphics[width=\linewidth]{figures/performances/spear_qcp_lognorm_val_nllh_vs_obs.pdf}
-%         \caption{Caption}
-%     \end{subfigure}
-%     \begin{subfigure}{0.195\linewidth}
-%         \includegraphics[width=\linewidth]{figures/performances/yalsat_qcp_lognorm_val_nllh_vs_obs.pdf}
-%         \caption{Caption}
-%     \end{subfigure}
-%     \begin{subfigure}{0.195\linewidth}
-%         \includegraphics[width=\linewidth]{figures/performances/spear_swgcp_lognorm_val_nllh_vs_obs.pdf}
-%         \caption{Caption}
-%     \end{subfigure}
-%     \begin{subfigure}{0.195\linewidth}
-%         \includegraphics[width=\linewidth]{figures/performances/yalsat_swgcp_lognorm_val_nllh_vs_obs.pdf}
-%         \caption{Caption}
-%     \end{subfigure}
-%     \begin{subfigure}{0.195\linewidth}
-%         \includegraphics[width=\linewidth]{figures/performances/lpg-zeno_lognorm_val_nllh_vs_obs.pdf}
-%         \caption{Caption}
-%     \end{subfigure}
-
-%     \begin{subfigure}{1.0\linewidth}
-%     \centering
-%         \includegraphics[trim={3.7cm 3.7cm 2.4cm 0},clip]{figures/performances/legend.pdf}
-%         \caption{Caption}
-%     \end{subfigure}
-%     \caption{NLLH}
-%     \label{fig:placeholder}
-% \end{figure*}
-
-
-% \begin{figure}
-%     \centering
-%     % \begin{subfigure}{0.195\linewidth}
-%     %     \includegraphics[width=\linewidth]{figures/performances/clasp_factoring_lognorm_cpu_training_time_vs_obs.pdf}
-%     %     \caption{Caption}
-%     % \end{subfigure}
-%     \begin{subfigure}{0.49\linewidth}
-%         \includegraphics[width=0.8\linewidth]{figures/performances/saps-CVVAR_lognorm_cpu_training_time_vs_obs.pdf}
-%         \caption{Caption}
-%     \end{subfigure}
-%     % \begin{subfigure}{0.195\linewidth}
-%     %     \includegraphics[width=\linewidth]{figures/performances/spear_qcp_lognorm_cpu_training_time_vs_obs.pdf}
-%     %     \caption{Caption}
-%     % \end{subfigure}
-%     % \begin{subfigure}{0.195\linewidth}
-%     %     \includegraphics[width=\linewidth]{figures/performances/yalsat_qcp_lognorm_cpu_training_time_vs_obs.pdf}
-%     %     \caption{Caption}
-%     % \end{subfigure}
-%     % \begin{subfigure}{0.195\linewidth}
-%     %     \includegraphics[width=\linewidth]{figures/performances/spear_swgcp_lognorm_cpu_training_time_vs_obs.pdf}
-%     %     \caption{Caption}
-%     % \end{subfigure}
-%     % \begin{subfigure}{0.195\linewidth}
-%     %     \includegraphics[width=\linewidth]{figures/performances/yalsat_swgcp_lognorm_cpu_training_time_vs_obs.pdf}
-%     %     \caption{Caption}
-%     % \end{subfigure}
-%     \begin{subfigure}{0.49\linewidth}
-%         \includegraphics[width=0.8\linewidth]{figures/performances/lpg-zeno_lognorm_cpu_training_time_vs_obs.pdf}
-%         \caption{Caption}
-%     \end{subfigure}
-
-%     \begin{subfigure}{1.0\linewidth}
-%     \centering
-%         \includegraphics[trim={3.7cm 3.7cm 2.4cm 0.9cm},clip]{figures/performances/legend.pdf}
-%         % \caption{Caption}
-%     \end{subfigure}
-%     \caption{Time}
-%     \label{fig:cpu_training_time}
-% \end{figure}
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics{figures/09/figures/performances/saps-CVVAR_lognorm_cpu_training_time_vs_obs.pdf}
+        \caption{Saps-CV-VAR}
+        \label{fig:ch09:saps_cvvar_cpu_training_time_vs_obs}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics{figures/09/figures/performances/lpg-zeno_lognorm_cpu_training_time_vs_obs.pdf}
+        \caption{LPG-Zenotravel}
+        \label{fig:ch09:lpg_zeno_cpu_training_time_vs_obs}
+    \end{subfigure}
+    \par\smallskip
+    \includegraphics{figures/09/figures/performances/legend.pdf}
+    \caption[Log-normal CPU training time]{\changed{CPU time for log-normal final model fits on Saps-CV-VAR and LPG-Zenotravel. The vertical axes are logarithmic and differ in range. Boxes summarise ten folds; lower is better. Hyperparameter optimisation and explanation computation are excluded.}}
+    \label{fig:ch09:lognorm_time}
+\end{figure}
 
 
 
+\subsection{\changed{Sensitivity to the distribution family}}
+\label{sec:ch09:invgauss}
+
+\changed{The inverse-Gaussian results from the paper's online appendix are included in \cref{fig:ch09:invgauss_ks,fig:ch09:invgauss_nllh,fig:ch09:invgauss_crps,fig:ch09:invgauss_mass,fig:ch09:invgauss_time}. They use the same scenarios, training budgets, and instance-level folds as the log-normal comparison. Besides KS distance, we report negative log-likelihood (NLL), continuous ranked probability score (CRPS), the predicted probability mass outside the interval from zero to $1.5$ times the largest observed running time of each test instance, and CPU training time. Lower is better for KS distance, NLL, CRPS, and time. Outside-range mass is a tail diagnostic rather than a complete measure of predictive quality: a small value alone does not establish agreement with the observed distribution.}
+
+\changed{The KS results show that the model ranking depends on the distribution family. With 100 observations, XGBoost has a lower median KS distance on Clasp-Factoring (0.247 versus 0.743), Saps-CV-VAR (0.429 versus 0.844), YalSAT-QCP (0.268 versus 0.282), and LPG-Zenotravel (0.249 versus 0.947). DistNet has lower medians on Spear-QCP (0.246 versus 0.314), Spear-SWGCP (0.349 versus 0.456), and YalSAT-SWGCP (0.248 versus 0.263). The especially large DistNet errors on Clasp-Factoring, Saps-CV-VAR, and LPG-Zenotravel persist even at large observation budgets. Thus, additional runs do not by themselves resolve these errors. The plots cannot distinguish optimisation difficulties from a mismatch between the fitted distributions and the observations.}
+
+\changed{The alternative scores qualify the KS comparison. Considering finite NLL scores at 100 observations, XGBoost has a lower median on six scenarios, including Spear-QCP and Spear-SWGCP, where DistNet has the lower KS distance. Conversely, DistNet has a slightly lower median NLL on YalSAT-QCP despite its higher KS distance. These disagreements are plausible because KS measures the largest cumulative-distribution discrepancy, whereas NLL evaluates density at the observed running times. CRPS also accounts for the size of prediction errors and need not reproduce either ranking. NLL can be negative for continuous densities; the symmetric logarithmic axes retain negative values and the very large positive errors, rather than clipping large finite errors. Some DistNet NLL values are infinite or missing, especially on Saps-CV-VAR. These values cannot enter a finite box plot: the NLL panels show finite scores only and label the available fold count wherever it is below ten. These failures further limit conclusions drawn from NLL summaries alone. Raw NLL and CRPS magnitudes should be compared within a scenario because running-time scales differ across benchmarks.}
+
+\changed{The outside-range mass plots illustrate why a tail diagnostic must be interpreted alongside distributional accuracy. On LPG-Zenotravel, DistNet's median outside-range mass at 100 observations is approximately $1\times10^{-8}$, even though its median KS distance is 0.947. Almost all predicted mass can lie inside the broad reference interval while still being concentrated in the wrong part of that interval. In particular, less outside-range mass is not sufficient evidence for a better explanation of tail behaviour.}
+
+\changed{XGBoost's median inverse-Gaussian final-fit CPU time at 100 observations ranges from approximately 62 to 252 seconds across the seven scenarios, compared with approximately 3576--3614 seconds for DistNet. The corresponding scenario-wise median-time ratios range from about $14\times$ to $58\times$. This substantial saving concerns final fits only, and does not imply uniformly better predictive quality. Comparing distribution families, XGBoost's inverse-Gaussian median KS distance is lower than its log-normal counterpart only on Clasp-Factoring at this budget; DistNet's inverse-Gaussian medians are higher on all seven scenarios. The log-normal family therefore gives more favourable KS results on most of these benchmarks. The feature-attribution analyses below remain analyses of log-normal predictors; the inverse-Gaussian comparison does not establish that their feature rankings generalise to a different family.}
+
+\begin{figure}[p]
+    \centering
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics{figures/09/figures/performances/clasp_factoring_invgauss_val_ks_d_vs_obs.pdf}
+        \caption{Clasp-Factoring}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics{figures/09/figures/performances/saps-CVVAR_invgauss_val_ks_d_vs_obs.pdf}
+        \caption{Saps-CV-VAR}
+    \end{subfigure}
+    \par\smallskip
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics{figures/09/figures/performances/spear_qcp_invgauss_val_ks_d_vs_obs.pdf}
+        \caption{Spear-QCP}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics{figures/09/figures/performances/yalsat_qcp_invgauss_val_ks_d_vs_obs.pdf}
+        \caption{YalSAT-QCP}
+    \end{subfigure}
+    \par\smallskip
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics{figures/09/figures/performances/spear_swgcp_invgauss_val_ks_d_vs_obs.pdf}
+        \caption{Spear-SWGCP}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics{figures/09/figures/performances/yalsat_swgcp_invgauss_val_ks_d_vs_obs.pdf}
+        \caption{YalSAT-SWGCP}
+    \end{subfigure}
+    \par\smallskip
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics{figures/09/figures/performances/lpg-zeno_invgauss_val_ks_d_vs_obs.pdf}
+        \caption{LPG-Zenotravel}
+    \end{subfigure}
+    \par\smallskip
+    \includegraphics{figures/09/figures/performances/legend.pdf}
+    \caption[Inverse-Gaussian KS distance]{\changed{Inverse-Gaussian prediction quality measured by KS distance across ten folds. Lower is better. All panels share a linear axis from 0 to 1. The box and colour encodings match \cref{fig:ch09:genperf}.}}
+    \label{fig:ch09:invgauss_ks}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics{figures/09/figures/performances/clasp_factoring_invgauss_val_nllh_vs_obs.pdf}
+        \caption{Clasp-Factoring}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics{figures/09/figures/performances/saps-CVVAR_invgauss_val_nllh_vs_obs.pdf}
+        \caption{Saps-CV-VAR}
+    \end{subfigure}
+    \par\smallskip
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics{figures/09/figures/performances/spear_qcp_invgauss_val_nllh_vs_obs.pdf}
+        \caption{Spear-QCP}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics{figures/09/figures/performances/yalsat_qcp_invgauss_val_nllh_vs_obs.pdf}
+        \caption{YalSAT-QCP}
+    \end{subfigure}
+    \par\smallskip
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics{figures/09/figures/performances/spear_swgcp_invgauss_val_nllh_vs_obs.pdf}
+        \caption{Spear-SWGCP}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics{figures/09/figures/performances/yalsat_swgcp_invgauss_val_nllh_vs_obs.pdf}
+        \caption{YalSAT-SWGCP}
+    \end{subfigure}
+    \par\smallskip
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics{figures/09/figures/performances/lpg-zeno_invgauss_val_nllh_vs_obs.pdf}
+        \caption{LPG-Zenotravel}
+    \end{subfigure}
+    \par\smallskip
+    \includegraphics{figures/09/figures/performances/legend.pdf}
+    \caption[Inverse-Gaussian negative log-likelihood]{\changed{Inverse-Gaussian negative log-likelihood; lower is better. Boxes use finite scores only; rose numbers above a budget give the finite DistNet fold count (out of ten) when values are infinite or missing. Symmetric logarithmic axes are linear between $-1$ and $1$ and logarithmic beyond that interval, retaining negative scores and extreme positive errors. Vertical ranges differ by scenario.}}
+    \label{fig:ch09:invgauss_nllh}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics{figures/09/figures/performances/clasp_factoring_invgauss_val_crps_vs_obs.pdf}
+        \caption{Clasp-Factoring}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics{figures/09/figures/performances/saps-CVVAR_invgauss_val_crps_vs_obs.pdf}
+        \caption{Saps-CV-VAR}
+    \end{subfigure}
+    \par\smallskip
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics{figures/09/figures/performances/spear_qcp_invgauss_val_crps_vs_obs.pdf}
+        \caption{Spear-QCP}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics{figures/09/figures/performances/yalsat_qcp_invgauss_val_crps_vs_obs.pdf}
+        \caption{YalSAT-QCP}
+    \end{subfigure}
+    \par\smallskip
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics{figures/09/figures/performances/spear_swgcp_invgauss_val_crps_vs_obs.pdf}
+        \caption{Spear-SWGCP}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics{figures/09/figures/performances/yalsat_swgcp_invgauss_val_crps_vs_obs.pdf}
+        \caption{YalSAT-SWGCP}
+    \end{subfigure}
+    \par\smallskip
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics{figures/09/figures/performances/lpg-zeno_invgauss_val_crps_vs_obs.pdf}
+        \caption{LPG-Zenotravel}
+    \end{subfigure}
+    \par\smallskip
+    \includegraphics{figures/09/figures/performances/legend.pdf}
+    \caption[Inverse-Gaussian CRPS]{\changed{Inverse-Gaussian continuous ranked probability score across ten folds; lower is better. Vertical axes are logarithmic, with scenario-specific ranges. Compare methods within each scenario.}}
+    \label{fig:ch09:invgauss_crps}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics{figures/09/figures/performances/clasp_factoring_invgauss_val_mass_vs_obs.pdf}
+        \caption{Clasp-Factoring}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics{figures/09/figures/performances/saps-CVVAR_invgauss_val_mass_vs_obs.pdf}
+        \caption{Saps-CV-VAR}
+    \end{subfigure}
+    \par\smallskip
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics{figures/09/figures/performances/spear_qcp_invgauss_val_mass_vs_obs.pdf}
+        \caption{Spear-QCP}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics{figures/09/figures/performances/yalsat_qcp_invgauss_val_mass_vs_obs.pdf}
+        \caption{YalSAT-QCP}
+    \end{subfigure}
+    \par\smallskip
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics{figures/09/figures/performances/spear_swgcp_invgauss_val_mass_vs_obs.pdf}
+        \caption{Spear-SWGCP}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics{figures/09/figures/performances/yalsat_swgcp_invgauss_val_mass_vs_obs.pdf}
+        \caption{YalSAT-SWGCP}
+    \end{subfigure}
+    \par\smallskip
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics{figures/09/figures/performances/lpg-zeno_invgauss_val_mass_vs_obs.pdf}
+        \caption{LPG-Zenotravel}
+    \end{subfigure}
+    \par\smallskip
+    \includegraphics{figures/09/figures/performances/legend.pdf}
+    \caption[Inverse-Gaussian outside-range probability mass]{\changed{Inverse-Gaussian predicted mass outside $[0,1.5\max_t y_{I,t}]$, averaged over test instances in each fold. The maximum is taken over the observed runs of each test instance. Symmetric logarithmic axes retain exact zeros, with a linear region up to $10^{-4}$; vertical ranges differ. This is a tail diagnostic, not an overall accuracy score.}}
+    \label{fig:ch09:invgauss_mass}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics{figures/09/figures/performances/clasp_factoring_invgauss_cpu_training_time_vs_obs.pdf}
+        \caption{Clasp-Factoring}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics{figures/09/figures/performances/saps-CVVAR_invgauss_cpu_training_time_vs_obs.pdf}
+        \caption{Saps-CV-VAR}
+    \end{subfigure}
+    \par\smallskip
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics{figures/09/figures/performances/spear_qcp_invgauss_cpu_training_time_vs_obs.pdf}
+        \caption{Spear-QCP}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics{figures/09/figures/performances/yalsat_qcp_invgauss_cpu_training_time_vs_obs.pdf}
+        \caption{YalSAT-QCP}
+    \end{subfigure}
+    \par\smallskip
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics{figures/09/figures/performances/spear_swgcp_invgauss_cpu_training_time_vs_obs.pdf}
+        \caption{Spear-SWGCP}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics{figures/09/figures/performances/yalsat_swgcp_invgauss_cpu_training_time_vs_obs.pdf}
+        \caption{YalSAT-SWGCP}
+    \end{subfigure}
+    \par\smallskip
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics{figures/09/figures/performances/lpg-zeno_invgauss_cpu_training_time_vs_obs.pdf}
+        \caption{LPG-Zenotravel}
+    \end{subfigure}
+    \par\smallskip
+    \includegraphics{figures/09/figures/performances/legend.pdf}
+    \caption[Inverse-Gaussian CPU training time]{\changed{Inverse-Gaussian CPU training time for the final model fit across ten folds; lower is better. Vertical axes are logarithmic and have scenario-specific ranges. Hyperparameter optimisation and explanation computation are excluded.}}
+    \label{fig:ch09:invgauss_time}
+\end{figure}
+
+\FloatBarrier
 
 \subsection{Explainability analysis in SAT: Spear-SWGCP}
 
@@ -499,67 +664,71 @@ We analyse the running time distribution of the Spear SAT solver on the Small Wo
 \cref{fig:ch09:spear_swgcp_permut,fig:ch09:spear_swgcp_ice} show permutation importance rankings per statistic and ICE curves for the top feature per statistic, respectively.
 The results reveal a clear structure: the most influential features for the scale statistics (mean, variance and IQR) are local search probing features, while DPLL probing features are the most influential for the shape statistics (skewness and kurtosis).
 
-\begin{figure}[!htbp]
+\begin{figure}[!tbp]
     \centering
-    % --- Spear-SWGCP: permutation importance ---
-    \begin{subfigure}{0.32\linewidth}
-        \includegraphics[width=\linewidth]{figures/09/figures/explainability/spear_swgcp_xgb_dist_lognorm_100_fold0_mean_permutation_importance.pdf}
+
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics{figures/09/figures/explainability/spear_swgcp_xgb_dist_lognorm_100_fold0_mean_permutation_importance.pdf}
         \caption{Mean}
         \label{fig:ch09:spear_swgcp_mean_permutation_importance}
-    \end{subfigure}
-    \begin{subfigure}{0.32\linewidth}
-        \includegraphics[width=\linewidth]{figures/09/figures/explainability/spear_swgcp_xgb_dist_lognorm_100_fold0_variance_permutation_importance.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics{figures/09/figures/explainability/spear_swgcp_xgb_dist_lognorm_100_fold0_variance_permutation_importance.pdf}
         \caption{Variance}
         \label{fig:ch09:spear_swgcp_variance_permutation_importance}
     \end{subfigure}
-    \begin{subfigure}{0.32\linewidth}
-        \includegraphics[width=\linewidth]{figures/09/figures/explainability/spear_swgcp_xgb_dist_lognorm_100_fold0_iqr_permutation_importance.pdf}
+    \par\medskip
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics{figures/09/figures/explainability/spear_swgcp_xgb_dist_lognorm_100_fold0_iqr_permutation_importance.pdf}
         \caption{IQR}
         \label{fig:ch09:spear_swgcp_iqr_permutation_importance}
-    \end{subfigure}
-    \begin{subfigure}{0.32\linewidth}
-        \includegraphics[width=\linewidth]{figures/09/figures/explainability/spear_swgcp_xgb_dist_lognorm_100_fold0_skewness_permutation_importance.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics{figures/09/figures/explainability/spear_swgcp_xgb_dist_lognorm_100_fold0_skewness_permutation_importance.pdf}
         \caption{Skewness}
         \label{fig:ch09:spear_swgcp_skewness_permutation_importance}
     \end{subfigure}
-    \begin{subfigure}{0.32\linewidth}
-        \includegraphics[width=\linewidth]{figures/09/figures/explainability/spear_swgcp_xgb_dist_lognorm_100_fold0_kurtosis_permutation_importance.pdf}
+    \par\medskip
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics{figures/09/figures/explainability/spear_swgcp_xgb_dist_lognorm_100_fold0_kurtosis_permutation_importance.pdf}
         \caption{Kurtosis}
         \label{fig:ch09:spear_swgcp_kurtosis_permutation_importance}
     \end{subfigure}
-    \caption{Permutation importance rankings for the predicted running time distribution statistics of Spear on SWGCP. Mean and IQR are dominated by SAPS local search probing features, variance by the variability of the same probing signal, and skewness and kurtosis by the number of variables remaining after depth-16 unit-propagation probing.}
+    \caption[Permutation importance for Spear on SWGCP]{\changed{Permutation importance is the increase in mean squared deviation from the original model-predicted statistic after feature permutation; magnitudes are specific to each statistic and its units.} Permutation importance rankings for the predicted running time distribution statistics of Spear on SWGCP. Mean and IQR are dominated by \gls{saps} local-search probing features, variance by the variability of the same probing signal, and skewness and kurtosis by the number of variables remaining after depth-16 unit-propagation probing.}
     \label{fig:ch09:spear_swgcp_permut}
 \end{figure}
 
-\begin{figure}[!htbp]
+\begin{figure}[!tbp]
     \centering
-    % --- Spear-SWGCP: ICE ---
-    \begin{subfigure}{0.32\linewidth}
-        \includegraphics[width=\linewidth]{figures/09/figures/explainability/spear_swgcp_xgb_dist_lognorm_100_fold0_mean_ice_feature59.pdf}
+
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics{figures/09/figures/explainability/spear_swgcp_xgb_dist_lognorm_100_fold0_mean_ice_feature59.pdf}
         \caption{Mean }
         \label{fig:ch09:spear_swgcp_mean_ice}
-    \end{subfigure}
-    \begin{subfigure}{0.32\linewidth}
-        \includegraphics[width=\linewidth]{figures/09/figures/explainability/spear_swgcp_xgb_dist_lognorm_100_fold0_variance_ice_feature60.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics{figures/09/figures/explainability/spear_swgcp_xgb_dist_lognorm_100_fold0_variance_ice_feature60.pdf}
         \caption{\footnotesize Variance}
         \label{fig:ch09:spear_swgcp_variance_ice}
     \end{subfigure}
-    \begin{subfigure}{0.32\linewidth}
-        \includegraphics[width=\linewidth]{figures/09/figures/explainability/spear_swgcp_xgb_dist_lognorm_100_fold0_iqr_ice_feature59.pdf}
+    \par\medskip
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics{figures/09/figures/explainability/spear_swgcp_xgb_dist_lognorm_100_fold0_iqr_ice_feature59.pdf}
         \caption{\footnotesize IQR}
         \label{fig:ch09:spear_swgcp_iqr_ice}
-    \end{subfigure}
-    \begin{subfigure}{0.32\linewidth}
-        \includegraphics[width=\linewidth]{figures/09/figures/explainability/spear_swgcp_xgb_dist_lognorm_100_fold0_skewness_ice_feature46.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics{figures/09/figures/explainability/spear_swgcp_xgb_dist_lognorm_100_fold0_skewness_ice_feature46.pdf}
         \caption{\footnotesize Skewness}
         \label{fig:ch09:spear_swgcp_skewness_ice}
     \end{subfigure}
-    \begin{subfigure}{0.32\linewidth}
-        \includegraphics[width=\linewidth]{figures/09/figures/explainability/spear_swgcp_xgb_dist_lognorm_100_fold0_kurtosis_ice_feature46.pdf}
+    \par\medskip
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics{figures/09/figures/explainability/spear_swgcp_xgb_dist_lognorm_100_fold0_kurtosis_ice_feature46.pdf}
         \caption{Kurtosis}
         \label{fig:ch09:spear_swgcp_kurtosis_ice}
     \end{subfigure}
-    \caption{Centred ICE curves for the most important feature of each predicted statistic for Spear on SWGCP. Green curves show individual instances and red curves show partial dependence. The scale statistics change mostly through SAPS first-local-minimum features, while the shape statistics are more heterogeneous and depend on the residual formula size after unit propagation.}
+    \caption[ICE curves for Spear on SWGCP]{Centred \gls{ice} curves for the most important feature of each predicted statistic for Spear on SWGCP. \changed{Teal solid curves show 100 deterministically sampled individual instances and wine dashed curves show partial dependence over all instances. All curves are centred at the first feature-grid value.} The scale statistics change mostly through \gls{saps} first-local-minimum features, while the shape statistics are more heterogeneous and depend on the residual formula size after unit propagation.}
     \label{fig:ch09:spear_swgcp_ice}
 \end{figure}
 
@@ -600,6 +769,8 @@ Skewness is highest for intermediate fractions of remaining variables, whereas k
 % Those seeking to identify instances with predictable running times \aj{what does predictable running times even mean here? Of course we are interested in those instances, no? Ideally all instances will have predictable running times, i.e., running times that can be predicted. What could we say instead? How can we replace this?} should focus on local search probing features, particularly the first local minimum ratio and its variability. In contrast, those concerned about tail risk, such as the potential for occasional extreme outliers that could violate time budgets, should examine the residual problem complexity after unit propagation. The fact that different features dominate different aspects of the distribution suggests that instance hardness is multifaceted: an instance may have moderate expected running time but high tail risk, or vice versa, and these characteristics are driven by distinct structural properties.
 
 
+\FloatBarrier
+
 \subsection{Explainability analysis in automated planning: LPG-Zenotravel}
 % We now shift our attention to a scenario from the automated planning domain.
 We analyse the running time distribution of the LPG stochastic local search planner~\citep{GerSer02} on the Zenotravel~\citep{PenWel94} instances.
@@ -607,70 +778,74 @@ We analyse the running time distribution of the LPG stochastic local search plan
 The planning feature set combines planning-native descriptors, such as PDDL, causal-graph, domain-transition-graph and probing features, with SAT features obtained by translating the planning task into a bounded-horizon CNF representation~\citep{FawEtAl14}.
 In this scenario, the scale statistics (mean, variance, IQR) are driven mainly by features of this SAT encoding, whereas the shape statistics (skewness, kurtosis) are driven by a planning-native domain-transition-graph feature.
 
-\begin{figure}[!htbp]
+\begin{figure}[!tbp]
     \centering
-    % --- LPG-Zenotravel: permutation importance ---
-    \begin{subfigure}{0.32\linewidth}
-        \includegraphics[width=\linewidth]{figures/09/figures/explainability/lpg-zeno_xgb_dist_lognorm_100_fold0_mean_permutation_importance.pdf}
+
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics{figures/09/figures/explainability/lpg-zeno_xgb_dist_lognorm_100_fold0_mean_permutation_importance.pdf}
         \caption{Mean}
         \label{fig:ch09:lpg_zeno_mean_permutation_importance}
-    \end{subfigure}
-    \begin{subfigure}{0.32\linewidth}
-        \includegraphics[width=\linewidth]{figures/09/figures/explainability/lpg-zeno_xgb_dist_lognorm_100_fold0_variance_permutation_importance.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics{figures/09/figures/explainability/lpg-zeno_xgb_dist_lognorm_100_fold0_variance_permutation_importance.pdf}
         \caption{Variance}
         \label{fig:ch09:lpg_zeno_variance_permutation_importance}
     \end{subfigure}
-    \begin{subfigure}{0.32\linewidth}
-        \includegraphics[width=\linewidth]{figures/09/figures/explainability/lpg-zeno_xgb_dist_lognorm_100_fold0_iqr_permutation_importance.pdf}
+    \par\medskip
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics{figures/09/figures/explainability/lpg-zeno_xgb_dist_lognorm_100_fold0_iqr_permutation_importance.pdf}
         \caption{IQR}
         \label{fig:ch09:lpg_zeno_iqr_permutation_importance}
-    \end{subfigure}
-    \begin{subfigure}{0.32\linewidth}
-        \includegraphics[width=\linewidth]{figures/09/figures/explainability/lpg-zeno_xgb_dist_lognorm_100_fold0_skewness_permutation_importance.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics{figures/09/figures/explainability/lpg-zeno_xgb_dist_lognorm_100_fold0_skewness_permutation_importance.pdf}
         \caption{Skewness}
         \label{fig:ch09:lpg_zeno_skewness_permutation_importance}
     \end{subfigure}
-    \begin{subfigure}{0.32\linewidth}
-        \includegraphics[width=\linewidth]{figures/09/figures/explainability/lpg-zeno_xgb_dist_lognorm_100_fold0_kurtosis_permutation_importance.pdf}
+    \par\medskip
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics{figures/09/figures/explainability/lpg-zeno_xgb_dist_lognorm_100_fold0_kurtosis_permutation_importance.pdf}
         \caption{Kurtosis}
         \label{fig:ch09:lpg_zeno_kurtosis_permutation_importance}
     \end{subfigure}
 
-    \caption{Permutation importance rankings for the predicted running time distribution statistics of LPG on Zenotravel. The scale statistics are mainly driven by SAT-encoding features extracted from the planning task, while skewness and kurtosis are dominated by the size of the planning domain-transition graph.}
+    \caption[Permutation importance for LPG on Zenotravel]{\changed{Permutation importance is the increase in mean squared deviation from the original model-predicted statistic after feature permutation; magnitudes are specific to each statistic and its units.} Permutation importance rankings for the predicted running time distribution statistics of LPG on Zenotravel. The scale statistics are mainly driven by \gls{sat}-encoding features extracted from the planning task, while skewness and kurtosis are dominated by the size of the planning domain-transition graph.}
     \label{fig:ch09:lpg_zeno_permut}
 \end{figure}
 
-\begin{figure}[!htbp]
+\begin{figure}[!tbp]
     \centering
-    % --- LPG-Zenotravel: ICE ---
-    \begin{subfigure}{0.32\linewidth}
-        \includegraphics[width=\linewidth]{figures/09/figures/explainability/lpg-zeno_xgb_dist_lognorm_100_fold0_mean_ice_feature2.pdf}
+
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics{figures/09/figures/explainability/lpg-zeno_xgb_dist_lognorm_100_fold0_mean_ice_feature2.pdf}
         \caption{Mean}
         \label{fig:ch09:lpg_zeno_mean_ice}
-    \end{subfigure}
-    \begin{subfigure}{0.32\linewidth}
-        \includegraphics[width=\linewidth]{figures/09/figures/explainability/lpg-zeno_xgb_dist_lognorm_100_fold0_variance_ice_feature62.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics{figures/09/figures/explainability/lpg-zeno_xgb_dist_lognorm_100_fold0_variance_ice_feature62.pdf}
         \caption{Variance}
         \label{fig:ch09:lpg_zeno_variance_ice}
     \end{subfigure}
-    \begin{subfigure}{0.32\linewidth}
-        \includegraphics[width=\linewidth]{figures/09/figures/explainability/lpg-zeno_xgb_dist_lognorm_100_fold0_iqr_ice_feature62.pdf}
+    \par\medskip
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics{figures/09/figures/explainability/lpg-zeno_xgb_dist_lognorm_100_fold0_iqr_ice_feature62.pdf}
         \caption{IQR }
         \label{fig:ch09:lpg_zeno_iqr_ice}
-    \end{subfigure}
-    \begin{subfigure}{0.32\linewidth}
-        \includegraphics[width=\linewidth]{figures/09/figures/explainability/lpg-zeno_xgb_dist_lognorm_100_fold0_skewness_ice_feature135.pdf}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics{figures/09/figures/explainability/lpg-zeno_xgb_dist_lognorm_100_fold0_skewness_ice_feature135.pdf}
         \caption{Skewness}
         \label{fig:ch09:lpg_zeno_skewness_ice}
     \end{subfigure}
-    \begin{subfigure}{0.32\linewidth}
-        \includegraphics[width=\linewidth]{figures/09/figures/explainability/lpg-zeno_xgb_dist_lognorm_100_fold0_kurtosis_ice_feature135.pdf}
+    \par\medskip
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics{figures/09/figures/explainability/lpg-zeno_xgb_dist_lognorm_100_fold0_kurtosis_ice_feature135.pdf}
         \caption{Kurtosis}
         \label{fig:ch09:lpg_zeno_kurtosis_ice}
     \end{subfigure}
 
 
-    \caption{Centred ICE curves for the most important feature of each predicted statistic for LPG on Zenotravel. Green curves show individual instances and red curves show partial dependence. Horn-variable entropy in the SAT encoding affects mean running time, the SAT variable-to-clause ratio governs variance and IQR, and the number of domain-transition-graph vertices affects skewness and kurtosis.}
+    \caption[ICE curves for LPG on Zenotravel]{Centred \gls{ice} curves for the most important feature of each predicted statistic for LPG on Zenotravel. \changed{Teal solid curves show 100 deterministically sampled individual instances and wine dashed curves show partial dependence over all instances. All curves are centred at the first feature-grid value.} Horn-variable entropy in the \gls{sat} encoding affect mean running time, the \gls{sat} variable-to-clause ratio governs variance and IQR, and the number of domain-transition-graph vertices affect skewness and kurtosis.}
     \label{fig:ch09:lpg_zeno_ice}
 \end{figure}
 
@@ -688,14 +863,15 @@ Thus, the spread of LPG runtimes is associated with how the planning instance is
 Skewness and kurtosis exhibit a different behaviour.
 Both skewness and kurtosis are primarily influenced by the total number of vertices in the domain transition graphs, a planning-native feature.
 Domain transition graphs describe the possible value transitions of finite-domain planning variables. Their total number of vertices reflects the aggregate size of these variable domains.
-The ICE curves show increasing skewness and kurtosis as this transition structure grows, with the strongest increase near the upper end of the observed range.
-This suggests that tail behaviour for LPG-Zenotravel is tied to the size of the underlying finite-domain transition structure, while mean and dispersion are tied more strongly to the bounded SAT encoding used by the feature extractor.
+\changed{Their ICE curves increase most strongly near the upper end of the observed vertex-count range, linking predicted tail behaviour to planning-native structure.}
 
 
 
 
 
 
+
+\FloatBarrier
 
 \section{Conclusions and future work}
 \label{sec:ch09:concl}
@@ -712,34 +888,34 @@ Overall, we believe that the performance of randomised algorithms should not be 
 % Use the style of numbering in square brackets.
 % If nothing is used, default style will be taken.
 %\begin{enumerate}[a)]
-%\item 
-%\item 
-%\item 
-%\end{enumerate}  
+%\item
+%\item
+%\item
+%\end{enumerate}
 
 % Unnumbered list
 %\begin{itemize}
-%\item 
-%\item 
-%\item 
-%\end{itemize}  
+%\item
+%\item
+%\item
+%\end{itemize}
 
 % Description list
 %\begin{description}
 %\item[]
-%\item[] 
-%\item[] 
-%\end{description}  
+%\item[]
+%\item[]
+%\end{description}
 
 
 % \end{table}
 
 % Uncomment and use as the case may be
-%\begin{theorem} 
+%\begin{theorem}
 %\end{theorem}
 
 % Uncomment and use as the case may be
-%\begin{lemma} 
+%\begin{lemma}
 %\end{lemma}
 
 %% The Appendices part is started with the command \appendix;
@@ -753,34 +929,34 @@ Overall, we believe that the performance of randomised algorithms should not be 
 % Use the style of numbering in square brackets.
 % If nothing is used, default style will be taken.
 %\begin{enumerate}[a)]
-%\item 
-%\item 
-%\item 
-%\end{enumerate}  
+%\item
+%\item
+%\item
+%\end{enumerate}
 
 % Unnumbered list
 %\begin{itemize}
-%\item 
-%\item 
-%\item 
-%\end{itemize}  
+%\item
+%\item
+%\item
+%\end{itemize}
 
 % Description list
 %\begin{description}
 %\item[]
-%\item[] 
-%\item[] 
-%\end{description}  
+%\item[]
+%\item[]
+%\end{description}
 
 
 % \end{table}
 
 % Uncomment and use as the case may be
-%\begin{theorem} 
+%\begin{theorem}
 %\end{theorem}
 
 % Uncomment and use as the case may be
-%\begin{lemma} 
+%\begin{lemma}
 %\end{lemma}
 
 %% The Appendices part is started with the command \appendix;
