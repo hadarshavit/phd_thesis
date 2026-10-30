@@ -163,168 +163,170 @@ We use a cluster of 18 nodes, each equipped with 2 AMD EPYC 7543 32-core CPUs wi
 \label{sec:ch04:feature-computation-time}
 
 \begin{figure*}[h]
-    \caption{Percentage of features computed by the old tool (SATZilla 2012; in red) and the new tool (SATZilla 2024; in blue) over the available time budget for each feature group on the 2022 SAT Competition. For most feature groups, the new tool extracts features from more instances than the old one.}
+    \caption{Percentage of features computed by the old tool (SATZilla 2012; in rose) and the new tool (SATZilla 2024; in indigo) over the available time budget for each feature group on the 2022 SAT Competition. For most feature groups, the new tool extracts features from more instances than the old one.}
     \centering
-    \begin{subfigure}[b]{0.24\textwidth}
+    \begin{subfigure}[b]{0.32\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/ecdf_sc2022_Pre-featuretime.pdf}
+        \includegraphics{figures/04/figs/ecdf_sc2022_Pre-featuretime.pdf}
         \caption{Preliminary}
         \label{fig:ch04:satcomp22_pre}
-    \end{subfigure}
-    \centering
-    \begin{subfigure}[b]{0.24\textwidth}
+    \end{subfigure}\hfill
+\begin{subfigure}[b]{0.32\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/ecdf_sc2022_Basic-featuretime.pdf}
+        \includegraphics{figures/04/figs/ecdf_sc2022_Basic-featuretime.pdf}
         \caption{Basic}
         \label{fig:ch04:satcomp22_basic}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.24\textwidth}
+    \end{subfigure}\hfill
+\begin{subfigure}[b]{0.32\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/ecdf_sc2022_KLB-featuretime.pdf}
+        \includegraphics{figures/04/figs/ecdf_sc2022_KLB-featuretime.pdf}
         \caption{KLB}
         \label{fig:ch04:satcomp22_klb}
     \end{subfigure}
-        \begin{subfigure}[b]{0.24\textwidth}
+\par\medskip
+\begin{subfigure}[b]{0.32\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/ecdf_sc2022_CG-featuretime.pdf}
+        \includegraphics{figures/04/figs/ecdf_sc2022_CG-featuretime.pdf}
         \caption{Clause graph}
         \label{fig:ch04:satcomp22_cg}
-    \end{subfigure}
-    \centering
-    \begin{subfigure}[b]{0.24\textwidth}
+    \end{subfigure}\hfill
+\begin{subfigure}[b]{0.32\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/ecdf_sc2022_cl-featuretime.pdf}
+        \includegraphics{figures/04/figs/ecdf_sc2022_cl-featuretime.pdf}
         \caption{Clause learning}
         \label{fig:ch04:satcomp22_cl}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.24\textwidth}
+    \end{subfigure}\hfill
+\begin{subfigure}[b]{0.32\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/ecdf_sc2022_ls-gsat-featuretime.pdf}
+        \includegraphics{figures/04/figs/ecdf_sc2022_ls-gsat-featuretime.pdf}
         \caption{LS: GSAT}
         \label{fig:ch04:satcomp22_ls_gsat}
     \end{subfigure}
-        \begin{subfigure}[b]{0.24\textwidth}
+\par\medskip
+\begin{subfigure}[b]{0.32\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/ecdf_sc2022_ls-saps-featuretime.pdf}
+        \includegraphics{figures/04/figs/ecdf_sc2022_ls-saps-featuretime.pdf}
         \caption{LS: SAPS/Sparrow}
         \label{fig:ch04:satcomp22_ls_saps}
-    \end{subfigure}
-    \centering
-    \begin{subfigure}[b]{0.24\textwidth}
+    \end{subfigure}\hfill
+\begin{subfigure}[b]{0.32\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/ecdf_sc2022_sp-featuretime.pdf}
+        \includegraphics{figures/04/figs/ecdf_sc2022_sp-featuretime.pdf}
         \caption{Survey propagation}
         \label{fig:ch04:satcomp22_sp}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.24\textwidth}
+    \end{subfigure}\hfill
+\begin{subfigure}[b]{0.32\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/ecdf_sc2022_DIAMETER-featuretime.pdf}
+        \includegraphics{figures/04/figs/ecdf_sc2022_DIAMETER-featuretime.pdf}
         \caption{Diameter}
         \label{fig:ch04:satcomp22_dia}
     \end{subfigure}
-    \begin{subfigure}[b]{0.24\textwidth}
+\par\medskip
+\begin{subfigure}[b]{0.32\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/ecdf_sc2022_lobjois-featuretime.pdf}
+        \includegraphics{figures/04/figs/ecdf_sc2022_lobjois-featuretime.pdf}
         \caption{Lobjois}
         \label{fig:ch04:satcomp22_lobjois}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.24\textwidth}
+    \end{subfigure}\hfill
+\begin{subfigure}[b]{0.32\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/ecdf_sc2022_unit-featuretime.pdf}
+        \includegraphics{figures/04/figs/ecdf_sc2022_unit-featuretime.pdf}
         \caption{Unit propagation}
         \label{fig:ch04:satcomp22_unit}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.24\textwidth}
+    \end{subfigure}\hfill
+\begin{subfigure}[b]{0.32\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/ecdf_sc2022_lpTIME.pdf}
+        \includegraphics{figures/04/figs/ecdf_sc2022_lpTIME.pdf}
         \caption{Linear programming}
         \label{fig:ch04:satcomp22_lp}
     \end{subfigure}
+
     \label{fig:ch04:feat_comtimes_2022}
 \end{figure*}
 
 \begin{figure*}[h]
-    \caption{Percentage of features computed by the old tool (SATZilla 2012; in red) and the new tool (SATZilla 2024; in blue) over the available time budget for each feature group on the 2023 SAT Competition. For most feature groups, the new tool extracts features from more instances than the old one.}
+    \caption{Percentage of features computed by the old tool (SATZilla 2012; in rose) and the new tool (SATZilla 2024; in indigo) over the available time budget for each feature group on the 2023 SAT Competition. For most feature groups, the new tool extracts features from more instances than the old one.}
 
-    \begin{subfigure}[b]{0.24\textwidth}
+    \begin{subfigure}[b]{0.32\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/ecdf_sc2023_Pre-featuretime.pdf}
+        \includegraphics{figures/04/figs/ecdf_sc2023_Pre-featuretime.pdf}
         \caption{Preliminary}
         \label{fig:ch04:satcomp23_pre}
-    \end{subfigure}
-    \centering
-    \begin{subfigure}[b]{0.24\textwidth}
+    \end{subfigure}\hfill
+\begin{subfigure}[b]{0.32\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/ecdf_sc2023_Basic-featuretime.pdf}
+        \includegraphics{figures/04/figs/ecdf_sc2023_Basic-featuretime.pdf}
         \caption{Basic}
         \label{fig:ch04:satcomp23_basic}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.24\textwidth}
+    \end{subfigure}\hfill
+\begin{subfigure}[b]{0.32\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/ecdf_sc2023_KLB-featuretime.pdf}
+        \includegraphics{figures/04/figs/ecdf_sc2023_KLB-featuretime.pdf}
         \caption{KLB}
         \label{fig:ch04:satcomp23_klb}
     \end{subfigure}
-        \begin{subfigure}[b]{0.24\textwidth}
+\par\medskip
+\begin{subfigure}[b]{0.32\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/ecdf_sc2023_CG-featuretime.pdf}
+        \includegraphics{figures/04/figs/ecdf_sc2023_CG-featuretime.pdf}
         \caption{Clause graph}
         \label{fig:ch04:satcomp23_cg}
-    \end{subfigure}
-    \centering
-    \begin{subfigure}[b]{0.24\textwidth}
+    \end{subfigure}\hfill
+\begin{subfigure}[b]{0.32\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/ecdf_sc2023_cl-featuretime.pdf}
+        \includegraphics{figures/04/figs/ecdf_sc2023_cl-featuretime.pdf}
         \caption{Clause learning}
         \label{fig:ch04:satcomp23_cl}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.24\textwidth}
+    \end{subfigure}\hfill
+\begin{subfigure}[b]{0.32\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/ecdf_sc2023_ls-gsat-featuretime.pdf}
+        \includegraphics{figures/04/figs/ecdf_sc2023_ls-gsat-featuretime.pdf}
         \caption{LS: GSAT}
         \label{fig:ch04:satcomp23_ls_gsat}
     \end{subfigure}
-        \begin{subfigure}[b]{0.24\textwidth}
+\par\medskip
+\begin{subfigure}[b]{0.32\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/ecdf_sc2023_ls-saps-featuretime.pdf}
+        \includegraphics{figures/04/figs/ecdf_sc2023_ls-saps-featuretime.pdf}
         \caption{LS: SAPS/Sparrow}
         \label{fig:ch04:satcomp23_ls_saps}
-    \end{subfigure}
-    \centering
-    \begin{subfigure}[b]{0.24\textwidth}
+    \end{subfigure}\hfill
+\begin{subfigure}[b]{0.32\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/ecdf_sc2023_sp-featuretime.pdf}
+        \includegraphics{figures/04/figs/ecdf_sc2023_sp-featuretime.pdf}
         \caption{Survey propagation}
         \label{fig:ch04:satcomp23_sp}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.24\textwidth}
+    \end{subfigure}\hfill
+\begin{subfigure}[b]{0.32\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/ecdf_sc2023_DIAMETER-featuretime.pdf}
+        \includegraphics{figures/04/figs/ecdf_sc2023_DIAMETER-featuretime.pdf}
         \caption{Diameter}
         \label{fig:ch04:satcomp23_dia}
     \end{subfigure}
-    \begin{subfigure}[b]{0.24\textwidth}
+\par\medskip
+\begin{subfigure}[b]{0.32\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/ecdf_sc2023_lobjois-featuretime.pdf}
+        \includegraphics{figures/04/figs/ecdf_sc2023_lobjois-featuretime.pdf}
         \caption{Lobjois}
         \label{fig:ch04:satcomp23_lobjois}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.24\textwidth}
+    \end{subfigure}\hfill
+\begin{subfigure}[b]{0.32\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/ecdf_sc2023_unit-featuretime.pdf}
+        \includegraphics{figures/04/figs/ecdf_sc2023_unit-featuretime.pdf}
         \caption{Unit propagation}
         \label{fig:ch04:satcomp23_unit}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.24\textwidth}
+    \end{subfigure}\hfill
+\begin{subfigure}[b]{0.32\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/ecdf_sc2023_lpTIME.pdf}
+        \includegraphics{figures/04/figs/ecdf_sc2023_lpTIME.pdf}
         \caption{Linear programming}
         \label{fig:ch04:satcomp23_lp}
     \end{subfigure}
+
     \label{fig:ch04:feat_comtimes_2023}
 \end{figure*}
 
-\cref{fig:ch04:feat_comtimes_2022,fig:ch04:feat_comtimes_2023} show the percentage of features computed over the available time budget using the old (depicted in red) and new (depicted in blue) SATZilla tool on the 2022 and 2023 SAT Competition data, respectively. For simplicity, due to the similarity of the overall results between the two competitions, we draw more detailed insights based on plots from the 2023 edition (\cref{fig:ch04:feat_comtimes_2023}). 
+\cref{fig:ch04:feat_comtimes_2022,fig:ch04:feat_comtimes_2023} show the percentage of features computed over the available time budget using the old (depicted in rose) and new (depicted in indigo) SATZilla tool on the 2022 and 2023 SAT Competition data, respectively. For simplicity, due to the similarity of the overall results between the two competitions, we draw more detailed insights based on plots from the 2023 edition (\cref{fig:ch04:feat_comtimes_2023}).
 
 We first observe that the new tool is able to extract more features than the old one for most feature groups. In particular, we highlight the performance gains on the preliminary feature group (\cref{fig:ch04:satcomp23_pre}), for which the new tool can extract the features for all formulas, compared to less than $80\%$ of the formulas when using the the old tool. We note that for some feature groups, like graph learning (\cref{fig:ch04:satcomp23_cg}), the old tool is able to extract more features compared to the preliminary feature group. This is due to the fact that the old tool extracts the preliminary, basic, KLB and CG feature groups together. Therefore, in case computing one of those groups takes a long time, the whole feature extraction fails.
 
@@ -353,16 +355,15 @@ We present the satisfiability prediction accuracy scores in \cref{fig:ch04:sat_p
         \centering
         
 
-        \includegraphics[]{figures/04/figs/sat_bar_2022.pdf}
+        \includegraphics{figures/04/figs/sat_bar_2022.pdf}
         \caption{2022 SAT Competition}
         \label{fig:ch04:satpred22}
-    \end{subfigure}
-    \centering
+    \end{subfigure}\hfill
     \begin{subfigure}[b]{0.49\textwidth}
         \centering
         
 
-        \includegraphics[]{figures/04/figs/sat_bar_2023.pdf}
+        \includegraphics{figures/04/figs/sat_bar_2023.pdf}
         \caption{2023 SAT Competition}
         \label{fig:ch04:satpred23}
     \end{subfigure}
@@ -377,20 +378,19 @@ In line with the previous task, we perform inner and outer cross-validation and 
 We look into the performance of the EPM for running time prediction on all solvers from the 2022 and 2023 SAT Competitions. Here, we do not actually run solvers on instances to record their running times, but rather use the running times reported by the competitions. We display the results for the 10 best solvers from each competition in \cref{fig:ch04:rt_pred} (the results for all solvers can be found in the supplementary material). We see that using the features extracted by the new tool leads to the lower RMSE for all solvers, compared to using those extracted by the old tool. For some solvers, we observe a significantly lower RMSE, like Kissat{\_}MAB{\_}prop-no{\_}sym, where using the new tool decreases the RMSE from 0.84 to 0.69. \cref{fig:ch04:rmse_hists} shows the histogram of the error percentage for all solvers in the 2022 and 2023 SAT Competitions. We see that for the 2022 competition, the new tool has more instances with error rate lower than $10\%$ compared to the old version. For the 2023 competition, using the features extracted with the new version, more instances are predicted with less than $1\%$ error. Histograms per solver are available in \cref{sec:ch04:rts_hists_per_solver}.
 
 \begin{figure*}[h]
-    \caption{Root mean square error (RMSE) of (log-transformed) running time prediction using a random forest with features extracted by the old (SATZilla 2012; in red) and the new tool (SATZilla 2024; in blue), on SAT solvers from the 2022 and 2023 SAT Competitions. The new tool achieves lower RMSE for all solvers.}
+    \caption{Root mean square error (RMSE) of (log-transformed) running time prediction using a random forest with features extracted by the old (SATZilla 2012; in rose) and the new tool (SATZilla 2024; in indigo), on SAT solvers from the 2022 and 2023 SAT Competitions. The new tool achieves lower RMSE for all solvers.}
     \label{fig:ch04:rt_pred}
     \begin{subfigure}[b]{0.99\textwidth}
         \centering
         
-        \includegraphics[]{figures/04/figs/rts_bar_2022.pdf}
+        \includegraphics{figures/04/figs/rts_bar_2022.pdf}
         \caption{2022 SAT Competition}
         \label{fig:ch04:rt_pred22}
-    \end{subfigure}
-    \centering
+    \end{subfigure}\hfill
     \begin{subfigure}[b]{0.99\textwidth}
         \centering
         
-        \includegraphics[]{figures/04/figs/rts_bar_2023.pdf}
+        \includegraphics{figures/04/figs/rts_bar_2023.pdf}
         \caption{2023 SAT Competition}
         \label{fig:ch04:rt_pred23}
     \end{subfigure}
@@ -398,22 +398,21 @@ We look into the performance of the EPM for running time prediction on all solve
 
 
 \begin{figure*}[h]
-    \caption{Histogram of the error percentage of the root mean square error (RMSE) of (log-transformed) running time prediction using a random forest with features extracted by the old (SATZilla 2012; in red) and the new tool (SATZilla 2024; in blue), on SAT solvers from the 2022 and 2023 SAT Competitions. The new tool achieves lower error percentages.}
+    \caption{Histogram of the error percentage of the root mean square error (RMSE) of (log-transformed) running time prediction using a random forest with features extracted by the old (SATZilla 2012; in rose) and the new tool (SATZilla 2024; in indigo), on SAT solvers from the 2022 and 2023 SAT Competitions. The new tool achieves lower error percentages.}
     \label{fig:ch04:rmse_hists}
     \begin{subfigure}[b]{0.49\textwidth}
         \centering
                 
 
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both.pdf}
         \caption{2022 SAT Competition}
         \label{fig:ch04:rmse_hist_2022}
-    \end{subfigure}
-    \centering
+    \end{subfigure}\hfill
     \begin{subfigure}[b]{0.49\textwidth}
         \centering
         
 
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2023_both.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2023_both.pdf}
         \caption{2023 SAT Competition}
         \label{fig:ch04:rmse_hist_2023}
     \end{subfigure}
@@ -474,7 +473,7 @@ Overall, the ECDF plots reflect well what is shown in \cref{fig:ch04:closed_gap}
 
 \begin{figure}[h]
     \centering
-    \caption{Closed gap values for the algorithm selection task using the old (SATZilla 2012; in red) and the new tool (SATZilla 2024; in blue) on the 2022 and 2023 SAT Competitions; higher is better.}
+    \caption{Closed gap values for the algorithm selection task using the old (SATZilla 2012; in rose) and the new tool (SATZilla 2024; in indigo) on the 2022 and 2023 SAT Competitions; higher is better.}
     \includegraphics{figures/04/figs/as_bar_2023.pdf}
     \label{fig:ch04:closed_gap}
 \end{figure}
@@ -484,14 +483,13 @@ Overall, the ECDF plots reflect well what is shown in \cref{fig:ch04:closed_gap}
     \label{fig:ch04:ecdf_as}
     \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/ecds_af_2022.pdf}
+        \includegraphics{figures/04/figs/ecds_af_2022.pdf}
         \caption{2022 SAT Competition}
         \label{fig:ch04:ecdf_as_2022}
-    \end{subfigure}
-    \centering
+    \end{subfigure}\hfill
     \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/ecds_af_2023.pdf}
+        \includegraphics{figures/04/figs/ecds_af_2023.pdf}
         \caption{2023 SAT Competition}
         \label{fig:ch04:ecdf_as_2023}
     \end{subfigure}
@@ -670,535 +668,602 @@ tabularasat-1.0.0 & 0.88 & \textbf{0.76} \\
 
 \section{Running time prediction histograms}
 \label{sec:ch04:rts_hists_per_solver}
-We present the histograms for the RMSE values per solver for running time prediction in Figures 8-19.
-\begin{figure}
-    \centering
-    \caption{Histogram of the error percentage of the root mean square error (RMSE) of (log-transformed) running time prediction using a random forest with features extracted by the old (SATZilla 2012; in red) and the new tool (SATZilla 2024; in blue), on SAT solvers from the 2022 and 2023 SAT Competitions. Results are presented per solver.}
-    \label{fig:ch04:rts_hists1}
-    \begin{subfigure}[b]{0.49\textwidth}
-        \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_CaDiCaL-watchsat-lto.pdf}
-        \caption{2022 Comp. CaDiCaL-watchsat-lto}
-\end{subfigure}
+We present the histograms for the RMSE values per solver for running time prediction in the figures in this section.
+\begin{figure}[p]
+\centering
+\caption{Per-solver running time prediction error percentages for SATZilla 2012 (rose, striped) and SATZilla 2024 (indigo).}
+\label{fig:ch04:rts_hists1}
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_CaDiCaL_DVDL_V1.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_CaDiCaL-watchsat-lto.pdf}
+        \caption{2022 Comp. CaDiCaL-watchsat-lto}
+\end{subfigure}\hfill
+\begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_CaDiCaL_DVDL_V1.pdf}
         \caption{2022 Comp. CaDiCaL\_DVDL\_V1}
 \end{subfigure}
+\par\medskip
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_CaDiCaL_DVDL_V2.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_CaDiCaL_DVDL_V2.pdf}
         \caption{2022 Comp. CaDiCaL\_DVDL\_V2}
-\end{subfigure}
+\end{subfigure}\hfill
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_CadicalReorder.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_CadicalReorder.pdf}
         \caption{2022 Comp. CadicalReorder}
 \end{subfigure}
+\end{figure}
+\begin{figure}[p]
+\centering
+\caption{Per-solver running time prediction error percentages for SATZilla 2012 (rose, striped) and SATZilla 2024 (indigo).}
+\label{fig:ch04:rts_hists1b}
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_Cadical_ESA.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_Cadical_ESA.pdf}
         \caption{2022 Comp. Cadical\_ESA}
-\end{subfigure}
+\end{subfigure}\hfill
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_IsaSAT.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_IsaSAT.pdf}
         \caption{2022 Comp. IsaSAT}
 \end{subfigure}
+\par\medskip
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_Kissat-MAB-rephasing.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_Kissat-MAB-rephasing.pdf}
         \caption{2022 Comp. Kissat-MAB-rephasing}
-\end{subfigure}
+\end{subfigure}\hfill
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_Kissat_MAB-HyWalk.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_Kissat_MAB-HyWalk.pdf}
         \caption{2022 Comp. Kissat\_MAB-HyWalk}
 \end{subfigure}
 \end{figure}
-\begin{figure}
+\begin{figure}[p]
 \centering
-\caption{Histogram of the error percentage of the root mean square error (RMSE) of (log-transformed) running time prediction using a random forest with features extracted by the old (SATZilla 2012; in red) and the new tool (SATZilla 2024; in blue), on SAT solvers from the 2022 and 2023 SAT Competitions. Results are presented per solver (contd.).}
-    \label{fig:ch04:rts_hists2}
-
+\caption{Per-solver running time prediction error percentages for SATZilla 2012 (rose, striped) and SATZilla 2024 (indigo).}
+\label{fig:ch04:rts_hists2}
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_Kissat_MAB_ESA.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_Kissat_MAB_ESA.pdf}
         \caption{2022 Comp. Kissat\_MAB\_ESA}
-\end{subfigure}
+\end{subfigure}\hfill
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_Kissat_MAB_MOSS.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_Kissat_MAB_MOSS.pdf}
         \caption{2022 Comp. Kissat\_MAB\_MOSS}
 \end{subfigure}
+\par\medskip
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_Kissat_MAB_UCB.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_Kissat_MAB_UCB.pdf}
         \caption{2022 Comp. Kissat\_MAB\_UCB}
-\end{subfigure}
+\end{subfigure}\hfill
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_Kissat_adaptive_restart.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_Kissat_adaptive_restart.pdf}
         \caption{2022 Comp. Kissat\_adaptive\_restart}
 \end{subfigure}
+\end{figure}
+\begin{figure}[p]
+\centering
+\caption{Per-solver running time prediction error percentages for SATZilla 2012 (rose, striped) and SATZilla 2024 (indigo).}
+\label{fig:ch04:rts_hists2b}
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_Kissat_cfexp.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_Kissat_cfexp.pdf}
         \caption{2022 Comp. Kissat\_cfexp}
-\end{subfigure}
+\end{subfigure}\hfill
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_LSTech_CaDiCaL.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_LSTech_CaDiCaL.pdf}
         \caption{2022 Comp. LSTech\_CaDiCaL}
 \end{subfigure}
+\par\medskip
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_LSTech_Maple.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_LSTech_Maple.pdf}
         \caption{2022 Comp. LSTech\_Maple}
-\end{subfigure}
+\end{subfigure}\hfill
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_LSTech_kissat.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_LSTech_kissat.pdf}
         \caption{2022 Comp. LSTech\_kissat}
 \end{subfigure}
 \end{figure}
-\begin{figure}
+\begin{figure}[p]
 \centering
-\caption{Histogram of the error percentage of the root mean square error (RMSE) of (log-transformed) running time prediction using a random forest with features extracted by the old (SATZilla 2012; in red) and the new tool (SATZilla 2024; in blue), on SAT solvers from the 2022 and 2023 SAT Competitions. Results are presented per solver (contd.).}
-    \label{fig:ch04:rts_hists3}
-
+\caption{Per-solver running time prediction error percentages for SATZilla 2012 (rose, striped) and SATZilla 2024 (indigo).}
+\label{fig:ch04:rts_hists3}
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_LStech-Maple-BandSAT.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_LStech-Maple-BandSAT.pdf}
         \caption{2022 Comp. LStech-Maple-BandSAT}
-\end{subfigure}
+\end{subfigure}\hfill
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_LStech-Maple-FPS.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_LStech-Maple-FPS.pdf}
         \caption{2022 Comp. LStech-Maple-FPS}
 \end{subfigure}
+\par\medskip
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_LStech-Maple-HyWalk.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_LStech-Maple-HyWalk.pdf}
         \caption{2022 Comp. LStech-Maple-HyWalk}
-\end{subfigure}
+\end{subfigure}\hfill
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_MapleLCMDistChrBt-DL-v3.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_MapleLCMDistChrBt-DL-v3.pdf}
         \caption{2022 Comp. MapleLCMDistChrBt-DL-v3}
 \end{subfigure}
+\end{figure}
+\begin{figure}[p]
+\centering
+\caption{Per-solver running time prediction error percentages for SATZilla 2012 (rose, striped) and SATZilla 2024 (indigo).}
+\label{fig:ch04:rts_hists3b}
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_MergeSat 4.0-rc-rc3.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_MergeSat 4.0-rc-rc3.pdf}
         \caption{2022 Comp. MergeSat 4.0-rc-rc3}
-\end{subfigure}
+\end{subfigure}\hfill
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_SLIME SC-2022.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_SLIME SC-2022.pdf}
         \caption{2022 Comp. SLIME SC-2022}
 \end{subfigure}
+\par\medskip
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_SLIME SC-2022-alpha.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_SLIME SC-2022-alpha.pdf}
         \caption{2022 Comp. SLIME SC-2022-alpha}
-\end{subfigure}
+\end{subfigure}\hfill
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_SLIME SC-2022-beta.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_SLIME SC-2022-beta.pdf}
         \caption{2022 Comp. SLIME SC-2022-beta}
 \end{subfigure}
 \end{figure}
-\begin{figure}
+\begin{figure}[p]
 \centering
-\caption{Histogram of the error percentage of the root mean square error (RMSE) of (log-transformed) running time prediction using a random forest with features extracted by the old (SATZilla 2012; in red) and the new tool (SATZilla 2024; in blue), on SAT solvers from the 2022 and 2023 SAT Competitions. Results are presented per solver (contd.).}
-    \label{fig:ch04:rts_hists4}
-
+\caption{Per-solver running time prediction error percentages for SATZilla 2012 (rose, striped) and SATZilla 2024 (indigo).}
+\label{fig:ch04:rts_hists4}
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_SLIME SC-2022-gamma.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_SLIME SC-2022-gamma.pdf}
         \caption{2022 Comp. SLIME SC-2022-gamma}
-\end{subfigure}
+\end{subfigure}\hfill
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_SeqFROST-ERE-All.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_SeqFROST-ERE-All.pdf}
         \caption{2022 Comp. SeqFROST-ERE-All}
 \end{subfigure}
+\par\medskip
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_SeqFROST-NoExtend.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_SeqFROST-NoExtend.pdf}
         \caption{2022 Comp. SeqFROST-NoExtend}
-\end{subfigure}
+\end{subfigure}\hfill
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_cadical-hack-gb.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_cadical-hack-gb.pdf}
         \caption{2022 Comp. cadical-hack-gb}
 \end{subfigure}
+\end{figure}
+\begin{figure}[p]
+\centering
+\caption{Per-solver running time prediction error percentages for SATZilla 2012 (rose, striped) and SATZilla 2024 (indigo).}
+\label{fig:ch04:rts_hists4b}
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_cadical_rel_Scavel.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_cadical_rel_Scavel.pdf}
         \caption{2022 Comp. cadical\_rel\_Scavel}
-\end{subfigure}
+\end{subfigure}\hfill
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_ekissat-mab-db-v1.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_ekissat-mab-db-v1.pdf}
         \caption{2022 Comp. ekissat-mab-db-v1}
 \end{subfigure}
+\par\medskip
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_ekissat-mab-db-v2.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_ekissat-mab-db-v2.pdf}
         \caption{2022 Comp. ekissat-mab-db-v2}
-\end{subfigure}
+\end{subfigure}\hfill
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_ekissat-mab-gb-db.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_ekissat-mab-gb-db.pdf}
         \caption{2022 Comp. ekissat-mab-gb-db}
 \end{subfigure}
 \end{figure}
-\begin{figure}
+\begin{figure}[p]
 \centering
-\caption{Histogram of the error percentage of the root mean square error (RMSE) of (log-transformed) running time prediction using a random forest with features extracted by the old (SATZilla 2012; in red) and the new tool (SATZilla 2024; in blue), on SAT solvers from the 2022 and 2023 SAT Competitions. Results are presented per solver (contd.).}
-    \label{fig:ch04:rts_hists5}
-
+\caption{Per-solver running time prediction error percentages for SATZilla 2012 (rose, striped) and SATZilla 2024 (indigo).}
+\label{fig:ch04:rts_hists5}
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_glucose-reboot.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_glucose-reboot.pdf}
         \caption{2022 Comp. glucose-reboot}
-\end{subfigure}
+\end{subfigure}\hfill
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_hCaD_V1-psids.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_hCaD_V1-psids.pdf}
         \caption{2022 Comp. hCaD\_V1-psids}
 \end{subfigure}
+\par\medskip
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_hCaD_V2.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_hCaD_V2.pdf}
         \caption{2022 Comp. hCaD\_V2}
-\end{subfigure}
+\end{subfigure}\hfill
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_hKis-psids.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_hKis-psids.pdf}
         \caption{2022 Comp. hKis-psids}
 \end{subfigure}
+\end{figure}
+\begin{figure}[p]
+\centering
+\caption{Per-solver running time prediction error percentages for SATZilla 2012 (rose, striped) and SATZilla 2024 (indigo).}
+\label{fig:ch04:rts_hists5b}
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_hKis-sat.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_hKis-sat.pdf}
         \caption{2022 Comp. hKis-sat}
-\end{subfigure}
+\end{subfigure}\hfill
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_hKis-unsat.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_hKis-unsat.pdf}
         \caption{2022 Comp. hKis-unsat}
 \end{subfigure}
+\par\medskip
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_kissat-els-v1.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_kissat-els-v1.pdf}
         \caption{2022 Comp. kissat-els-v1}
-\end{subfigure}
+\end{subfigure}\hfill
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_kissat-els-v2.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_kissat-els-v2.pdf}
         \caption{2022 Comp. kissat-els-v2}
 \end{subfigure}
 \end{figure}
-\begin{figure}
+\begin{figure}[p]
 \centering
-\caption{Histogram of the error percentage of the root mean square error (RMSE) of (log-transformed) running time prediction using a random forest with features extracted by the old (SATZilla 2012; in red) and the new tool (SATZilla 2024; in blue), on SAT solvers from the 2022 and 2023 SAT Competitions. Results are presented per solver (contd.).}
-    \label{fig:ch04:rts_hists6}
-
+\caption{Per-solver running time prediction error percentages for SATZilla 2012 (rose, striped) and SATZilla 2024 (indigo).}
+\label{fig:ch04:rts_hists6}
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_kissat-els-v3.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_kissat-els-v3.pdf}
         \caption{2022 Comp. kissat-els-v3}
-\end{subfigure}
+\end{subfigure}\hfill
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_kissat-els-v4.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_kissat-els-v4.pdf}
         \caption{2022 Comp. kissat-els-v4}
 \end{subfigure}
+\par\medskip
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_kissat-mab-gb.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_kissat-mab-gb.pdf}
         \caption{2022 Comp. kissat-mab-gb}
-\end{subfigure}
+\end{subfigure}\hfill
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_kissat-sc2022-bulky.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_kissat-sc2022-bulky.pdf}
         \caption{2022 Comp. kissat-sc2022-bulky}
 \end{subfigure}
+\end{figure}
+\begin{figure}[p]
+\centering
+\caption{Per-solver running time prediction error percentages for SATZilla 2012 (rose, striped) and SATZilla 2024 (indigo).}
+\label{fig:ch04:rts_hists6b}
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_kissat-sc2022-hyper.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_kissat-sc2022-hyper.pdf}
         \caption{2022 Comp. kissat-sc2022-hyper}
-\end{subfigure}
+\end{subfigure}\hfill
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_kissat-sc2022-light.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_kissat-sc2022-light.pdf}
         \caption{2022 Comp. kissat-sc2022-light}
 \end{subfigure}
+\par\medskip
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_kissat-watchsat-lto.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_kissat-watchsat-lto.pdf}
         \caption{2022 Comp. kissat-watchsat-lto}
-\end{subfigure}
+\end{subfigure}\hfill
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_kissat_inc.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_kissat_inc.pdf}
         \caption{2022 Comp. kissat\_inc}
 \end{subfigure}
 \end{figure}
-\begin{figure}
+\begin{figure}[p]
 \centering
-\caption{Histogram of the error percentage of the root mean square error (RMSE) of (log-transformed) running time prediction using a random forest with features extracted by the old (SATZilla 2012; in red) and the new tool (SATZilla 2024; in blue), on SAT solvers from the 2022 and 2023 SAT Competitions. Results are presented per solver (contd.).}
-    \label{fig:ch04:rts_hists7}
-
+\caption{Per-solver running time prediction error percentages for SATZilla 2012 (rose, striped) and SATZilla 2024 (indigo).}
+\label{fig:ch04:rts_hists7}
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_kissat_pre.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_kissat_pre.pdf}
         \caption{2022 Comp. kissat\_pre}
-\end{subfigure}
+\end{subfigure}\hfill
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2022_both_kissat_relaxed.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2022_both_kissat_relaxed.pdf}
         \caption{2022 Comp. kissat\_relaxed}
 \end{subfigure}
+\par\medskip
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2023_both_AMSAT_.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2023_both_AMSAT_.pdf}
         \caption{2023 Comp. AMSAT\_}
-\end{subfigure}
+\end{subfigure}\hfill
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2023_both_BreakID-kissat-low.sh.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2023_both_BreakID-kissat-low.sh.pdf}
         \caption{2023 Comp. BreakID-kissat-low.sh}
 \end{subfigure}
+\end{figure}
+\begin{figure}[p]
+\centering
+\caption{Per-solver running time prediction error percentages for SATZilla 2012 (rose, striped) and SATZilla 2024 (indigo).}
+\label{fig:ch04:rts_hists7b}
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2023_both_CaDiCaL_vivinst.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2023_both_CaDiCaL_vivinst.pdf}
         \caption{2023 Comp. CaDiCaL\_vivinst}
-\end{subfigure}
+\end{subfigure}\hfill
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2023_both_Cadical_ESA.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2023_both_Cadical_ESA.pdf}
         \caption{2023 Comp. Cadical\_ESA}
 \end{subfigure}
+\par\medskip
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2023_both_Cadical_rel_1.5.3.Scavel.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2023_both_Cadical_rel_1.5.3.Scavel.pdf}
         \caption{2023 Comp. Cadical\_rel\_1.5.3.Scavel}
-\end{subfigure}
+\end{subfigure}\hfill
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2023_both_IsaSAT.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2023_both_IsaSAT.pdf}
         \caption{2023 Comp. IsaSAT}
 \end{subfigure}
 \end{figure}
-\begin{figure}
+\begin{figure}[p]
 \centering
-\caption{Histogram of the error percentage of the root mean square error (RMSE) of (log-transformed) running time prediction using a random forest with features extracted by the old (SATZilla 2012; in red) and the new tool (SATZilla 2024; in blue), on SAT solvers from the 2022 and 2023 SAT Competitions. Results are presented per solver (contd.).}
-    \label{fig:ch04:rts_hists8}
-
+\caption{Per-solver running time prediction error percentages for SATZilla 2012 (rose, striped) and SATZilla 2024 (indigo).}
+\label{fig:ch04:rts_hists8}
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2023_both_Kissat_Inc_ESA.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2023_both_Kissat_Inc_ESA.pdf}
         \caption{2023 Comp. Kissat\_Inc\_ESA}
-\end{subfigure}
+\end{subfigure}\hfill
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2023_both_Kissat_MAB_Binary.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2023_both_Kissat_MAB_Binary.pdf}
         \caption{2023 Comp. Kissat\_MAB\_Binary}
 \end{subfigure}
+\par\medskip
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2023_both_Kissat_MAB_Conflict.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2023_both_Kissat_MAB_Conflict.pdf}
         \caption{2023 Comp. Kissat\_MAB\_Conflict}
-\end{subfigure}
+\end{subfigure}\hfill
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2023_both_Kissat_MAB_Conflict+.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2023_both_Kissat_MAB_Conflict+.pdf}
         \caption{2023 Comp. Kissat\_MAB\_Conflict+}
 \end{subfigure}
+\end{figure}
+\begin{figure}[p]
+\centering
+\caption{Per-solver running time prediction error percentages for SATZilla 2012 (rose, striped) and SATZilla 2024 (indigo).}
+\label{fig:ch04:rts_hists8b}
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2023_both_Kissat_MAB_DeepWalk+.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2023_both_Kissat_MAB_DeepWalk+.pdf}
         \caption{2023 Comp. Kissat\_MAB\_DeepWalk+}
-\end{subfigure}
+\end{subfigure}\hfill
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2023_both_Kissat_MAB_ESA.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2023_both_Kissat_MAB_ESA.pdf}
         \caption{2023 Comp. Kissat\_MAB\_ESA}
 \end{subfigure}
+\par\medskip
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2023_both_Kissat_MAB_Rephases.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2023_both_Kissat_MAB_Rephases.pdf}
         \caption{2023 Comp. Kissat\_MAB\_Rephases}
-\end{subfigure}
+\end{subfigure}\hfill
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2023_both_Kissat_MAB_prop.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2023_both_Kissat_MAB_prop.pdf}
         \caption{2023 Comp. Kissat\_MAB\_prop}
 \end{subfigure}
 \end{figure}
-\begin{figure}
+\begin{figure}[p]
 \centering
-\caption{Histogram of the error percentage of the root mean square error (RMSE) of (log-transformed) running time prediction using a random forest with features extracted by the old (SATZilla 2012; in red) and the new tool (SATZilla 2024; in blue), on SAT solvers from the 2022 and 2023 SAT Competitions. Results are presented per solver (contd.).}
-    \label{fig:ch04:rts_hists9}
-
+\caption{Per-solver running time prediction error percentages for SATZilla 2012 (rose, striped) and SATZilla 2024 (indigo).}
+\label{fig:ch04:rts_hists9}
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2023_both_Kissat_MAB_prop-no_sym.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2023_both_Kissat_MAB_prop-no_sym.pdf}
         \caption{2023 Comp. Kissat\_MAB\_prop-no\_sym}
-\end{subfigure}
+\end{subfigure}\hfill
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2023_both_Kissat_MAB_prop_pr-no_sym.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2023_both_Kissat_MAB_prop_pr-no_sym.pdf}
         \caption{2023 Comp. Kissat\_MAB\_prop\_pr-no\_sym}
 \end{subfigure}
+\par\medskip
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2023_both_MapleCaDiCaL_LBD-990_275.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2023_both_MapleCaDiCaL_LBD-990_275.pdf}
         \caption{2023 Comp. MapleCaDiCaL\_LBD-990\_275}
-\end{subfigure}
+\end{subfigure}\hfill
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2023_both_MapleCaDiCaL_LBD-990_500.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2023_both_MapleCaDiCaL_LBD-990_500.pdf}
         \caption{2023 Comp. MapleCaDiCaL\_LBD-990\_500}
 \end{subfigure}
+\end{figure}
+\begin{figure}[p]
+\centering
+\caption{Per-solver running time prediction error percentages for SATZilla 2012 (rose, striped) and SATZilla 2024 (indigo).}
+\label{fig:ch04:rts_hists9b}
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2023_both_MapleCaDiCaL_PPD-500_500.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2023_both_MapleCaDiCaL_PPD-500_500.pdf}
         \caption{2023 Comp. MapleCaDiCaL\_PPD-500\_500}
-\end{subfigure}
+\end{subfigure}\hfill
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2023_both_MapleCaDiCaL_PPD-950_950.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2023_both_MapleCaDiCaL_PPD-950_950.pdf}
         \caption{2023 Comp. MapleCaDiCaL\_PPD-950\_950}
 \end{subfigure}
+\par\medskip
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2023_both_MergeSat-bve_gates.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2023_both_MergeSat-bve_gates.pdf}
         \caption{2023 Comp. MergeSat-bve\_gates}
-\end{subfigure}
+\end{subfigure}\hfill
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2023_both_MergeSat-bve_semgates.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2023_both_MergeSat-bve_semgates.pdf}
         \caption{2023 Comp. MergeSat-bve\_semgates}
 \end{subfigure}
 \end{figure}
-\begin{figure}
+\begin{figure}[p]
 \centering
-\caption{Histogram of the error percentage of the root mean square error (RMSE) of (log-transformed) running time prediction using a random forest with features extracted by the old (SATZilla 2012; in red) and the new tool (SATZilla 2024; in blue), on SAT solvers from the 2022 and 2023 SAT Competitions. Results are presented per solver (contd.).}
-    \label{fig:ch04:rts_hists10}
-
+\caption{Per-solver running time prediction error percentages for SATZilla 2012 (rose, striped) and SATZilla 2024 (indigo).}
+\label{fig:ch04:rts_hists10}
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2023_both_MergeSat-thread1.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2023_both_MergeSat-thread1.pdf}
         \caption{2023 Comp. MergeSat-thread1}
-\end{subfigure}
+\end{subfigure}\hfill
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2023_both_MiniSat+XorEngine.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2023_both_MiniSat+XorEngine.pdf}
         \caption{2023 Comp. MiniSat+XorEngine}
 \end{subfigure}
+\par\medskip
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2023_both_PReLearn-kissat-PReLearn-kissat.sh.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2023_both_PReLearn-kissat-PReLearn-kissat.sh.pdf}
         \caption{2023 Comp. PReLearn-kissat-PReLearn-kissat.sh}
-\end{subfigure}
+\end{subfigure}\hfill
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2023_both_PReLearn-kissat-PReLearn-tern-kissat.sh.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2023_both_PReLearn-kissat-PReLearn-tern-kissat.sh.pdf}
         \caption{2023 Comp. PReLearn-kissat-PReLearn-tern-kissat.sh}
 \end{subfigure}
+\end{figure}
+\begin{figure}[p]
+\centering
+\caption{Per-solver running time prediction error percentages for SATZilla 2012 (rose, striped) and SATZilla 2024 (indigo).}
+\label{fig:ch04:rts_hists10b}
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2023_both_ReEncode-kissat-ReEncode-pair-kissat.sh.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2023_both_ReEncode-kissat-ReEncode-pair-kissat.sh.pdf}
         \caption{2023 Comp. ReEncode-kissat-ReEncode-pair-kissat.sh}
-\end{subfigure}
+\end{subfigure}\hfill
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2023_both_SBVA-sbva_cadical.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2023_both_SBVA-sbva_cadical.pdf}
         \caption{2023 Comp. SBVA-sbva\_cadical}
 \end{subfigure}
+\par\medskip
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2023_both_SBVA-sbva_kissat.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2023_both_SBVA-sbva_kissat.pdf}
         \caption{2023 Comp. SBVA-sbva\_kissat}
-\end{subfigure}
+\end{subfigure}\hfill
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2023_both_SeqFROST.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2023_both_SeqFROST.pdf}
         \caption{2023 Comp. SeqFROST}
 \end{subfigure}
 \end{figure}
-\begin{figure}
+\begin{figure}[p]
 \centering
-\caption{Histogram of the error percentage of the root mean square error (RMSE) of (log-transformed) running time prediction using a random forest with features extracted by the old (SATZilla 2012; in red) and the new tool (SATZilla 2024; in blue), on SAT solvers from the 2022 and 2023 SAT Competitions. Results are presented per solver (contd.).}
-    \label{fig:ch04:rts_hists11}
-
+\caption{Per-solver running time prediction error percentages for SATZilla 2012 (rose, striped) and SATZilla 2024 (indigo).}
+\label{fig:ch04:rts_hists11}
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2023_both_SeqFROST-ERE-All.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2023_both_SeqFROST-ERE-All.pdf}
         \caption{2023 Comp. SeqFROST-ERE-All}
-\end{subfigure}
+\end{subfigure}\hfill
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2023_both_SeqFROST-NoExtend.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2023_both_SeqFROST-NoExtend.pdf}
         \caption{2023 Comp. SeqFROST-NoExtend}
 \end{subfigure}
+\par\medskip
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2023_both_hKis-psids.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2023_both_hKis-psids.pdf}
         \caption{2023 Comp. hKis-psids}
-\end{subfigure}
+\end{subfigure}\hfill
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2023_both_hKis-sat_psids.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2023_both_hKis-sat_psids.pdf}
         \caption{2023 Comp. hKis-sat\_psids}
 \end{subfigure}
+\end{figure}
+\begin{figure}[p]
+\centering
+\caption{Per-solver running time prediction error percentages for SATZilla 2012 (rose, striped) and SATZilla 2024 (indigo).}
+\label{fig:ch04:rts_hists11b}
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2023_both_hKis-unsat.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2023_both_hKis-unsat.pdf}
         \caption{2023 Comp. hKis-unsat}
-\end{subfigure}
+\end{subfigure}\hfill
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2023_both_hKissatInc-unsat.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2023_both_hKissatInc-unsat.pdf}
         \caption{2023 Comp. hKissatInc-unsat}
 \end{subfigure}
+\par\medskip
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2023_both_kissat-3.1.0.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2023_both_kissat-3.1.0.pdf}
         \caption{2023 Comp. kissat-3.1.0}
-\end{subfigure}
+\end{subfigure}\hfill
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2023_both_kissat-hywalk-exp.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2023_both_kissat-hywalk-exp.pdf}
         \caption{2023 Comp. kissat-hywalk-exp}
 \end{subfigure}
 \end{figure}
-\begin{figure}
+\begin{figure}[p]
 \centering
-\caption{Histogram of the error percentage of the root mean square error (RMSE) of (log-transformed) running time prediction using a random forest with features extracted by the old (SATZilla 2012; in red) and the new tool (SATZilla 2024; in blue), on SAT solvers from the 2022 and 2023 SAT Competitions. Results are presented per solver (contd.).}
-    \label{fig:ch04:rts_hists12}
-
+\caption{Per-solver running time prediction error percentages for SATZilla 2012 (rose, striped) and SATZilla 2024 (indigo).}
+\label{fig:ch04:rts_hists12}
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2023_both_kissat-hywalk-exp-gb.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2023_both_kissat-hywalk-exp-gb.pdf}
         \caption{2023 Comp. kissat-hywalk-exp-gb}
-\end{subfigure}
+\end{subfigure}\hfill
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2023_both_kissat-hywalk-gb.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2023_both_kissat-hywalk-gb.pdf}
         \caption{2023 Comp. kissat-hywalk-gb}
 \end{subfigure}
+\par\medskip
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2023_both_kissat_incsp.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2023_both_kissat_incsp.pdf}
         \caption{2023 Comp. kissat\_incsp}
-\end{subfigure}
+\end{subfigure}\hfill
 \begin{subfigure}[b]{0.49\textwidth}
         \centering
-        \includegraphics[]{figures/04/figs/acc_rt_pred_sc2023_both_tabularasat-1.0.0.pdf}
+        \includegraphics{figures/04/figs/acc_rt_pred_sc2023_both_tabularasat-1.0.0.pdf}
         \caption{2023 Comp. tabularasat-1.0.0}
 \end{subfigure}
 \end{figure}
