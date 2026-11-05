@@ -1020,6 +1020,8 @@ The total Bayesian optimisation budget was set at $300$ evaluations including th
 \section{Results}
 \label{sec:ch05:res}
 
+Figure labels use AE for autoencoder, RP for random projection, 2L for two layers, and unsup. for unsupervised; Param. abbreviates parametric.
+
 % \hs{not yet ready}
 \changed{
 We present and discuss selected results from our experiments for the four assessment tasks. Due to the scale of the experiments, we present the results using heatmaps, with additional boxplots available in~\cref{app:ch05:detailed-default-results}. Results obtained with task-specifically tuned dimensionality reduction methods are reported in~\cref{app:ch05:tuned-results}.
@@ -1077,17 +1079,17 @@ As these methods simultaneously exhibit low homogeneity, as seen in~\cref{fig:ch
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/summary_k_homogeneity.pdf}
+\includegraphics{figures/05/ml/summary_k_homogeneity.pdf}
 \caption{Homogeneity}\label{fig:ch05:cluster_all_agg_homogeneity}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/summary_k_completeness.pdf}
+\includegraphics{figures/05/ml/summary_k_completeness.pdf}
 \caption{Completeness}\label{fig:ch05:cluster_all_agg_completeness}
 \end{subfigure}
 \par\vspace{6pt}
-\includegraphics{figures/ml/summary_k_homogeneity_colorbar.pdf}
+\includegraphics{figures/05/ml/summary_k_homogeneity_colorbar.pdf}
 
 
     \caption{Mean performance of dimensionality reduction methods aggregated across all OpenML~CC-18 datasets for different target dimensionalities $k$ on \textbf{Task 1: clustering ability}. The upper and lower panels show homogeneity and completeness, respectively; higher values are better. }
@@ -1106,17 +1108,17 @@ With respect to cluster completeness (\cref{fig:ch05:cluster_homogeneity_dataset
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/summary_size_homogeneity.pdf}
+\includegraphics{figures/05/ml/summary_size_homogeneity.pdf}
 \caption{Homogeneity}\label{fig:ch05:cluster_homogeneity_dataset_sizes_homogeneity}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/summary_size_completeness.pdf}
+\includegraphics{figures/05/ml/summary_size_completeness.pdf}
 \caption{Completeness}\label{fig:ch05:cluster_homogeneity_dataset_sizes_completeness}
 \end{subfigure}
 \par\vspace{6pt}
-\includegraphics{figures/ml/summary_size_homogeneity_colorbar.pdf}
+\includegraphics{figures/05/ml/summary_size_homogeneity_colorbar.pdf}
 
 
     \caption{Mean performance of dimensionality reduction methods on low-, medium- and high-dimensional OpenML~CC-18 datasets for $k=5$ on \textbf{Task 1: clustering ability}. The upper and lower panels show homogeneity and completeness, respectively; higher values are better. }
@@ -1152,17 +1154,17 @@ Overall, while most methods achieve comparable accuracy, Ivis consistently perfo
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/summary_k_rf_acc.pdf}
+\includegraphics{figures/05/ml/summary_k_rf_acc.pdf}
 \caption{Random forest}\label{fig:ch05:ml_pred_all-rf}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/summary_k_gb_acc.pdf}
+\includegraphics{figures/05/ml/summary_k_gb_acc.pdf}
 \caption{Gradient boosting}\label{fig:ch05:ml_pred_all-gb}
 \end{subfigure}
 \par\vspace{6pt}
-\includegraphics{figures/ml/summary_k_rf_acc_colorbar.pdf}
+\includegraphics{figures/05/ml/summary_k_rf_acc_colorbar.pdf}
 
 
     \caption{Mean classification accuracy of dimensionality reduction methods across OpenML~CC-18 datasets for different target dimensionalities $k$ on \textbf{Task 2: tabular classification accuracy}. From top to bottom, the panels show random forest, gradient boosting and MLP results; higher values are better.}
@@ -1174,11 +1176,11 @@ Overall, while most methods achieve comparable accuracy, Ivis consistently perfo
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/summary_k_mlp_acc.pdf}
+\includegraphics{figures/05/ml/summary_k_mlp_acc.pdf}
 \caption{MLP}\label{fig:ch05:ml_pred_all-mlp}
 \end{subfigure}
 \par\vspace{6pt}
-\includegraphics{figures/ml/summary_k_mlp_acc_colorbar.pdf}
+\includegraphics{figures/05/ml/summary_k_mlp_acc_colorbar.pdf}
 
 
     \caption{\textit{Continued.} Mean classification accuracy of dimensionality reduction methods across OpenML~CC-18 datasets for different target dimensionalities $k$ on \textbf{Task 2: tabular classification accuracy}. From top to bottom, the panels show random forest, gradient boosting and MLP results; higher values are better.}
@@ -1202,17 +1204,17 @@ The comparison in~\cref{fig:ch05:ml_pred_le1000} (see Appendix) includes Slipmap
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/summary_size_rf_acc.pdf}
+\includegraphics{figures/05/ml/summary_size_rf_acc.pdf}
 \caption{Random forest}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/summary_size_gb_acc.pdf}
+\includegraphics{figures/05/ml/summary_size_gb_acc.pdf}
 \caption{Gradient boosting}
 \end{subfigure}
 \par\vspace{6pt}
-\includegraphics{figures/ml/summary_size_rf_acc_colorbar.pdf}
+\includegraphics{figures/05/ml/summary_size_rf_acc_colorbar.pdf}
 
 
     \caption{Mean classification accuracy of dimensionality reduction methods on low-, medium- and high-dimensional OpenML~CC-18 datasets for $k=5$ on \textbf{Task 2: tabular classification accuracy}. From top to bottom, the panels show random forest, gradient boosting and MLP results; higher values are better. }
@@ -1224,11 +1226,11 @@ The comparison in~\cref{fig:ch05:ml_pred_le1000} (see Appendix) includes Slipmap
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/summary_size_mlp_acc.pdf}
+\includegraphics{figures/05/ml/summary_size_mlp_acc.pdf}
 \caption{MLP}
 \end{subfigure}
 \par\vspace{6pt}
-\includegraphics{figures/ml/summary_size_mlp_acc_colorbar.pdf}
+\includegraphics{figures/05/ml/summary_size_mlp_acc_colorbar.pdf}
 
 
     \caption{\textit{Continued.} Mean classification accuracy of dimensionality reduction methods on low-, medium- and high-dimensional OpenML~CC-18 datasets for $k=5$ on \textbf{Task 2: tabular classification accuracy}. From top to bottom, the panels show random forest, gradient boosting and MLP results; higher values are better. }
@@ -1252,9 +1254,9 @@ The comparison in~\cref{fig:ch05:ml_pred_le1000} (see Appendix) includes Slipmap
 % hs: Separate panels at natural size; LaTeX owns captions and lettering.
 \begin{figure}[htbp]
 \centering
-\includegraphics{figures/epm/summary_red_dim_100_120.pdf}
+\includegraphics{figures/05/epm/summary_red_dim_100_120.pdf}
 \par\vspace{6pt}
-\includegraphics{figures/epm/summary_red_dim_100_120_colorbar.pdf}
+\includegraphics{figures/05/epm/summary_red_dim_100_120_colorbar.pdf}
 
 
     \caption{Mean normalised RMSE of dimensionality reduction methods across synthetic benchmark problems for varying target dimensionality $k$, with $D=120$ and $N=100$, on \textbf{Task 3: target function approximation}; lower is better.}
@@ -1279,9 +1281,9 @@ This aligns with expectations, as PLS components are explicitly optimised to max
 % hs: Separate panels at natural size; LaTeX owns captions and lettering.
 \begin{figure}[htbp]
 \centering
-\includegraphics{figures/epm/summary_inpt_dim_100_20.pdf}
+\includegraphics{figures/05/epm/summary_inpt_dim_100_20.pdf}
 \par\vspace{6pt}
-\includegraphics{figures/epm/summary_inpt_dim_100_20_colorbar.pdf}
+\includegraphics{figures/05/epm/summary_inpt_dim_100_20_colorbar.pdf}
 
 
     \caption{Mean normalised RMSE of dimensionality reduction methods across synthetic benchmark problems for varying input dimensionality $D$, with $k=20$ and $N=100$, on \textbf{Task 3: target function approximation}; lower is better.}
@@ -1304,17 +1306,17 @@ Second, we look into the effect of varying the input dimensionality $D$, keeping
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/epm/summary_sample_40_5.pdf}
+\includegraphics{figures/05/epm/summary_sample_40_5.pdf}
 \caption{$D=40$, $k=5$}\label{fig:ch05:res-bbo-task2_samp_sizes-40-5}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/epm/summary_sample_1000_40.pdf}
+\includegraphics{figures/05/epm/summary_sample_1000_40.pdf}
 \caption{$D=1000$, $k=40$}\label{fig:ch05:res-bbo-task2_samp_sizes-1000-40}
 \end{subfigure}
 \par\vspace{6pt}
-\includegraphics{figures/epm/summary_sample_40_5_colorbar.pdf}
+\includegraphics{figures/05/epm/summary_sample_40_5_colorbar.pdf}
 
 
     \caption{Mean normalised RMSE of dimensionality reduction methods across synthetic benchmark problems for varying initial sample size $N$. The upper panel shows $D=40$, $k=5$; the lower panel shows $D=1000$, $k=40$; lower is better.}
@@ -1334,17 +1336,17 @@ For high-dimensional inputs ($D = 1000$,~\cref{fig:ch05:res-bbo-task2_samp_sizes
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/epm/summary_real_red_dim_1000.pdf}
+\includegraphics{figures/05/epm/summary_real_red_dim_1000.pdf}
 \caption{Varying k with $N=1000$}\label{fig:ch05:res-bbo-task1_real-k}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/epm/summary_real_sample_5.pdf}
+\includegraphics{figures/05/epm/summary_real_sample_5.pdf}
 \caption{Varying N with $k=5$}\label{fig:ch05:res-bbo-task1_real-n}
 \end{subfigure}
 \par\vspace{6pt}
-\includegraphics{figures/epm/summary_real_red_dim_1000_colorbar.pdf}
+\includegraphics{figures/05/epm/summary_real_red_dim_1000_colorbar.pdf}
 
 
     \caption{Mean normalised RMSE of dimensionality reduction methods across real-world benchmark problems on \textbf{Task 3: target function approximation}. The upper panel varies $k$ with $N=1000$; the lower panel varies $N$ with $k=5$; lower is better.}
@@ -1370,9 +1372,9 @@ In contrast to Task 3, PCA (RBF) consistently exhibits the best performance acro
 % hs: Separate panels at natural size; LaTeX owns captions and lettering.
 \begin{figure}[htbp]
 \centering
-\includegraphics{figures/bop/summary_red_dim_100_120.pdf}
+\includegraphics{figures/05/bop/summary_red_dim_100_120.pdf}
 \par\vspace{6pt}
-\includegraphics{figures/bop/summary_red_dim_100_120_colorbar.pdf}
+\includegraphics{figures/05/bop/summary_red_dim_100_120_colorbar.pdf}
 
 
     \caption{Mean final performance across synthetic benchmark problems for varying target dimensionality $k$, with $D=120$ and $N=100$, on \textbf{Task 4: black-box optimiser performance}. Values are min--max normalised within each function; lower is better.}
@@ -1388,9 +1390,9 @@ Next, we analyse the effect of varying input dimensionalities $D$ while fixing t
 % hs: Separate panels at natural size; LaTeX owns captions and lettering.
 \begin{figure}[htbp]
 \centering
-\includegraphics{figures/bop/summary_inpt_dim_100_20.pdf}
+\includegraphics{figures/05/bop/summary_inpt_dim_100_20.pdf}
 \par\vspace{6pt}
-\includegraphics{figures/bop/summary_inpt_dim_100_20_colorbar.pdf}
+\includegraphics{figures/05/bop/summary_inpt_dim_100_20_colorbar.pdf}
 
 
     \caption{Mean final performance across synthetic benchmark problems for varying input dimensionality $D$, with $k=20$ and $N=100$, on \textbf{Task 4: black-box optimiser performance}. Values are min--max normalised within each function; lower is better.}
@@ -1406,17 +1408,17 @@ We further examined the effect of varying initial sample sizes $N$ on performanc
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/bop/summary_sample_40_5.pdf}
+\includegraphics{figures/05/bop/summary_sample_40_5.pdf}
 \caption{$D=40$, $k=5$}\label{fig:ch05:res-bbo-task2_samples-40-5}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/bop/summary_sample_1000_40.pdf}
+\includegraphics{figures/05/bop/summary_sample_1000_40.pdf}
 \caption{$D=1000$, $k=40$}\label{fig:ch05:res-bbo-task2_samples-1000-40}
 \end{subfigure}
 \par\vspace{6pt}
-\includegraphics{figures/bop/summary_sample_40_5_colorbar.pdf}
+\includegraphics{figures/05/bop/summary_sample_40_5_colorbar.pdf}
 
 
     \caption{Mean final performance across synthetic benchmark problems for varying initial sample size $N$. The upper panel shows $D=40$, $k=5$; the lower panel shows $D=1000$, $k=40$. Values are min--max normalised within each function; lower is better.}
@@ -1457,17 +1459,17 @@ on every individual problem.}
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/bop/summary_real_red_dim_100.pdf}
+\includegraphics{figures/05/bop/summary_real_red_dim_100.pdf}
 \caption{Varying k with $N=100$}\label{fig:ch05:res-bbo-task2-real-world-k}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/bop/summary_real_sample_5.pdf}
+\includegraphics{figures/05/bop/summary_real_sample_5.pdf}
 \caption{Varying N with $k=5$}\label{fig:ch05:res-bbo-task2-real-world-n}
 \end{subfigure}
 \par\vspace{6pt}
-\includegraphics{figures/bop/summary_real_red_dim_100_colorbar.pdf}
+\includegraphics{figures/05/bop/summary_real_red_dim_100_colorbar.pdf}
 
 
     \caption{Mean final performance across real-world benchmark problems on \textbf{Task 4: black-box optimiser performance}. The upper panel varies $k$ with $N=100$; the lower panel varies $N$ with $k=5$. Values are min--max normalised within each function; lower is better.}
@@ -1517,13 +1519,13 @@ We found that Gaussian and sparse random projections consistently incur low runn
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/time/9985_train_time.pdf}
+\includegraphics{figures/05/time/9985_train_time.pdf}
 \caption{Training on dataset 9985}\label{fig:ch05:res-rt-a}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/time/9985_transform_time.pdf}
+\includegraphics{figures/05/time/9985_transform_time.pdf}
 \caption{Transform on dataset 9985}\label{fig:ch05:res-rt-b}
 \end{subfigure}
 \par\vspace{6pt}
@@ -1540,13 +1542,13 @@ We found that Gaussian and sparse random projections consistently incur low runn
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/time/9981_train_time.pdf}
+\includegraphics{figures/05/time/9981_train_time.pdf}
 \caption{Training on dataset 9981}\label{fig:ch05:res-rt-c}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/time/9981_transform_time.pdf}
+\includegraphics{figures/05/time/9981_transform_time.pdf}
 \caption{Transform on dataset 9981}\label{fig:ch05:res-rt-d}
 \end{subfigure}
 \par\vspace{6pt}
@@ -1778,13 +1780,13 @@ For Task 4, we additionally report the mean rank trajectories over the complete 
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/agg_5_homogeneity.pdf}
+\includegraphics{figures/05/ml/agg_5_homogeneity.pdf}
 \caption{$k=5$; homogeneity}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/agg_10_homogeneity.pdf}
+\includegraphics{figures/05/ml/agg_10_homogeneity.pdf}
 \caption{$k=10$; homogeneity}
 \end{subfigure}
 \par\vspace{6pt}
@@ -1800,13 +1802,13 @@ For Task 4, we additionally report the mean rank trajectories over the complete 
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/agg_20_homogeneity.pdf}
+\includegraphics{figures/05/ml/agg_20_homogeneity.pdf}
 \caption{$k=20$; homogeneity}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/agg_40_homogeneity.pdf}
+\includegraphics{figures/05/ml/agg_40_homogeneity.pdf}
 \caption{$k=40$; homogeneity}
 \end{subfigure}
 \par\vspace{6pt}
@@ -1822,13 +1824,13 @@ For Task 4, we additionally report the mean rank trajectories over the complete 
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/agg_5_completeness.pdf}
+\includegraphics{figures/05/ml/agg_5_completeness.pdf}
 \caption{$k=5$; completeness}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/agg_10_completeness.pdf}
+\includegraphics{figures/05/ml/agg_10_completeness.pdf}
 \caption{$k=10$; completeness}
 \end{subfigure}
 \par\vspace{6pt}
@@ -1844,13 +1846,13 @@ For Task 4, we additionally report the mean rank trajectories over the complete 
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/agg_20_completeness.pdf}
+\includegraphics{figures/05/ml/agg_20_completeness.pdf}
 \caption{$k=20$; completeness}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/agg_40_completeness.pdf}
+\includegraphics{figures/05/ml/agg_40_completeness.pdf}
 \caption{$k=40$; completeness}
 \end{subfigure}
 \par\vspace{6pt}
@@ -1858,33 +1860,31 @@ For Task 4, we additionally report the mean rank trajectories over the complete 
 
 
     % \begin{subfigure}{0.48\textwidth}
-    %     \includegraphics[width=\linewidth]{figures/ml/agg_5_v_measure.pdf}
+    %     \includegraphics[width=\linewidth]{figures/05/ml/agg_5_v_measure.pdf}
     %     \caption{\tiny{$k$=5 V-Measure}}
     % \end{subfigure}
     % \begin{subfigure}{0.48\textwidth}
-    %     \includegraphics[width=\linewidth]{figures/ml/agg_10_v_measure.pdf}
+    %     \includegraphics[width=\linewidth]{figures/05/ml/agg_10_v_measure.pdf}
     %     \caption{\tiny{$k$=10 V-Measure}}
     % \end{subfigure}
     % \begin{subfigure}{0.48\textwidth}
-    %     \includegraphics[width=\linewidth]{figures/ml/agg_20_v_measure.pdf}
+    %     \includegraphics[width=\linewidth]{figures/05/ml/agg_20_v_measure.pdf}
     %     \caption{\tiny{$k$=20 V-Measure}}
     % \end{subfigure}
     % \begin{subfigure}{0.48\textwidth}
-    %     \includegraphics[width=\linewidth]{figures/ml/agg_40_v_measure.pdf}
+    %     \includegraphics[width=\linewidth]{figures/05/ml/agg_40_v_measure.pdf}
     %     \caption{\tiny{$k$=40 V-Measure}}
     % \end{subfigure}
 % \begin{subfigure}[t]{0.8\textwidth}
 %         \centering
-%         \includegraphics[width=1.0\textwidth,trim={1.5cm 4cm 3.7cm 0.0cm},clip]{figures/legend.pdf}
+%         \includegraphics[width=1.0\textwidth,trim={1.5cm 4cm 3.7cm 0.0cm},clip]{figures/05/legend.pdf}
 %     \end{subfigure}
-\caption{
-% \changed{
+\caption{% \changed{
 \changed{Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is better.}
 % }
 }
 \label{fig:ch05:details-cluster_all_agg}
-\Description{
-% \changed{
+\Description{% \changed{
 Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is better.
 % }
 }
@@ -1895,17 +1895,17 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/summary_k_le1000_homogeneity.pdf}
+\includegraphics{figures/05/ml/summary_k_le1000_homogeneity.pdf}
 \caption{Homogeneity}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/summary_k_le1000_completeness.pdf}
+\includegraphics{figures/05/ml/summary_k_le1000_completeness.pdf}
 \caption{Completeness}
 \end{subfigure}
 \par\vspace{6pt}
-\includegraphics{figures/ml/summary_k_le1000_homogeneity_colorbar.pdf}
+\includegraphics{figures/05/ml/summary_k_le1000_homogeneity_colorbar.pdf}
 
 
     \caption{\changed{Clustering performance for $k\in\{5,10,20,40\}$ on the six OpenML datasets with at most 1\,000 samples, including Slipmap, measured by homogeneity and completeness; higher is better.}}
@@ -1918,13 +1918,13 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/agg_small_5_homogeneity.pdf}
+\includegraphics{figures/05/ml/agg_small_5_homogeneity.pdf}
 \caption{Small $D$; homogeneity}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/agg_medium_5_homogeneity.pdf}
+\includegraphics{figures/05/ml/agg_medium_5_homogeneity.pdf}
 \caption{Medium $D$; homogeneity}
 \end{subfigure}
 \par\vspace{6pt}
@@ -1939,7 +1939,7 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/agg_large_5_homogeneity.pdf}
+\includegraphics{figures/05/ml/agg_large_5_homogeneity.pdf}
 \caption{Large $D$; homogeneity}
 \end{subfigure}
 \par\vspace{6pt}
@@ -1955,13 +1955,13 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/agg_small_5_completeness.pdf}
+\includegraphics{figures/05/ml/agg_small_5_completeness.pdf}
 \caption{Small $D$; completeness}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/agg_medium_5_completeness.pdf}
+\includegraphics{figures/05/ml/agg_medium_5_completeness.pdf}
 \caption{Medium $D$; completeness}
 \end{subfigure}
 \par\vspace{6pt}
@@ -1970,15 +1970,13 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 
 % \begin{subfigure}[t]{0.8\textwidth}
 %         \centering
-%         \includegraphics[width=1.0\textwidth,trim={1.5cm 4cm 3.7cm 0.0cm},clip]{figures/legend.pdf}
+%         \includegraphics[width=1.0\textwidth,trim={1.5cm 4cm 3.7cm 0.0cm},clip]{figures/05/legend.pdf}
 %     \end{subfigure}
-\caption{
-\changed{Clustering performance on low-, medium- and high-dimensional datasets for $k=5$, measured by completeness; higher is better.}
+\caption{\changed{Clustering performance on low-, medium- and high-dimensional datasets for $k=5$, measured by completeness; higher is better.}
 % \todo{if we can please have 2 rows x 3 columns s.t. homogeneity is in the first row and completeness in the second row? Also for the following figures analogously}
 }
 \label{fig:ch05:details-cluster_homogeneity_dataset_sizes}
-\Description{
-\changed{Clustering performance on low-, medium- and high-dimensional datasets for $k=5$, measured by completeness; higher is better.}
+\Description{\changed{Clustering performance on low-, medium- and high-dimensional datasets for $k=5$, measured by completeness; higher is better.}
 % \todo{if we can please have 2 rows x 3 columns s.t. homogeneity is in the first row and completeness in the second row? Also for the following figures analogously}
 }
 \end{figure}
@@ -1987,7 +1985,7 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/agg_large_5_completeness.pdf}
+\includegraphics{figures/05/ml/agg_large_5_completeness.pdf}
 \caption{Large $D$; completeness}
 \end{subfigure}
 \par\vspace{6pt}
@@ -1996,10 +1994,9 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 
 % \begin{subfigure}[t]{0.8\textwidth}
 %         \centering
-%         \includegraphics[width=1.0\textwidth,trim={1.5cm 4cm 3.7cm 0.0cm},clip]{figures/legend.pdf}
+%         \includegraphics[width=1.0\textwidth,trim={1.5cm 4cm 3.7cm 0.0cm},clip]{figures/05/legend.pdf}
 %     \end{subfigure}
-\caption{ 
-\changed{\textit{Continued.} Clustering performance on low-, medium- and high-dimensional datasets for $k=5$, measured by completeness; higher is better.}
+\caption{\changed{\textit{Continued.} Clustering performance on low-, medium- and high-dimensional datasets for $k=5$, measured by completeness; higher is better.}
 % \todo{if we can please have 2 rows x 3 columns s.t. homogeneity is in the first row and completeness in the second row? Also for the following figures analogously}
 }
 
@@ -2017,13 +2014,13 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/agg_5_rf_acc.pdf}
+\includegraphics{figures/05/ml/agg_5_rf_acc.pdf}
 \caption{Random forest; $k=5$}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/agg_10_rf_acc.pdf}
+\includegraphics{figures/05/ml/agg_10_rf_acc.pdf}
 \caption{Random forest; $k=10$}
 \end{subfigure}
 \par\vspace{6pt}
@@ -2038,13 +2035,13 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/agg_20_rf_acc.pdf}
+\includegraphics{figures/05/ml/agg_20_rf_acc.pdf}
 \caption{Random forest; $k=20$}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/agg_40_rf_acc.pdf}
+\includegraphics{figures/05/ml/agg_40_rf_acc.pdf}
 \caption{Random forest; $k=40$}
 \end{subfigure}
 \par\vspace{6pt}
@@ -2060,13 +2057,13 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/agg_5_gb_acc.pdf}
+\includegraphics{figures/05/ml/agg_5_gb_acc.pdf}
 \caption{Gradient boosting; $k=5$}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/agg_10_gb_acc.pdf}
+\includegraphics{figures/05/ml/agg_10_gb_acc.pdf}
 \caption{Gradient boosting; $k=10$}
 \end{subfigure}
 \par\vspace{6pt}
@@ -2081,13 +2078,13 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/agg_20_gb_acc.pdf}
+\includegraphics{figures/05/ml/agg_20_gb_acc.pdf}
 \caption{Gradient boosting; $k=20$}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/agg_40_gb_acc.pdf}
+\includegraphics{figures/05/ml/agg_40_gb_acc.pdf}
 \caption{Gradient boosting; $k=40$}
 \end{subfigure}
 \par\vspace{6pt}
@@ -2103,13 +2100,13 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/agg_5_mlp_acc.pdf}
+\includegraphics{figures/05/ml/agg_5_mlp_acc.pdf}
 \caption{MLP; $k=5$}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/agg_10_mlp_acc.pdf}
+\includegraphics{figures/05/ml/agg_10_mlp_acc.pdf}
 \caption{MLP; $k=10$}
 \end{subfigure}
 \par\vspace{6pt}
@@ -2118,14 +2115,12 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 
 % \begin{subfigure}[t]{0.8\textwidth}
 %         \centering
-%         \includegraphics[width=1.0\textwidth,trim={1.5cm 4cm 3.7cm 0.0cm},clip]{figures/legend.pdf}
+%         \includegraphics[width=1.0\textwidth,trim={1.5cm 4cm 3.7cm 0.0cm},clip]{figures/05/legend.pdf}
 %     \end{subfigure}
-\caption{
-\textit{Continued.} \changed{Classification accuracy with MLP for $k\in\{5,10,20,40\}$; higher is better.}
+\caption{\textit{Continued.} \changed{Classification accuracy with MLP for $k\in\{5,10,20,40\}$; higher is better.}
 }
 \label{fig:ch05:details-ml_pred_all}
-\Description{
-\textit{Continued.} \changed{Classification accuracy with MLP for $k\in\{5,10,20,40\}$; higher is better.}
+\Description{\textit{Continued.} \changed{Classification accuracy with MLP for $k\in\{5,10,20,40\}$; higher is better.}
 }
 \end{figure}
 \begin{figure}[htbp]
@@ -2133,13 +2128,13 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/agg_20_mlp_acc.pdf}
+\includegraphics{figures/05/ml/agg_20_mlp_acc.pdf}
 \caption{MLP; $k=20$}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/agg_40_mlp_acc.pdf}
+\includegraphics{figures/05/ml/agg_40_mlp_acc.pdf}
 \caption{MLP; $k=40$}
 \end{subfigure}
 \par\vspace{6pt}
@@ -2148,7 +2143,7 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 
 % \begin{subfigure}[t]{0.8\textwidth}
 %         \centering
-%         \includegraphics[width=1.0\textwidth,trim={1.5cm 4cm 3.7cm 0.0cm},clip]{figures/legend.pdf}
+%         \includegraphics[width=1.0\textwidth,trim={1.5cm 4cm 3.7cm 0.0cm},clip]{figures/05/legend.pdf}
 %     \end{subfigure}
 \caption{\textit{Continued.} \changed{Classification accuracy with MLP for $k\in\{5,10,20,40\}$; higher is better.}
 }
@@ -2162,17 +2157,17 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/summary_k_le1000_rf_acc.pdf}
+\includegraphics{figures/05/ml/summary_k_le1000_rf_acc.pdf}
 \caption{Random forest}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/summary_k_le1000_gb_acc.pdf}
+\includegraphics{figures/05/ml/summary_k_le1000_gb_acc.pdf}
 \caption{Gradient boosting}
 \end{subfigure}
 \par\vspace{6pt}
-\includegraphics{figures/ml/summary_k_le1000_rf_acc_colorbar.pdf}
+\includegraphics{figures/05/ml/summary_k_le1000_rf_acc_colorbar.pdf}
 
 
     \caption{\changed{Mean classification accuracy for $k\in\{5,10,20,40\}$ on the six OpenML datasets with at most 1\,000 samples, including Slipmap, for random forest and gradient boosting; higher is better.}}
@@ -2184,11 +2179,11 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/summary_k_le1000_mlp_acc.pdf}
+\includegraphics{figures/05/ml/summary_k_le1000_mlp_acc.pdf}
 \caption{MLP}
 \end{subfigure}
 \par\vspace{6pt}
-\includegraphics{figures/ml/summary_k_le1000_mlp_acc_colorbar.pdf}
+\includegraphics{figures/05/ml/summary_k_le1000_mlp_acc_colorbar.pdf}
 
 
     \caption{\textit{Continued.} \changed{Mean classification accuracy for $k\in\{5,10,20,40\}$ on the six OpenML datasets with at most 1\,000 samples, including Slipmap, for MLP; higher is better.}}
@@ -2201,13 +2196,13 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/agg_small_5_rf_acc.pdf}
+\includegraphics{figures/05/ml/agg_small_5_rf_acc.pdf}
 \caption{Random forest; small $D$}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/agg_medium_5_rf_acc.pdf}
+\includegraphics{figures/05/ml/agg_medium_5_rf_acc.pdf}
 \caption{Random forest; medium $D$}
 \end{subfigure}
 \par\vspace{6pt}
@@ -2222,7 +2217,7 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/agg_large_5_rf_acc.pdf}
+\includegraphics{figures/05/ml/agg_large_5_rf_acc.pdf}
 \caption{Random forest, large $D$}
 \end{subfigure}
 \par\vspace{6pt}
@@ -2238,13 +2233,13 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/agg_small_5_gb_acc.pdf}
+\includegraphics{figures/05/ml/agg_small_5_gb_acc.pdf}
 \caption{Gradient boosting; small $D$}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/agg_medium_5_gb_acc.pdf}
+\includegraphics{figures/05/ml/agg_medium_5_gb_acc.pdf}
 \caption{Gradient boosting; medium $D$}
 \end{subfigure}
 \par\vspace{6pt}
@@ -2259,7 +2254,7 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/agg_large_5_gb_acc.pdf}
+\includegraphics{figures/05/ml/agg_large_5_gb_acc.pdf}
 \caption{Gradient boosting; large $D$}
 \end{subfigure}
 \par\vspace{6pt}
@@ -2275,13 +2270,13 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/agg_small_5_mlp_acc.pdf}
+\includegraphics{figures/05/ml/agg_small_5_mlp_acc.pdf}
 \caption{MLP; small $D$}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/agg_medium_5_mlp_acc.pdf}
+\includegraphics{figures/05/ml/agg_medium_5_mlp_acc.pdf}
 \caption{MLP; medium $D$}
 \end{subfigure}
 \par\vspace{6pt}
@@ -2291,14 +2286,12 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 
 % \begin{subfigure}[t]{0.8\textwidth}
 %         \centering
-%         \includegraphics[width=1.0\textwidth,trim={1.5cm 4cm 3.7cm 0.0cm},clip]{figures/legend.pdf}
+%         \includegraphics[width=1.0\textwidth,trim={1.5cm 4cm 3.7cm 0.0cm},clip]{figures/05/legend.pdf}
 %     \end{subfigure}
-\caption{
-\changed{Classification accuracy with MLP on low-, medium- and high-dimensional datasets for $k=5$; higher is better.}
+\caption{\changed{Classification accuracy with MLP on low-, medium- and high-dimensional datasets for $k=5$; higher is better.}
 }
 \label{fig:ch05:details-ml_pred_sizes}
-\Description{
-\changed{Classification accuracy with MLP on low-, medium- and high-dimensional datasets for $k=5$; higher is better.}
+\Description{\changed{Classification accuracy with MLP on low-, medium- and high-dimensional datasets for $k=5$; higher is better.}
 }
 \end{figure}
 \begin{figure}[htbp]
@@ -2306,7 +2299,7 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml/agg_large_5_mlp_acc.pdf}
+\includegraphics{figures/05/ml/agg_large_5_mlp_acc.pdf}
 \caption{MLP; large $D$}
 \end{subfigure}
 \par\vspace{6pt}
@@ -2316,7 +2309,7 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 
 % \begin{subfigure}[t]{0.8\textwidth}
 %         \centering
-%         \includegraphics[width=1.0\textwidth,trim={1.5cm 4cm 3.7cm 0.0cm},clip]{figures/legend.pdf}
+%         \includegraphics[width=1.0\textwidth,trim={1.5cm 4cm 3.7cm 0.0cm},clip]{figures/05/legend.pdf}
 %     \end{subfigure}
 \caption{\textit{Continued.} 
 \changed{Classification accuracy with MLP on low-, medium- and high-dimensional datasets for $k=5$; higher is better.}
@@ -2336,25 +2329,23 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/epm/agg_sample_red_inpt_100_120_5.pdf}
+\includegraphics{figures/05/epm/agg_sample_red_inpt_100_120_5.pdf}
 \caption{$k=5$}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/epm/agg_sample_red_inpt_100_120_10.pdf}
+\includegraphics{figures/05/epm/agg_sample_red_inpt_100_120_10.pdf}
 \caption{$k=10$}
 \end{subfigure}
 \par\vspace{6pt}
 
 
 
-    \caption{
-    \changed{Target function approximation for $k\in\{5,10,20,40\}$, with $D=120$ and $N=100$, measured by min--max normalised mean RMSE; lower is better.}
+    \caption{    \changed{Target function approximation for $k\in\{5,10,20,40\}$, with $D=120$ and $N=100$, measured by min--max normalised mean RMSE; lower is better.}
     }
     \label{fig:ch05:details-res-bbo-task1_red_dim_inpt_dim}
-\Description{
-        \changed{Target function approximation for $k\in\{5,10,20,40\}$, with $D=120$ and $N=100$, measured by min--max normalised mean RMSE; lower is better.}
+\Description{        \changed{Target function approximation for $k\in\{5,10,20,40\}$, with $D=120$ and $N=100$, measured by min--max normalised mean RMSE; lower is better.}
     }
 \end{figure}
 \begin{figure}[htbp]
@@ -2362,13 +2353,13 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/epm/agg_sample_red_inpt_100_120_20.pdf}
+\includegraphics{figures/05/epm/agg_sample_red_inpt_100_120_20.pdf}
 \caption{$k=20$}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/epm/agg_sample_red_inpt_100_120_40.pdf}
+\includegraphics{figures/05/epm/agg_sample_red_inpt_100_120_40.pdf}
 \caption{$k=40$}
 \end{subfigure}
 \par\vspace{6pt}
@@ -2388,13 +2379,13 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/epm/agg_sample_red_inpt_100_40_20.pdf}
+\includegraphics{figures/05/epm/agg_sample_red_inpt_100_40_20.pdf}
 \caption{$D=40$}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/epm/agg_sample_red_inpt_100_60_20.pdf}
+\includegraphics{figures/05/epm/agg_sample_red_inpt_100_60_20.pdf}
 \caption{$D=60$}
 \end{subfigure}
 \par\vspace{6pt}
@@ -2409,13 +2400,13 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/epm/agg_sample_red_inpt_100_120_20.pdf}
+\includegraphics{figures/05/epm/agg_sample_red_inpt_100_120_20.pdf}
 \caption{$D=120$}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/epm/agg_sample_red_inpt_100_240_20.pdf}
+\includegraphics{figures/05/epm/agg_sample_red_inpt_100_240_20.pdf}
 \caption{$D=240$}
 \end{subfigure}
 \par\vspace{6pt}
@@ -2431,26 +2422,24 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/epm/agg_sample_red_inpt_100_500_20.pdf}
+\includegraphics{figures/05/epm/agg_sample_red_inpt_100_500_20.pdf}
 \caption{$D=500$}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/epm/agg_sample_red_inpt_100_1000_20.pdf}
+\includegraphics{figures/05/epm/agg_sample_red_inpt_100_1000_20.pdf}
 \caption{$D=1000$}
 \end{subfigure}
 \par\vspace{6pt}
 
 
 
-    \caption{
-    \textit{Continued.}
+    \caption{    \textit{Continued.}
     \changed{Target function approximation for $D\in\{40,60,120,240,500,1000\}$, with $k=20$ and $N=100$, measured by min--max normalised mean RMSE; lower is better.}
     }
     \label{fig:ch05:details-res-bbo-task1_inpt_dim}
-\Description{
-       \textit{Continued.}
+\Description{       \textit{Continued.}
     \changed{Target function approximation for $D\in\{40,60,120,240,500,1000\}$, with $k=20$ and $N=100$, measured by min--max normalised mean RMSE; lower is better.}
     }
 \end{figure}
@@ -2459,13 +2448,13 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/epm/agg_sample_red_inpt_100_40_5.pdf}
+\includegraphics{figures/05/epm/agg_sample_red_inpt_100_40_5.pdf}
 \caption{$D=40$, $k=5$, $N=100$}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/epm/agg_sample_red_inpt_200_40_5.pdf}
+\includegraphics{figures/05/epm/agg_sample_red_inpt_200_40_5.pdf}
 \caption{$D=40$, $k=5$, $N=200$}
 \end{subfigure}
 \par\vspace{6pt}
@@ -2480,13 +2469,13 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/epm/agg_sample_red_inpt_500_40_5.pdf}
+\includegraphics{figures/05/epm/agg_sample_red_inpt_500_40_5.pdf}
 \caption{$D=40$, $k=5$, $N=500$}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/epm/agg_sample_red_inpt_1000_40_5.pdf}
+\includegraphics{figures/05/epm/agg_sample_red_inpt_1000_40_5.pdf}
 \caption{$D=40$, $k=5$, $N=1000$}
 \end{subfigure}
 \par\vspace{6pt}
@@ -2502,25 +2491,23 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/epm/agg_sample_red_inpt_100_1000_40.pdf}
+\includegraphics{figures/05/epm/agg_sample_red_inpt_100_1000_40.pdf}
 \caption{$D=1000$, $k=40$, $N=100$}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/epm/agg_sample_red_inpt_200_1000_40.pdf}
+\includegraphics{figures/05/epm/agg_sample_red_inpt_200_1000_40.pdf}
 \caption{$D=1000$, $k=40$, $N=200$}
 \end{subfigure}
 \par\vspace{6pt}
 
 
 
-    \caption{
-    \changed{Target function approximation for $N\in\{100,200,500,1000\}$, with $D=1000$ and $k=40$, measured by min--max normalised mean RMSE; lower is better.}
+    \caption{    \changed{Target function approximation for $N\in\{100,200,500,1000\}$, with $D=1000$ and $k=40$, measured by min--max normalised mean RMSE; lower is better.}
     }
     \label{fig:ch05:details-res-bbo-task2_samp_sizes}
-\Description{
-    \changed{Target function approximation for $N\in\{100,200,500,1000\}$, with $D=1000$ and $k=40$, measured by min--max normalised mean RMSE; lower is better.}
+\Description{    \changed{Target function approximation for $N\in\{100,200,500,1000\}$, with $D=1000$ and $k=40$, measured by min--max normalised mean RMSE; lower is better.}
     }
 \end{figure}
 \begin{figure}[htbp]
@@ -2528,13 +2515,13 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/epm/agg_sample_red_inpt_500_1000_40.pdf}
+\includegraphics{figures/05/epm/agg_sample_red_inpt_500_1000_40.pdf}
 \caption{$D=1000$, $k=40$, $N=500$}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/epm/agg_sample_red_inpt_1000_1000_40.pdf}
+\includegraphics{figures/05/epm/agg_sample_red_inpt_1000_1000_40.pdf}
 \caption{$D=1000$, $k=40$, $N=1000$}
 \end{subfigure}
 \par\vspace{6pt}
@@ -2554,13 +2541,13 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/epm/real_agg_sample_red_dim_1000_5.pdf}
+\includegraphics{figures/05/epm/real_agg_sample_red_dim_1000_5.pdf}
 \caption{$N=1000$, $k=5$}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/epm/real_agg_sample_red_dim_1000_10.pdf}
+\includegraphics{figures/05/epm/real_agg_sample_red_dim_1000_10.pdf}
 \caption{$N=1000$, $k=10$}
 \end{subfigure}
 \par\vspace{6pt}
@@ -2575,13 +2562,13 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/epm/real_agg_sample_red_dim_1000_20.pdf}
+\includegraphics{figures/05/epm/real_agg_sample_red_dim_1000_20.pdf}
 \caption{$N=1000$, $k=20$}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/epm/real_agg_sample_red_dim_1000_40.pdf}
+\includegraphics{figures/05/epm/real_agg_sample_red_dim_1000_40.pdf}
 \caption{$N=1000$, $k=40$}
 \end{subfigure}
 \par\vspace{6pt}
@@ -2597,13 +2584,13 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/epm/real_agg_sample_red_dim_100_5.pdf}
+\includegraphics{figures/05/epm/real_agg_sample_red_dim_100_5.pdf}
 \caption{$k=5$, $N=100$}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/epm/real_agg_sample_red_dim_200_5.pdf}
+\includegraphics{figures/05/epm/real_agg_sample_red_dim_200_5.pdf}
 \caption{$k=5$, $N=200$}
 \end{subfigure}
 \par\vspace{6pt}
@@ -2613,14 +2600,12 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
     % \hspace{0.2cm}
     % \begin{subfigure}[t]{0.8\textwidth}
     %     \centering
-    %     \includegraphics[width=1.0\textwidth,trim={1.5cm 4cm 3.7cm 0.0cm},clip]{figures/legend.pdf}
+    %     \includegraphics[width=1.0\textwidth,trim={1.5cm 4cm 3.7cm 0.0cm},clip]{figures/05/legend.pdf}
     % \end{subfigure}
-    \caption{
-    \changed{Target function approximation on real-world benchmarks for $N\in\{100,200,500,1000\}$ and $k=5$, measured by min--max normalised mean RMSE; lower is better.}
+    \caption{    \changed{Target function approximation on real-world benchmarks for $N\in\{100,200,500,1000\}$ and $k=5$, measured by min--max normalised mean RMSE; lower is better.}
     }
     \label{fig:ch05:details-res-bbo-task1_real}
-\Description{
-        \changed{Target function approximation on real-world benchmarks for $N\in\{100,200,500,1000\}$ and $k=5$, measured by min--max normalised mean RMSE; lower is better.}
+\Description{        \changed{Target function approximation on real-world benchmarks for $N\in\{100,200,500,1000\}$ and $k=5$, measured by min--max normalised mean RMSE; lower is better.}
     }
 \end{figure}
 \begin{figure}[htbp]
@@ -2628,13 +2613,13 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/epm/real_agg_sample_red_dim_500_5.pdf}
+\includegraphics{figures/05/epm/real_agg_sample_red_dim_500_5.pdf}
 \caption{$k=5$, $N=500$}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/epm/real_agg_sample_red_dim_1000_5.pdf}
+\includegraphics{figures/05/epm/real_agg_sample_red_dim_1000_5.pdf}
 \caption{$k=5$, $N=1000$}
 \end{subfigure}
 \par\vspace{6pt}
@@ -2644,7 +2629,7 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
     % \hspace{0.2cm}
     % \begin{subfigure}[t]{0.8\textwidth}
     %     \centering
-    %     \includegraphics[width=1.0\textwidth,trim={1.5cm 4cm 3.7cm 0.0cm},clip]{figures/legend.pdf}
+    %     \includegraphics[width=1.0\textwidth,trim={1.5cm 4cm 3.7cm 0.0cm},clip]{figures/05/legend.pdf}
     % \end{subfigure}
     \caption{\textit{Continued.} 
     \changed{Target function approximation on real-world benchmarks for $N\in\{100,200,500,1000\}$ and $k=5$, measured by min--max normalised mean RMSE; lower is better.}
@@ -2666,21 +2651,20 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 \centering
 \begin{subfigure}[t]{0.49\textwidth}
 \centering
-\includegraphics{figures/bop/heatmap_100_120_5.pdf}
+\includegraphics{figures/05/bop/heatmap_100_120_5.pdf}
 \caption{$k=5$}
 \end{subfigure}
 \hfill
 \begin{subfigure}[t]{0.49\textwidth}
 \centering
-\includegraphics{figures/bop/heatmap_100_120_10.pdf}
+\includegraphics{figures/05/bop/heatmap_100_120_10.pdf}
 \caption{$k=10$}
 \end{subfigure}
 \par\vspace{6pt}
-\includegraphics{figures/bop/heatmap_100_120_5_colorbar.pdf}
+\includegraphics{figures/05/bop/heatmap_100_120_5_colorbar.pdf}
 
 
-    \caption{
-    \changed{Mean rank trajectories throughout the optimisation on synthetic benchmarks for $k\in\{5,10,20,40\}$ with $D = 120$ and $N = 100$; rank 1 is best.}
+    \caption{    \changed{Mean rank trajectories throughout the optimisation on synthetic benchmarks for $k\in\{5,10,20,40\}$ with $D = 120$ and $N = 100$; rank 1 is best.}
     }
     \label{fig:ch05:details-res-bbo-task2_red_dim}
 \Description{\changed{Mean rank trajectories throughout the optimisation on synthetic benchmarks for $k\in\{5,10,20,40\}$ with $D = 120$ and $N = 100$; rank 1 is best.}}
@@ -2690,17 +2674,17 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 \centering
 \begin{subfigure}[t]{0.49\textwidth}
 \centering
-\includegraphics{figures/bop/heatmap_100_120_20.pdf}
+\includegraphics{figures/05/bop/heatmap_100_120_20.pdf}
 \caption{$k=20$}
 \end{subfigure}
 \hfill
 \begin{subfigure}[t]{0.49\textwidth}
 \centering
-\includegraphics{figures/bop/heatmap_100_120_40.pdf}
+\includegraphics{figures/05/bop/heatmap_100_120_40.pdf}
 \caption{$k=40$}
 \end{subfigure}
 \par\vspace{6pt}
-\includegraphics{figures/bop/heatmap_100_120_20_colorbar.pdf}
+\includegraphics{figures/05/bop/heatmap_100_120_20_colorbar.pdf}
 
 
     \caption{\textit{Continued.}     \changed{Mean rank trajectories throughout the optimisation on synthetic benchmarks for $k\in\{5,10,20,40\}$ with $D = 120$ and $N = 100$; rank 1 is best.}}
@@ -2712,17 +2696,17 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 \centering
 \begin{subfigure}[t]{0.49\textwidth}
 \centering
-\includegraphics{figures/bop/heatmap_100_40_20.pdf}
+\includegraphics{figures/05/bop/heatmap_100_40_20.pdf}
 \caption{$D=40$}
 \end{subfigure}
 \hfill
 \begin{subfigure}[t]{0.49\textwidth}
 \centering
-\includegraphics{figures/bop/heatmap_100_60_20.pdf}
+\includegraphics{figures/05/bop/heatmap_100_60_20.pdf}
 \caption{$D=60$}
 \end{subfigure}
 \par\vspace{6pt}
-\includegraphics{figures/bop/heatmap_100_40_20_colorbar.pdf}
+\includegraphics{figures/05/bop/heatmap_100_40_20_colorbar.pdf}
 
 
     \caption[]{\changed{Mean rank trajectories throughout the optimisation on synthetic benchmarks for $D\in\{40,60,120,240,500,1000\}$ with $k = 20$ and $N = 100$; rank 1 is best.}}
@@ -2733,17 +2717,17 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 \centering
 \begin{subfigure}[t]{0.49\textwidth}
 \centering
-\includegraphics{figures/bop/heatmap_100_120_20.pdf}
+\includegraphics{figures/05/bop/heatmap_100_120_20.pdf}
 \caption{$D=120$}
 \end{subfigure}
 \hfill
 \begin{subfigure}[t]{0.49\textwidth}
 \centering
-\includegraphics{figures/bop/heatmap_100_240_20.pdf}
+\includegraphics{figures/05/bop/heatmap_100_240_20.pdf}
 \caption{$D=240$}
 \end{subfigure}
 \par\vspace{6pt}
-\includegraphics{figures/bop/heatmap_100_120_20_colorbar.pdf}
+\includegraphics{figures/05/bop/heatmap_100_120_20_colorbar.pdf}
 
 
     \caption[]{\textit{Continued.} \changed{Mean rank trajectories throughout the optimisation on synthetic benchmarks for $D\in\{40,60,120,240,500,1000\}$ with $k = 20$ and $N = 100$; rank 1 is best.}}
@@ -2755,17 +2739,17 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 \centering
 \begin{subfigure}[t]{0.49\textwidth}
 \centering
-\includegraphics{figures/bop/heatmap_100_500_20.pdf}
+\includegraphics{figures/05/bop/heatmap_100_500_20.pdf}
 \caption{$D=500$}
 \end{subfigure}
 \hfill
 \begin{subfigure}[t]{0.49\textwidth}
 \centering
-\includegraphics{figures/bop/heatmap_100_1000_20.pdf}
+\includegraphics{figures/05/bop/heatmap_100_1000_20.pdf}
 \caption{$D=1000$}
 \end{subfigure}
 \par\vspace{6pt}
-\includegraphics{figures/bop/heatmap_100_500_20_colorbar.pdf}
+\includegraphics{figures/05/bop/heatmap_100_500_20_colorbar.pdf}
 
 
     \caption{\textit{Continued.} \changed{Mean rank trajectories throughout the optimisation on synthetic benchmarks for $D\in\{40,60,120,240,500,1000\}$ with $k = 20$ and $N = 100$; rank 1 is best.}}
@@ -2777,17 +2761,17 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 \centering
 \begin{subfigure}[t]{0.49\textwidth}
 \centering
-\includegraphics{figures/bop/heatmap_100_40_5.pdf}
+\includegraphics{figures/05/bop/heatmap_100_40_5.pdf}
 \caption{$D=40$, $k=5$, $N=100$}
 \end{subfigure}
 \hfill
 \begin{subfigure}[t]{0.49\textwidth}
 \centering
-\includegraphics{figures/bop/heatmap_200_40_5.pdf}
+\includegraphics{figures/05/bop/heatmap_200_40_5.pdf}
 \caption{$D=40$, $k=5$, $N=200$}
 \end{subfigure}
 \par\vspace{6pt}
-\includegraphics{figures/bop/heatmap_100_40_5_colorbar.pdf}
+\includegraphics{figures/05/bop/heatmap_100_40_5_colorbar.pdf}
 
 
     \caption[]{\changed{Mean rank trajectories throughout the optimisation on synthetic benchmarks for $N\in\{100,200,500,1000\}$ with $D = 40$ and $k = 5$; rank 1 is best.}}
@@ -2798,17 +2782,17 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 \centering
 \begin{subfigure}[t]{0.49\textwidth}
 \centering
-\includegraphics{figures/bop/heatmap_500_40_5.pdf}
+\includegraphics{figures/05/bop/heatmap_500_40_5.pdf}
 \caption{$D=40$, $k=5$, $N=500$}
 \end{subfigure}
 \hfill
 \begin{subfigure}[t]{0.49\textwidth}
 \centering
-\includegraphics{figures/bop/heatmap_1000_40_5.pdf}
+\includegraphics{figures/05/bop/heatmap_1000_40_5.pdf}
 \caption{$D=40$, $k=5$, $N=1000$}
 \end{subfigure}
 \par\vspace{6pt}
-\includegraphics{figures/bop/heatmap_500_40_5_colorbar.pdf}
+\includegraphics{figures/05/bop/heatmap_500_40_5_colorbar.pdf}
 
 
     \caption[]{\textit{Continued.} \changed{Mean rank trajectories throughout the optimisation on synthetic benchmarks for $N\in\{100,200,500,1000\}$ with $D = 40$ and $k = 5$; rank 1 is best.}}
@@ -2820,17 +2804,17 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 \centering
 \begin{subfigure}[t]{0.49\textwidth}
 \centering
-\includegraphics{figures/bop/heatmap_100_1000_40.pdf}
+\includegraphics{figures/05/bop/heatmap_100_1000_40.pdf}
 \caption{$D=1000$, $k=40$, $N=100$}
 \end{subfigure}
 \hfill
 \begin{subfigure}[t]{0.49\textwidth}
 \centering
-\includegraphics{figures/bop/heatmap_200_1000_40.pdf}
+\includegraphics{figures/05/bop/heatmap_200_1000_40.pdf}
 \caption{$D=1000$, $k=40$, $N=200$}
 \end{subfigure}
 \par\vspace{6pt}
-\includegraphics{figures/bop/heatmap_100_1000_40_colorbar.pdf}
+\includegraphics{figures/05/bop/heatmap_100_1000_40_colorbar.pdf}
 
 
     \caption{\changed{Mean rank trajectories throughout the optimisation on synthetic benchmarks for $N\in\{100,200,500,1000\}$ with $D = 1000$ and $k = 40$; rank 1 is best.}}
@@ -2842,17 +2826,17 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 \centering
 \begin{subfigure}[t]{0.49\textwidth}
 \centering
-\includegraphics{figures/bop/heatmap_500_1000_40.pdf}
+\includegraphics{figures/05/bop/heatmap_500_1000_40.pdf}
 \caption{$D=1000$, $k=40$, $N=500$}
 \end{subfigure}
 \hfill
 \begin{subfigure}[t]{0.49\textwidth}
 \centering
-\includegraphics{figures/bop/heatmap_1000_1000_40.pdf}
+\includegraphics{figures/05/bop/heatmap_1000_1000_40.pdf}
 \caption{$D=1000$, $k=40$, $N=1000$}
 \end{subfigure}
 \par\vspace{6pt}
-\includegraphics{figures/bop/heatmap_500_1000_40_colorbar.pdf}
+\includegraphics{figures/05/bop/heatmap_500_1000_40_colorbar.pdf}
 
 
     \caption{\textit{Continued.} \changed{Mean rank trajectories throughout the optimisation on synthetic benchmarks for $N\in\{100,200,500,1000\}$ with $D = 1000$ and $k = 40$; rank 1 is best.}}
@@ -2864,17 +2848,17 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 \centering
 \begin{subfigure}[t]{0.49\textwidth}
 \centering
-\includegraphics{figures/bop/heatmap_real_100_5.pdf}
+\includegraphics{figures/05/bop/heatmap_real_100_5.pdf}
 \caption{$N=100$, $k=5$}
 \end{subfigure}
 \hfill
 \begin{subfigure}[t]{0.49\textwidth}
 \centering
-\includegraphics{figures/bop/heatmap_real_100_10.pdf}
+\includegraphics{figures/05/bop/heatmap_real_100_10.pdf}
 \caption{$N=100$, $k=10$}
 \end{subfigure}
 \par\vspace{6pt}
-\includegraphics{figures/bop/heatmap_real_100_5_colorbar.pdf}
+\includegraphics{figures/05/bop/heatmap_real_100_5_colorbar.pdf}
 
 
     \caption[]{\changed{Mean rank trajectories throughout the optimisation on real-world benchmarks for $k\in\{5,10,20,40\}$ with $N = 100$; rank 1 is best.}}
@@ -2885,17 +2869,17 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 \centering
 \begin{subfigure}[t]{0.49\textwidth}
 \centering
-\includegraphics{figures/bop/heatmap_real_100_20.pdf}
+\includegraphics{figures/05/bop/heatmap_real_100_20.pdf}
 \caption{$N=100$, $k=20$}
 \end{subfigure}
 \hfill
 \begin{subfigure}[t]{0.49\textwidth}
 \centering
-\includegraphics{figures/bop/heatmap_real_100_40.pdf}
+\includegraphics{figures/05/bop/heatmap_real_100_40.pdf}
 \caption{$N=100$, $k=40$}
 \end{subfigure}
 \par\vspace{6pt}
-\includegraphics{figures/bop/heatmap_real_100_20_colorbar.pdf}
+\includegraphics{figures/05/bop/heatmap_real_100_20_colorbar.pdf}
 
 
     \caption[]{\textit{Continued.} \changed{Mean rank trajectories throughout the optimisation on real-world benchmarks for $k\in\{5,10,20,40\}$ with $N = 100$; rank 1 is best.}}
@@ -2907,17 +2891,17 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 \centering
 \begin{subfigure}[t]{0.49\textwidth}
 \centering
-\includegraphics{figures/bop/heatmap_real_100_5.pdf}
+\includegraphics{figures/05/bop/heatmap_real_100_5.pdf}
 \caption{$k=5$, $N=100$}
 \end{subfigure}
 \hfill
 \begin{subfigure}[t]{0.49\textwidth}
 \centering
-\includegraphics{figures/bop/heatmap_real_200_5.pdf}
+\includegraphics{figures/05/bop/heatmap_real_200_5.pdf}
 \caption{$k=5$, $N=200$}
 \end{subfigure}
 \par\vspace{6pt}
-\includegraphics{figures/bop/heatmap_real_100_5_colorbar.pdf}
+\includegraphics{figures/05/bop/heatmap_real_100_5_colorbar.pdf}
 
 
     \caption{ \changed{Mean rank trajectories throughout the optimisation on real-world benchmarks for $N\in\{100,200,500,1000\}$ with $k = 5$; rank 1 is best.}}
@@ -2929,17 +2913,17 @@ Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is 
 \centering
 \begin{subfigure}[t]{0.49\textwidth}
 \centering
-\includegraphics{figures/bop/heatmap_real_500_5.pdf}
+\includegraphics{figures/05/bop/heatmap_real_500_5.pdf}
 \caption{$k=5$, $N=500$}
 \end{subfigure}
 \hfill
 \begin{subfigure}[t]{0.49\textwidth}
 \centering
-\includegraphics{figures/bop/heatmap_real_1000_5.pdf}
+\includegraphics{figures/05/bop/heatmap_real_1000_5.pdf}
 \caption{$k=5$, $N=1000$}
 \end{subfigure}
 \par\vspace{6pt}
-\includegraphics{figures/bop/heatmap_real_500_5_colorbar.pdf}
+\includegraphics{figures/05/bop/heatmap_real_500_5_colorbar.pdf}
 
 
     \caption{\textit{Continued.}  \changed{Mean rank trajectories throughout the optimisation on real-world benchmarks for $N\in\{100,200,500,1000\}$ with $k = 5$; rank 1 is best.}}
@@ -3027,13 +3011,13 @@ For Task 1, we tune hyperparameters of dimensionality reduction methods independ
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml_cluster_tuning/agg_5_tuned_homogeneity_homogeneity.pdf}
+\includegraphics{figures/05/ml_cluster_tuning/agg_5_tuned_homogeneity_homogeneity.pdf}
 \caption{$k=5$}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml_cluster_tuning/agg_10_tuned_homogeneity_homogeneity.pdf}
+\includegraphics{figures/05/ml_cluster_tuning/agg_10_tuned_homogeneity_homogeneity.pdf}
 \caption{$k=10$}
 \end{subfigure}
 \par\vspace{6pt}
@@ -3049,13 +3033,13 @@ For Task 1, we tune hyperparameters of dimensionality reduction methods independ
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml_cluster_tuning/agg_20_tuned_homogeneity_homogeneity.pdf}
+\includegraphics{figures/05/ml_cluster_tuning/agg_20_tuned_homogeneity_homogeneity.pdf}
 \caption{$k=20$}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml_cluster_tuning/agg_40_tuned_homogeneity_homogeneity.pdf}
+\includegraphics{figures/05/ml_cluster_tuning/agg_40_tuned_homogeneity_homogeneity.pdf}
 \caption{$k=40$}
 \end{subfigure}
 \par\vspace{6pt}
@@ -3072,13 +3056,13 @@ For Task 1, we tune hyperparameters of dimensionality reduction methods independ
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml_cluster_tuning/agg_5_tuned_completeness_completeness.pdf}
+\includegraphics{figures/05/ml_cluster_tuning/agg_5_tuned_completeness_completeness.pdf}
 \caption{$k=5$}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml_cluster_tuning/agg_10_tuned_completeness_completeness.pdf}
+\includegraphics{figures/05/ml_cluster_tuning/agg_10_tuned_completeness_completeness.pdf}
 \caption{$k=10$}
 \end{subfigure}
 \par\vspace{6pt}
@@ -3094,13 +3078,13 @@ For Task 1, we tune hyperparameters of dimensionality reduction methods independ
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml_cluster_tuning/agg_20_tuned_completeness_completeness.pdf}
+\includegraphics{figures/05/ml_cluster_tuning/agg_20_tuned_completeness_completeness.pdf}
 \caption{$k=20$}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml_cluster_tuning/agg_40_tuned_completeness_completeness.pdf}
+\includegraphics{figures/05/ml_cluster_tuning/agg_40_tuned_completeness_completeness.pdf}
 \caption{$k=40$}
 \end{subfigure}
 \par\vspace{6pt}
@@ -3117,13 +3101,13 @@ For Task 1, we tune hyperparameters of dimensionality reduction methods independ
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml_cluster_tuning/agg_5_tuned_homogeneity_completeness.pdf}
+\includegraphics{figures/05/ml_cluster_tuning/agg_5_tuned_homogeneity_completeness.pdf}
 \caption{$k=5$}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml_cluster_tuning/agg_10_tuned_homogeneity_completeness.pdf}
+\includegraphics{figures/05/ml_cluster_tuning/agg_10_tuned_homogeneity_completeness.pdf}
 \caption{$k=10$}
 \end{subfigure}
 \par\vspace{6pt}
@@ -3139,13 +3123,13 @@ For Task 1, we tune hyperparameters of dimensionality reduction methods independ
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml_cluster_tuning/agg_20_tuned_homogeneity_completeness.pdf}
+\includegraphics{figures/05/ml_cluster_tuning/agg_20_tuned_homogeneity_completeness.pdf}
 \caption{$k=20$}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml_cluster_tuning/agg_40_tuned_homogeneity_completeness.pdf}
+\includegraphics{figures/05/ml_cluster_tuning/agg_40_tuned_homogeneity_completeness.pdf}
 \caption{$k=40$}
 \end{subfigure}
 \par\vspace{6pt}
@@ -3162,13 +3146,13 @@ For Task 1, we tune hyperparameters of dimensionality reduction methods independ
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml_cluster_tuning/agg_5_tuned_completeness_homogeneity.pdf}
+\includegraphics{figures/05/ml_cluster_tuning/agg_5_tuned_completeness_homogeneity.pdf}
 \caption{$k=5$}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml_cluster_tuning/agg_10_tuned_completeness_homogeneity.pdf}
+\includegraphics{figures/05/ml_cluster_tuning/agg_10_tuned_completeness_homogeneity.pdf}
 \caption{$k=10$}
 \end{subfigure}
 \par\vspace{6pt}
@@ -3184,13 +3168,13 @@ For Task 1, we tune hyperparameters of dimensionality reduction methods independ
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml_cluster_tuning/agg_20_tuned_completeness_homogeneity.pdf}
+\includegraphics{figures/05/ml_cluster_tuning/agg_20_tuned_completeness_homogeneity.pdf}
 \caption{$k=20$}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml_cluster_tuning/agg_40_tuned_completeness_homogeneity.pdf}
+\includegraphics{figures/05/ml_cluster_tuning/agg_40_tuned_completeness_homogeneity.pdf}
 \caption{$k=40$}
 \end{subfigure}
 \par\vspace{6pt}
@@ -3213,13 +3197,13 @@ For Task 2, we analyse classification accuracy on ten held-out OpenML tasks in~\
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml_pred_tuning/agg_5_rf_acc.pdf}
+\includegraphics{figures/05/ml_pred_tuning/agg_5_rf_acc.pdf}
 \caption{$k=5$}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml_pred_tuning/agg_10_rf_acc.pdf}
+\includegraphics{figures/05/ml_pred_tuning/agg_10_rf_acc.pdf}
 \caption{$k=10$}
 \end{subfigure}
 \par\vspace{6pt}
@@ -3235,13 +3219,13 @@ For Task 2, we analyse classification accuracy on ten held-out OpenML tasks in~\
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml_pred_tuning/agg_20_rf_acc.pdf}
+\includegraphics{figures/05/ml_pred_tuning/agg_20_rf_acc.pdf}
 \caption{$k=20$}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml_pred_tuning/agg_40_rf_acc.pdf}
+\includegraphics{figures/05/ml_pred_tuning/agg_40_rf_acc.pdf}
 \caption{$k=40$}
 \end{subfigure}
 \par\vspace{6pt}
@@ -3258,13 +3242,13 @@ For Task 2, we analyse classification accuracy on ten held-out OpenML tasks in~\
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml_pred_tuning/agg_5_gb_acc.pdf}
+\includegraphics{figures/05/ml_pred_tuning/agg_5_gb_acc.pdf}
 \caption{$k=5$}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml_pred_tuning/agg_10_gb_acc.pdf}
+\includegraphics{figures/05/ml_pred_tuning/agg_10_gb_acc.pdf}
 \caption{$k=10$}
 \end{subfigure}
 \par\vspace{6pt}
@@ -3280,13 +3264,13 @@ For Task 2, we analyse classification accuracy on ten held-out OpenML tasks in~\
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml_pred_tuning/agg_20_gb_acc.pdf}
+\includegraphics{figures/05/ml_pred_tuning/agg_20_gb_acc.pdf}
 \caption{$k=20$}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml_pred_tuning/agg_40_gb_acc.pdf}
+\includegraphics{figures/05/ml_pred_tuning/agg_40_gb_acc.pdf}
 \caption{$k=40$}
 \end{subfigure}
 \par\vspace{6pt}
@@ -3303,13 +3287,13 @@ For Task 2, we analyse classification accuracy on ten held-out OpenML tasks in~\
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml_pred_tuning/agg_5_mlp_acc.pdf}
+\includegraphics{figures/05/ml_pred_tuning/agg_5_mlp_acc.pdf}
 \caption{$k=5$}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml_pred_tuning/agg_10_mlp_acc.pdf}
+\includegraphics{figures/05/ml_pred_tuning/agg_10_mlp_acc.pdf}
 \caption{$k=10$}
 \end{subfigure}
 \par\vspace{6pt}
@@ -3325,13 +3309,13 @@ For Task 2, we analyse classification accuracy on ten held-out OpenML tasks in~\
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml_pred_tuning/agg_20_mlp_acc.pdf}
+\includegraphics{figures/05/ml_pred_tuning/agg_20_mlp_acc.pdf}
 \caption{$k=20$}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/ml_pred_tuning/agg_40_mlp_acc.pdf}
+\includegraphics{figures/05/ml_pred_tuning/agg_40_mlp_acc.pdf}
 \caption{$k=40$}
 \end{subfigure}
 \par\vspace{6pt}
@@ -3353,13 +3337,13 @@ For Task 3, we report the results obtained with task-specific reducer configurat
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/epm_tuning/agg_sample_red_inpt_100_120_10.pdf}
+\includegraphics{figures/05/epm_tuning/agg_sample_red_inpt_100_120_10.pdf}
 \caption{$D=120$}
 \end{subfigure}
 \par\vspace{6pt}
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
-\includegraphics{figures/epm_tuning/agg_sample_red_inpt_100_240_10.pdf}
+\includegraphics{figures/05/epm_tuning/agg_sample_red_inpt_100_240_10.pdf}
 \caption{$D=240$}
 \end{subfigure}
 \par\vspace{6pt}
@@ -3381,17 +3365,17 @@ For Task 4, the tuned Bayesian optimisation results in~\cref{fig:ch05:tuned-bop}
 \centering
 \begin{subfigure}[t]{0.49\textwidth}
 \centering
-\includegraphics{figures/bop_tuning/heatmap_100_120_10.pdf}
+\includegraphics{figures/05/bop_tuning/heatmap_100_120_10.pdf}
 \caption{$D=120$}
 \end{subfigure}
 \hfill
 \begin{subfigure}[t]{0.49\textwidth}
 \centering
-\includegraphics{figures/bop_tuning/heatmap_100_240_10.pdf}
+\includegraphics{figures/05/bop_tuning/heatmap_100_240_10.pdf}
 \caption{$D=240$}
 \end{subfigure}
 \par\vspace{6pt}
-\includegraphics{figures/bop_tuning/heatmap_100_120_10_colorbar.pdf}
+\includegraphics{figures/05/bop_tuning/heatmap_100_120_10_colorbar.pdf}
 
 
     \caption{Mean ranks during Bayesian optimisation with task-specifically tuned reducers for the initial sample size \(N=100\) and target dimensionality \(k=10\). Rank 1 is best.}
@@ -3414,17 +3398,17 @@ The main Bayesian optimisation experiments used a separate 30-point Sobol design
 \centering
 \begin{subfigure}[t]{0.49\textwidth}
 \centering
-\includegraphics{figures/bop_initial_sample/heatmap_100_120_10.pdf}
+\includegraphics{figures/05/bop_initial_sample/heatmap_100_120_10.pdf}
 \caption{$D=120$}
 \end{subfigure}
 \hfill
 \begin{subfigure}[t]{0.49\textwidth}
 \centering
-\includegraphics{figures/bop_initial_sample/heatmap_100_240_10.pdf}
+\includegraphics{figures/05/bop_initial_sample/heatmap_100_240_10.pdf}
 \caption{$D=240$}
 \end{subfigure}
 \par\vspace{6pt}
-\includegraphics{figures/bop_initial_sample/heatmap_100_120_10_colorbar.pdf}
+\includegraphics{figures/05/bop_initial_sample/heatmap_100_120_10_colorbar.pdf}
 
 
     \caption{Mean ranks during Bayesian optimisation when the initial sample of \(N=100\) reducer-training observations is reused as the BO initial design (for the target dimensionality \(k=10\)). Rank 1 is best.}

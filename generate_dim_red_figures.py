@@ -1,204 +1,177 @@
-"""Regenerate Chapter 4 PDFs from the benchmark aggregate databases.
+# /// script
+# requires-python = ">=3.10"
+# dependencies = ["plotly>=6.1,<7", "kaleido>=1,<2"]
+# ///
+"""Replace chapter-5 figures using the saved original chart data and thesis theme.
 
-Run from any directory: python thesis/phd_thesis/generate_dim_red_figures.py
-Requires the surrounding benchmark repository, thesis/template.py, and the
-aggregate DuckDB files. Use --aggregation-dir to select another data location.
-The script replaces only figures/04 PDFs.
+Run: uv run generate_dim_red_figures.py
+Requires Chrome/Chromium and Palatino (or the compatible P052 fallback).
+To refresh the data or thesis/template.py theme, first run
+scripts/collect_dim_red_figure_data.py in the benchmark Python environment.
+Only figures/05 PDFs are replaced; obsolete chapter-5 PDFs are removed.
 """
-import argparse
+import gzip
+import json
 from pathlib import Path
 import re
-import sys
+import tempfile
 
-import duckdb
-import matplotlib
-matplotlib.use('Agg')
-import matplotlib.pyplot as plt
-from matplotlib.lines import Line2D
+import plotly.graph_objects as go
+import plotly.io as pio
 
 THESIS = Path(__file__).resolve().parent
-ROOT = THESIS.parents[1]
-sys.path.insert(0, str(ROOT))
-from analysev2 import bop, epm, common
-sys.path.insert(0, str(THESIS.parent))
-from template import TOL_MUTED, TEXT_WIDTH_PT
-
-PALETTE = tuple(TOL_MUTED.values())
-COLORS = {name: PALETTE[i % len(PALETTE)] for i, name in enumerate(common.METHODS)}
-plt.rcParams.update({
-    'font.family': 'serif', 'font.serif': ['P052', 'Palatino', 'TeX Gyre Pagella'],
-    'font.size': 7, 'axes.linewidth': .55, 'axes.edgecolor': '#606060',
-    'axes.labelcolor': '#262626', 'text.color': '#262626',
-    'xtick.color': '#606060', 'ytick.color': '#606060',
-    'grid.color': '#E8E8E8', 'grid.linewidth': .4,
-    'savefig.facecolor': 'white',
-})
-
-chapter = (THESIS / 'Chapters/Chapter05_dim_red.tex').read_text()
-refs = {}
-for width, body in re.findall(
-    r'\\begin\{subfigure\}(?:\[[^]]+\])?\{([.0-9]+)\\textwidth\}(.+?)\\end\{subfigure\}', chapter, re.S
-):
-    match = re.search(r'figures/05/([^}]+)', body)
-    if match:
-        name = match.group(1).removesuffix('.pdf')
-        if name in refs:
-            assert refs[name] == float(width), f'{name} occurs at two placement widths'
-        refs[name] = float(width)
-refs['legend'] = 1.0
-assert len(refs) == 88, f'Expected 88 chapter figures, found {len(refs)}'
-assert set(refs.values()) == {0.49, 1.0}, set(refs.values())
+PX_PER_TEX_PT = 96 / 72.27
+# Long method names otherwise consume nearly the entire half-width BO panel.
+SHORT_NAMES = {'Gaussian Random Projection': 'Gaussian RP',
+               'Sparse Random Projection': 'Sparse RP',
+               'Autoencoder (2-layer)': 'Autoencoder (2L)',
+               'Denoising Autoencoder': 'Denoising AE',
+               'Denoising Autoencoder (2-layer)': 'Denoising AE (2L)',
+               'VAE (2-layer)': 'VAE (2L)',
+               'Parametric UMAP (Unsupervised)': 'Param. UMAP (unsup.)',
+               'UMAP (Unsupervised)': 'UMAP (unsup.)'}
 
 
-def method_order(frame):
-    column = 'method_name' if 'method_name' in frame else 'method'
-    present = set(frame[column])
-    order = [method for method in common.METHODS if method in present]
-    return column, order + sorted(present - set(order))
+def rank_panel(name):
+    return '/heatmap_' in name
 
 
-def canvas(name, tall=False):
-    width_pt = TEXT_WIDTH_PT * refs[name]
-    height_pt = 242 if tall else 128
-    fig, ax = plt.subplots(figsize=(width_pt / 72.27, height_pt / 72.27))
-    fig.subplots_adjust(left=.12 if tall else .20, right=.98 if tall else .94, top=.96, bottom=.60 if tall else .26)
-    ax.spines[['top', 'right']].set_visible(False)
-    ax.tick_params(length=2.5, width=.6, pad=2, labelsize=8)
-    ax.yaxis.grid(True)
-    ax.set_axisbelow(True)
-    return fig, ax
-
-
-def save(fig, name):
-    path = THESIS / 'figures/04' / f'{name}.pdf'
-    assert path.is_file(), f'Unexpected output: {path}'
-    fig.canvas.draw()
-    renderer = fig.canvas.get_renderer()
-    labels = list(fig.texts)
-    for ax in fig.axes:
-        labels.extend(ax.get_xticklabels() + [ax.xaxis.label, ax.yaxis.label])
-    for label in labels:
-        if label.get_visible() and label.get_text():
-            bounds = label.get_window_extent(renderer)
-            assert bounds.x0 >= -1 and bounds.y0 >= -1 and bounds.x1 <= fig.bbox.width + 1 and bounds.y1 <= fig.bbox.height + 1, f'Clipped label in {name}: {label.get_text()}'
-    fig.savefig(path, dpi=300)
-    plt.close(fig)
-    print(path.relative_to(THESIS), flush=True)
-
-
-def box(frame, value, ylabel, name, log=False):
-    assert not frame.empty, f'No data for {name}'
-    column, order = method_order(frame)
-    order = ([method for method in order if method in common.UNSUPERVISED_METHODS]
-             + [method for method in order if method not in common.UNSUPERVISED_METHODS])
-    fig, ax = canvas(name, tall=True)
-    n_unsupervised = sum(method in common.UNSUPERVISED_METHODS for method in order)
-    if 0 < n_unsupervised < len(order):
-        ax.axvline(n_unsupervised + .5, color='#aaaaaa', linestyle='--', linewidth=.7)
-    values = [frame.loc[frame[column] == method, value].dropna().to_numpy() for method in order]
-    assert all(len(v) for v in values), f'Missing method data in {name}'
-    artists = ax.boxplot(values, patch_artist=True, widths=.65,
-                         flierprops={'marker': '.', 'markersize': 1.2, 'markeredgecolor': '#606060'},
-                         medianprops={'color': '#262626', 'linewidth': .8},
-                         whiskerprops={'linewidth': .7}, capprops={'linewidth': .7})
-    for method, patch in zip(order, artists['boxes']):
-        patch.set_facecolor(COLORS.get(method, '#999933'))
-        patch.set_edgecolor(COLORS.get(method, '#999933'))
-        patch.set_alpha(.55)
-        patch.set_linewidth(.7)
-    ax.set_xticks(range(1, len(order) + 1), [common.display_name(method) for method in order],
-                  rotation=90, fontsize=8)
-    ax.set_ylabel(ylabel, fontsize=9, labelpad=2)
-    ax.tick_params(axis='x', length=1, pad=1)
-    if log:
-        ax.set_yscale('log')
-    if value == 'normalized_rmse':
-        ax.set_ylim(bottom=0)
-    save(fig, name)
-
-
-def line(frame, name):
-    assert not frame.empty, f'No data for {name}'
-    column, order = method_order(frame)
-    fig, ax = canvas(name)
-    fig.subplots_adjust(left=.20, right=.92, top=.96, bottom=.26)
-    for i, method in enumerate(order):
-        part = frame[frame[column] == method].sort_values('evaluation')
-        ax.plot(part.evaluation, part.mean_rank,
-                color=COLORS.get(method, '#999933'), linewidth=.95,
-                linestyle=('-', '--', ':', '-.')[common.METHODS.index(method) // len(PALETTE) % 4],
-                label=common.display_name(method))
-    ax.set_xlabel('Evaluations', fontsize=9, labelpad=2)
-    ax.set_ylabel('Mean rank', fontsize=9, labelpad=2)
-    ax.set_ylim(.5, len(order) + .5)
-    ax.margins(x=0)
-    save(fig, name)
-
-
-def legend():
-    name = 'legend'
-    width_pt = TEXT_WIDTH_PT * refs[name]
-    fig = plt.figure(figsize=(width_pt / 72.27, 250 / 72.27))
-    for i, method in enumerate(common.METHODS):
-        col, row = divmod(i, 17)
-        x = .02 + col * .49
-        y = .965 - row * .054
-        dash = ('-', '--', ':', '-.')[i // len(PALETTE) % 4]
-        fig.add_artist(Line2D([x, x + .068], [y, y], transform=fig.transFigure,
-                              color=COLORS[method], linestyle=dash, linewidth=1))
-        fig.text(x + .083, y, common.display_name(method), fontsize=8, va='center')
-    fig.text(.02, .025, 'Each rank-plot line uses the colour and dash shown beside its reducer name.',
-             fontsize=8)
-    save(fig, name)
+def make_figures(data):
+    pio.templates['thesis'] = go.layout.Template(data['template'])
+    # P052 is the installed Palatino-compatible font on the thesis build machine.
+    pio.templates['thesis'].layout.font.family = 'P052, ' + data['template']['layout']['font']['family']
+    palette = data['palette']
+    # A sequential scale derived only from the thesis palette; darker means better.
+    sequential = [[0, '#FFFFFF'], [.25, palette['cyan']], [.6, palette['teal']], [1, palette['green']]]
+    reverse = [[1 - stop, color] for stop, color in reversed(sequential)]
+    figures, scales = {}, {}
+    for name, raw in data['charts'].items():
+        source = go.Figure(raw)
+        heatmap = source.data[0].type == 'heatmap'
+        portrait = rank_panel(name)
+        width_pt = data['text_width_pt'] * (.49 if portrait else 1)
+        height_pt = 325 if portrait else 242 if not heatmap else 210
+        fig = go.Figure(layout=dict(template='thesis'))
+        fig.update_layout(width=round(width_pt * PX_PER_TEX_PT),
+                          height=round(height_pt * PX_PER_TEX_PT), showlegend=False,
+                          margin=dict(l=116 if portrait else 48, r=8, t=8,
+                                      b=42 if portrait else 208))
+        fig.update_xaxes(tickfont_size=12, title_font_size=13.33,
+                         title_standoff=5, showgrid=False)
+        fig.update_yaxes(tickfont_size=12, title_font_size=13.33,
+                         title_standoff=5)
+        if heatmap:
+            trace = source.data[0]
+            if portrait:
+                rows = dict(zip(trace.y, trace.customdata))
+                order = [m for m in data['method_order'] if m in rows]
+                assert set(order) == set(rows), name
+                z = [list(rows[m]) for m in order]
+                assert len(order) == len(trace.y), name
+                assert all(len(row) == len(trace.x) and all(isinstance(v, (int, float)) and 1 <= v <= len(data['method_order']) for v in row) for row in z), name
+                assert all(z[i] == list(rows[m]) for i, m in enumerate(order)), name
+                fig.add_heatmap(x=list(trace.x), y=[SHORT_NAMES.get(m, m) for m in order],
+                                z=z, coloraxis='coloraxis')
+                low, high = 1, len(data['method_order'])
+                title, colorscale = 'Mean rank', reverse
+                fig.update_yaxes(autorange='reversed', tickfont_size=10.67,
+                                 showline=False, ticks='', showgrid=False,
+                                 tickmode='array', tickvals=list(fig.data[0].y),
+                                 ticktext=list(fig.data[0].y))
+                fig.update_xaxes(title_text='Evaluations', tickfont_size=10.67,
+                                 tickvals=source.layout.xaxis.tickvals,
+                                 ticktext=source.layout.xaxis.ticktext)
+            else:
+                fig.add_heatmap(x=list(trace.x), y=list(trace.y), z=trace.z,
+                                coloraxis='coloraxis')
+                peers = [go.Figure(data['charts'][p]) for p in data['scales'][name]]
+                low = min(p.layout.coloraxis.cmin for p in peers)
+                high = max(p.layout.coloraxis.cmax for p in peers)
+                title = source.layout.coloraxis.colorbar.title.text
+                colorscale = reverse if 'RMSE' in title or 'final' in title else sequential
+                fig.update_xaxes(tickangle=-90, showline=False, ticks='',
+                                 type='category', tickmode='array', tickvals=list(trace.x),
+                                 ticktext=list(trace.x))
+                fig.update_yaxes(autorange='reversed', showline=False, ticks='', showgrid=False)
+                fig.update_layout(height=round((178 + 14 * len(trace.y)) * PX_PER_TEX_PT))
+            fig.update_layout(coloraxis=dict(cmin=low, cmax=high, colorscale=colorscale, showscale=False))
+            scales[name] = (low, high, colorscale, title)
+        else:
+            assert all(t.type == 'box' for t in source.data), name
+            order = list(source.layout.xaxis.categoryarray)
+            colors = dict(zip(data['method_order'], list(palette.values()) * 4))
+            for trace in source.data:
+                color = colors[trace.name]
+                fill = 'rgba(' + ','.join(str(int(color[i:i + 2], 16)) for i in (1, 3, 5)) + ',0.25)'
+                fig.add_box(x=trace.x, y=trace.y, name=trace.name,
+                            line=dict(color=colors[trace.name], width=1),
+                            fillcolor=fill,
+                            marker=dict(color=colors[trace.name], size=2),
+                            boxpoints='outliers', whiskerwidth=.5)
+            fig.update_xaxes(categoryorder='array', categoryarray=order,
+                             tickmode='array', tickvals=order, ticktext=order, tickangle=-90)
+            fig.update_yaxes(title_text=source.layout.yaxis.title.text,
+                             type=source.layout.yaxis.type)
+            fig.update_layout(shapes=source.layout.shapes)
+            for old, new in zip(source.data, fig.data):
+                assert repr(list(old.y)) == repr(list(new.y)), name
+                assert all(v is None or isinstance(v, (int, float)) for v in new.y), name
+        figures[name] = fig
+    for group in data['groups']:
+        bars = [name for name in group if name.endswith('_colorbar.pdf')]
+        if not bars:
+            continue
+        panels = [name for name in group if not name.endswith('_colorbar.pdf')]
+        scale = scales[panels[0]]
+        assert all(scales[name][:3] == scale[:3] for name in panels), group
+        name = bars[0]
+        assert len(bars) == 1
+        if name in figures:
+            continue
+        low, high, colorscale, title = scale
+        if len({scales[p][3] for p in panels}) > 1:
+            title = 'Mean score'
+        bar = go.Figure(layout=dict(template='thesis'))
+        bar.add_scatter(x=[None, None], y=[None, None], mode='markers',
+                        marker=dict(color=[low, high], cmin=low, cmax=high,
+                                    colorscale=colorscale, showscale=True,
+                                    colorbar=dict(orientation='h', x=.5, y=1,
+                                                  xanchor='center', yanchor='top', len=.9,
+                                                  thickness=10, outlinewidth=0, ypad=0,
+                                                  tickfont_size=12,
+                                                  title=dict(text=title, side='bottom', font_size=13.33))))
+        if title == 'Mean rank':
+            bar.data[0].marker.colorbar.update(tickmode='array', tickvals=[low, 10, 20, high])
+        bar.update_layout(width=round(data['text_width_pt'] * PX_PER_TEX_PT),
+                          height=round(60 * PX_PER_TEX_PT), showlegend=False,
+                          margin=dict(l=10, r=10, t=2, b=8),
+                          xaxis_visible=False, yaxis_visible=False)
+        figures[name] = bar
+    return figures
 
 
 def main():
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--aggregation-dir', type=Path, default=common.AGGREGATION_DIR)
-    base = parser.parse_args().aggregation_dir
-    with duckdb.connect(str(base / 'ml_cluster.duck'), read_only=True) as conn:
-        frame = conn.execute('SELECT * FROM ml_cluster_results').fetchdf()
-        frame = frame[frame.method != 'slipmap']
-        for metric, label in [('homogeneity', 'Homogeneity'), ('completeness', 'Completeness')]:
-            for k in (5, 10, 20, 40):
-                box(frame[frame.n_components == k], metric, label, f'ml/agg_{k}_{metric}')
-            for size, lo, hi in [('small', 0, 60), ('medium', 60, 200), ('large', 200, 1_000_000)]:
-                box(frame[(frame.n_components == 5) & frame.n_features.between(lo, hi)],
-                    metric, label, f'ml/agg_{size}_5_{metric}')
-    with duckdb.connect(str(base / 'ml_pred.duck'), read_only=True) as conn:
-        frame = conn.execute('SELECT * FROM ml_pred_results').fetchdf()
-        frame = frame[frame.method != 'slipmap']
-        for algo in ('rf', 'gb', 'mlp'):
-            part = frame[frame.algo == algo]
-            for k in (5, 10, 20, 40):
-                box(part[part.n_components == k], 'acc', 'Accuracy', f'ml/agg_{k}_{algo}_acc')
-            for size, lo, hi in [('small', 0, 60), ('medium', 60, 200), ('large', 200, 1_000_000)]:
-                box(part[(part.n_components == 5) & part.n_features.between(lo, hi)],
-                    'acc', 'Accuracy', f'ml/agg_{size}_5_{algo}_acc')
-    with duckdb.connect(str(base / 'ml_time.duck'), read_only=True) as conn:
-        frame = conn.execute('SELECT * FROM ml_time_results').fetchdf()
-        for dataset in (9985, 9981):
-            for column, suffix in [('fit_cpu_time', 'train_time'), ('transform_cpu_time', 'transform_time')]:
-                part = frame[frame.task_id == dataset].copy()
-                part['hours'] = part[column] / 3600
-                box(part, 'hours', 'CPU hours', f'time/{dataset}_{suffix}', log=True)
-    with duckdb.connect(str(base / 'epm.duck'), read_only=True) as conn:
-        for sample, dimension, k in epm.SYNTHETIC_FIGURES:
-            name = f'epm/agg_sample_red_inpt_{sample}_{dimension}_{k}'
-            box(epm.synthetic_data(conn, sample, dimension, k), 'normalized_rmse', 'Normalised RMSE', name)
-    with duckdb.connect(str(base / 'epm_real.duck'), read_only=True) as conn:
-        for sample, k in epm.REAL_FIGURES:
-            name = f'epm/real_agg_sample_red_dim_{sample}_{k}'
-            box(epm.real_data(conn, sample, k), 'normalized_rmse', 'Normalised RMSE', name)
-    with duckdb.connect(str(base / 'bop.duck'), read_only=True) as conn:
-        for sample, dimension, k in bop.SYNTHETIC_FIGURES:
-            line(bop.synthetic_data(conn, sample, dimension, k), f'bop/rank_{sample}_{dimension}_{k}')
-    with duckdb.connect(str(base / 'bop_real.duck'), read_only=True) as conn:
-        for sample, k in bop.REAL_FIGURES:
-            line(bop.real_data(conn, sample, k), f'bop/rank_real_{sample}_{k}')
-    legend()
-    assert set(refs) == {str(p.relative_to(THESIS / 'figures/04').with_suffix(''))
-                         for p in (THESIS / 'figures/04').rglob('*.pdf')}
+    data = json.loads(gzip.decompress((THESIS / 'scripts/dim_red_figure_data.json.gz').read_bytes()))
+    figures = make_figures(data)
+    chapter = (THESIS / 'Chapters/Chapter05_dim_red.tex').read_text()
+    chapter = re.sub(r'(?m)(?<!\\)%.*', '', chapter)
+    refs = set(re.findall(r'\\includegraphics(?:\[[^]]*\])?\{figures/05/([^}]+)\}', chapter))
+    assert figures.keys() == refs, (figures.keys() - refs, refs - figures.keys())
+    target = THESIS / 'figures/05'
+    with tempfile.TemporaryDirectory(prefix='.dim_red_', dir=THESIS) as temporary:
+        paths = [Path(temporary) / f'{i}.pdf' for i in range(len(figures))]
+        pio.write_images(list(figures.values()), paths,
+                         width=[fig.layout.width for fig in figures.values()],
+                         height=[fig.layout.height for fig in figures.values()])
+        assert all(path.read_bytes().startswith(b'%PDF') for path in paths)
+        for name, path in zip(figures, paths):
+            dest = target / name
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            path.replace(dest)
+        for path in target.rglob('*.pdf'):
+            if str(path.relative_to(target)) not in refs:
+                path.unlink()
+    print(f'Replaced {len(figures)} chapter-5 PDFs in {target}')
 
 
 if __name__ == '__main__':
