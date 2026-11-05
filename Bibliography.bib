@@ -344,12 +344,12 @@ M J{\"{a}}rvisalo},
 
 @inproceedings{Ballard87,
 	author       = {Dana H. Ballard},
-	editor       = {Kenneth D. Forbus and
+	old_editor   = {Kenneth D. Forbus and
                   Howard E. Shrobe},
 	title        = {Modular Learning in Neural Networks},
 	booktitle    = {Proceedings of the AAAI Conference on Artificial Intelligence (AAAI 1987)},
 	pages        = {279--284},
-	publisher    = {Morgan Kaufmann},
+	old_publisher = {Morgan Kaufmann},
 	year         = {1987},
 	timestamp    = {Mon, 04 Sep 2023 16:46:41 +0200}
 }
@@ -507,7 +507,7 @@ C Morris},
                   Li Yao and
                   Guillaume Alain and
                   Pascal Vincent},
-	editor       = {Christopher J. C. Burges and
+	old_editor   = {Christopher J. C. Burges and
                   L{\'{e}}on Bottou and
                   Zoubin Ghahramani and
                   Kilian Q. Weinberger},
@@ -845,15 +845,15 @@ J Vanschoren},
 	author       = {Anton Bj{\"{o}}rklund and
                   Lauri Sepp{\"{a}}l{\"{a}}inen and
                   Kai Puolam{\"{a}}ki},
-	editor       = {Ioanna Miliou and
+	old_editor   = {Ioanna Miliou and
                   Nico Piatkowski and
                   Panagiotis Papapetrou},
 	title        = {{SLIPMAP:} Fast and Robust Manifold Visualisation for Explainable
                   {AI}},
 	booktitle    = {Proceedings of the International Symposium on Intelligent Data Analysis (IDA 2024)},
-	series       = {Lecture Notes in Computer Science},
+	old_series   = {Lecture Notes in Computer Science},
 	pages        = {223--235},
-	publisher    = {Springer},
+	old_publisher = {Springer},
 	year         = {2024},
 	timestamp    = {Sat, 08 Jun 2024 13:13:57 +0200}
 }
@@ -861,13 +861,12 @@ J Vanschoren},
 @article{BleEtAl03,
 	title        = {Latent {{Dirichlet Allocation}}},
 	author       = {Blei, David M. and Ng, Andrew Y. and Jordan, Michael I.},
-	date         = {2003},
+	year         = {2003},
 	journaltitle = {Journal of Machine Learning Research},
 	volume       = {3},
 	pages        = {993--1022},
 	issn         = {ISSN 1533-7928},
 	abstract     = {We describe latent Dirichlet allocation (LDA), a generative probabilistic model for collections of discrete data such as text corpora. LDA is a three-level hierarchical Bayesian model, in which each item of a collection is modeled as a finite mixture over an underlying set of topics. Each topic is, in turn, modeled as an infinite mixture over an underlying set of topic probabilities. In the context of text modeling, the topic probabilities provide an explicit representation of a document. We present efficient approximate inference techniques based on variational methods and an EM algorithm for empirical Bayes parameter estimation. We report results in document modeling, text classification, and collaborative filtering, comparing to a mixture of unigrams model and the probabilistic LSI model.},
-	issue        = {Jan},
 	file         = {/Users/elenaraponi/Zotero/storage/JMKEVXLF/Blei et al. - 2003 - Latent Dirichlet Allocation.pdf}
 }
 
@@ -1696,11 +1695,11 @@ F Hutter},
 	shorttitle   = {Backbones-Review},
 	author       = {Elharrouss, Omar and Akbari, Younes and Almadeed, Noor and {Al-Maadeed}, Somaya},
 	year         = {2024},
-	month        = aug,
 	journal      = {Computer Science Review},
 	volume       = {53},
-	pages        = {100645},
-	issn         = {15740137}
+	issue        = {C},
+	old_pages    = {100645},
+	old_issn     = {15740137}
 }
 
 @article{ElsEtAl19,
@@ -1716,18 +1715,18 @@ F Hutter},
 
 @inproceedings{EngEtAl11,
 	author       = {Daniel Engel and
-                  Lars Huettenberger and
+                  Lars H\"uttenberger and
                   Bernd Hamann},
-	editor       = {Christoph Garth and
+	old_editor   = {Christoph Garth and
                   Ariane Middel and
                   Hans Hagen},
 	title        = {A Survey of Dimension Reduction Methods for High-dimensional Data
                   Analysis and Visualization},
 	booktitle    = {Proceedings of the Workshop on Visualization of Large and Unstructured Data Sets (VLUDS 2011)},
-	series       = {OASIcs},
+	old_series   = {OASIcs},
 	volume       = {27},
 	pages        = {135--149},
-	publisher    = {Schloss Dagstuhl - Leibniz-Zentrum f{\"{u}}r Informatik, Germany},
+	old_publisher = {Schloss Dagstuhl - Leibniz-Zentrum f{\"{u}}r Informatik, Germany},
 	year         = {2011},
 	timestamp    = {Fri, 21 Nov 2025 23:44:11 +0100}
 }
@@ -1830,10 +1829,9 @@ Roger Wattenhofer},
 	booktitle    = {Proceedings of the ACM SIGKDD Conference on Knowledge Discovery and Data Mining (KDD 1996)},
 	author       = {Ester, Martin and Kriegel, Hans-Peter and Sander, J{\"o}rg and Xu, Xiaowei},
 	year         = {1996},
-	month        = aug,
-	series       = {Proceedings of the Second International Conference on Knowledge Discovery and Data Mining (KDD 1996)},
+	old_series   = {Proceedings of the Second International Conference on Knowledge Discovery and Data Mining (KDD 1996)},
 	pages        = {226--231},
-	address      = {Portland, Oregon}
+	old_address  = {Portland, Oregon}
 }
 
 @article{FaiRos24,
@@ -1939,16 +1937,24 @@ Models via Complexity Classes},
 	year         = {2018}
 }
 
-@article{FeuEtAl18b,
+@inproceedings{FeuEtAl18b,
 	author       = {Matthias Feurer and
                   Benjamin Letham and
                   Eytan Bakshy},
-	title        = {Scalable Meta-Learning for Bayesian Optimization},
-	journal      = {CoRR},
-	volume       = {abs/1802.02219},
+	title        = {Scalable Meta-Learning for Bayesian Optimization using Ranking-Weighted Gaussian Process Ensembles},
+	booktitle    = {Proceedings of the ICML 2018 AutoML Workshop},
+	old_volume   = {abs/1802.02219},
 	year         = {2018},
-	eprinttype   = {arXiv},
+	old_eprinttype = {arXiv},
 	timestamp    = {Wed, 26 Nov 2025 20:51:28 +0100}
+}
+
+@article{FeuEtAl18c,
+	title        = {Scalable Meta-Learning for Bayesian Optimization},
+	author       = {Matthias Feurer and Benjamin Letham and Eytan Bakshy},
+	year         = 2018,
+	journal      = {CoRR},
+	volume       = {abs/1802.02219}
 }
 
 @article{FeuEtAl22,
@@ -2039,6 +2045,19 @@ B and Bendias, R and Barghi, A and Kocijan, V and Zhang, Z and X He and J E Lens
 	title        = {Engineering {Design} via {Surrogate} {Modelling} - {A} {Practical} {Guide}},
 	volume       = {},
 	year         = {2008}
+}
+
+@book{ForEtAl08b,
+	author       = {Alexander I. J. Forrester and
+                  Andras Sobester and
+                  Andy J. Keane},
+	title        = {Engineering Design via Surrogate Modelling - {A} Practical Guide},
+	publisher    = {Wiley},
+	year         = {2008},
+	old_isbn     = {978-0-470-06068-1},
+	timestamp    = {Sun, 07 May 2017 01:25:58 +0200},
+	biburl       = {https://dblp.org/rec/books/daglib/0022623.bib},
+	bibsource    = {dblp computer science bibliography, https://dblp.org}
 }
 
 @article{FraBur70,
@@ -2443,10 +2462,10 @@ and a Scheduler},
 	title        = {Why do tree-based models still outperform deep learning on typical tabular data?},
 	year         = {2022},
 	booktitle    = {Proceedings of the Conference on Neural Information Processing Systems (NeurIPS 2022)},
-	articleno    = {37},
-	numpages     = {14},
+	old_articleno = {37},
 	pages        = {507--520},
-	isbn         = {978-1-71387-108-8}
+	isbn         = {978-1-71387-108-8},
+	numpages     = {14}
 }
 
 @article{GuoEtAl19,
@@ -2721,7 +2740,7 @@ M Suda},
 	author       = {Matthew D. Hoffman and
                   David M. Blei and
                   Francis R. Bach},
-	editor       = {John D. Lafferty and
+	old_editor   = {John D. Lafferty and
                   Christopher K. I. Williams and
                   John Shawe{-}Taylor and
                   Richard S. Zemel and
@@ -2729,7 +2748,7 @@ M Suda},
 	title        = {Online Learning for Latent Dirichlet Allocation},
 	booktitle    = {Proceedings of the Conference on Neural Information Processing Systems (NeurIPS 2010)},
 	pages        = {856--864},
-	publisher    = {Curran Associates, Inc.},
+	old_publisher = {Curran Associates, Inc.},
 	year         = {2010},
 	timestamp    = {Mon, 16 May 2022 15:41:51 +0200}
 }
@@ -2776,6 +2795,19 @@ M Suda},
 	number       = {2},
 	title        = {Growing scale-free networks with tunable clustering},
 	year         = {2002}
+}
+
+@article{HonEtAl21,
+	author       = {Wenjing Hong and
+                  Peng Yang and
+                  Ke Tang},
+	title        = {Evolutionary Computation for Large-scale Multi-objective Optimization:
+                  {A} Decade of Progresses},
+	journal      = {International Journal of Automation and Computing},
+	volume       = {18},
+	number       = {2},
+	pages        = {155--169},
+	year         = {2021}
 }
 
 @inproceedings{HooEtAl12,
@@ -2868,7 +2900,7 @@ M Suda},
 	date-added   = {2026-09-14 16:34:50 +0200},
 	date-modified = {2026-09-14 16:34:50 +0200},
 	id           = {Huang2022},
-	isbn         = {2399-3642},
+	old_isbn     = {2399-3642},
 	journal      = {Communications Biology},
 	number       = {1},
 	pages        = {719},
@@ -2889,7 +2921,7 @@ M Suda},
 	author       = {Haiyang Huang and
                   Yingfan Wang and
                   Cynthia Rudin},
-	editor       = {Amir Globersons and
+	old_editor   = {Amir Globersons and
                   Lester Mackey and
                   Danielle Belgrave and
                   Angela Fan and
@@ -3194,6 +3226,23 @@ Testing {SAT}},
 	year         = {2017}
 }
 
+@inproceedings{JeoEtAl25,
+	author       = {Hyeon Jeon and
+                  Hyunwook Lee and
+                  Yun{-}Hsin Kuo and
+                  Taehyun Yang and
+                  Daniel Archambault and
+                  Sungahn Ko and
+                  Takanori Fujiwara and
+                  Kwan{-}Liu Ma and
+                  Jinwook Seo},
+	title        = {Unveiling High-dimensional Backstage: {A} Survey for Reliable Visual
+                  Analytics with Dimensionality Reduction},
+	booktitle    = {Proceedings of the International Conference on Human Factors in Computing Systems  ({CHI} 2025)},
+	pages        = {394:1--394:24},
+	year         = {2025}
+}
+
 @inproceedings{JiaEtAl20,
 	author       = {Jiang, Ping and Zhou, Qi and Shao, Xinyu},
 	booktitle    = {Surrogate {Model}-{Based} {Engineering} {Design} and {Optimization}},
@@ -3331,7 +3380,7 @@ Ilya Sutskever},
 	title        = {An Efficient K-Means Clustering Algorithm: Analysis and Implementation},
 	shorttitle   = {An Efficient K-Means Clustering Algorithm},
 	author       = {Kanungo, T. and Mount, D.M. and Netanyahu, N.S. and Piatko, C.D. and Silverman, R. and Wu, A.Y.},
-	date         = {2002-07},
+	year         = {2002},
 	journaltitle = {IEEE Transactions on Pattern Analysis and Machine Intelligence},
 	volume       = {24},
 	number       = {7},
@@ -3519,12 +3568,14 @@ Le Song},
 @inproceedings{KinWel14,
 	author       = {Diederik P. Kingma and
                   Max Welling},
-	editor       = {Yoshua Bengio and
+	old_editor   = {Yoshua Bengio and
                   Yann LeCun},
 	title        = {Auto-Encoding Variational Bayes},
 	booktitle    = {Proceedings of the International Conference on Learning Representations (ICLR 2014)},
 	year         = {2014},
-	timestamp    = {Thu, 04 Apr 2019 13:20:07 +0200}
+	timestamp    = {Thu, 04 Apr 2019 13:20:07 +0200},
+	editor       = {Yoshua Bengio and
+                  Yann LeCun}
 }
 
 @misc{KinWel22,
@@ -3756,14 +3807,6 @@ Experiments, {ALENEX}},
 	year         = {2006}
 }
 
-@book{LeeEtAl07,
-	title        = {Nonlinear dimensionality reduction},
-	author       = {Lee, John A and Verleysen, Michel and others},
-	volume       = {1},
-	year         = {2007},
-	publisher    = {Springer}
-}
-
 @inproceedings{LeeEtAl25,
 	author       = {Seonho Lee and
                Amar Phanishayee and
@@ -3784,9 +3827,17 @@ Experiments, {ALENEX}},
 	author       = {Lee, Daniel and Seung, H. Sebastian},
 	date         = {2000},
 	volume       = {13},
-	publisher    = {MIT Press},
+	old_publisher = {MIT Press},
 	abstract     = {Non-negative matrix factorization (NMF) has previously been shown to  be a useful decomposition for multivariate data. Two different multi-  plicative algorithms for NMF are analyzed. They differ only slightly in  the multiplicative factor used in the update rules. One algorithm can be  shown to minimize the conventional least squares error while the other  minimizes the generalized Kullback-Leibler divergence. The monotonic  convergence of both algorithms can be proven using an auxiliary func-  tion analogous to that used for proving convergence of the Expectation-  Maximization algorithm. The algorithms can also be interpreted as diag-  onally rescaled gradient descent, where the rescaling factor is optimally  chosen to ensure convergence.},
 	file         = {/Users/elenaraponi/Zotero/storage/ZM6CM7KV/Lee and Seung - 2000 - Algorithms for Non-negative Matrix Factorization.pdf}
+}
+
+@book{LeeVer07,
+	title        = {Nonlinear dimensionality reduction},
+	author       = {Lee, John A and Verleysen, Michel},
+	volume       = {1},
+	year         = {2007},
+	publisher    = {Springer}
 }
 
 @article{LesKre16,
@@ -3895,13 +3946,12 @@ and Shoham, Yoav",
 	author       = {Li, Ping and Hastie, Trevor J. and Church, Kenneth W.},
 	title        = {Very sparse random projections},
 	year         = {2006},
-	publisher    = {Association for Computing Machinery},
-	address      = {New York, NY, USA},
+	old_publisher = {Association for Computing Machinery},
+	old_address  = {New York, NY, USA},
 	booktitle    = {Proceedings of the ACM SIGKDD Conference on Knowledge Discovery and Data Mining (KDD 2006)},
 	pages        = {287–296},
 	numpages     = {10},
-	location     = {Philadelphia, PA, USA},
-	series       = {KDD '06}
+	old_series   = {KDD '06}
 }
 
 @article{LiEtAl17,
@@ -4679,14 +4729,6 @@ J Dean},
 }
 
 @book{Mockus12,
-	title        = {Bayesian approach to global optimization: theory and applications},
-	author       = {Mockus, Jonas},
-	year         = 2012,
-	publisher    = {Springer Science \& Business Media},
-	volume       = 37
-}
-
-@book{Mockus12b,
 	title        = {{{Bayesian}} approach to global optimization: theory and applications},
 	author       = {Mo{\v{c}}kus, Jonas},
 	year         = 2012,
@@ -4713,6 +4755,14 @@ J Dean},
 }
 
 @book{Mockus89b,
+	title        = {Bayesian approach to global optimization: theory and applications},
+	author       = {Mockus, Jonas},
+	year         = 1989,
+	publisher    = {Springer Dordrecht},
+	volume       = 37
+}
+
+@book{Mockus89c,
 	title        = {{{Bayesian}} approach to global optimization: theory and applications},
 	author       = {Mo{\v{c}}kus, Jonas},
 	year         = 1989,
@@ -4813,7 +4863,7 @@ C Morris},
 @article{NarEtAl21,
 	title        = {Assessing Single-Cell Transcriptomic Variability through Density-Preserving Data Visualization},
 	author       = {Narayan, Ashwin and Berger, Bonnie and Cho, Hyunghoon},
-	date         = {2021-06},
+	year         = {2021},
 	journaltitle = {Nature Biotechnology},
 	shortjournal = {Nature Biotechnology},
 	volume       = {39},
@@ -4903,8 +4953,9 @@ Hash Functions},
 	title        = {{BOIDS: high-dimensional Bayesian optimization via incumbent-guided direction lines and subspace embeddings}},
 	year         = {2025},
 	booktitle    = {Proceedings of the AAAI Conference on Artificial Intelligence (AAAI 2025)},
-	articleno    = {2192},
-	numpages     = {9}
+	old_articleno = {2192},
+	pages        = {19659--19667
+}
 }
 
 @inproceedings{NguEtAl22,
@@ -4918,7 +4969,7 @@ Hash Functions},
 }
 
 @inproceedings{NguTra24,
-	author       = {Nguyen, Quoc-Anh Hoang and Tran, The Hung},
+	author       = {Nguyen{-}Dinh, Quoc-Anh Hoang and Tran, The Hung},
 	title        = {{High-Dimensional Bayesian Optimization via Random Projection of Manifold Subspaces}},
 	year         = {2024},
 	booktitle    = {Proceedings of the European Conference on Machine Learning and Knowledge Discovery in Databases (ECML-PKDD 2024)},
@@ -5212,9 +5263,10 @@ Graphs},
 
 @inproceedings{PreEtAl24,
 	title        = {Twofold {{Adaptive Design Space Reduction}} for {{Constrained Bayesian Optimization}} of {{Transonic Compressor Blades}}},
+	booktitle    = {Proceedings of the ASME Turbo Expo 2024: Turbomachinery Technical Conference and Exposition},
 	author       = {Pretsch, Lisa and Arsenyev, Ilya and Raponi, Elena and Duddeck, Fabian},
-	date         = {2024-08-28},
-	publisher    = {American Society of Mechanical Engineers Digital Collection}
+	year         = {2024},
+	old_publisher = {American Society of Mechanical Engineers Digital Collection}
 }
 
 @inproceedings{Preuss12,
@@ -5301,6 +5353,15 @@ Problems},
 	organization = {IEEE}
 }
 
+@inproceedings{RakEtAl21,
+	author       = {Rakicevic, Nemanja and Cully, Antoine and Kormushev, Petar},
+	title        = {Policy manifold search: exploring the manifold hypothesis for diversity-based neuroevolution},
+	year         = {2021},
+	booktitle    = {Proceedings of the Genetic and Evolutionary Computation Conference (GECCO 2021)},
+	pages        = {901–909},
+	numpages     = {9}
+}
+
 @inproceedings{RamMir14,
 	author       = {Ramar, K and Mirnalinee, TT},
 	booktitle    = {Proceedings of the International Conference on Recent Trends in Information Technology},
@@ -5319,8 +5380,8 @@ Problems},
 	year         = {2020}
 }
 
-@inbook{RapEtAl25,
-	title        = {Global Sensitivity Analysis Is Not Always Beneficial for Evolutionary Computation: A Study in Engineering Design},
+@incollection{RapEtAl25,
+	title        = {Global Sensitivity Analysis Is Not Always Beneficial for Evolutionary Computation: A Study in Engineering Design (Book Chapter)},
 	author       = {Elena Raponi and Ivan Olarte Rodriguez and Niki van Stein},
 	year         = 2025,
 	booktitle    = {Explainable AI for Evolutionary Computation},
@@ -5673,10 +5734,10 @@ Behavior},
 	shorttitle   = {{{FaceNet}}},
 	booktitle    = {Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR 2015)},
 	author       = {Schroff, Florian and Kalenichenko, Dmitry and Philbin, James},
-	date         = {2015-06},
+	year         = {2015},
 	pages        = {815--823},
-	publisher    = {IEEE},
-	location     = {Boston, MA, USA}
+	old_publisher = {IEEE},
+	old_location = {Boston, MA, USA}
 }
 
 @article{SchEtAl20,
@@ -6091,12 +6152,12 @@ Yiming Yang},
 @article{TalEtAl21,
 	title        = {Anomaly {{Detection}} in {{High-Dimensional Data}}},
 	author       = {Talagala, Priyanga Dilini and Hyndman, Rob J. and Smith-Miles, Kate},
-	date         = {2021-06-03},
+	year         = {2021},
 	journaltitle = {Journal of Computational and Graphical Statistics},
 	volume       = {30},
 	number       = {2},
 	pages        = {360--374},
-	publisher    = {ASA Website},
+	old_publisher = {ASA Website},
 	issn         = {1061-8600}
 }
 
@@ -6155,7 +6216,7 @@ Yiming Yang},
 @article{TheBho24,
 	title        = {Feature Selection Techniques for Machine Learning: A Survey of More than Two Decades of Research},
 	author       = {Theng, Dipti and Bhoyar, Kishor K.},
-	date         = {2024-03-01},
+	year         = {2024},
 	journaltitle = {Knowledge and Information Systems},
 	shortjournal = {Knowledge and Information Systems},
 	volume       = {66},
@@ -6180,6 +6241,18 @@ Yiming Yang},
 	pages        = {239},
 	year         = {2021},
 	timestamp    = {Mon, 28 Aug 2023 21:36:26 +0200}
+}
+
+@article{TiaEtAl21b,
+	author       = {Tian, Ye and Si, Langchun and Zhang, Xingyi and Cheng, Ran and He, Cheng and Tan, Kay Chen and Jin, Yaochu},
+	title        = {Evolutionary Large-Scale Multi-Objective Optimization: A Survey},
+	year         = {2021},
+	volume       = {54},
+	number       = {8},
+	journal      = {ACM Computing Surveys},
+	month        = oct,
+	articleno    = {174},
+	numpages     = {34}
 }
 
 @inproceedings{Tipping00,
@@ -6683,13 +6756,13 @@ Risto Miikkulainen},
                   Yiyang Sun and
                   Haiyang Huang and
                   Cynthia Rudin},
-	editor       = {Toby Walsh and
+	old_editor   = {Toby Walsh and
                   Julie Shah and
                   Zico Kolter},
 	title        = {Dimension Reduction with Locally Adjusted Graphs},
 	booktitle    = {Proceedings of the AAAI Conference on Artificial Intelligence (AAAI 2025)},
 	pages        = {21357--21365},
-	publisher    = {{AAAI} Press},
+	old_publisher = {{AAAI} Press},
 	year         = {2025},
 	timestamp    = {Wed, 18 Mar 2026 17:07:12 +0100}
 }
@@ -6809,6 +6882,16 @@ Reversible Functions and Reversible Circuits},
 	title        = {Supervising the {Multi}-{Fidelity} {Race} of {Hyperparameter} {Configurations}},
 	volume       = {},
 	year         = {2022}
+}
+
+@article{WolEtAl01,
+	title        = {PLS-regression: a basic tool of chemometrics},
+	journal      = {Chemometrics and Intelligent Laboratory Systems},
+	volume       = {58},
+	number       = {2},
+	pages        = {109--130},
+	year         = {2001},
+	author       = {Svante Wold and Michael Sjöström and Lennart Eriksson}
 }
 
 @article{WonEtAl23,
@@ -7125,6 +7208,21 @@ Eric P. Xing},
 	volume       = {44},
 	year         = {2011},
 	month        = {nov}
+}
+
+@article{ZhoEtAl24,
+	author       = {MengChu Zhou and
+                  Meiji Cui and
+                  Dian Xu and
+                  Shuwei Zhu and
+                  Ziyan Zhao and
+                  Abdullah Abusorrah},
+	title        = {Evolutionary Optimization Methods for High-Dimensional Expensive Problems: {A} Survey},
+	journal      = {{IEEE} {CAA} Journal of Automatica Sinica},
+	volume       = {11},
+	number       = {5},
+	pages        = {1092--1105},
+	year         = {2024}
 }
 
 @article{ZhuEtAl14,

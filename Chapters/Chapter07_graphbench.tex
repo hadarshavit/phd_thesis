@@ -218,7 +218,7 @@ We provide three datasets: \dataset{small}, which includes only small formulae w
 \paragraph{Dataset challenges:} Algorithm selection and performance prediction are particularly challenging in this setting for several reasons. First, solver performance is inherently stochastic: repeated runs of the same solver on the same instance can result in substantially different running times. This induces noisy target values that the learning algorithm must account for. Second, the targets are right-censored because of solver cutoffs: when a solver does not terminate before the cutoff, its true running time is only known to exceed the cutoff. Third, the SAT instances can be very large, with corresponding graphs containing thousands to millions of variable nodes, making scalable graph processing a major challenge. Finally, accurate prediction requires the GNN to capture both local structural patterns and the formula's global properties.
 
 \paragraph{Experimental evaluation and baselines}~
-All SAT solving tasks in the benchmark are graph-level. For the GNN baselines, we employ an encoder-processor-decoder pipeline, as described in~\cref{Section:ExpSetup}. We used the following architectures: GIN, GCN, GIN+, GCN+, Gated GCN+, and, with node features on \dataset{LCG} only, GraSS. While we considered GT for the tasks, we encountered high computational costs in calculating the positional embeddings (more than a CPU day) and therefore excluded them from the evaluation. To evaluate the capacity of GNNs to extract information purely from the formula's topology, we ran experiments both without and with the supplied node-level features. Furthermore, when training on medium- and large-sized graphs, we encountered out-of-memory errors even on an H100. Consequently, we only consider small formulae for MPNNs. Similarly, we observed out-of-memory issues with the clause graphs and therefore excluded them from the evaluation. We optimized these models' hyperparameters using SMAC3~\citep{LinEtAl22b} with a multi-fidelity facade, running 200 trials per setting with bfloat16 mixed precision and batch size 16. We evaluated the selected configuration over three seeds. Full details of the hyperparameter configuration space and tuning procedure are in~\cref{sec:ch07:hpo}.
+All SAT solving tasks in the benchmark are graph-level. For the GNN baselines, we employ an encoder-processor-decoder pipeline, as described in~\cref{sec:ch07:ExpSetup}. We used the following architectures: GIN, GCN, GIN+, GCN+, Gated GCN+, and, with node features on \dataset{LCG} only, GraSS. While we considered GT for the tasks, we encountered high computational costs in calculating the positional embeddings (more than a CPU day) and therefore excluded them from the evaluation. To evaluate the capacity of GNNs to extract information purely from the formula's topology, we ran experiments both without and with the supplied node-level features. Furthermore, when training on medium- and large-sized graphs, we encountered out-of-memory errors even on an H100. Consequently, we only consider small formulae for MPNNs. Similarly, we observed out-of-memory issues with the clause graphs and therefore excluded them from the evaluation. We optimized these models' hyperparameters using SMAC3~\citep{LinEtAl22b} with a multi-fidelity facade, running 200 trials per setting with bfloat16 mixed precision and batch size 16. We evaluated the selected configuration over three seeds. Full details of the hyperparameter configuration space and tuning procedure are in~\cref{sec:ch07:hpo}.
 
 We note that algorithm selection datasets are traditionally evaluated using cross-validation, primarily because of limited data availability. In contrast, our new dataset contains tens of thousands of formulas. Since it is also intended for deep learning approaches, which are computationally expensive and thus impractical to evaluate using 10-fold cross-validation, we instead provide a fixed train–validation–test split and report results across 3 random seeds.
 
@@ -506,7 +506,7 @@ Finally, we find a larger closed gap for the large dataset across all three base
 
 
 
-\section{Experimental setup}\label{Section:ExpSetup}
+\section{Experimental setup}\label{sec:ch07:ExpSetup}
 Similar to~\cite{BecEtAl25, StoEtAl25}, we use an encoder-processor-decoder architecture for all tasks, which we detail below. While the task-specific components vary, we provide a general architecture to measure the performance of selected baselines on our tasks. For the chip design and weather forecast dataset, we adapt this architecture to provide the necessary task-dependent encoder and decoder functionality.
 
 \paragraph{Encoder}~
@@ -514,7 +514,7 @@ For each task, we provide a task-specific encoder that derives node- and edge-le
 
 \paragraph{Processor}~
 As our processor, we select one of the baseline models we evaluate. These consist of two dummy baselines: an MLP and a DeepSet architecture; a GNN baseline using a GIN architecture; and a Graph Transformer baseline. Independent of the selected baseline, we compute updated node and graph representations at each layer as follows, given a graph $G$ with node representations $\vec{X}$,
-\begin{equation}\label{eq:processor_eq}
+\begin{equation}\label{eq:ch07:processor_eq}
 	\vec{X} = \phi(\textsf{LayerNorm}(\vec{X}), G)
 \end{equation}
 \begin{equation*}
