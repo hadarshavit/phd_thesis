@@ -1,3 +1,5 @@
+% Retain the paper figure descriptions in source when compiling with ClassicThesis.
+\providecommand{\Description}[1]{}
 \chapter{Task-driven Assessment of Dimensionality Reduction Methods for Machine Learning and Black-Box Optimisation}\label{ch:ch05:dim_red}
 \section{Introduction}
 \label{sec:ch05:intro}
@@ -401,7 +403,7 @@ ours is the first benchmarking study that assesses and compares a wide range of 
     }
     \label{tab:ch05:dimensionality reduction-methods}
     \small{
-    \begin{tabular}{cccc} 
+    \begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}Xll@{}} 
         \toprule
          Method&  Citation&  Type \\ \midrule
           Autoencoder & \citet{Ballard87} & Unsupervised\\
@@ -427,10 +429,10 @@ ours is the first benchmarking study that assesses and compares a wide range of 
          Factor Analysis& \citet{Barber12} & Unsupervised\\
                   Denoising Autoencoder & \citet{BenEtAl13} & Unsupervised\\
          Variational Autoencoder & \citet{KinWel14} & Unsupervised\\
-         Ivis& \citet{SzuEtAl19} & Supervised &\\
-         UMAP& \citet{McIEtAl18} & Supervised&\\
+         Ivis& \citet{SzuEtAl19} & Supervised\\
+         UMAP& \citet{McIEtAl18} & Supervised\\
          UMAP (unsupervised)& \citet{McIEtAl18} & Unsupervised\\
-         % DUMAP& & Supervised&\\
+         % DUMAP& & Supervised\\
           LoLP& \citet{VogEtAl21}& Supervised\\
 
          Parametric UMAP & \citet{SaiEtAl21} & Supervised\\
@@ -442,9 +444,9 @@ ours is the first benchmarking study that assesses and compares a wide range of 
          LocalMAP & \citet{WanEtAl25} & Unsupervised\\
 
 
-         % Ivis& & Supervised&\\ 
+         % Ivis& & Supervised\\ 
          \bottomrule
-    \end{tabular}
+    \end{tabularx}
     }
     
 \end{table*}

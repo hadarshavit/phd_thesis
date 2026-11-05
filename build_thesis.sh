@@ -28,7 +28,7 @@ run_latex() {
     fi
 }
 run_latex 1
-"$thesis_dir/.tools/biber" --input-directory "$output_dir" --output-directory "$output_dir" ClassicThesis
+biber --input-directory "$output_dir" --output-directory "$output_dir" ClassicThesis
 run_latex 2
 run_latex 3
 printf 'Built %s/ClassicThesis.pdf\n' "$output_dir"
