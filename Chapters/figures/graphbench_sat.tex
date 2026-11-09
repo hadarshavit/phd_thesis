@@ -6,9 +6,6 @@
         inner sep=1pt, font=\sffamily\small},
     gb variable edge/.style={draw=tolTeal!75!black, line width=.8pt},
     gb clause edge/.style={draw=tolIndigo, line width=.8pt},
-    gb complement edge/.style={gb variable edge, decorate,
-        decoration={snake, amplitude=.45mm, segment length=2.5mm,
-            pre length=.5mm, post length=.5mm}},
     gb panel label/.style={font=\normalsize, anchor=north}
 ]
     \node[font=\normalsize] at (6.5,4.55)
@@ -26,7 +23,6 @@
     \node[gb variable] (vcg-b) at (6.5,2.7) {$b$};
     \node[gb variable] (vcg-c) at (5.95,1.85) {$c$};
     \node[gb clause] (vcg-cl3) at (5.95,.95) {$\mathrm{cl}_3$};
-    \draw[gb variable edge] (vcg-a) -- (vcg-b) -- (vcg-c) -- (vcg-a);
     \draw[gb clause edge] (vcg-cl1) -- (vcg-a);
     \draw[gb clause edge] (vcg-cl1) -- (vcg-b);
     \draw[gb clause edge] (vcg-cl1.south) to[bend right=30] (vcg-c.west);
@@ -35,7 +31,7 @@
     \draw[gb clause edge] (vcg-cl2.south) to[bend left=30] (vcg-c.east);
     \draw[gb clause edge] (vcg-a.south west) to[bend right=25] (vcg-cl3.west);
     \draw[gb clause edge] (vcg-c) -- (vcg-cl3);
-    \node[gb panel label] at (5.95,.05) {Variable clause graph};
+    \node[gb panel label] at (5.95,.05) {Variable-clause graph};
 
     \node[gb variable] (lcg-na) at (9.55,3.25) {$\neg a$};
     \node[gb variable] (lcg-nb) at (9.55,2.2) {$\neg b$};
@@ -54,11 +50,5 @@
     \draw[gb clause edge] (lcg-cl2) -- (lcg-nc);
     \draw[gb clause edge] (lcg-cl3) -- (lcg-a);
     \draw[gb clause edge] (lcg-cl3) -- (lcg-c);
-    \draw[gb complement edge] (lcg-na.north east)
-        to[bend left=28] (lcg-a.north west);
-    \draw[gb complement edge] (lcg-nb.south east)
-        to[bend right=28] (lcg-b.south west);
-    \draw[gb complement edge] (lcg-nc.south east)
-        to[bend right=28] (lcg-c.south west);
-    \node[gb panel label] at (11.1,.05) {Literal clause graph};
+    \node[gb panel label] at (11.1,.05) {Literal-clause graph};
 \end{tikzpicture}

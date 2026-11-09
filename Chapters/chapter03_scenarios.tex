@@ -8,3 +8,25 @@ The \new{Boolean satisfiability problem} (\gls{sat}) is a central and longstandi
 \end{equation*}
 Here, each $l_{i,j}$ is a literal, i.e., either a variable $v_p$ or its negation $\lnot v_p$. The task is to decide whether there exists an assignment $a$ such that $\varphi(a) = \text{true}$. \Gls{sat} is of significant theoretical importance as one of the first problems proven \textsf{NP}-complete~\citep{Cook71}, and it underpins numerous practical applications in hardware and software verification~\citep{BieEtAl09}, automated planning~\citep{KauSel96}, and operations research~\citep{GomEtAl08}. Its significance has led to the development of a wide range of solvers, systematically benchmarked in annual \gls{sat} competitions (e.g.,~\citep{FroEtAl21,BalEtAl17,HeuEtAl19}).
 
+\subsection{Graph representations of SAT}
+\label{sec:ch03:sat-graphs}
+
+SAT formulae can be represented as graphs whose structure does not depend on the order of clauses or literals in the CNF representation. The following four representations are used in this thesis~\citep{NudEtAl04b,HutEtAl14e,SelEtAl19}:
+\begin{itemize}
+    \item \new{Variable graph} (VG): an undirected graph with one node per variable. Two distinct variables are connected if they occur together in at least one clause, irrespective of their polarity.
+    \item \new{Clause graph} (CG): an undirected graph with one node per clause. Two distinct clauses are connected if they share at least one negated literal.
+    \item \new{Variable-clause graph} (VCG): a bipartite, undirected graph with one node per variable and one node per clause. A variable node is connected to a clause node if the variable occurs in that clause, either positively or negatively.
+    \item \new{Literal-clause graph} (LCG): a bipartite, undirected graph with two literal nodes per variable, one for its positive form and one for its negation, and one node per clause. A literal node is connected to a clause node if that literal occurs in the clause.
+\end{itemize}
+
+The VG and the unlabelled VCG do not distinguish positive from negative occurrences. The LCG preserves this distinction through separate literal nodes. Polarity can also be attached to VCG edges as an attribute. Additional attributes and edges depend on the application; in particular, edges connecting complementary literals extend the bipartite LCG defined above.
+\Cref{fig:ch03:sat-graphs} illustrates the VG, VCG, and LCG for the same formula.
+
+\begin{figure}[tbp]
+    \centering
+    \resizebox{\linewidth}{!}{\input{Chapters/figures/graphbench_sat.tex}}
+    \caption[Graph representations of a SAT formula]{Variable, variable-clause, and literal-clause graphs of the displayed SAT formula. Clause nodes $\mathrm{cl}_1$, $\mathrm{cl}_2$, and $\mathrm{cl}_3$ correspond to the clauses in their displayed order. The VCG shows only variable--clause incidence edges; the LCG shows only literal--clause incidence edges.}
+    \label{fig:ch03:sat-graphs}
+\end{figure}
+
+These representations support two approaches to empirical performance prediction. The SATzilla features summarise graph structure through hand-crafted statistics, as discussed in~\cref{ch:ch04:rev_SATzilla}. GraphBench instead provides graph representations as inputs to graph neural networks, with application-specific node and edge encodings described in~\cref{ch:ch07:gnns_epms}.
