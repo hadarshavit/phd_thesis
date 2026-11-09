@@ -1,6 +1,6 @@
 
 \chapter{Background}\label{ch:ch02:background}
-In this chapter we provide background for \todo{complete this introduction}
+In this chapter we provide background on empirical performance prediction, algorithm selection, and Bayesian optimisation.
 \section{Empirical performance prediction}
 \label{sec:ch02:empirical_performance_prediction}
 
@@ -14,22 +14,19 @@ where the input $\modelInput$ depends on the observation type. There are three c
 
 \begin{itemize}
   \item \textbf{Per-instance.} The algorithm is executed with a fixed (usually the default) configuration, and performance is predicted from instance features alone: $\modelInput = \instanceFeatures$. Such setting is commonly is in algorithm selectors such as SATzilla~\citep{XuEtAl08}.
-%   \item \textbf{Per-configuration.} The algorithm is evaluated on a fixed instance or a fixed set of instances, and performance is predicted from the configuration parameters: $\modelInput = \configuration$. This is the case in HPO~\citep{FeuEtAl19} and NAS~\citep{ElsEtAl19}.
-%   \item \textbf{Per-configuration-and-instance.} The input for the model consists of both configuration and instance features: $\modelInput = (\configuration, \instanceFeatures)$. This most general setting and is used, for example, in algorithm configuration~\citep{HutEtAl14,EggEtAl18}.
+  \item \textbf{Per-configuration.} The algorithm is evaluated on a fixed instance or a fixed set of instances, and performance is predicted from the configuration parameters: $\modelInput = \configuration$. This is the case in HPO~\citep{FeuEtAl19} and NAS~\citep{ElsEtAl19}.
+  \item \textbf{Per-configuration-and-instance.} The input for the model consists of both configuration and instance features: $\modelInput = (\configuration, \instanceFeatures)$. This most general setting and is used, for example, in algorithm configuration~\citep{HutEtAl14,EggEtAl18}.
 \end{itemize}
-
-% A key challenge that distinguishes EPMs from standard regression problems is the structure of the observed data. Performance observations are usually not independent: multiple configurations may be evaluated on the same problem instance (or vice versa), introducing group structure that violates the i.i.d.\ assumption. Additionally, a common performance metric, running time, frequently exhibit heavy-tailed, right-skewed distributions, requiring special treatment. 
-% The problem becomes more severe, as running time observations have a cutoff, meaning that the algorithms are ran until a certain time limit. 
-% This means that, for some runs of the algorithm, we don't know the exact running time, but simply that it is larger than the cutoff.
-% Moreover, performance data is usually noisy, as many algorithms use randomness, and, as data is scarce, it is necessary to learn a meaningful predictor from few observations. Performance observations are usually not independent: multiple configurations may be evaluated on the same problem instance (or vice versa), introducing group structure that violates the i.i.d.\ assumption. 
-% Finally, across different scenarios, the scale of the performance target can vary by many orders of magnitude, so preprocessing choices that are beneficial in one scenario may be harmful in another. 
-
+A key challenge that distinguishes EPMs from standard regression problems is the structure of the observed data. Performance observations are usually not independent: multiple configurations may be evaluated on the same problem instance (or vice versa), introducing group structure that violates the i.i.d.\ assumption. Additionally, a common performance metric, running time, frequently exhibit heavy-tailed, right-skewed distributions, requiring special treatment. 
+The problem becomes more severe, as running time observations have a cutoff, meaning that the algorithms are ran until a certain time limit. 
+This means that, for some runs of the algorithm, we don't know the exact running time, but simply that it is larger than the cutoff.
+Moreover, performance data is usually noisy, as many algorithms use randomness, and, as data is scarce, it is necessary to learn a meaningful predictor from few observations. Performance observations are usually not independent: multiple configurations may be evaluated on the same problem instance (or vice versa), introducing group structure that violates the i.i.d.\ assumption. 
+Finally, across different scenarios, the scale of the performance target can vary by many orders of magnitude, so preprocessing choices that are beneficial in one scenario may be harmful in another. 
 
 
 
-% The predict performance can be a single number per metric, showing the mean or median value. Alternatively, it is also possible to predict the full performance distribution distribution $p(y \mid \modelInput)$ rather than a single value to obtain a distributional EPM~\citep{EggEtAl18a}, which is particularly valuable for capturing more subtle details of the performance of the algorithm, such as its variance and skewness.
 
-
+The predict performance can be a single number per metric, showing the mean or median value. Alternatively, it is also possible to predict the full performance distribution distribution $p(y \mid \modelInput)$ rather than a single value to obtain a distributional EPM~\citep{EggEtAl18a}, which is particularly valuable for capturing more subtle details of the performance of the algorithm, such as its variance and skewness.
 \section{Algorithm selection}
 \label{sec:ch02:algorithm_selection}
 
@@ -41,13 +38,9 @@ Given a set of problem instances $\instanceSpace$ (which can be, for example, da
 Extensions include the use of \textit{algorithm features}, which are combined with the instance features to predict the best algorithm for each problem instance. For simplicity, for the remainder of the section, we assume that the goal is to minimise $m$.
 In algorithm selection, the ideal goal is to reach the performance of the \gls{vbs} (\emph{i.e.}, perfect selector). Furthermore, the selection must be better than the single best solver (\gls{sbs}) in order to make the use of algorithm selection worthwhile.
 
-
-
-
 \subsection{Algorithm selection pipelines}
 \begin{figure}[tbp]
     \centering
-    % Portrait layout: readable labels at the thesis's 336 pt text width.
     \begin{tikzpicture}[
         >=Stealth, font=\fontsize{9}{10.5}\selectfont,
         box/.style={rounded corners=3pt, line width=.6pt,
@@ -139,7 +132,6 @@ Algorithm selection methods are integrated into \textit{algorithm selection pipe
 \begin{itemize}
     \item \textbf{Pre-selection:} A subset of algorithms is selected from a larger candidate set. In most real-world scenarios, only a few algorithms contribute substantially to \gls{vbs} performance, yet having many candidates to choose from makes accurate selection harder and increases the risk of poor predictions. Pre-selection constructs a small, complementary portfolio. A prominent method for pre-selection is greedy selection based on marginal contributions~\citep{XuEtAl08}, where algorithms are iteratively added to the portfolio if they yield the largest improvement to the \gls{vbs} performance.
 
-
     \item \textbf{Pre-solving schedules:} For problems where the metric of interest is running time (e.g., $\mathcal{NP}$-complete problem solving), it is beneficial to first run a short schedule (\emph{i.e.}, a sequence of solvers, each executed with a specific cut-off time) of solvers to solve easy instances quickly, thereby avoiding unnecessary feature computation. Such methods use, for example, a greedy method to decide which algorithms to run~\citep{XuEtAl08}, or use an optimisation problem to find the optimal pre-solving schedule~\citep{HooEtAl12,KadEtAl11}.
 
     \item \textbf{Algorithm selection:} An algorithm (or a schedule of algorithms) is selected based on the computed features. This step typically involves a machine learning model. For example, there can be models that predict the performance for each instance~\citep{XuEtAl08,OztEtAl22}, models that predict the ranking of the algorithms~\citep{XuEtAl12,KerEtAl18}, formulating the problem as a recommendation task~\citep{MisSeb17} and other approaches.
@@ -151,17 +143,13 @@ Additionally, for algorithm selection, there is a need for two additional, probl
 
     \item \textbf{Evaluation metric:} This is an important component of algorithm selection, as it is used to evaluate the performance of the algorithm selector. While there exist broadly applicable metrics such as the performance of the \gls{vbs} and \gls{sbs}, their definition depends on the specific problem.
 
-
     Therefore, a problem-specific evaluation metric must be chosen that represents the performance of the algorithm. This can be, for example, accuracy, precision, recall, F1-score, AUC, running time and more, depending on the use-case.
 \end{itemize}
 An overview of the algorithm selection pipeline is presented in~\cref{fig:ch02:asf_pipeline}.
 
-
-
-
 \subsection{Algorithm selection versus multi-class classification}
 A common mistake among newcomers to algorithm selection is to treat it as a standard multi-class classification problem.
-Although an algorithm selector predicts one algorithm from a finite set and 
+Although an algorithm selector predicts one algorithm from a finite set and
 
 can therefore be seen as performing a multi-class prediction task, training it as an ordinary multi-class classifier can yield sub-par performance, because it discards the performance of the algorithms relative to each other.
 
@@ -170,52 +158,50 @@ In that case, selecting the second-best algorithm is a reasonable error.
 A plain multi-class classifier, however, treats this outcome as equally wrong as choosing an algorithm that performs very poorly on the instance.
 As we show in our ASlib experiments (\cref{sec:ch10:aslib_appendix}), multi-class classifiers can indeed perform far below the other methods in practice.
 
-
 \section{Bayesian optimisation}
 
-
-In this section, we define the \gls{hpo} problem and describe the working mechanisms of the \gls{bo} framework. 
+In this section, we define the \gls{hpo} problem and describe the working mechanisms of the \gls{bo} framework.
 We also cover related work on dynamic design choices related to the components of \gls{bo}, as well as using ensembles in \gls{bo}.
 
-\subsection{Hyperparameter optimisation} Let $\mathcal{A}$ be a learning algorithm with $n$ hyperparameters, $\Lambda_{i}$ the domain of the $i$-th hyperparameter, and $\boldsymbol{\Lambda} = \Lambda_{1} \times \Lambda_{2} \times \dots \Lambda_{n}$ the overall hyperparameter configuration space. 
+\subsection{Hyperparameter optimisation} Let $\mathcal{A}$ be a learning algorithm with $n$ hyperparameters, $\Lambda_{i}$ the domain of the $i$-th hyperparameter, and $\boldsymbol{\Lambda} = \Lambda_{1} \times \Lambda_{2} \times \dots \Lambda_{n}$ the overall hyperparameter configuration space.
 We denote a hyperparameter configuration by $\boldsymbol{\lambda} \in \boldsymbol{\Lambda}$, and the algorithm $\mathcal{A}$ with its hyperparameters instantiated to $\boldsymbol{\lambda}$ by $\mathcal{A}_{\boldsymbol{\lambda}}$.
 Given a dataset $D$, the objective of \gls{hpo} is to find a hyperparameter configuration $\boldsymbol{\lambda}^{*}$ that minimises the loss $\mathcal{L}$ of a model fitted by algorithm $\mathcal{A}$ with hyperparameters $\boldsymbol{\lambda}$ on training data ${D}_{train}$, and evaluated on validation data ${D}_{validate}$, for a given loss function $\mathcal{L}$, \emph{i.e.},
 \begin{equation}
 \label{eq:ch02:def-hpo}
-\boldsymbol{\lambda}^{*} \in \argmin_{\boldsymbol{\lambda} \in \boldsymbol{\Lambda}} 
+\boldsymbol{\lambda}^{*} \in \argmin_{\boldsymbol{\lambda} \in \boldsymbol{\Lambda}}
 \mathcal{L}(\mathcal{A}_{\boldsymbol{\lambda}}, {D}_{train}, {D}_{validate}) = \argmin_{\boldsymbol{\lambda} \in \boldsymbol{\Lambda}} c(\boldsymbol{\lambda})
 \end{equation}
 Here, $c(\boldsymbol{\lambda})$ is a shorthand for the loss function when $\mathcal{A}_{\boldsymbol{\lambda}}$ and $D$ are fixed.
 Note that $c(\boldsymbol{\lambda})$ is a black-box function, without a closed-form expression nor analytic gradient information.
 
-\subsection{Bayesian optimisation} 
+\subsection{Bayesian optimisation}
 \label{sec:ch02:bac_bo}
 Bayesian optimisation (\gls{bo})~\citep{Mockus12,Garnett23,Frazier18,Kushner62,Kushner64} is a family of surrogate-based algorithms for efficient global optimisation of black-box problems.
-\changed{Typically,} \gls{bo} consists of three main modules: an \emph{initial design}, \emph{i.e.}, in \gls{hpo}, a set of hyperparameter configuration candidates $\boldsymbol{\lambda} = (\lambda^{(1)},\ldots, \lambda^{(r)})$ and their evaluations 
-$c(\boldsymbol{\lambda}) = (c(\lambda^{(1)}),\ldots, c(\lambda^{(r)}))$; a \emph{surrogate model} (fitted to the 
+Typically, \gls{bo} consists of three main modules: an \emph{initial design}, \emph{i.e.}, in \gls{hpo}, a set of hyperparameter configuration candidates $\boldsymbol{\lambda} = (\lambda^{(1)},\ldots, \lambda^{(r)})$ and their evaluations
+$c(\boldsymbol{\lambda}) = (c(\lambda^{(1)}),\ldots, c(\lambda^{(r)}))$; a \emph{surrogate model} (fitted to the
 
 observations) that returns an approximation $\hat{c}(\boldsymbol{\lambda})$ of the unknown loss function $c(\boldsymbol{\lambda})$ while capturing the uncertainty in the prediction $\hat{\sigma}(\boldsymbol{\lambda})$ on unobserved points in the search space; and an \emph{acquisition function}, which is optimised to suggest solution candidates to be evaluated next, usually balancing exploration and exploitation of the search space.
-\changed{\gls{bo} then evaluates the most promising candidates.} 
+\gls{bo} then evaluates the most promising candidates.
 
-To approximate the expensive objective function, \gls{bo} typically employs a Gaussian process (GP) model as the surrogate. The GP model defines a distribution over functions on the configuration space $c(\lambda)\sim\mathcal{GP}_c(\mu(\lambda),k(\lambda,\lambda'))$, where 
-$\mu(\cdot)$ 
-is a mean function and 
+To approximate the expensive objective function, \gls{bo} typically employs a Gaussian process (GP) model as the surrogate. The GP model defines a distribution over functions on the configuration space $c(\lambda)\sim\mathcal{GP}_c(\mu(\lambda),k(\lambda,\lambda'))$, where
+$\mu(\cdot)$
+is a mean function and
 $k(\cdot,\cdot)$
-is a covariance function. If we consider an observation model 
+is a covariance function. If we consider an observation model
 $y_i = c(\lambda^{(i)}) + \varepsilon_i$
-with normally distributed noise, 
-$\varepsilon_i\sim\mathcal{N}(0,\sigma^2_\varepsilon)$, 
-the predicted value by the GP model at one unknown configuration 
-$\lambda$ will also follow a normal distribution with mean 
-$\mu(\lambda)=K_{\lambda,\boldsymbol{\lambda}}(K_{\boldsymbol{\lambda},\boldsymbol{\lambda}}+\sigma^2_\varepsilon I)^{-1}\boldsymbol{y}$ and variance $\sigma^2(\lambda)=k(\lambda,\lambda)-K_{\lambda,\boldsymbol{\lambda}}(K_{\boldsymbol{\lambda},\boldsymbol{\lambda}}+\sigma^2_\varepsilon I)^{-1} K_{\boldsymbol{\lambda},\lambda}$, 
+with normally distributed noise,
+$\varepsilon_i\sim\mathcal{N}(0,\sigma^2_\varepsilon)$,
+the predicted value by the GP model at one unknown configuration
+$\lambda$ will also follow a normal distribution with mean
+$\mu(\lambda)=K_{\lambda,\boldsymbol{\lambda}}(K_{\boldsymbol{\lambda},\boldsymbol{\lambda}}+\sigma^2_\varepsilon I)^{-1}\boldsymbol{y}$ and variance $\sigma^2(\lambda)=k(\lambda,\lambda)-K_{\lambda,\boldsymbol{\lambda}}(K_{\boldsymbol{\lambda},\boldsymbol{\lambda}}+\sigma^2_\varepsilon I)^{-1} K_{\boldsymbol{\lambda},\lambda}$,
 where $\boldsymbol{y}=(y_1,\ldots,y_r)$ is the vector of observations, $K_{\boldsymbol{\lambda},\boldsymbol{\lambda}}=[k(\lambda^{(i)},\lambda^{(j)})]_{\lambda^{(i)},\lambda^{(j)}\in\boldsymbol{\lambda}}$ is the covariance matrix, and $K_{\lambda,\boldsymbol{\lambda}}=[k(\lambda^{(i)},\lambda)]_{\lambda^{(i)}\in\boldsymbol{\lambda}}$ is the correlation vector for all samples.
 
 GPs as a surrogate model inherently provide both the mean and the variance vector.
 
-However, GPs are not the only surrogate model used in \gls{bo}. Another common choice for a surrogate model are tree-based models, 
-such as random forests (RFs). 
-Tree-based models traditionally predict only the mean of the given data (\emph{e.g.}, in a regression setting). 
-In this case, the variance is defined based on the variance of the predictions of the leaves~\citep{HutEtAl11}. 
+However, GPs are not the only surrogate model used in \gls{bo}. Another common choice for a surrogate model are tree-based models,
+such as random forests (RFs).
+Tree-based models traditionally predict only the mean of the given data (\emph{e.g.}, in a regression setting).
+In this case, the variance is defined based on the variance of the predictions of the leaves~\citep{HutEtAl11}.
 With $t(\lambda)$ being the prediction of a tree $t \in T$, we calculate the mean $\mu(\lambda)$ and variance $\sigma(\lambda)$ for a set of trees $T$ as follows:
 
 \begin{equation}
@@ -225,33 +211,22 @@ With $t(\lambda)$ being the prediction of a tree $t \in T$, we calculate the mea
     \sigma(\lambda)=\frac{1}{|T|} \cdot \sum_{t\in T} (t(\lambda) - \mu(\lambda))^2 \; .
 \end{equation}
 
-
-
-
-
 Alternatively, uncertainty can be estimated via quantile regression~\citep{KoeBas78}, using two separate models to predict the upper and lower quantile of the output distribution, and deriving variance from the spread between these quantiles.
 We adopt this approach to estimate uncertainty for another tree-based model, gradient boosting (GB); this is done similarly to the implementation in the \textsc{scikit-optimize} package.\footnote{\url{https://github.com/scikit-optimize/scikit-optimize}}
-
-
 
 \Gls{bo} proceeds iteratively until a termination criterion is met. In each iteration, it optimises the acquisition function
 by repeatedly querying the surrogate model to generate a pool of solution candidates. It then evaluates the most high-potential solutions (\emph{i.e.}, the solutions that maximise the acquisition function) from this pool,
 refines the surrogate model based on the new observations, and updates the optimum if the new point improves upon the true function value of the best observation so far.
 
 Among the many variants of \gls{bo} from the literature, in this work, we focus on the state-of-the-art method for \gls{hpo} to empirically evaluate our ensembling method: HEBO~\citep{CowEtAl22}.
-HEBO (Heteroscedastic and Evolutionary Bayesian optimisation) is a \gls{bo}-based optimiser with several advancements 
-\changed{
+HEBO (Heteroscedastic and Evolutionary Bayesian optimisation) is a \gls{bo}-based optimiser with several advancements
+
 targeting each of the core \gls{bo} modules described above.
-For the surrogate model, HEBO uses GP with two key transformations: a power transformation applied to the output observations $\boldsymbol{y}$ and a Kumaraswamy transformation applied to the input configurations $\boldsymbol{\lambda}$; 
+For the surrogate model, HEBO uses GP with two key transformations: a power transformation applied to the output observations $\boldsymbol{y}$ and a Kumaraswamy transformation applied to the input configurations $\boldsymbol{\lambda}$;
 
 jointly, these address heteroscedasticity in the noise $\epsilon$ and non-stationarity in the covariance matrix $K_{\boldsymbol{\lambda},\boldsymbol{\lambda}}$.
 \citet{CowEtAl22} showed that these transformations enhance the ability of GPs to accurately approximate the mapping between configurations and corresponding performances, which is crucial for \gls{hpo}.
 
-
 For the acquisition function, rather than optimising a single criterion, HEBO samples new candidate configurations by maximising MACE~\citep{LyuEtAl18}, a multi-objective acquisition function that simultaneously considers expected improvement (EI)~\citep{Mockus75}, probability of improvement (PI)~\citep{Kushner64}, and upper confidence bound (UCB)~\citep{ForEtAl08}, providing a more robust balance between exploration and exploitation of the search space than any single acquisition function alone.
 
 Additional details on HEBO can be found in~\cref{sec:ch06:imp_det}.
-}
-
-
-

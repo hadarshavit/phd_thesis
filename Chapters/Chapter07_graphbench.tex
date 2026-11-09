@@ -10,7 +10,6 @@
 		\label{fig:ch07:sat}}
 \end{figure}
 
-
 The \new{Boolean satisfiability problem} (SAT) is a central and longstanding \textsf{NP}-complete problem~\citep{Karp72,BieEtAl21b}. It asks whether there exists a truth assignment that satisfies a Boolean formula $\varphi$ over variables $v_1,\ldots,v_r$, typically expressed in \new{conjunctive normal form} (CNF):
 \begin{equation*}
 	\varphi = \bigwedge_{i=1}^n c_i, \quad \text{where each } c_i = \bigvee_{j=1}^{m_i} l_{i, j}.
@@ -30,7 +29,6 @@ SAT instances can be naturally represented as graphs, reflecting their permutati
 
 Several studies have explored using GNNs or MPNNs to predict formula satisfiability, e.g.,~\citet{SelEtAl19}. Some of this work employs an additional representation, the \new{literal-clause graph}, a bipartite graph with one node per literal (a variable or its negation) and one node per clause, with edges linking literals to the clauses they appear in. However, many such approaches are \emph{unsound}, they can produce incorrect results, or cannot guarantee valid satisfying assignments or proofs of unsatisfiability, limiting their practical usefulness~\citep{SelEtAl19,LiEtAl24c}.  Other research has integrated MPNNs into existing SAT solvers to replace or guide solver heuristics~\citep{WanEtAl24,TonGro25}. These approaches retain the soundness and completeness guarantees of classical solvers while potentially accelerating solving. Nonetheless, benchmarking novel MPNN architectures in this setting is challenging because it requires extensive pretraining and large-scale evaluation.  A complementary line of work applies MPNNs to algorithm selection in SAT~\citep{ZhaEtAl24b,Shavit23}, predicting the most effective solver for a given instance directly from graph-based representations. \cref{fig:ch07:sat} provides an overview of how the three graph types are constructed from a given Boolean formula.
 
-
 In addition to the graph structure, we add node features to provide the GNN with additional information about the formula's structure. Our node embeddings draw on the hand-crafted features used in \textsc{SATzilla}~\citep{NudEtAl04b} and the node-level encodings proposed in \textsc{GraSS}~\citep{ZhaEtAl24b}. These features capture local syntactic properties (e.g., polarity counts, clause membership statistics), normalized and relational quantities (e.g., positive-to-negative ratio, normalized frequency), and sinusoidal positional encodings for clause nodes. \cref{tab:ch07:vcg_features,tab:ch07:lcg_features,tab:ch07:vg_features} summarize the node features for each graph type. We compute all features during graph construction and store them as floating-point node attributes.
 
 \begin{table}[htbp]
@@ -38,8 +36,7 @@ In addition to the graph structure, we add node features to provide the GNN with
 	\caption{Node features for the variable-clause graph (VCG). Variable nodes carry 12 features, and clause nodes carry 22 features. Edges between variables and clauses are attributed with the literal polarity ($+1$/$-1$); reverse edges are included.}
 	\label{tab:ch07:vcg_features}
 	\renewcommand{\arraystretch}{1.2}
-	\maxsizebox{\linewidth}{!}{%
-		\begin{tabular}{@{} p{0.22\textwidth} c p{0.62\textwidth} @{}}
+	\maxsizebox{\linewidth}{!}{\begin{tabular}{@{} p{0.22\textwidth} c p{0.62\textwidth} @{}}
 			\toprule
 			\textbf{Node type} & \textbf{Dim.} & \textbf{Feature description}                                              \\
 			\midrule
@@ -79,8 +76,7 @@ In addition to the graph structure, we add node features to provide the GNN with
 	\caption{Node features for the literal-clause graph (LCG). Literal nodes carry 12 features, and clause nodes carry 22 features. Literal-to-clause edges carry a polarity attribute ($+1$/$-1$); reverse and complement edges (linking each literal to its negation) are also included.}
 	\label{tab:ch07:lcg_features}
 	\renewcommand{\arraystretch}{1.2}
-	\maxsizebox{\linewidth}{!}{%
-		\begin{tabular}{@{} p{0.22\textwidth} c p{0.62\textwidth} @{}}
+	\maxsizebox{\linewidth}{!}{\begin{tabular}{@{} p{0.22\textwidth} c p{0.62\textwidth} @{}}
 			\toprule
 			\textbf{Node type} & \textbf{Dim.} & \textbf{Feature description}                                              \\
 			\midrule
@@ -121,8 +117,7 @@ In addition to the graph structure, we add node features to provide the GNN with
 	\caption{Node features for the variable graph (VG). Each variable node carries 12 features. Edges connect co-occurring variables and carry no attributes.}
 	\label{tab:ch07:vg_features}
 	\renewcommand{\arraystretch}{1.2}
-	\maxsizebox{\linewidth}{!}{%
-		\begin{tabular}{@{} p{0.22\textwidth} c p{0.62\textwidth} @{}}
+	\maxsizebox{\linewidth}{!}{\begin{tabular}{@{} p{0.22\textwidth} c p{0.62\textwidth} @{}}
 			\toprule
 			\textbf{Node type} & \textbf{Dim.} & \textbf{Feature description}                                                                \\
 			\midrule
@@ -144,7 +139,6 @@ In addition to the graph structure, we add node features to provide the GNN with
 \end{table}
 
 In \gb, we introduce, to the best of our knowledge, the largest algorithm-selection benchmark for SAT solvers, covering eleven solvers and more than 100\,000 instances. Our benchmark supports multiple graph representations of SAT formulae and also provides the \textsc{SATzilla} 2024 feature set~\citep{ShaHoo24}, enabling their combination with MPNNs. Unlike existing GNN benchmarks for SAT~\citep{LiEtAl24c}, which primarily focus on satisfiability prediction or assignment generation, our benchmark targets practical downstream tasks in SAT solving, specifically, algorithm selection and performance prediction.
-
 
 \paragraph{Related work}~
 Because using MPNNs for algorithm selection is a relatively new research direction, no benchmarks exist for this task. Previously, \citet{Shavit23} used a dataset of 3\,000 synthetically generated SAT instances, while \citet{ZhaEtAl24b} used a proprietary dataset and the 2022 Anniversary track of the SAT Competition, after removing large instances. Outside of the graph domain, the \textsc{ASlib} benchmark suite is used to benchmark algorithm selection methods~\citep{BisEtAl16b}. \textsc{ASlib} contains multiple algorithm-selection datasets across various domains, including SAT and TSP. Each dataset contains features extracted from instances (such as \textsc{SATzilla}) as well as the computation times of several algorithms on those instances. \textsc{ASlib} provides SAT scenarios based on a subset of SAT competitions, including instances and solvers from specific years. In contrast, our dataset comprises all available SAT competition instances, as well as numerous instances from other sources.
@@ -190,7 +184,6 @@ We pre-selected solvers for the benchmark by constructing a portfolio of $m$ com
 
 In total, our dataset includes the following solvers. From the 2024 SAT Competition: Kissat~\citep{BieEtAl24}, BreadIdKissat~\citep{BogEtAl24}, AMSAT~\citep{LiEtAl24d}, and KissatMABDC~\citep{LiuEtAl24b}. From the 2023 SAT Competition: SBVA CadiCal~\citep{HabGre23}, Reencode Kissat~\citep{ReeBry23}, Minisat XOR, KissatMAB Prop PR~\citep{Gao23}, hKissatInc~\citep{TchDja23}, CadiCal vivinst~\citep{BieEtAl23}, and BreakID Kissat~\citep{BogEtAl23}. We measured solver computation times in CPU time using \texttt{runsolver}~\citep{Roussel11c} and generic wrapper tools~\citep{EggEtAl19} to ensure accurate, consistent performance measurements.
 
-
 \begin{table}
 	\centering
 	\caption{Overview of the instances for the SAT solving benchmark.}
@@ -214,7 +207,6 @@ In total, our dataset includes the following solvers. From the 2024 SAT Competit
 \end{table}
 We provide three datasets: \dataset{small}, which includes only small formulae with up to 3\,000 variables and 15\,000 clauses; \dataset{medium}, which consists of the small formulae with additional medium-sized formulae with up to 20\,000 variables and 80\,000 clauses; and \dataset{large}, which includes all formulae. This way, we provide datasets with varying levels of hardness, as formula size can pose hurdles for training time and GPU memory. While the \dataset{large} and \dataset{medium} datasets are unlikely to be accessible on current available hardware, we include them to keep the benchmark relevant long term.
 
-
 \paragraph{Dataset challenges:} Algorithm selection and performance prediction are particularly challenging in this setting for several reasons. First, solver performance is inherently stochastic: repeated runs of the same solver on the same instance can result in substantially different running times. This induces noisy target values that the learning algorithm must account for. Second, the targets are right-censored because of solver cutoffs: when a solver does not terminate before the cutoff, its true running time is only known to exceed the cutoff. Third, the SAT instances can be very large, with corresponding graphs containing thousands to millions of variable nodes, making scalable graph processing a major challenge. Finally, accurate prediction requires the GNN to capture both local structural patterns and the formula's global properties.
 
 \paragraph{Experimental evaluation and baselines}~
@@ -224,16 +216,13 @@ We note that algorithm selection datasets are traditionally evaluated using cros
 
 For the performance prediction task, we compare the MPNNs against traditional baselines, which use the \solver{SATzilla} features and a (tabular) machine learning model. We use random forest~\citep{Breiman01b} and XGBoost~\citep{CheGue16b}, which are commonly used as empirical performance models (EPM) (see, e.g., \citet{BanEtAl22b,EggEtAl15b,HutEtAl14c}).
 We use the \solver{SATzilla} 2024 features as input and predict the log10-scaled computation time. We implement these baselines using the ASF library.
-For algorithm selection, we provide several well-known baselines. First, we use pairwise regression~\citep{KerEtAl18b} (PR; predicts performance differences between each pair of solvers, then picks the solver with the best sum), pairwise classification~\citep{XuEtAl12b} (PC; predicts the better solver in each pair, then uses majority vote, %\mia{
-winner of the ICON challenge on algorithm selection~\citep{LinEtAl19c}%}
-) as well as a simple multi-class classification~\citep{Kotthoff13b} (MC; directly predicts the best solver). Similar to the EPM baselines, these baselines use the \solver{SATzilla} 2024 features with a random forest. We tune these baselines using SMAC3~\citep{LinEtAl22b} for 50 trials.
+For algorithm selection, we provide several well-known baselines. First, we use pairwise regression~\citep{KerEtAl18b} (PR; predicts performance differences between each pair of solvers, then picks the solver with the best sum), pairwise classification~\citep{XuEtAl12b} (PC; predicts the better solver in each pair, then uses majority vote, winner of the ICON challenge on algorithm selection~\citep{LinEtAl19c}) as well as a simple multi-class classification~\citep{Kotthoff13b} (MC; directly predicts the best solver). Similar to the EPM baselines, these baselines use the \solver{SATzilla} 2024 features with a random forest. We tune these baselines using SMAC3~\citep{LinEtAl22b} for 50 trials.
 \begin{table}[htbp]
   \tabledefaults
   \centering
   \caption{\textbf{SAT Solving.} RMSE (log\textsubscript{10} time) for performance prediction on \dataset{small} SAT instances without node features. Mean and sample standard deviation over three seeds; lower is better. SATzilla baselines are reproduced from the original table.}
   \label{tab:ch07:sat_epm_res_small_no_feat}
-  \maxsizebox{\linewidth}{!}{%
-  \begin{tabular}{llcccc}
+  \maxsizebox{\linewidth}{!}{\begin{tabular}{llcccc}
     \toprule
     \textbf{Solver} & \textbf{Method} & \dataset{VG} & \dataset{VCG} & \dataset{LCG} & \dataset{SATzilla} \\
     \midrule
@@ -280,8 +269,7 @@ winner of the ICON challenge on algorithm selection~\citep{LinEtAl19c}%}
   \centering
   \caption{\textbf{SAT Solving.} Algorithm selection results on \dataset{small} SAT instances without node features (gap closed; mean and sample standard deviation over three seeds; higher is better). SATzilla baselines for all instance sizes are reproduced from the original table.}
   \label{tab:ch07:sat_as_res_no_feat}
-  \maxsizebox{\linewidth}{!}{%
-  \begin{tabular}{llcccc}
+  \maxsizebox{\linewidth}{!}{\begin{tabular}{llcccc}
     \toprule
     \textbf{Instances} & \textbf{Method} & \dataset{VG} & \dataset{VCG} & \dataset{LCG} & \dataset{SATzilla} \\
     \midrule
@@ -312,8 +300,7 @@ winner of the ICON challenge on algorithm selection~\citep{LinEtAl19c}%}
   \centering
   \caption{\textbf{SAT Solving.} RMSE (log\textsubscript{10} time) for performance prediction on \dataset{small} SAT instances with node features. Mean and sample standard deviation over three seeds; lower is better. SATzilla baselines are reproduced from the original table.}
   \label{tab:ch07:sat_epm_res_small_with_feat}
-  \maxsizebox{\linewidth}{!}{%
-  \begin{tabular}{llcccc}
+  \maxsizebox{\linewidth}{!}{\begin{tabular}{llcccc}
     \toprule
     \textbf{Solver} & \textbf{Method} & \dataset{VG} & \dataset{VCG} & \dataset{LCG} & \dataset{SATzilla} \\
     \midrule
@@ -364,8 +351,7 @@ winner of the ICON challenge on algorithm selection~\citep{LinEtAl19c}%}
   \centering
   \caption{\textbf{SAT Solving.} Algorithm selection results on \dataset{small} SAT instances with node features (gap closed; mean and sample standard deviation over three seeds; higher is better). SATzilla baselines for all instance sizes are reproduced from the original table.}
   \label{tab:ch07:sat_as_res_with_feat}
-  \maxsizebox{\linewidth}{!}{%
-  \begin{tabular}{llcccc}
+  \maxsizebox{\linewidth}{!}{\begin{tabular}{llcccc}
     \toprule
     \textbf{Instances} & \textbf{Method} & \dataset{VG} & \dataset{VCG} & \dataset{LCG} & \dataset{SATzilla} \\
     \midrule
@@ -393,7 +379,6 @@ winner of the ICON challenge on algorithm selection~\citep{LinEtAl19c}%}
   \end{tabular}}
 \end{table}
 
-
 \begin{table}[htbp]
   \tabledefaults
   \centering
@@ -402,8 +387,7 @@ winner of the ICON challenge on algorithm selection~\citep{LinEtAl19c}%}
   \begin{minipage}{0.48\textwidth}
     \centering
     \subcaption{Medium-size SAT instances}
-    \resizebox{0.8\linewidth}{!}{%
-    \begin{tabular}{llc}
+    \resizebox{0.8\linewidth}{!}{\begin{tabular}{llc}
       \toprule
       \textbf{Solver} & \textbf{Method} & \dataset{SATzilla} \\
       \midrule
@@ -430,8 +414,7 @@ winner of the ICON challenge on algorithm selection~\citep{LinEtAl19c}%}
   \begin{minipage}{0.48\textwidth}
     \centering
     \subcaption{Large SAT instances}
-    \resizebox{0.8\linewidth}{!}{%
-    \begin{tabular}{llc}
+    \resizebox{0.8\linewidth}{!}{\begin{tabular}{llc}
       \toprule
       \textbf{Solver} & \textbf{Method} & \dataset{SATzilla} \\
       \midrule
@@ -491,10 +474,9 @@ Because of limited computational resources, we could not run HPO on all datasets
 	\end{tabular}
 \end{table}
 
-
 \paragraph{Results}~
 We start by presenting the results for the performance prediction task. We report the RMSE of the log-scaled computation time for the solvers from SAT Competition 2024 (\solver{Kissat}, \solver{BreakIDKissat}, \solver{KissatMABDC}, \solver{AMSAT}) on small formulae in~\cref{tab:ch07:sat_epm_res_small_no_feat,tab:ch07:sat_epm_res_small_with_feat}. We note that GraSS is evaluated only on \dataset{LCG} with node features as the method requires them.
-Without node features, GCN+ performs best for all four solvers, using \dataset{VCG} for three and \dataset{LCG} for \solver{AMSAT}. With node features, GCN on \dataset{VCG} performs best for all four solvers. The best with features result outperforms the best featureless result for each solver, indicating that node features provide useful information for performance prediction. 
+Without node features, GCN+ performs best for all four solvers, using \dataset{VCG} for three and \dataset{LCG} for \solver{AMSAT}. With node features, GCN on \dataset{VCG} performs best for all four solvers. The best with features result outperforms the best featureless result for each solver, indicating that node features provide useful information for performance prediction.
 For the small-instance performance prediction task, graph-based models outperform the SATzilla-feature baselines. We also present random forest and XGBoost results on medium-size and large formulae in~\cref{tab:ch07:sat_epm_res_med,tab:ch07:sat_epm_res_large}, so they can be compared against graph machine learning solutions in the future. Overall, we observe similar performance between XGBoost and random forest, with a slight advantage to XGBoost.
 
 For the algorithm selection task, we report the
@@ -502,9 +484,6 @@ closed gap metric of different selectors in~\cref{tab:ch07:sat_as_res_no_feat,ta
 For small instances, GCN+ on \dataset{VCG} achieves the highest mean closed gap without features, while GCN on \dataset{LCG} performs best with features. Both outperform the feature-based baselines. The task-specific GraSS method performs worse than the general-purpose GCN.
 Among the three baselines based on hand-crafted features, we observe that multi-class classification underperforms both pairwise classification and regression, leaving a negative gap on the small and medium-sized datasets. This highlights that algorithm selection is not a simple multi-class classification problem. In that formulation, the model loses valuable information about the performance of algorithms other than the best one.
 Finally, we find a larger closed gap for the large dataset across all three baselines, as it includes harder instances. As solving time increases, the benefit of algorithm selection grows because feature computation accounts for a smaller fraction of the total computation time. Moreover, for harder instances, multiple solvers frequently time out, so choosing a solver that successfully solves the instance becomes especially valuable, given the additional penalty imposed by the PAR score.
-
-
-
 
 \section{Experimental setup}\label{sec:ch07:ExpSetup}
 Similar to~\cite{BecEtAl25, StoEtAl25}, we use an encoder-processor-decoder architecture for all tasks, which we detail below. While the task-specific components vary, we provide a general architecture to measure the performance of selected baselines on our tasks. For the chip design and weather forecast dataset, we adapt this architecture to provide the necessary task-dependent encoder and decoder functionality.
@@ -539,4 +518,3 @@ In addition to training models with our encoder-processor-decoder architecture, 
 
 \paragraph{Evaluation protocol}~
 For the learned baselines with repeated-run results, we report means and standard deviations across three random seeds, subject to the task-specific descriptions. The size-generalization study reuses a single selected seed for each pretrained model; we report domain-specific reference methods such as ABC and Persistence separately. For out-of-distribution evaluations using pretrained models, we use models obtained from the corresponding baseline experiments.
-

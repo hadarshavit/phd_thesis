@@ -1,4 +1,3 @@
-% Thesis-owned counterpart of figures/07/sat.pdf; preserve its graph structure.
 \begin{tikzpicture}[
     gb variable/.style={circle, fill=tolTeal!75!black, text=white,
         minimum size=6mm, inner sep=0pt, font=\sffamily\small},
@@ -15,14 +14,12 @@
     \node[font=\normalsize] at (6.5,4.55)
         {$(a\lor\neg b\lor c)\land(a\lor b\lor\neg c)\land(a\lor c)$};
 
-    % Variable graph: all three variables co-occur.
     \node[gb variable] (vg-a) at (.6,2.7) {$a$};
     \node[gb variable] (vg-b) at (2.1,2.7) {$b$};
     \node[gb variable] (vg-c) at (1.35,1.4) {$c$};
     \draw[gb variable edge] (vg-a) -- (vg-b) -- (vg-c) -- (vg-a);
     \node[gb panel label] at (1.35,.05) {Variable graph};
 
-    % Variable-clause graph, including the variable links in the original.
     \node[gb clause] (vcg-cl1) at (4.6,3.5) {$\mathrm{cl}_1$};
     \node[gb clause] (vcg-cl2) at (7.3,3.5) {$\mathrm{cl}_2$};
     \node[gb variable] (vcg-a) at (5.35,2.7) {$a$};
@@ -40,7 +37,6 @@
     \draw[gb clause edge] (vcg-c) -- (vcg-cl3);
     \node[gb panel label] at (5.95,.05) {Variable clause graph};
 
-    % Literal-clause graph: solid incidence links and wavy complements.
     \node[gb variable] (lcg-na) at (9.55,3.25) {$\neg a$};
     \node[gb variable] (lcg-nb) at (9.55,2.2) {$\neg b$};
     \node[gb variable] (lcg-nc) at (9.55,1.15) {$\neg c$};
