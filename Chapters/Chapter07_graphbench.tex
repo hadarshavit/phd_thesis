@@ -125,13 +125,32 @@ In \gb, we introduce, to the best of our knowledge, the largest algorithm-select
 
 \section{Background and Related work}
 \subsection{Graph neural networks}
-Graph neural networks (GNNs) are type of neural networks used to process graphs. Formally, give an (undirected) graph $G=(V, E)$ with a finite set of vertex $V$ and a set of edges $E\subseteq \{\{u,v\}\subseteq V | u \neq v\}$. 
-In GNNs, each vertex $v\in V$ has an initial representation, $h_v^{(0)}\in\mathbb{R}^d_0$. A GNN with L layers has L neural network layers, calculates the following:
-\begin{equation}
-  h_v^{(t)} = \text{UPD}
-\end{equation}
+Graph neural networks (GNNs) process graph-structured data. In this section, we focus on message-passing neural networks (MPNNs). Other types of GNNs include \todo{}.
 
-The first step in layer $t$ is the message calculation, where a neural network calculates for each edge $\{u, v\}$
+Let $G=(V,E)$ be an undirected graph with finite vertex set $V$ and edge set $E\subseteq\{\{u,v\}\subseteq V\mid u\neq v\}$. Write $N(v)=\{u\in V\mid\{u,v\}\in E\}$ for the neighbours of $v$. Each vertex has initial features $h_v^{(0)}\in\mathbb{R}^{d_0}$; let $e_{vu}$ denote any edge attributes, omitted for unattributed edges. An $L$-layer MPNN updates these representations for $t=1,\ldots,L$:
+\begin{equation}
+\label{eq:ch07:message-passing}
+\begin{aligned}
+    m_v^{(t)} &= \operatorname{AGG}^{(t)}\!\left(
+        \left\{\!\left\{
+        \operatorname{MSG}^{(t)}\!\left(h_v^{(t-1)},h_u^{(t-1)},e_{vu}\right)
+        \mid u\in N(v)
+        \right\}\!\right\}
+        \right), \\
+    h_v^{(t)} &= \operatorname{UPD}^{(t)}\!\left(h_v^{(t-1)},m_v^{(t)}\right)
+        \in\mathbb{R}^{d_t}.
+\end{aligned}
+\end{equation}
+Here, double braces denote a multiset. The learnable message function $\operatorname{MSG}^{(t)}$ computes messages from neighbouring vertices. The permutation-invariant aggregation $\operatorname{AGG}^{(t)}$, such as summation, mean, or elementwise maximum, combines them. The learnable update $\operatorname{UPD}^{(t)}$ combines this result with the previous vertex representation. Parameters are shared across vertices within each layer.
+
+For graph-level tasks, a permutation-invariant readout pools the final vertex representations:
+\begin{equation}
+\label{eq:ch07:graph-readout}
+    h_G=\operatorname{READOUT}\!\left(
+        \left\{\!\left\{h_v^{(L)}\mid v\in V\right\}\!\right\}
+        \right).
+\end{equation}
+A prediction head maps $h_G$ to solver running-time predictions or algorithm-selection scores.
 
 \subsection{Graph-based machine learning for SAT}
 Because using MPNNs for algorithm selection is a relatively new research direction, no benchmarks exist for this task. Previously, \citet{Shavit23} used a dataset of 3\,000 synthetically generated SAT instances, while \citet{ZhaEtAl24b} used a proprietary dataset and the 2022 Anniversary track of the SAT Competition, after removing large instances. Outside of the graph domain, the \textsc{ASlib} benchmark suite is used to benchmark algorithm selection methods~\citep{BisEtAl16b}. \textsc{ASlib} contains multiple algorithm-selection datasets across various domains, including SAT and TSP. Each dataset contains features extracted from instances (such as \textsc{SATzilla}) as well as the computation times of several algorithms on those instances. \textsc{ASlib} provides SAT scenarios based on a subset of SAT competitions, including instances and solvers from specific years. In contrast, our dataset comprises all available SAT competition instances, as well as numerous instances from other sources.
