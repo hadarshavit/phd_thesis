@@ -33,7 +33,7 @@ In addition to the graph structure, we add node features to provide the GNN with
 
 \begin{table}[htbp]
 	\centering
-	\caption{Node features for the variable-clause graph (VCG). Variable nodes carry 12 features, and clause nodes carry 22 features. Edges between variables and clauses are attributed with the literal polarity ($+1$/$-1$); reverse edges are included.}
+	\caption[Node features for the variable-clause graph]{Node features for the variable-clause graph (VCG). Variable nodes carry 12 features, and clause nodes carry 22 features. Edges between variables and clauses are attributed with the literal polarity ($+1$/$-1$); reverse edges are included.}
 	\label{tab:ch07:vcg_features}
 	\renewcommand{\arraystretch}{1.2}
 	\maxsizebox{\linewidth}{!}{\begin{tabular}{@{} p{0.22\textwidth} c p{0.62\textwidth} @{}}
@@ -73,7 +73,7 @@ In addition to the graph structure, we add node features to provide the GNN with
 
 \begin{table}[htbp]
 	\centering
-	\caption{Node features for the literal-clause graph (LCG). Literal nodes carry 12 features, and clause nodes carry 22 features. Literal-to-clause edges carry a polarity attribute ($+1$/$-1$); reverse and complement edges (linking each literal to its negation) are also included.}
+	\caption[Node features for the literal-clause graph]{Node features for the literal-clause graph (LCG). Literal nodes carry 12 features, and clause nodes carry 22 features. Literal-to-clause edges carry a polarity attribute ($+1$/$-1$); reverse and complement edges (linking each literal to its negation) are also included.}
 	\label{tab:ch07:lcg_features}
 	\renewcommand{\arraystretch}{1.2}
 	\maxsizebox{\linewidth}{!}{\begin{tabular}{@{} p{0.22\textwidth} c p{0.62\textwidth} @{}}
@@ -114,7 +114,7 @@ In addition to the graph structure, we add node features to provide the GNN with
 
 \begin{table}[htbp]
 	\centering
-	\caption{Node features for the variable graph (VG). Each variable node carries 12 features. Edges connect co-occurring variables and carry no attributes.}
+	\caption[Node features for the variable graph]{Node features for the variable graph (VG). Each variable node carries 12 features. Edges connect co-occurring variables and carry no attributes.}
 	\label{tab:ch07:vg_features}
 	\renewcommand{\arraystretch}{1.2}
 	\maxsizebox{\linewidth}{!}{\begin{tabular}{@{} p{0.22\textwidth} c p{0.62\textwidth} @{}}
@@ -186,7 +186,7 @@ In total, our dataset includes the following solvers. From the 2024 SAT Competit
 
 \begin{table}
 	\centering
-	\caption{Overview of the instances for the SAT solving benchmark.}
+	\caption[SAT benchmark instances]{Overview of the instances for the SAT solving benchmark.}
 	\maxsizebox{\linewidth}{!}{
 		\begin{tabular}{ll@{\hskip 0.5in}llll@{\hskip 0.5in}llll}
 			\toprule
@@ -220,7 +220,7 @@ For algorithm selection, we provide several well-known baselines. First, we use 
 \begin{table}[htbp]
   \tabledefaults
   \centering
-  \caption{\textbf{SAT Solving.} RMSE (log\textsubscript{10} time) for performance prediction on \dataset{small} SAT instances without node features. Mean and sample standard deviation over three seeds; lower is better. SATzilla baselines are reproduced from the original table.}
+  \caption[Performance prediction on small SAT instances without node features]{\textbf{SAT Solving.} RMSE (log\textsubscript{10} time) for performance prediction on \dataset{small} SAT instances without node features. Mean and sample standard deviation over three seeds; lower is better. SATzilla baselines are reproduced from the original table.}
   \label{tab:ch07:sat_epm_res_small_no_feat}
   \maxsizebox{\linewidth}{!}{\begin{tabular}{llcccc}
     \toprule
@@ -267,7 +267,7 @@ For algorithm selection, we provide several well-known baselines. First, we use 
 \begin{table}[htbp]
   \tabledefaults
   \centering
-  \caption{\textbf{SAT Solving.} Algorithm selection results on \dataset{small} SAT instances without node features (gap closed; mean and sample standard deviation over three seeds; higher is better). SATzilla baselines for all instance sizes are reproduced from the original table.}
+  \caption[Algorithm selection on small SAT instances without node features]{\textbf{SAT Solving.} Algorithm selection results on \dataset{small} SAT instances without node features (gap closed; mean and sample standard deviation over three seeds; higher is better). SATzilla baselines for all instance sizes are reproduced from the original table.}
   \label{tab:ch07:sat_as_res_no_feat}
   \maxsizebox{\linewidth}{!}{\begin{tabular}{llcccc}
     \toprule
@@ -298,7 +298,7 @@ For algorithm selection, we provide several well-known baselines. First, we use 
 \begin{table}[htbp]
   \tabledefaults
   \centering
-  \caption{\textbf{SAT Solving.} RMSE (log\textsubscript{10} time) for performance prediction on \dataset{small} SAT instances with node features. Mean and sample standard deviation over three seeds; lower is better. SATzilla baselines are reproduced from the original table.}
+  \caption[Performance prediction on small SAT instances with node features]{\textbf{SAT Solving.} RMSE (log\textsubscript{10} time) for performance prediction on \dataset{small} SAT instances with node features. Mean and sample standard deviation over three seeds; lower is better. SATzilla baselines are reproduced from the original table.}
   \label{tab:ch07:sat_epm_res_small_with_feat}
   \maxsizebox{\linewidth}{!}{\begin{tabular}{llcccc}
     \toprule
@@ -349,7 +349,7 @@ For algorithm selection, we provide several well-known baselines. First, we use 
 \begin{table}[htbp]
   \tabledefaults
   \centering
-  \caption{\textbf{SAT Solving.} Algorithm selection results on \dataset{small} SAT instances with node features (gap closed; mean and sample standard deviation over three seeds; higher is better). SATzilla baselines for all instance sizes are reproduced from the original table.}
+  \caption[Algorithm selection on small SAT instances with node features]{\textbf{SAT Solving.} Algorithm selection results on \dataset{small} SAT instances with node features (gap closed; mean and sample standard deviation over three seeds; higher is better). SATzilla baselines for all instance sizes are reproduced from the original table.}
   \label{tab:ch07:sat_as_res_with_feat}
   \maxsizebox{\linewidth}{!}{\begin{tabular}{llcccc}
     \toprule
@@ -382,7 +382,7 @@ For algorithm selection, we provide several well-known baselines. First, we use 
 \begin{table}[htbp]
   \tabledefaults
   \centering
-  \caption{\textbf{SAT Solving.} RMSE (log\textsubscript{10} time) for performance prediction on \dataset{medium} and \dataset{large} SAT instances. Lower is better.}
+  \caption[Performance prediction on medium and large SAT instances]{\textbf{SAT Solving.} RMSE (log\textsubscript{10} time) for performance prediction on \dataset{medium} and \dataset{large} SAT instances. Lower is better.}
   \label{tab:ch07:sat_epm_res_med_large}
   \begin{minipage}{0.48\textwidth}
     \centering
@@ -455,7 +455,7 @@ Because of limited computational resources, we could not run HPO on all datasets
 
 \begin{table}[htbp]
 	\centering
-	\caption{Configuration space used in the hyperparameter optimization.}
+	\caption[Graph model hyperparameter configuration space]{Configuration space used in the hyperparameter optimization.}
 
 	\label{tab:ch07:hpo_cs}
 	\begin{tabular}{lc}

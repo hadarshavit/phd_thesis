@@ -364,7 +364,7 @@ Importantly, ASF enables this systematic comparison with minimal implementation 
 
 \begin{table*}[t]
   \centering
-    \caption{OOD-Chameleon selector matrix. Rows represent training/evaluation/model combinations, columns correspond to selectors, and cells report mean worst-group error $\pm$ standard deviation over the five seeds, in percentage points. Lower is better; bold entries mark the lowest value in a row or values within 0.5 percentage points of it.
+    \caption[OOD-Chameleon selector errors]{OOD-Chameleon selector matrix. Rows represent training/evaluation/model combinations, columns correspond to selectors, and cells report mean worst-group error $\pm$ standard deviation over the five seeds, in percentage points. Lower is better; bold entries mark the lowest value in a row or values within 0.5 percentage points of it.
     }
   \label{tab:ch10:ood_selector_by_scenario}
   \resizebox{\textwidth}{!}{\input{figures/10/figures/tables/ood_selector_error_by_scenario.tex}}
@@ -627,7 +627,7 @@ We evaluated schedule-based presolvers on the same ASlib running time scenarios 
 
 \begin{table*}[!htbp]
   \centering
-  \caption{ASlib pre-solving solved-instance counts. Rows are grouped by pre-solving budget and ASlib scenario; columns are pre-solving methods. Higher is better, and bold entries mark the highest count in each row.}
+  \caption[ASlib instances solved by pre-solving methods]{ASlib pre-solving solved-instance counts. Rows are grouped by pre-solving budget and ASlib scenario; columns are pre-solving methods. Higher is better, and bold entries mark the highest count in each row.}
   {\input{figures/10/figures/tables/presolving_solved_counts_by_budget.tex}}
   \label{tab:ch10:aslib_presolving_counts}
 \end{table*}
@@ -720,7 +720,7 @@ We used Python version 3.10.8, clingo version 5.8.0, SMAC3 version 2.3.1, scikit
 
 \begin{table*}[!htbp]
   \centering
-  \caption{Compute resources used for the experiments}
+  \caption[Experimental compute resources]{Compute resources used for the experiments}
   \label{tab:ch10:experiment_hardware}
   \begin{tabular}{lll}
     \toprule
@@ -741,7 +741,7 @@ The ASlib selector benchmark tunes learned selectors with SMAC for 50 trials usi
 
 \begin{table*}[!htbp]
   \centering
-  \caption{Hyperparameters used in the ZAP selector experiment. Both JointRanking variants use identical hyperparameters and differ only in whether the 525 configurations are pre-selected to 10. Since PairwiseClassifier, PairwiseRegressor, PerformanceModel and SimpleRanking have only the hyperparameters of XGBoost, we listed only them.}
+  \caption[ZAP selector hyperparameters]{Hyperparameters used in the ZAP selector experiment. Both JointRanking variants use identical hyperparameters and differ only in whether the 525 configurations are pre-selected to 10. Since PairwiseClassifier, PairwiseRegressor, PerformanceModel and SimpleRanking have only the hyperparameters of XGBoost, we listed only them.}
   \label{tab:ch10:zap_hyperparameters}
   \scriptsize
   \begin{subtable}[t]{0.48\textwidth}
@@ -799,7 +799,7 @@ The ASlib selector benchmark tunes learned selectors with SMAC for 50 trials usi
 
 \begin{table*}[!htbp]
   \centering
-  \caption{Hyperparameters used in the OOD-Chameleon selector experiment. Each subtable gives the settings for one selector. The ASF selectors (PairwiseClassifier, PairwiseRegressor and PerformanceModel) are based on random forest.}
+  \caption[OOD-Chameleon selector hyperparameters]{Hyperparameters used in the OOD-Chameleon selector experiment. Each subtable gives the settings for one selector. The ASF selectors (PairwiseClassifier, PairwiseRegressor and PerformanceModel) are based on random forest.}
   \label{tab:ch10:ood_hyperparameters}
   \begin{subtable}[t]{0.48\textwidth}
     \centering
@@ -836,7 +836,7 @@ The ASlib selector benchmark tunes learned selectors with SMAC for 50 trials usi
 
 \begin{table*}[!htbp]
   \centering
-  \caption{Parameters used in the HPOBench and ASlib pre-selection experiments. Each pre-selector is shown in a separate subtable. Both benchmarks use the VBS objective on the training matrix. MarginalContribution, SBS and beam search have no parameters}
+  \caption[HPOBench and ASlib pre-selection parameters]{Parameters used in the HPOBench and ASlib pre-selection experiments. Each pre-selector is shown in a separate subtable. Both benchmarks use the VBS objective on the training matrix. MarginalContribution, SBS and beam search have no parameters}
   \label{tab:ch10:aslib_preselection_hyperparameters}
 
   \begin{subtable}[t]{0.48\textwidth}
@@ -882,7 +882,7 @@ The ASlib selector benchmark tunes learned selectors with SMAC for 50 trials usi
 
 \begin{table*}[!htbp]
   \centering
-  \caption{Parameters used in the ASlib pre-solving experiment. Greedy presolver has no parameters.}
+  \caption[ASlib pre-solving parameters]{Parameters used in the ASlib pre-solving experiment. Greedy presolver has no parameters.}
   \label{tab:ch10:aslib_presolving_hyperparameters}
     \begin{subtable}[t]{0.48\textwidth}
     \centering
@@ -935,7 +935,7 @@ The ASlib selector benchmark tunes learned selectors with SMAC for 50 trials usi
 
 \begin{table*}[!htbp]
   \centering
-  \caption{Shared configuration-space components used by selector tuning. These subspaces are reused by the selector-specific spaces in \cref{tab:ch10:selector_configuration_spaces}.}
+  \caption[Shared configuration spaces for selector tuning]{Shared configuration-space components used by selector tuning. These subspaces are reused by the selector-specific spaces in \cref{tab:ch10:selector_configuration_spaces}.}
   \label{tab:ch10:shared_configuration_spaces}
   \scriptsize
   \begin{subtable}[t]{0.48\textwidth}
@@ -1000,7 +1000,7 @@ The ASlib selector benchmark tunes learned selectors with SMAC for 50 trials usi
 
 \begin{table*}[!htbp]
   \centering
-  \caption{Selector-specific configuration spaces. Each selector is shown in a separate subtable; model-class choices recurse into the shared model spaces in \cref{tab:ch10:shared_configuration_spaces}.}
+  \caption[Selector-specific configuration spaces]{Selector-specific configuration spaces. Each selector is shown in a separate subtable; model-class choices recurse into the shared model spaces in \cref{tab:ch10:shared_configuration_spaces}.}
   \label{tab:ch10:selector_configuration_spaces}
   \begin{subtable}[t]{0.48\textwidth}
     \centering
