@@ -14,120 +14,126 @@ For the GNN input, we represent each undirected edge by directed edges in both d
 
 In addition to the graph structure, we add node features to provide the GNN with additional information about the formula's structure. Our node embeddings draw on the hand-crafted features used in \textsc{SATzilla}~\citep{NudEtAl04b} and the node-level encodings proposed in \textsc{GraSS}~\citep{ZhaEtAl24b}. These features capture local syntactic properties (e.g., polarity counts, clause membership statistics), normalized and relational quantities (e.g., positive-to-negative ratio, normalized frequency), and sinusoidal positional encodings for clause nodes. \cref{tab:ch07:vcg_features,tab:ch07:lcg_features,tab:ch07:vg_features} summarize the node features for each graph type. We compute all features during graph construction and store them as floating-point node attributes.
 
-\begin{table}[htbp]
-	\centering
-	\caption[Node features for the variable-clause graph]{Node features for the variable-clause graph (VCG). Variable nodes carry 12 features, and clause nodes carry 22 features. Edges between variables and clauses are attributed with the literal polarity ($+1$/$-1$); reverse edges are included.}
-	\label{tab:ch07:vcg_features}
-	\renewcommand{\arraystretch}{1.2}
-	\maxsizebox{\linewidth}{!}{\begin{tabular}{@{} p{0.22\textwidth} c p{0.62\textwidth} @{}}
-			\toprule
-			\textbf{Node type} & \textbf{Dim.} & \textbf{Feature description}                                              \\
-			\midrule
-			\multirow{11}{=}{\textbf{Variable}\newline(12 features)}
-			                   & 1--2          & Constant placeholders (reserved, set to zero)                             \\
-			                   & 3             & Number of Horn clauses in which this variable appears                     \\
-			                   & 4             & Number of occurrences as a positive literal                               \\
-			                   & 5             & Number of occurrences as a negative literal                               \\
-			                   & 6             & Total number of clause appearances (degree)                               \\
-			                   & 7             & Ratio of positive to negative occurrences                                 \\
-			                   & 8             & Number of appearances in binary clauses (length two)                      \\
-			                   & 9             & Number of appearances in unit clauses (length one)                        \\
-			                   & 10            & Number of appearances in ternary clauses (length three)                   \\
-			                   & 11            & Normalised frequency (degree divided by the total number of clauses)      \\
-			                   & 12            & Mean length of clauses containing this variable                           \\
-			\midrule
-			\multirow{13}{=}{\textbf{Clause}\newline(22 features)}
-			                   & 1--10         & Sinusoidal positional encoding (10 dimensions)                            \\
-			                   & 11            & Number of positive literals                                               \\
-			                   & 12            & Number of negative literals                                               \\
-			                   & 13            & Ratio of positive to negative literals                                    \\
-			                   & 14            & Clause length (number of literals)                                        \\
-			                   & 15            & Indicator: unit clause (length one)                                       \\
-			                   & 16            & Indicator: binary clause (length two)                                     \\
-			                   & 17            & Indicator: ternary clause (length three)                                  \\
-			                   & 18            & Indicator: Horn clause (at most one positive literal)                     \\
-			                   & 19            & Normalized clause length (divided by the maximum clause length)           \\
-			                   & 20            & Normalized clause position (index divided by the total number of clauses) \\
-			                   & 21            & Indicator: definite Horn clause (exactly one positive literal)            \\
-			                   & 22            & Indicator: negative clause (all literals are negative)                    \\
-			\bottomrule
-		\end{tabular}}
-\end{table}
+% \begin{table}[htbp]
+% 	\centering
+% 	\caption[Node features for the variable-clause graph]{Node features for the variable-clause graph (VCG). Variable nodes carry 12 features, and clause nodes carry 22 features. Edges between variables and clauses are attributed with the literal polarity ($+1$/$-1$); reverse edges are included.}
+% 	\label{tab:ch07:vcg_features}
+% 	\renewcommand{\arraystretch}{1.2}
+% 	\maxsizebox{\linewidth}{!}{\begin{tabular}{@{} p{0.22\textwidth} c p{0.62\textwidth} @{}}
+% 			\toprule
+% 			\textbf{Node type} & \textbf{Dim.} & \textbf{Feature description}                                              \\
+% 			\midrule
+% 			\multirow{11}{=}{\textbf{Variable}\newline(12 features)}
+% 			                   & 1--2          & Constant placeholders (reserved, set to zero)                             \\
+% 			                   & 3             & Number of Horn clauses in which this variable appears                     \\
+% 			                   & 4             & Number of occurrences as a positive literal                               \\
+% 			                   & 5             & Number of occurrences as a negative literal                               \\
+% 			                   & 6             & Total number of clause appearances (degree)                               \\
+% 			                   & 7             & Ratio of positive to negative occurrences                                 \\
+% 			                   & 8             & Number of appearances in binary clauses (length two)                      \\
+% 			                   & 9             & Number of appearances in unit clauses (length one)                        \\
+% 			                   & 10            & Number of appearances in ternary clauses (length three)                   \\
+% 			                   & 11            & Normalised frequency (degree divided by the total number of clauses)      \\
+% 			                   & 12            & Mean length of clauses containing this variable                           \\
+% 			\midrule
+% 			\multirow{13}{=}{\textbf{Clause}\newline(22 features)}
+% 			                   & 1--10         & Sinusoidal positional encoding (10 dimensions)                            \\
+% 			                   & 11            & Number of positive literals                                               \\
+% 			                   & 12            & Number of negative literals                                               \\
+% 			                   & 13            & Ratio of positive to negative literals                                    \\
+% 			                   & 14            & Clause length (number of literals)                                        \\
+% 			                   & 15            & Indicator: unit clause (length one)                                       \\
+% 			                   & 16            & Indicator: binary clause (length two)                                     \\
+% 			                   & 17            & Indicator: ternary clause (length three)                                  \\
+% 			                   & 18            & Indicator: Horn clause (at most one positive literal)                     \\
+% 			                   & 19            & Normalized clause length (divided by the maximum clause length)           \\
+% 			                   & 20            & Normalized clause position (index divided by the total number of clauses) \\
+% 			                   & 21            & Indicator: definite Horn clause (exactly one positive literal)            \\
+% 			                   & 22            & Indicator: negative clause (all literals are negative)                    \\
+% 			\bottomrule
+% 		\end{tabular}}
+% \end{table}
 
-\begin{table}[htbp]
-	\centering
-	\caption[Node features for the literal-clause graph]{Node features for the literal-clause graph (LCG). Literal nodes carry 12 features, and clause nodes carry 22 features. Literal-to-clause edges carry a polarity attribute ($+1$/$-1$); reverse and complement edges (linking each literal to its negation) are also included.}
-	\label{tab:ch07:lcg_features}
-	\renewcommand{\arraystretch}{1.2}
-	\maxsizebox{\linewidth}{!}{\begin{tabular}{@{} p{0.22\textwidth} c p{0.62\textwidth} @{}}
-			\toprule
-			\textbf{Node type} & \textbf{Dim.} & \textbf{Feature description}                                              \\
-			\midrule
-			\multirow{12}{=}{\textbf{Literal}\newline(12 features)}
-			                   & 1             & Indicator: positive literal                                               \\
-			                   & 2             & Indicator: negative literal                                               \\
-			                   & 3             & Number of Horn clauses in which this literal appears                      \\
-			                   & 4             & Total number of clause occurrences                                        \\
-			                   & 5             & Number of clause occurrences of the complementary literal                 \\
-			                   & 6             & Degree (equal to the occurrence count)                                    \\
-			                   & 7             & Ratio of this literal's occurrences to those of its complement            \\
-			                   & 8             & Number of appearances in binary clauses (length two)                      \\
-			                   & 9             & Number of appearances in unit clauses (length one)                        \\
-			                   & 10            & Number of appearances in ternary clauses (length three)                   \\
-			                   & 11            & Normalized frequency (occurrences divided by the total number of clauses) \\
-			                   & 12            & Mean length of clauses containing this literal                            \\
-			\midrule
-			\multirow{13}{=}{\textbf{Clause}\newline(22 features)}
-			                   & 1--10         & Sinusoidal positional encoding (10 dimensions)                            \\
-			                   & 11            & Number of positive literals                                               \\
-			                   & 12            & Number of negative literals                                               \\
-			                   & 13            & Ratio of positive to negative literals                                    \\
-			                   & 14            & Clause length (number of literals)                                        \\
-			                   & 15            & Indicator: unit clause (length one)                                       \\
-			                   & 16            & Indicator: binary clause (length two)                                     \\
-			                   & 17            & Indicator: ternary clause (length three)                                  \\
-			                   & 18            & Indicator: Horn clause (at most one positive literal)                     \\
-			                   & 19            & Normalized clause length (divided by the maximum clause length)           \\
-			                   & 20            & Normalized clause position (index divided by the total number of clauses) \\
-			                   & 21            & Indicator: definite Horn clause (exactly one positive literal)            \\
-			                   & 22            & Indicator: negative clause (all literals are negative)                    \\
-			\bottomrule
-		\end{tabular}}
-\end{table}
+% \begin{table}[htbp]
+% 	\centering
+% 	\caption[Node features for the literal-clause graph]{Node features for the literal-clause graph (LCG). Literal nodes carry 12 features, and clause nodes carry 22 features. Literal-to-clause edges carry a polarity attribute ($+1$/$-1$); reverse and complement edges (linking each literal to its negation) are also included.}
+% 	\label{tab:ch07:lcg_features}
+% 	\renewcommand{\arraystretch}{1.2}
+% 	\maxsizebox{\linewidth}{!}{\begin{tabular}{@{} p{0.22\textwidth} c p{0.62\textwidth} @{}}
+% 			\toprule
+% 			\textbf{Node type} & \textbf{Dim.} & \textbf{Feature description}                                              \\
+% 			\midrule
+% 			\multirow{12}{=}{\textbf{Literal}\newline(12 features)}
+% 			                   & 1             & Indicator: positive literal                                               \\
+% 			                   & 2             & Indicator: negative literal                                               \\
+% 			                   & 3             & Number of Horn clauses in which this literal appears                      \\
+% 			                   & 4             & Total number of clause occurrences                                        \\
+% 			                   & 5             & Number of clause occurrences of the complementary literal                 \\
+% 			                   & 6             & Degree (equal to the occurrence count)                                    \\
+% 			                   & 7             & Ratio of this literal's occurrences to those of its complement            \\
+% 			                   & 8             & Number of appearances in binary clauses (length two)                      \\
+% 			                   & 9             & Number of appearances in unit clauses (length one)                        \\
+% 			                   & 10            & Number of appearances in ternary clauses (length three)                   \\
+% 			                   & 11            & Normalized frequency (occurrences divided by the total number of clauses) \\
+% 			                   & 12            & Mean length of clauses containing this literal                            \\
+% 			\midrule
+% 			\multirow{13}{=}{\textbf{Clause}\newline(22 features)}
+% 			                   & 1--10         & Sinusoidal positional encoding (10 dimensions)                            \\
+% 			                   & 11            & Number of positive literals                                               \\
+% 			                   & 12            & Number of negative literals                                               \\
+% 			                   & 13            & Ratio of positive to negative literals                                    \\
+% 			                   & 14            & Clause length (number of literals)                                        \\
+% 			                   & 15            & Indicator: unit clause (length one)                                       \\
+% 			                   & 16            & Indicator: binary clause (length two)                                     \\
+% 			                   & 17            & Indicator: ternary clause (length three)                                  \\
+% 			                   & 18            & Indicator: Horn clause (at most one positive literal)                     \\
+% 			                   & 19            & Normalized clause length (divided by the maximum clause length)           \\
+% 			                   & 20            & Normalized clause position (index divided by the total number of clauses) \\
+% 			                   & 21            & Indicator: definite Horn clause (exactly one positive literal)            \\
+% 			                   & 22            & Indicator: negative clause (all literals are negative)                    \\
+% 			\bottomrule
+% 		\end{tabular}}
+% \end{table}
 
-\begin{table}[htbp]
-	\centering
-	\caption[Node features for the variable graph]{Node features for the variable graph (VG). Each variable node carries 12 features. Edges connect co-occurring variables and carry no attributes.}
-	\label{tab:ch07:vg_features}
-	\renewcommand{\arraystretch}{1.2}
-	\maxsizebox{\linewidth}{!}{\begin{tabular}{@{} p{0.22\textwidth} c p{0.62\textwidth} @{}}
-			\toprule
-			\textbf{Node type} & \textbf{Dim.} & \textbf{Feature description}                                                                \\
-			\midrule
-			\multirow{12}{=}{\textbf{Variable}\newline(12 features)}
-			                   & 1             & Number of Horn clauses in which this variable appears                                       \\
-			                   & 2             & Number of occurrences as a positive literal                                                 \\
-			                   & 3             & Number of occurrences as a negative literal                                                 \\
-			                   & 4             & Total co-occurrence count (degree in the variable graph)                                    \\
-			                   & 5             & Ratio of positive to negative occurrences                                                   \\
-			                   & 6             & Number of appearances in binary clauses (length two)                                        \\
-			                   & 7             & Number of appearances in unit clauses (length one)                                          \\
-			                   & 8             & Number of appearances in ternary clauses (length three)                                     \\
-			                   & 9             & Normalized frequency (clause appearances divided by the total number of clauses)            \\
-			                   & 10            & Mean length of clauses containing this variable                                             \\
-			                   & 11            & Total number of distinct clauses containing this variable                                   \\
-			                   & 12            & Mean co-occurrence degree (co-occurrence count divided by the number of containing clauses) \\
-			\bottomrule
-		\end{tabular}}
-\end{table}
+% \begin{table}[htbp]
+% 	\centering
+% 	\caption[Node features for the variable graph]{Node features for the variable graph (VG). Each variable node carries 12 features. Edges connect co-occurring variables and carry no attributes.}
+% 	\label{tab:ch07:vg_features}
+% 	\renewcommand{\arraystretch}{1.2}
+% 	\maxsizebox{\linewidth}{!}{\begin{tabular}{@{} p{0.22\textwidth} c p{0.62\textwidth} @{}}
+% 			\toprule
+% 			\textbf{Node type} & \textbf{Dim.} & \textbf{Feature description}                                                                \\
+% 			\midrule
+% 			\multirow{12}{=}{\textbf{Variable}\newline(12 features)}
+% 			                   & 1             & Number of Horn clauses in which this variable appears                                       \\
+% 			                   & 2             & Number of occurrences as a positive literal                                                 \\
+% 			                   & 3             & Number of occurrences as a negative literal                                                 \\
+% 			                   & 4             & Total co-occurrence count (degree in the variable graph)                                    \\
+% 			                   & 5             & Ratio of positive to negative occurrences                                                   \\
+% 			                   & 6             & Number of appearances in binary clauses (length two)                                        \\
+% 			                   & 7             & Number of appearances in unit clauses (length one)                                          \\
+% 			                   & 8             & Number of appearances in ternary clauses (length three)                                     \\
+% 			                   & 9             & Normalized frequency (clause appearances divided by the total number of clauses)            \\
+% 			                   & 10            & Mean length of clauses containing this variable                                             \\
+% 			                   & 11            & Total number of distinct clauses containing this variable                                   \\
+% 			                   & 12            & Mean co-occurrence degree (co-occurrence count divided by the number of containing clauses) \\
+% 			\bottomrule
+% 		\end{tabular}}
+% \end{table}
 
 In \gb, we introduce, to the best of our knowledge, the largest algorithm-selection benchmark for SAT solvers, covering eleven solvers and more than 100\,000 instances. Our benchmark supports multiple graph representations of SAT formulae and also provides the \textsc{SATzilla} 2024 feature set~\citep{ShaHoo24}, enabling their combination with MPNNs. Unlike existing GNN benchmarks for SAT~\citep{LiEtAl24c}, which primarily focus on satisfiability prediction or assignment generation, our benchmark targets practical downstream tasks in SAT solving, specifically, algorithm selection and performance prediction.
 
 \section{Background and Related work}
-\subsection{Learning on graphs}
-\todo{}
+\subsection{Graph neural networks}
+Graph neural networks (GNNs) are type of neural networks used to process graphs. Formally, give an (undirected) graph $G=(V, E)$ with a finite set of vertex $V$ and a set of edges $E\subseteq \{\{u,v\}\subseteq V | u \neq v\}$. 
+In GNNs, each vertex $v\in V$ has an initial representation, $h_v^{(0)}\in\mathbb{R}^d_0$. A GNN with L layers has L neural network layers, calculates the following:
+\begin{equation}
+  h_v^{(t)} = \text{UPD}
+\end{equation}
 
-\section{Graph-based machine learning for SAT}
+The first step in layer $t$ is the message calculation, where a neural network calculates for each edge $\{u, v\}$
+
+\subsection{Graph-based machine learning for SAT}
 Because using MPNNs for algorithm selection is a relatively new research direction, no benchmarks exist for this task. Previously, \citet{Shavit23} used a dataset of 3\,000 synthetically generated SAT instances, while \citet{ZhaEtAl24b} used a proprietary dataset and the 2022 Anniversary track of the SAT Competition, after removing large instances. Outside of the graph domain, the \textsc{ASlib} benchmark suite is used to benchmark algorithm selection methods~\citep{BisEtAl16b}. \textsc{ASlib} contains multiple algorithm-selection datasets across various domains, including SAT and TSP. Each dataset contains features extracted from instances (such as \textsc{SATzilla}) as well as the computation times of several algorithms on those instances. \textsc{ASlib} provides SAT scenarios based on a subset of SAT competitions, including instances and solvers from specific years. In contrast, our dataset comprises all available SAT competition instances, as well as numerous instances from other sources.
 
 \section{Methodology}
