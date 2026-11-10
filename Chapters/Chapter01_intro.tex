@@ -1,12 +1,10 @@
 
 \chapter{Introduction}\label{ch:ch01:introduction}
 
-
 \Gls{ai} has made substantial progress in recent decades, both in research and in practice.
 Modern \gls{ai} methods solve problems across a growing range of domains: they classify images, process natural language, support automated reasoning, verify hardware and software systems, and search for high-quality solutions to difficult optimisation problems.
 This diversity is important for the perspective taken in this dissertation.
 \Gls{ai} is not a single algorithmic technology, but a broad collection of methods whose behaviour depends strongly on the problem instances, data sets, configurations, and computational budgets to which they are applied.
-
 
 A common feature of these settings is that there are usually many candidate algorithms, and each algorithm often has many hyperparameters that control its behaviour.
 Moreover, the performance of these algorithms can vary significantly across different instances and configurations.
@@ -77,12 +75,10 @@ Second, how can we build better predictive models and surrogate models once thos
 Third, how can we make the resulting methods easier to understand, compare, and use?
 The chapters answer these questions in sequence.
 
-% \subsection{Contributions by thesis part}
-
 \subsection{Better Features}
 
 The first part of the dissertation focuses on the representations that make empirical performance prediction possible.
-\cref{ch:ch03:rev_SATzilla}, based on
+\cref{ch:ch04:rev_SATzilla}, based on
 \begin{itemize}
     \item \fullcite{ShaHoo24}
 \end{itemize}
@@ -90,7 +86,7 @@ contributes a modernised feature extraction tool that replaces outdated preproce
 The chapter shows that this infrastructure work is not merely engineering maintenance: updating the feature extractor leads to better downstream performance in satisfiability prediction, runtime prediction, and automated algorithm selection.
 In this sense, the chapter establishes a central theme of the dissertation: better empirical performance prediction often begins with making the inputs to the model reliable and informative.
 
-\cref{ch:ch04:dim_red}, based on
+\cref{ch:ch05:dim_red}, based on
 \begin{itemize}
     \item \fullcite{ShaEtAl25}
 \end{itemize}
@@ -99,9 +95,9 @@ Rather than judging dimensionality reduction only by generic reconstruction or v
 The results show strong performance complementarity: methods that work well for one task, dimensionality, or data regime may be poor choices for another.
 This makes dimensionality reduction itself an algorithm selection problem and motivates task-aware representation choices.
 
-\cref{ch:ch05:dymbo}, based on
+\cref{ch:ch06:dymbo}, based on
 \begin{itemize}
-    \item \fullcite{ShaEtAl25c}
+    \item \fullcite{ShaEtAl25d}
 \end{itemize}
 connects representation quality to model-based optimisation.
 Although the chapter primarily develops a modelling method, it appears in this part because its central mechanism depends on representing the changing suitability of surrogate models during an optimisation run.
@@ -112,13 +108,13 @@ Together with the preceding chapters, this shows that empirical performance pred
 \subsection{Better Models}
 
 The second part turns from representation to predictive modelling.
-\cref{ch:ch06:gnns_epms}, based on
+\cref{ch:ch07:gnns_epms}, based on
 \begin{itemize}
     \item \fullcite{ShaHoo25b}
 \end{itemize}
 contributes a benchmark for graph-based \gls{sat} empirical performance prediction and compares multiple graph representations and neural architectures against standard tabular models trained on hand-crafted SATzilla features.
 Its main contribution is to show that learned graph representations can be competitive for performance prediction and algorithm selection, and can in some settings outperform hand-crafted features.
-This provides a complementary answer to the feature-engineering work in \cref{ch:ch03:rev_SATzilla}: instead of only improving hand-crafted features, we can also learn representations from the structure of the instance itself.
+This provides a complementary answer to the feature-engineering work in \cref{ch:ch04:rev_SATzilla}: instead of only improving hand-crafted features, we can also learn representations from the structure of the instance itself.
 
 The automated machine learning chapter studies empirical performance prediction in automated machine learning.
 Its role in the thesis is to connect the algorithm selection and optimisation themes to machine learning pipelines, where the objects being selected are not solvers for a single combinatorial problem but learning algorithms and their configurations.

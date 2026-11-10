@@ -5,25 +5,25 @@
 
 Bayesian optimisation (\gls{bo}) has emerged as a powerful technique for solving black-box optimisation problems, particularly for functions that are expensive to evaluate. The ability of \gls{bo} to efficiently reach good solutions within relatively few evaluations has made it an important approach in a variety of domains, ranging from hyperparameter tuning in machine learning~\citep{SnoEtAl12} to engineering design~\citep{JonEtAl98} and scientific discovery~\citep{LooEtAl19}. Bayesian optimisation relies on a surrogate model, which serves as a (computationally) inexpensive approximation of the objective function. This surrogate model is used to predict both the value of the objective function at unobserved points and the uncertainty associated with those predictions. These predictions are then combined by means of an acquisition function, which balances the trade-off between exploring unknown regions of the search space and exploiting regions known to contain high-quality solutions~\citep{Garnett23}.
 
-The surrogate model is a key component of Bayesian optimisation algorithms. Among the most commonly used surrogate models are Gaussian processes (GPs), which 
-can be seen as a probabilistic model of a given objective function~\citep{RasWil06}. 
+The surrogate model is a key component of Bayesian optimisation algorithms. Among the most commonly used surrogate models are Gaussian processes (GPs), which
+can be seen as a probabilistic model of a given objective function~\citep{RasWil06}.
 While GPs offer many advantages, notably flexibility and the ability to quantify uncertainty, they also have limitations; for instance, their computational cost scales poorly with the number of observations.
 
 Furthermore, due to their continuous nature, GPs cannot model categorical inputs naturally. Beyond GPs, other models, including random forests \citep{HutEtAl11}, deep neural networks \citep{BalajiLakshminarayanan17} and conformal predictors \citep{ShaVov08}, have been employed as surrogates, each with their own strengths and weaknesses. The choice of surrogate model can significantly influence the performance of a Bayesian optimisation procedure, and therefore, it is of considerable interest to understand how these models perform under different conditions.
 
-One of the key challenges in evaluating surrogate models is determining how their accuracy impacts the overall optimisation process. In traditional machine learning tasks, model performance is often assessed using metrics such as accuracy, mean squared error or log-likelihood on a held-out test set. However, these metrics may not directly correlate with optimisation performance in the context of Bayesian optimisation. For example, while it is commonly assumed that higher accuracy near the optimum is more important than accuracy in other regions (see, e.g., \citealp{Frazier18b}), 
-inaccuracies in less critical regions can still have detrimental effects. Such inaccuracies may lead to misleading acquisition function values, ultimately causing the optimiser to waste evaluations in suboptimal areas of the search space.  \changed{However, to the best of our knowledge, no prior work validated these assumptions and conducted a through evaluation.}
+One of the key challenges in evaluating surrogate models is determining how their accuracy impacts the overall optimisation process. In traditional machine learning tasks, model performance is often assessed using metrics such as accuracy, mean squared error or log-likelihood on a held-out test set. However, these metrics may not directly correlate with optimisation performance in the context of Bayesian optimisation. For example, while it is commonly assumed that higher accuracy near the optimum is more important than accuracy in other regions (see, e.g., \citealp{Frazier18b}),
+inaccuracies in less critical regions can still have detrimental effects. Such inaccuracies may lead to misleading acquisition function values, ultimately causing the optimiser to waste evaluations in suboptimal areas of the search space.  However, to the best of our knowledge, no prior work validated these assumptions and conducted a through evaluation.
 
-\changed{In this work, we aim to understand what makes the prediction of a surrogate model effective for Bayesian optimisation. }
-\changed{Towards this end, we introduce the \textit{noisy oracle} surrogate model,}
+In this work, we aim to understand what makes the prediction of a surrogate model effective for Bayesian optimisation.
+Towards this end, we introduce the \textit{noisy oracle} surrogate model,
 which provides noisy predictions of the ground-truth values of the objective function. The level of noise is determined by a weighting scheme that reflects the importance of different regions of the search space. By systematically varying these weighting schemes, we can study how accuracy in different regions influences the optimisation process itself, rather than a simple aggregation of prediction error. With this methodology we aim to achieve a targeted view of surrogate-model quality.
 Using it in a series of computational experiments, we find evidence that a good surrogate model needs to be accurate in regions where the target function has good values, and that being accurate only around the optimum can still result in suboptimal \gls{bo} performance.
 
-\changed{We support our empirical experiments with a theoretical analysis that derives explicit conditions under which each acquisition function (EI, PI, LCB) is guaranteed to prefer a suboptimal point over the optimum due to a mistake in the peredictions of the surrogate model. These conditions depend on the noise assigned to the suboptimal point, the objective gap, and the predictive uncertainty, providing a formal basis for the empirical observation that value-based schedules are more robust than distance-based ones.
+We support our empirical experiments with a theoretical analysis that derives explicit conditions under which each acquisition function (EI, PI, LCB) is guaranteed to prefer a suboptimal point over the optimum due to a mistake in the peredictions of the surrogate model. These conditions depend on the noise assigned to the suboptimal point, the objective gap, and the predictive uncertainty, providing a formal basis for the empirical observation that value-based schedules are more robust than distance-based ones.
 
 We note that, while real surrogate models might suffer from problems such as oversmoothing~\citep{HvaEtAl24}, uncalibrated uncertainty predictions~\citep{FolEtAl23b}, heteroskedastic noise~\citep{CowEtAl22} and other types of error, our goal here is to take a first step towards understanding a more general question: where in the optimisation landscape does the surrogate model need to be accurate to effectively support Bayesian optimisation, independent of the details of a particular surrogate class. By simplifying the surrogate to an oracle with controlled noise, we aim to isolate the accuracy question from other factors such as uncertainty calibration, model class, and learning dynamics. We view this as a necessary foundation upon which future work can build by progressively relaxing these simplifications.
 
-In the following sections, we first review existing approaches to surrogate-model evaluation and related assumptions regarding surrogate model accuracy. We then formalise the noisy oracle framework and introduce the weighting schemes used in our experiments. Next, we present an empirical evaluation of how these different accuracy patterns affect optimisation performance, followed by an analysis of how a GP and a random forest behave on a real optimisation trajectory. We then provide theoretical analysis of the noisy oracle framework. Finally, we conclude with implications for the design of Bayesian optimisation algorithms and surrogate models.}
+In the following sections, we first review existing approaches to surrogate-model evaluation and related assumptions regarding surrogate model accuracy. We then formalise the noisy oracle framework and introduce the weighting schemes used in our experiments. Next, we present an empirical evaluation of how these different accuracy patterns affect optimisation performance, followed by an analysis of how a GP and a random forest behave on a real optimisation trajectory. We then provide theoretical analysis of the noisy oracle framework. Finally, we conclude with implications for the design of Bayesian optimisation algorithms and surrogate models.
 
 \section{Background}
 Given a black-box function $f:\sR^n\rightarrow\sR$, the goal of an optimiser is to find its minimum, denoted by $x^*$, such that $f(x^*)\leq f(x)$ for every $x\in\sR^n$. The optimiser iteratively samples configurations $x_1, x_2, ..., x_n$, where $x_i$ is the configuration sampled at iteration $i$.
@@ -56,30 +56,30 @@ The acquisition function $AF$ is then optimised to find a candidate configuratio
 In this section, we cover existing work related to our goal of assessing where surrogate models need to be accurate. We first look at local Bayesian optimisation approaches and then discuss several metrics for surrogate models.
 
 \subsection{Local Bayesian optimisation}
-Traditionally, Bayesian optimisation performed a global search over the entire search space. However, when the search space is large and high-dimensional, global search can be expensive. Local Bayesian optimisation methods have been introduced to solve this problem~\citep{EriEtAl19,NguEtAl22,PapEtAl22}. 
-These methods focus on identifying candidates that are close to the current best 
-solution. Most notably, TuRBO~\citep{EriEtAl19} uses \textit{trust regions} to limit the search space to a small region around the known best solutions. It then changes the size of the trust region based on the performance of the new solutions sampled. 
+Traditionally, Bayesian optimisation performed a global search over the entire search space. However, when the search space is large and high-dimensional, global search can be expensive. Local Bayesian optimisation methods have been introduced to solve this problem~\citep{EriEtAl19,NguEtAl22,PapEtAl22}.
+These methods focus on identifying candidates that are close to the current best
+solution. Most notably, TuRBO~\citep{EriEtAl19} uses \textit{trust regions} to limit the search space to a small region around the known best solutions. It then changes the size of the trust region based on the performance of the new solutions sampled.
 
 The success of such methods is due to their focus on the local region around the current best solution, which is often where the most promising candidates are found. By exploiting the structure of the objective function in this way, local Bayesian optimisation methods can achieve significant speedups over traditional global search strategies. This shows the assumption in the community that the surrogate model needs to be more accurate around the optimum.
 A potential downside of local Bayesian optimisation methods is that they may continue exploring around a local optima, potentially missing better solutions elsewhere.
-\changed{The success of local-Bayesian optimisation suggest that a surrogate model should have accurate predictions only around the optimum, an assumption we will check in the following sections.}
+The success of local-Bayesian optimisation suggest that a surrogate model should have accurate predictions only around the optimum, an assumption we will check in the following sections.
 
 \subsection{Surrogate model evaluation}
 Several metrics have been proposed to evaluate the quality of surrogate models. These include traditional regression metrics as well as metrics that are more specific to optimisation. In the following subsections, we review representative examples and highlight why they do not directly answer our question about where surrogate models need to be accurate for \gls{bo}.
 
 \subsubsection{Mean squared error}
-Mean squared error (MSE) is one of the most widely used regression metrics~\citep{EimEtAl25,GijEtAl24}; it summarises the squares of the errors for all samples in the test set. 
+Mean squared error (MSE) is one of the most widely used regression metrics~\citep{EimEtAl25,GijEtAl24}; it summarises the squares of the errors for all samples in the test set.
 Formally, MSE is defined as:
 \begin{equation*}
     MSE(f, \test)=\sum_{j=1}^{|\test|}(\mu_S(x_j)-f(x_j))^2
 \end{equation*}
-MSE can also be weighted by assigning different weights to individual points. Such weighting is performed in machine learning when dealing with unbalanced datasets or in cases where the domain expert determines that specific samples are more important. However, for Bayesian optimisation, there is no known weighting mechanism, and therefore all points are treated equally (for example in~\citet{SanEtAl23}).
-    
+MSE can also be weighted by assigning different weights to individual points. Such weighting is performed in machine learning when dealing with unbalanced datasets or in cases where the domain expert determines that specific samples are more important. However, for Bayesian optimisation, there is no known weighting mechanism, and therefore all points are treated equally (for example in~\citet{SanEtAl24}).
+
 \subsubsection{Ranking score}
 Proposed by~\citet{FeuEtAl18b} to create a weighted ensemble of pre-trained GPs, the ranking loss is based on the observation that the exact values of the configurations are less important in the optimisation context. Instead, we are interested in the best point, and therefore, the rank of the points is more important. The ranking loss is defined as:
 \begin{equation*}
     \begin{aligned}
-        RS(f, \test) = \sum_{j=1}^{|\test|} \sum_{k=1}^{|\test|} 
+        RS(f, \test) = \sum_{j=1}^{|\test|} \sum_{k=1}^{|\test|}
         \mathds{1} \Big\{ (f(x_j) < f(x_k)) \oplus \\
         \quad (\mu_S(y_j) < \mu_S(y_k)) \Big\}
     \end{aligned}
@@ -88,8 +88,7 @@ where $\oplus$ is the exclusive-or operation.
 
 However, the ranking loss also treats all configurations equally. While we are interested in preserving the ranking of the points around the optimum, their rank far from the optimum has less impact. For example, given two configurations that are far from the optimum, we are only interested in knowing that they are far from it. The exact rank between these points is not important in the optimisation context. However, an error in ranking between these points will be taken into account in the same way as incorrect ranking between two points close to the optimum.
 
-
-\subsubsection{Uncertainty evaluation} 
+\subsubsection{Uncertainty evaluation}
 While in this work we put an emphasis on predicting the values obtained from the surrogate model, previous work has already researched the uncertainty of the model, as well as its expected calibration~\cite{FolEtAl23b,KulEtAl18}, which is defined as:
 
 \begin{equation*}
@@ -99,28 +98,23 @@ While in this work we put an emphasis on predicting the values obtained from the
     C_y(p)=\frac{1}{|\test|}\cdot \sum_{i\in \test} \mathbb{I}[y_i \leq F^{-1}_p(x_i)],
 \end{equation*}
 
-where $F^{-1}_p$ 
+where $F^{-1}_p$
 is the quantile function; this means that in a well-calibrated surrogate model, $p\%$  of the time, the test samples fall within $p\%$ of the confidence intervals, for several pre-defined $p$ values. The closer the ECE to $0$, the more calibrated the model is.
 
 While other metrics to quantify surrogate models exist, such as log-likelihood and $R^2$ score, they all treat all samples equally, similarly to the other metrics we covered in this section.
-
-
-
-
-
 
 \section{The noisy oracle surrogate model}
 \begin{figure}
     \centering
     \hfill
     \begin{subfigure}[c]{0.3\textwidth}
-        \centering 
+        \centering
         \includegraphics[width=\linewidth]{figures/08/figures/schedule_functions_scaled.pdf}
         \caption{}
     \end{subfigure}
     \hfill
     \begin{subfigure}[c]{0.3\textwidth}
-        \centering 
+        \centering
         \includegraphics[width=\linewidth]{figures/08/figures/schedule_functions_scaled_integral.pdf}
         \caption{}
     \end{subfigure}
@@ -129,7 +123,6 @@ While other metrics to quantify surrogate models exist, such as log-likelihood a
         \centering
 
         \includegraphics[width=\linewidth]{figures/08/figures/schedule_functions_scaled_integral_legend_square.pdf}
-
 
     \end{subfigure}
     \hfill
@@ -145,28 +138,15 @@ We construct a noisy oracle surrogate model to assess where surrogate models nee
     \label{eq:ch08:noisy_mu2}
     \varepsilon_\mu(x)\sim\mathcal{N}(0, N(x))
 \end{equation}
-In other words, we add normally distributed noise $\varepsilon_\mu$ to the actual target function value $f(x)$. The value of $N(x)$ determines how noisy the returned sample value can be. A high $N(x)$ can cause a value 
-$\mu(x)$ far from the actual function value, hence simulating a less accurate model for that solution. 
-
-
+In other words, we add normally distributed noise $\varepsilon_\mu$ to the actual target function value $f(x)$. The value of $N(x)$ determines how noisy the returned sample value can be. A high $N(x)$ can cause a value
+$\mu(x)$ far from the actual function value, hence simulating a less accurate model for that solution.
 
 We define the uncertainty of the model as the general uncertainty
 \begin{equation}
     \sigma(x)=N_{\text{base}}
 \end{equation}
 
-\changed{While real surrogate models typically induce more complicated uncertainty patterns, we keep the predictive uncertainty as the general noise level because our goal is to isolate the effect of the mean prediction. Varying $\sigma(x)$ simultaneously with the noise schedule would complicate the analysis, making it difficult to attribute performance differences to spatial accuracy patterns alone. Our theoretical results (Section~8) confirm that even with a varying $\sigma$, the misleading conditions still depend on $\sigma$ through the derived thresholds, showing that uncertainty plays a role but that the core phenomenon, distorted means misleading the acquisition function, is already present under constant uncertainty. We acknowledge that this simplification removes the data-driven exploration mechanism central to practical \gls{bo}. Our conclusions should therefore be interpreted as statements about where mean-prediction accuracy matters, holding uncertainty fixed. We note that studying the interaction between spatially varying $\sigma$ and mean-error patterns is an important direction for future work.}
-
-
-
-
-
-
-
-
-
-
-
+While real surrogate models typically induce more complicated uncertainty patterns, we keep the predictive uncertainty as the general noise level because our goal is to isolate the effect of the mean prediction. Varying $\sigma(x)$ simultaneously with the noise schedule would complicate the analysis, making it difficult to attribute performance differences to spatial accuracy patterns alone. Our theoretical results (Section~8) confirm that even with a varying $\sigma$, the misleading conditions still depend on $\sigma$ through the derived thresholds, showing that uncertainty plays a role but that the core phenomenon, distorted means misleading the acquisition function, is already present under constant uncertainty. We acknowledge that this simplification removes the data-driven exploration mechanism central to practical \gls{bo}. Our conclusions should therefore be interpreted as statements about where mean-prediction accuracy matters, holding uncertainty fixed. We note that studying the interaction between spatially varying $\sigma$ and mean-error patterns is an important direction for future work.
 
 The value of $N(x)$ can be determined from different measurements, such as how close $x$ is to the optimum $x^*$ or the value of $f(x)$. We denote by $m(x)$ the metric according to which the noise function is constructed, where lower values of $m(x)$ correspond to more important regions. Because different metrics can have different scales, we normalise $m(x)$ to the range $[0,1]$ using max-min normalisation:
 \begin{equation*}
@@ -179,11 +159,9 @@ We then define the actual noise level $N(x)$ using the normalised metric $\hat{m
 
 Here, $N_\text{base}$ is the main noise level and $N_\text{min}$ is the minimum noise floor (set to $0.001$ in all experiments), ensuring that all solutions retain some prediction error. We further divide by the integral of the schedule so that all schedules have the same total area under the curve. This normalisation is important because some schedules would otherwise induce much less total noise than others and would therefore enjoy an unintended advantage unrelated to their shape.
 
+We emphasise that the noisy oracle serves as the surrogate model in our \gls{bo} loop. When the acquisition function optimiser queries $\mu(x)$ at candidate points, it calls the noisy oracle and not the objective function directly. This is analogous to standard \gls{bo}, where acquisition optimisation queries the GP posterior (which itself was constructed from observed data). The objective $f(x)$ is used internally by the oracle to construct its prediction, but these internal accesses are not counted against the evaluation budget. Only the point ultimately selected by the acquisition function is evaluated on $f$ and added to the observation set $\mathcal{D}$. Each time $\mu(x)$ is queried, the noise term $\varepsilon_\mu(x)$ is sampled independently from $\mathcal{N}(0,N(x))$. This means that repeated queries to the same candidate $x$ within a single iteration may receive slightly different predictions, reflecting genuine stochastic variation in the surrogate rather than a deterministic lookup.
 
-
-\changed{We emphasise that the noisy oracle serves as the surrogate model in our \gls{bo} loop. When the acquisition function optimiser queries $\mu(x)$ at candidate points, it calls the noisy oracle and not the objective function directly. This is analogous to standard \gls{bo}, where acquisition optimisation queries the GP posterior (which itself was constructed from observed data). The objective $f(x)$ is used internally by the oracle to construct its prediction, but these internal accesses are not counted against the evaluation budget. Only the point ultimately selected by the acquisition function is evaluated on $f$ and added to the observation set $\mathcal{D}$. Each time $\mu(x)$ is queried, the noise term $\varepsilon_\mu(x)$ is sampled independently from $\mathcal{N}(0,N(x))$. This means that repeated queries to the same candidate $x$ within a single iteration may receive slightly different predictions, reflecting genuine stochastic variation in the surrogate rather than a deterministic lookup.}
-
-\changed{Furthermore we note that, by design, the noisy oracle does not condition on the accumulated observations $\mathcal{D}$. We decided to do this to check what would be the performance of a specific model, without re-training. A data-dependent surrogate would complicate the effect of spatial accuracy patterns with the effect of learning dynamics, making it difficult to attribute performance differences to the noise schedule alone. Our noisy oracle can be viewed as examining a fixed snapshot of surrogate quality at each iteration.}
+Furthermore we note that, by design, the noisy oracle does not condition on the accumulated observations $\mathcal{D}$. We decided to do this to check what would be the performance of a specific model, without re-training. A data-dependent surrogate would complicate the effect of spatial accuracy patterns with the effect of learning dynamics, making it difficult to attribute performance differences to the noise schedule alone. Our noisy oracle can be viewed as examining a fixed snapshot of surrogate quality at each iteration.
 
 In the following, we study several noise functions $\hat{N}(x):[0,1]\rightarrow[0,1]$ to create a wide variety of functions, ranging from functions that give preference to only a small area around the optimum to more aggressive functions that allow wider areas to have less noise, at the expense of significantly higher noise for the rest of the landscape. The noise functions we consider are:
 \begin{itemize}
@@ -213,35 +191,30 @@ In the following, we study several noise functions $\hat{N}(x):[0,1]\rightarrow[
     \end{equation*}
 \end{itemize}
 
-An illustration of the different noise functions is shown in \cref{fig:ch08:sched_funcs}, where we plot the functions before and after normalisation. The figure demonstrates that we included a wide variety of noise functions, ranging from those that yield low noise only for a minimal subset of solutions (e.g., Exponential with 0.01) to more relaxed noise functions that allow for larger areas to have lower noise levels. 
+An illustration of the different noise functions is shown in \cref{fig:ch08:sched_funcs}, where we plot the functions before and after normalisation. The figure demonstrates that we included a wide variety of noise functions, ranging from those that yield low noise only for a minimal subset of solutions (e.g., Exponential with 0.01) to more relaxed noise functions that allow for larger areas to have lower noise levels.
 
 We study two ways of constructing the metric $m(x)$. First, we use the distance from the optimum, in which case solutions closer to the optimum receive more accurate predictions. Second, we use the target-function value itself, so that solutions with values closer to the optimum receive less noise even if they are not spatially close to $x^*$. Under this value-based construction, local optima with relatively good objective values can also receive accurate predictions.
-These two constructions let us separate two competing notions of importance in \gls{bo}: geometric proximity to the optimum versus objective quality. 
-
-
+These two constructions let us separate two competing notions of importance in \gls{bo}: geometric proximity to the optimum versus objective quality.
 
 \section{Experimental Evaluation}
-\changed{
+
 We present the results of our experiments with the noisy oracle in several stages. We begin by exploring value-based noise functions across different noise levels. We then turn to distance-based noise functions and compare their behaviour to the value-based variants. Next, we directly contrast the two noise types within each schedule family. We conclude the experimental section with checks over acquisition functions, acquisition function optimisers, and dimensionalities. Throughout, we report results on both the synthetic BBOB suite and the real-world PD1 benchmark.
 
 \subsection{Setup of Experiments}
 We experiment with both synthetic and real-world functions.
-As synthetic functions, we used the BBOB~\citep{HanEtAl21} set through IOHExperimenter~\citep{DoeEtAl18}. BBOB contains 24 functions, ranging from a simple sphere function to more complex functions with various properties, such as multiple local optima or weak global structure. Each BBOB function has different instances, which are created by modifying the original function through rotation, the addition of constants and other transformations. 
+As synthetic functions, we used the BBOB~\citep{HanEtAl21} set through IOHExperimenter~\citep{DoeEtAl18}. BBOB contains 24 functions, ranging from a simple sphere function to more complex functions with various properties, such as multiple local optima or weak global structure. Each BBOB function has different instances, which are created by modifying the original function through rotation, the addition of constants and other transformations.
 We used the first 11 instances of each function and ran the optimisation using 5 pseudo-random seeds. We used dimensions 2, 4 and 8 of the BBOB functions.
 
-
-We also used the PD1 surrogate-based benchmark~\citep{MalEtAl23}, which is a hyperparameter optimisation benchmark for neural networks. 
+We also used the PD1 surrogate-based benchmark~\citep{MalEtAl23}, which is a hyperparameter optimisation benchmark for neural networks.
 In PD1, each target function is a combination of a dataset and a neural network architecture (for example, wide ResNet on CIFAR100).
 PD1 contains four target functions, and the goal is to optimise the hyperparameters of a neural network in order to minimise the error. PD1 contains purely continuous hyperparameters. We used 55 pseudo-random seeds in our PD1 experiments.
 
-To compute the noise levels, we needed to know the location of the minimum and maximum of the target functions. For BBOB, the location of the minimum is already known from analytical solutions. To find the location of the maximal values, as well as the minimum and maximum of PD1, we ran 100 times three optimisation algorithms: differential evolution, L-BFGS-B~\citep{ByrEtAl95} and CMA-ES~\citep{HanOst01}, using default settings for all three algorithms. For the first two algorithms, we used  SciPy~\citep{VirEtAl20} implementation; for CMA-ES, we used the PyCMA~\citep{HanEtAl19} package. 
+To compute the noise levels, we needed to know the location of the minimum and maximum of the target functions. For BBOB, the location of the minimum is already known from analytical solutions. To find the location of the maximal values, as well as the minimum and maximum of PD1, we ran 100 times three optimisation algorithms: differential evolution, L-BFGS-B~\citep{ByrEtAl95} and CMA-ES~\citep{HanOst01}, using default settings for all three algorithms. For the first two algorithms, we used  SciPy~\citep{VirEtAl20} implementation; for CMA-ES, we used the PyCMA~\citep{HanEtAl19} package.
 We chose these algorithms as they are popular optimisation procedures designed for non-constrained budgets (as opposed to Bayesian optimisation).
 
-We implemented the noisy oracle surrogate model within the highly flexible SMAC3~\citep{LinEtAl22b} Bayesian optimisation framework. We start each optimisation with one random sample, and then start the Bayesian optimisation loop using the noisy oracle, until we reach 100 samples. 
+We implemented the noisy oracle surrogate model within the highly flexible SMAC3~\citep{LinEtAl22b} Bayesian optimisation framework. We start each optimisation with one random sample, and then start the Bayesian optimisation loop using the noisy oracle, until we reach 100 samples.
 
 We performed our experiments on a compute cluster with 19 nodes; each node is equipped with two AMD EPYC 7543 32-Core processors with 512MB of L3 cache and 1TB of RAM running Rocky Linux 9.
-
-
 
 \subsection{Value-based noise functions}
 
@@ -280,7 +253,6 @@ We performed our experiments on a compute cluster with 19 nodes; each node is eq
     \caption[Value-based noise ranks on BBOB]{Mean ranks of regret resulting from running Bayesian optimisation with different value-based noise functions over different noise levels on the BBOB functions. For noise levels up to $0.1$, noise functions that give an advantage to larger areas around the optimum, at the expense of being more inaccurate far from it perform best. For higher noise levels, constant noise performs better.}
     \label{fig:ch08:value_based}
 \end{figure}
-
 
 We begin by examining the performance of the value-based noise functions.
 \cref{fig:ch08:value_based} shows aggregated results over all 24 BBOB functions on dimension 2 with the EI acquisition function. Each sub-figure compares the different noise schedules at a given base-noise level. First, we observe that the ranking of the noise functions changes with the base noise level.
@@ -327,9 +299,7 @@ As the noise level increases ($0.2$--$0.5$), constant noise becomes the best noi
     \label{fig:ch08:value_based_pd1}
 \end{figure}
 
-
 The PD1 results in \cref{fig:ch08:value_based_pd1} show a similar transition. At low-to-moderate noise levels, non-constant value-based schedules dominate: the cosine and tanh schedules perform very well, whereas overly aggressive or uniform schedules fare worse. The regime shift from non-constant to constant noise occurs at roughly the same noise level as on BBOB, despite the fact that PD1 contains only four target functions (compared to 24 for BBOB), suggesting that the transition is not an artefact of aggregation over many benchmarks. For higher noise levels, the less aggressive exponential schedules outperform the more aggressive non-constant schedules, while constant noise dominates overall.
-
 
 \subsection{Distance-based noise}
 \begin{figure}
@@ -364,7 +334,7 @@ The PD1 results in \cref{fig:ch08:value_based_pd1} show a similar transition. At
         \centering
         \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/rs_BBOBDistanceToOptimum_2_0.5_ei_rank_legend.pdf}
     \end{subfigure}
-    \caption[Distance-based noise ranks on BBOB]{Mean ranks of regret resulting from running Bayesian optimisation with different distance-based noise functions over different noise levels. For all noise levels, constant noise 
+    \caption[Distance-based noise ranks on BBOB]{Mean ranks of regret resulting from running Bayesian optimisation with different distance-based noise functions over different noise levels. For all noise levels, constant noise
     gives the best performance, with the margin increasing with the noise level.}
     \label{fig:ch08:dist_opt}
 \end{figure}
@@ -443,7 +413,6 @@ Taken together with the results from the previous sub-section, these results ind
 
         \includegraphics[width=\linewidth]{figures/08/figures/conv/20_rs_BBOBDistanceToOptimum_2_0.1_ei_cov_legend.pdf}
 
-
     \end{subfigure}
     \caption[Convergence plots with distance-based noise]{Convergence plots of BBOB functions 1 (a-c) and 20 (d-f) with noise levels ($0.01, 0.05, 0.1$), different noise schedules using distance-based noise. On function 1 and lower noise levels, it is better to be accurate around the optimum. For function 20, constant noise dominates, followed by more benign noise functions that give only modest advantage to solutions around the optimum.}
     \label{fig:ch08:conv_sample}
@@ -455,8 +424,6 @@ For function 1 with low noise levels ($0.01$ and $0.05$), the polynomial noise f
 The trajectories make the difference between the two functions particularly clear: on F1, several schedules remain competitive for a substantial part of the run and only separate clearly as the noise level increases, whereas on F20 the constant schedule establishes an advantage early and maintains it throughout. This is consistent with the intuition that multimodality makes distance-based inaccuracies more damaging, because the optimiser is more likely to be drawn toward distant but deceptively attractive regions.
 
 These results challenge the common assumption that being accurate around the optimum is sufficient for a good surrogate. Furthermore, being accurate only around the optimum, and not around other areas of good value, can be seen as providing an additional ``oracle'' hint. However, in practice, the optimiser confuses poorly predicted solutions with good ones, while neglecting the real optimum.
-
-
 
 \subsection{Comparing value-based and distance-based noise within each schedule}
 \begin{figure}[!htbp]
@@ -507,7 +474,6 @@ These results challenge the common assumption that being accurate around the opt
     \caption[Noise type and level comparison on BBOB]{Mean ranks of the regret resulting from running Bayesian optimisation with different noise types and levels. Each plot represents one noise function. For polynomial noise functions, value-based noise is superior to distance-based noise.}
     \label{fig:ch08:function_types}
 \end{figure}
-
 
 We compare value-based and distance-based noise within each schedule family. In \cref{fig:ch08:function_types,fig:ch08:function_types_pd1}, each sub-figure shows one noise schedule, with lines for value-based and distance-based variants across all tested noise levels. This experiment was conducted using EI as the acquisition function and random search for acquisition function optimisation on dimension 2.
 
@@ -560,13 +526,11 @@ We compare value-based and distance-based noise within each schedule family. In 
     \label{fig:ch08:function_types_pd1}
 \end{figure}
 
-
 \cref{fig:ch08:function_types,fig:ch08:function_types_pd1} show that for smooth noise functions such as linear, cosine and tanh, the value-based variant is superior, but the distance-based variant with low noise remains competitive; in contrast, sharper families (notably higher-order polynomial and steep exponential variants) are more sensitive and expose clearer differences between the two formulations. This is consistent with the idea that steep schedules amplify inductive bias: if the bias is aligned with objective quality, performance can improve, but if aligned only with distance, the optimiser is more easily led astray.
 
 \subsection{Different acquisition functions}
 We now check whether different acquisition functions require a different accuracy focus from the surrogate model. We evaluate PI and LCB in addition to the EI results presented earlier, using a noise level of $0.1$ and the 24 BBOB functions on dimension 2.
 The results are shown in \cref{fig:ch08:diff_acqs}.
-
 
 \begin{figure}
     \centering
@@ -579,7 +543,7 @@ The results are shown in \cref{fig:ch08:diff_acqs}.
         \caption{LCB}
     \end{subfigure}
     \hspace{0.5cm}
-    \begin{subfigure}[c]{\textwidth} 
+    \begin{subfigure}[c]{\textwidth}
         \centering
         \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_2_0.1_lcb_rank_legend.pdf}
     \end{subfigure}
@@ -622,7 +586,6 @@ In the next step, we also check whether different acquisition function optimiser
 
         \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/default_BBOBValueBased_2_0.1_ei_rank_legend.pdf}
 
-
     \end{subfigure}
     \caption[Local search optimisation comparison on BBOB]{Mean ranks of regret resulting from running Bayesian optimisation with value-based noise functions using different acquisition function optimisers: local search and random search, at a noise level of $0.1$. The best-performing noise functions remain similar to the random search case.}
     \label{fig:ch08:acq_opts}
@@ -645,7 +608,7 @@ In the next step, we also check whether different acquisition function optimiser
 Changing the acquisition optimiser from random search to local search (\cref{fig:ch08:acq_opts,fig:ch08:acq_opts_pd1}) leaves the qualitative ordering largely unchanged. In particular, schedules that perform well with random search remain competitive with local search, indicating that the observed trends are driven primarily by surrogate-noise design rather than by the particular search dynamics of the optimiser. We note that \cref{fig:ch08:acq_opts_pd1} shows results only with local search on PD1, as the random search baseline is already reported in \cref{fig:ch08:value_based_pd1}.
 
 \subsection{Dimensionalities}
-We check whether our results hold across different dimensionalities of the BBOB suite. We present results for value-based noise functions with EI as the acquisition function and a noise level of $0.1$, on dimensions $4$ and $8$, in \cref{fig:ch08:dims}. 
+We check whether our results hold across different dimensionalities of the BBOB suite. We present results for value-based noise functions with EI as the acquisition function and a noise level of $0.1$, on dimensions $4$ and $8$, in \cref{fig:ch08:dims}.
 \begin{figure}
     \centering
     \begin{subfigure}[c]{0.32\textwidth}
@@ -658,7 +621,7 @@ We check whether our results hold across different dimensionalities of the BBOB 
     \end{subfigure}
     \hspace{0.5cm}
     \begin{subfigure}[c]{\textwidth}
-        \centering 
+        \centering
         \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_8_0.1_ei_rank_legend.pdf}
     \end{subfigure}
     \caption[Combined noise analysis on BBOB]{Mean ranks of resulting regrets of running Bayesian optimisation with EI as an acquisition function with different value-based noise functions over different noise levels. With a noise level of $0.1$ on dimensions 4 and 8. With higher dimensions, more noise functions perform well. However, constant noise performs worse than other noise levels for both cases.}
@@ -673,7 +636,6 @@ We also observed that in general, value-based noise functions are superior to di
 
 The convergence comparison on F1 versus F20 further suggests that landscape structure modulates this trade-off. On smoother landscapes, non-uniform schedules can remain beneficial for longer. Other the other hand, on multimodal landscapes, schedules that heavily degrade distant points are riskier because the optimiser encounters more suboptimal-but-competitive regions that can be over-promoted by distorted predictions.
 
-}
 \section{Comparison to real-world surrogate models}
 \begin{figure}[tbp]
     \centering
@@ -702,13 +664,12 @@ The convergence comparison on F1 versus F20 further suggests that landscape stru
     \label{fig:ch08:gps_accs}
 \end{figure}
 
-\changed{Following the noisy-oracle experiments, we examine how real surrogate models behave on an actual \gls{bo} trajectory. The goal of this section is not to reproduce the earlier controlled setup exactly, but to check whether the qualitative pattern suggested by the noisy oracle can also be seen in standard surrogate models.}
-\changed{We use BBOB function 3 in dimension 2 because it has multiple local optima while still being easy to visualise. We run SMAC3~\cite{LinEtAl22b} for 100 evaluations and then train a Gaussian process on the first 10, 25, 50 and 100 solutions from the trajectory. The Gaussian process uses the default SMAC3 settings (\emph{i.e.}, a Matern kernel optimized with L-BFGS-B). We evaluate its absolute error on a grid of 10\,000 points over the full landscape. Results from the analogous experiment with random forest are shown next.}
+Following the noisy-oracle experiments, we examine how real surrogate models behave on an actual \gls{bo} trajectory. The goal of this section is not to reproduce the earlier controlled setup exactly, but to check whether the qualitative pattern suggested by the noisy oracle can also be seen in standard surrogate models.
+We use BBOB function 3 in dimension 2 because it has multiple local optima while still being easy to visualise. We run SMAC3~\cite{LinEtAl22b} for 100 evaluations and then train a Gaussian process on the first 10, 25, 50 and 100 solutions from the trajectory. The Gaussian process uses the default SMAC3 settings (\emph{i.e.}, a Matern kernel optimized with L-BFGS-B). We evaluate its absolute error on a grid of 10\,000 points over the full landscape. Results from the analogous experiment with random forest are shown next.
 
-\changed{The results are presented in \cref{fig:ch08:gps_accs}, together with the ground-truth function values. Early in the optimisation, the Gaussian process is already relatively accurate in some high-performance regions, but not necessarily exactly at the optimum. As the search progresses and more samples are gathered around the optimum, the error decreases in that region, while accuracy may deteriorate in parts of the landscape that are far away (for example around $x_2=-2.5$). This pattern does not prove that the GP follows the noisy-oracle mechanism exactly, but it is qualitatively consistent with our earlier observation that BO benefits when the surrogate allocates more accuracy to regions with good objective values than to uniformly poor regions.}
+The results are presented in \cref{fig:ch08:gps_accs}, together with the ground-truth function values. Early in the optimisation, the Gaussian process is already relatively accurate in some high-performance regions, but not necessarily exactly at the optimum. As the search progresses and more samples are gathered around the optimum, the error decreases in that region, while accuracy may deteriorate in parts of the landscape that are far away (for example around $x_2=-2.5$). This pattern does not prove that the GP follows the noisy-oracle mechanism exactly, but it is qualitatively consistent with our earlier observation that BO benefits when the surrogate allocates more accuracy to regions with good objective values than to uniformly poor regions.
 
-
-\changed{\cref{fig:ch08:rfs_accs} shows the corresponding behaviour for random forest. We again observe that the model is more accurate in regions with better objective values, similarly to the GP. Compared to the GP, however, the random forest tends to concentrate its lower-error predictions in smaller regions. This makes the random-forest result consistent with the same qualitative story, while also illustrating that different surrogate classes may realize this behaviour in different geometric ways.}
+\cref{fig:ch08:rfs_accs} shows the corresponding behaviour for random forest. We again observe that the model is more accurate in regions with better objective values, similarly to the GP. Compared to the GP, however, the random forest tends to concentrate its lower-error predictions in smaller regions. This makes the random-forest result consistent with the same qualitative story, while also illustrating that different surrogate classes may realize this behaviour in different geometric ways.
 \begin{figure}[tbp]
     \centering
     \begin{subfigure}{0.24\textwidth}
@@ -737,17 +698,16 @@ The convergence comparison on F1 versus F20 further suggests that landscape stru
 \end{figure}
 
 \section{Theoretical analysis}
-\changed{Our empirical results with the noisy oracle (e.g., \cref{fig:ch08:value_based,fig:ch08:dist_opt}) suggest that substantial surrogate-model inaccuracy can be detrimental, especially when it makes suboptimal points appear unrealistically attractive. In this section, we study a deterministic analogue of this phenomenon to better understand when such misleading behaviour can occur.
+Our empirical results with the noisy oracle (e.g., \cref{fig:ch08:value_based,fig:ch08:dist_opt}) suggest that substantial surrogate-model inaccuracy can be detrimental, especially when it makes suboptimal points appear unrealistically attractive. In this section, we study a deterministic analogue of this phenomenon to better understand when such misleading behaviour can occur.
 
 We provide a theoretical analysis of a deterministic version of the noisy oracle surrogate model. The purpose of this analysis is to derive simple, conditions under which the acquisition function prefers a suboptimal point to the optimum because the surrogate prediction is distorted.
 
 We note that the choice to analyse a deterministic surrogate rather than the stochastic oracle used in the experiments for two reasons. First, a stochastic oracle produces different predictions at each query, so the event ``the acquisition function is misled'' becomes a probabilistic statement that depends on the joint distribution of all noise draws across all evaluated candidates within an iteration. Deriving tight, interpretable bounds in this setting would require additional assumptions about the number of candidates, the correlation structure of queries, and the acquisition optimiser search strategy, which would obscure the core message. Second, we define the deterministic model represents a pessimistic, worst-case, scenario in which the surrogate consistently predicts values that are better than the truth by exactly the assigned noise magnitude. If the acquisition function can be misled under this deterministic bias, then it can certainly be misled by the stochastic oracle whenever a noise draw happens to produce a similarly large deviation, which occurs with non-negligible probability when $N(x_L)$ is large. In other words, the deterministic thresholds serve as sufficient conditions for the possibility of misleading behaviour under the stochastic oracle as they identify the noise magnitudes at which the risk of being misled becomes structurally unavoidable rather than merely a rare tail event.
 \subsection{General definitions}
 \label{sec:ch08:gen_defs}
-\changed{We define $x_L\in \sR^n$ as a suboptimal point such that $f(x_L) = f(x^*) + l$, where $l > 0$. Thus, $l$ measures the objective gap between the optimum and the suboptimal point.}
+We define $x_L\in \sR^n$ as a suboptimal point such that $f(x_L) = f(x^*) + l$, where $l > 0$. Thus, $l$ measures the objective gap between the optimum and the suboptimal point.
 
-
-\changed{At the optimum, the noise for the mean prediction is minimal, as $\hat{N}(x^*)=0$ and therefore $N(x^*)=N_\text{min}$. For the theoretical analysis, we consider a deterministic surrogate that always predicts values that are better than the truth by an amount equal to the assigned noise. This gives a pessimistic but easy-to-analyse model of how biased predictions can mislead \gls{bo}. Therefore, the model predicts:}
+At the optimum, the noise for the mean prediction is minimal, as $\hat{N}(x^*)=0$ and therefore $N(x^*)=N_\text{min}$. For the theoretical analysis, we consider a deterministic surrogate that always predicts values that are better than the truth by an amount equal to the assigned noise. This gives a pessimistic but easy-to-analyse model of how biased predictions can mislead \gls{bo}. Therefore, the model predicts:
 \begin{equation*}
     \mu_S(x^*) = f(x^*) - N_{\min}
 \end{equation*}
@@ -756,7 +716,7 @@ We note that the choice to analyse a deterministic surrogate rather than the sto
 \end{equation*}
 where $N_{\min} > 0$.
 
-\changed{At the suboptimal point $x_L$, the surrogate model also predicts a value that is better than the truth. Therefore, the model predicts:}
+At the suboptimal point $x_L$, the surrogate model also predicts a value that is better than the truth. Therefore, the model predicts:
 \begin{equation*}
     \mu_S(x_L) = f(x_L) - N(x_L) = f(x^*) + l - N(x_L)
 \end{equation*}
@@ -813,9 +773,6 @@ The acquisition function is misled if $\mathrm{EI}(x_L) > \mathrm{EI}(x^*)$. We 
 \begin{equation*}
     \mathrm{EI}(x_L) = (I_{x^*} - l + N(x_L)) \cdot \Phi(z_{x_L}) + \sigma(x_L) \cdot \phi(z_{x_L})
 \end{equation*}
-
-
-
 
 We assume that $N(x_L) \ge l - I_{x^*}$, as $l$ and $I_{x^*}$ are constants, and our goal is to show that with high enough noise, it is guaranteed to mislead the optimiser.
 In this case $z_{x_L} \ge 0$. In this case, $\Phi(z_{x_L}) \ge 0.5$. Furthermore, since $\phi(z_{x_L}) \ge 0$, we can drop the second term to obtain a lower bound:
@@ -874,30 +831,6 @@ Therefore, EI is misled if
     N(x_L) > l - 0.5 \cdot I_{x^*} + 0.5 \cdot N_{\min} - 0.399 \cdot \sigma(x_L)
 \end{equation*}
 \end{proof}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 \subsection{Probability of Improvement}
 \begin{theorem}
@@ -1043,10 +976,10 @@ The additional empirical patterns can also be interpreted through these bounds. 
 
 Moreover, our empirical results showed that the behaviour of the noisy oracle does not substantially change when changing the acquisition function from EI to PI or LCB. This goes in line with our theoretical findings as all derived conditions are driven by the same core quantities ($l$, $N_{\min}$, $\sigma$, and especially $N(x_L)$). Changing the optimisation mechanics can affect details of trajectories, but it does not remove the underlying mechanism by which distorted predictions at  suboptimal points can be selected over the optimal point.
 
-Furthermore, the worse performance that aggressive noise scheduled showed on multimodal functions is also aligned with the theoretical analysis. Multimodality increases the chance of encountering points with small $l$ but misleadingly high predicted utility. These are exactly the points for which large induced $N(x_L)$ can trigger the misleading conditions. Thus, the theory and experiments jointly suggest that keeping error a small error on suboptimal regions is particularly important in rugged landscapes.}
+Furthermore, the worse performance that aggressive noise scheduled showed on multimodal functions is also aligned with the theoretical analysis. Multimodality increases the chance of encountering points with small $l$ but misleadingly high predicted utility. These are exactly the points for which large induced $N(x_L)$ can trigger the misleading conditions. Thus, the theory and experiments jointly suggest that keeping error a small error on suboptimal regions is particularly important in rugged landscapes.
 \section{Chapter conclusion}
 
-\changed{This chapter aimed to understand how surrogate model predictions can be made effective for Bayesian optimisation.
+This chapter aimed to understand how surrogate model predictions can be made effective for Bayesian optimisation.
 To achieve this, we constructed a noisy oracle surrogate model that samples from the target function and then adds noise to the predicted value according to different noise functions.
 Using this model, we found evidence that a good surrogate model should be accurate not only around the optimum, but more broadly in regions where the target function has good values. At the same time, the surrogate should not become so inaccurate in low-performing regions that it makes them appear promising and therefore confuses the search process.
 
@@ -1064,10 +997,7 @@ Our results also connect naturally to the idea of training surrogates with value
 
 This study is a first step towards a principled understanding of where surrogate accuracy matters for \gls{bo}. Its simplification, constant predictive uncertainty, data-independent oracle, and access to global information allowed us to isolate the spatial accuracy question cleanly, but they also set the boundaries of what the conclusions can directly claim. In particular, the noisy oracle does not condition on the accumulated observations and uses constant predictive uncertainty, removing the data-driven exploration component central to practical GP-based \gls{bo}. The conclusions should therefore be interpreted as statements about where mean-prediction accuracy matters, holding other aspects of the surrogate fixed. The qualitative analysis of GP and random-forest error patterns on a real \gls{bo} trajectory provides partial evidence that the patterns identified here also arise in data-driven surrogates, but establishing this more rigorously requires further experimentation.
 
-
-
-
-Overall, we believe that empirical performance prediction, especially in the context of \gls{bo}, is an important research topic that offers several avenues for improving the current state of the art. Our results provide a concrete starting point for exploring such improvements in a more targeted way.}
+Overall, we believe that empirical performance prediction, especially in the context of \gls{bo}, is an important research topic that offers several avenues for improving the current state of the art. Our results provide a concrete starting point for exploring such improvements in a more targeted way.
 
 \paragraph{Connection to the thesis}~
 This chapter clarifies what kind of model accuracy matters for Bayesian optimisation: not uniform accuracy over the whole space, but accuracy that prevents the optimiser from being attracted to misleadingly good predictions.
