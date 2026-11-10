@@ -3,27 +3,22 @@
 \providecommand{\gb}{GraphBench}
 
 \section{Introduction}
-SAT solvers exhibit \emph{performance complementarity}: the most effective solver depends on the instance. Empirical performance models (EPMs) can exploit this variation by predicting solver running times, while algorithm selectors use instance information to choose a solver~\citep{Rice76b,XuEtAl08b,HutEtAl14e}. As discussed in~\cref{ch:ch04:rev_SATzilla}, a central design choice is how to represent a SAT formula for learning. SATzilla features summarise syntactic properties, graph statistics, and observations from short solver runs. Such summaries make tabular learning possible, but the learning algorithm does not directly observe the relationships between variables and clauses from which those summaries were derived.
+SAT solvers exhibit \emph{performance complementarity}: the most effective solver depends on the instance. Empirical performance models (EPMs) can exploit this variation by predicting solver running times, while algorithm selectors use instance information to choose a solver~\citep{Rice76b,XuEtAl08b,HutEtAl14e}. As discussed in~\cref{ch:ch04:rev_SATzilla}, the SATzilla features summarise syntactic properties, graph statistics, and observations from short solver runs to describe a SAT instance for such purposes. Such summaries make tabular learning possible, but the learning algorithm does not directly observe the relationships between variables and clauses from which those summaries were derived.
 
-The graph representations introduced in~\cref{sec:ch03:sat-graphs} offer an alternative. Graph neural networks (GNNs) can learn representations of a formula by propagating information between its variables, literals, and clauses. This raises the question of whether learned graph representations improve performance prediction and algorithm selection relative to established SATzilla-based models, and at what computational cost.
+In~\cref{sec:ch03:sat-graphs} we showed that SAT formulae can also be repsented as graphs, as graphs can provide a meaningful representations of the SAT formula, as they are also permutation invariant. Such graph representations have been used to gather hand-crafted features of the SAT formulas (such as features in the SATzilla features).
+Graph neural networks (GNNs) can learn representations of graphs directly. Therefore, it is possible to give them a graph as an input, and use them to process it independently of hand-crafted features. This raises the question of whether learned graph representations improve performance prediction and algorithm selection relative to established SATzilla-based models.
 
-This chapter studies that question through the SAT component of \gb{}. The benchmark combines 107\,866 instances, running times for eleven solvers, three graph representations, and SATzilla 2024 features~\citep{ShaHoo24}. It supports both regression of solver running times and direct algorithm selection. The empirical study addresses four questions:
-\begin{enumerate}
-    \item Can graph models improve running-time prediction and algorithm selection over tabular models using SATzilla features?
-    \item How do graph representation, network architecture, and supplied node features affect predictive performance?
-    \item Do the representations that perform best for running-time prediction also perform best for algorithm selection?
-    \item Which parts of the benchmark are accessible to current graph models, and where does scalability remain a limitation?
-\end{enumerate}
+In this chapter we introduce a new benchmark for performance prediction and algorithm selection of SAT solvers, in addition to introducing GNNs for the task of performance prediction.
 
 \Cref{sec:ch07:gnn-background,sec:ch07:gnn-sat} introduce the graph models and related SAT work. \Cref{sec:ch07:benchmark} describes benchmark construction, followed by the learning tasks and metrics in~\cref{sec:ch07:tasks}. \Cref{sec:ch07:ExpSetup} specifies the experimental setup. The results in~\cref{sec:ch07:results} are discussed in~\cref{sec:ch07:discussion}, before~\cref{sec:ch07:conclusions} summarises the implications for EPMs.
 
 \section{Background and related work}
 \subsection{Graph neural networks}
 \label{sec:ch07:gnn-background}
-Graph neural networks (GNNs) are parameterised models for learning functions on attributed graphs. Their architectures specify how graph structure and vertex or edge attributes are combined to obtain representations for prediction. Approaches include spectral graph convolutions~\citep{BruEtAl14}, message-passing neural networks (MPNNs)~\citep{GilEtAl17}, and graph transformers~\citep{MulEtAl24,StoEtAl25}. The following discussion introduces the message-passing framework and the architectures used in the SAT experiments: GCN, GIN, the GNN+ variants GCN+, GIN+, and Gated GCN+, and the SAT-specific architecture GraSS.
+Graph neural networks (GNNs) are machine learning models for learning functions on attributed graphs. Approaches include spectral graph convolutions~\citep{BruEtAl14}, message-passing neural networks (MPNNs)~\citep{GilEtAl17}, and graph transformers~\citep{MulEtAl24,StoEtAl25}. In the following, we introduce graph neural networks and some well-known variants of it.
 
-\subsubsection{Message-passing framework}
-Let $G=(V,E)$ be an undirected graph with finite vertex set $V$ and edge set $E\subseteq\{\{u,v\}\subseteq V\mid u\neq v\}$. For $v\in V$, let $N(v)=\{u\in V\mid\{u,v\}\in E\}$ denote its neighbourhood. Each vertex is assigned an initial representation $h_v^{(0)}\in\mathbb{R}^{d_0}$, and $e_{vu}$ denotes the attributes of edge $\{v,u\}$ when available. Following~\citet[Section~1.2]{WitEtAl26}, an $L$-layer MPNN computes
+\subsubsection{Message-passing graph neural networks framework}
+Given an undirected graph $G=(V,E)$ with finite vertex set $V$ and edge set $E\subseteq\{\{u,v\}\subseteq V\mid u\neq v\}$. For each vertex $v\in V$, we denote $N(v)=\{u\in V\mid\{u,v\}\in E\}$ its set of neighbours. Each vertex is assigned an initial representation $h_v^{(0)}\in\mathbb{R}^{d_0}$, and $e_{vu}$ denotes the attributes of edge $\{v,u\}$ when available. An $L$-layer graph neural networks includes $L$ message passing layers, each computing
 \begin{equation}
 \label{eq:ch07:message-passing}
 \begin{aligned}
@@ -37,7 +32,7 @@ Let $G=(V,E)$ be an undirected graph with finite vertex set $V$ and edge set $E\
         \in\mathbb{R}^{d_t}, \qquad t=1,\ldots,L.
 \end{aligned}
 \end{equation}
-Here, double braces denote a multiset. The aggregation function $\operatorname{AGG}^{(t)}$ transforms and combines the neighbourhood information, while $\operatorname{UPD}^{(t)}$ computes the next vertex representation from the aggregate and the previous representation. Edge attributes are omitted from the aggregation when unavailable. The functions share parameters across vertices within each layer, and aggregation is invariant to the ordering of neighbours. Consequently, the vertex representations are permutation equivariant: a relabelling of the attributed graph induces the corresponding relabelling of the representations. Each layer propagates information across one edge, so $L$ layers provide access to information from at most $L$ hops away through message passing.
+The aggregation function $\operatorname{AGG}^{(t)}$ is a neural network (\emph{i.e.}, MLP) that transforms and combines the neighbourhood information, while $\operatorname{UPD}^{(t)}$ is another neural network that computes the next vertex representation from the aggregate and the previous representation. The network $\operatorname{AGG}$ and $\operatorname{UPD}$ share parameters across all vertices within each layer. An important property of the aggregation function is that it is aggregation invariant to the ordering of neighbours. Consequently, the vertex representations are permutation equivariant: shuffeling the vertices of the graphs will not change the resulting representation of each of them. Another property of the message passing neural networks is that each layer propagates information across one edge, such that $L$ layers provide access to information from at most $L$ hops away through message passing.
 
 For graph-level prediction, a permutation-invariant readout maps the final vertex representations to a graph representation,
 \begin{equation}
@@ -46,13 +41,13 @@ For graph-level prediction, a permutation-invariant readout maps the final verte
         \left\{\!\left\{h_v^{(L)}\mid v\in V\right\}\!\right\}
         \right).
 \end{equation}
-Common readouts include sum and mean pooling~\citep{GilEtAl17,XuEtAl19}. A prediction head then maps $h_G$ to the target quantities. In this chapter, these are solver running times or algorithm-selection scores. The resulting predictions are invariant to vertex relabelling when the input attributes are retained. The input encoding, message-passing layers, and prediction head correspond to the encoder, processor, and decoder described in~\cref{sec:ch07:ExpSetup}.
+Common readouts include sum and mean pooling~\citep{GilEtAl17,XuEtAl19}. A prediction head then maps $h_G$ to the target quantities. 
 
 \subsubsection{Message-passing architectures}
-The architectures considered below instantiate~\cref{eq:ch07:message-passing} through different neighbourhood aggregation and update functions. We first give their core propagation rules without additional normalisation, dropout, or residual blocks. Vertex representations are treated as column vectors; $\sigma$ denotes an elementwise activation function, and all weight matrices have compatible dimensions. Bias terms are omitted for clarity.
+We introduce several well-known graph neural networks architectures, all fullfiling the general framework introduced above. These architectures differentiate through different neighbourhood aggregation and update functions. Vertex representations are treated as column vectors.
 
 \paragraph{GCN.}
-The graph convolutional network (GCN) of~\citet{KipWel17} applies a shared linear transformation to vertex representations and aggregates them with symmetric degree normalisation:
+The graph convolutional network (GCN)~\citep{KipWel17} applies a shared linear transformation to vertex representations and aggregates them as a sum with symmetric degree normalisation:
 \begin{equation}
 \label{eq:ch07:gcn}
     h_v^{(t)}=\sigma\!\left(
