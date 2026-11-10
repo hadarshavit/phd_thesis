@@ -8,31 +8,30 @@ SAT solvers exhibit \emph{performance complementarity}: the most effective solve
 In~\cref{sec:ch03:sat-graphs} we showed that SAT formulae can also be repsented as graphs, as graphs can provide a meaningful representations of the SAT formula, as they are also permutation invariant. Such graph representations have been used to gather hand-crafted features of the SAT formulas (such as features in the SATzilla features).
 Graph neural networks (GNNs) can learn representations of graphs directly. Therefore, it is possible to give them a graph as an input, and use them to process it independently of hand-crafted features. This raises the question of whether learned graph representations improve performance prediction and algorithm selection relative to established SATzilla-based models.
 
+\hs{todo integate it nicely}
+The benchmark presents several challenges beyond standard supervised regression. Solver running times can vary across repeated executions, introducing noise into the targets. Runs that reach the cutoff are right-censored: their true running times are known only to exceed the budget. In addition, formula sizes vary substantially, and the largest encodings can require graphs with millions of vertices or edges. These properties motivate evaluating predictive quality and computational feasibility separately. The timeout treatment used for the supervised targets is defined in~\cref{sec:ch07:tasks}; the graph-size restrictions encountered during evaluation are described in~\cref{sec:ch07:protocol}.
+
 In this chapter we introduce a new benchmark for performance prediction and algorithm selection of SAT solvers, in addition to introducing GNNs for the task of performance prediction.
 
-\Cref{sec:ch07:gnn-background,sec:ch07:gnn-sat} introduce the graph models and related SAT work. \Cref{sec:ch07:benchmark} describes benchmark construction, followed by the learning tasks and metrics in~\cref{sec:ch07:tasks}. \Cref{sec:ch07:ExpSetup} specifies the experimental setup. The results in~\cref{sec:ch07:results} are discussed in~\cref{sec:ch07:discussion}, before~\cref{sec:ch07:conclusions} summarises the implications for EPMs.
+\Cref{sec:ch07:gnn-background,sec:ch07:gnn-sat} introduce the graph models and related SAT work. \Cref{sec:ch07:benchmark} describes benchmark construction, followed by the learning tasks and metrics in~\cref{sec:ch07:tasks}. \Cref{sec:ch07:ExpSetup} specifies the experimental setup. \Cref{sec:ch07:results} presents the results, and~\cref{sec:ch07:conclusions} discusses their implications and limitations for EPMs.
 
 \section{Background and related work}
 \subsection{Graph neural networks}
 \label{sec:ch07:gnn-background}
-Graph neural networks (GNNs) are machine learning models for learning functions on attributed graphs. Approaches include spectral graph convolutions~\citep{BruEtAl14}, message-passing neural networks (MPNNs)~\citep{GilEtAl17}, and graph transformers~\citep{MulEtAl24,StoEtAl25}. In the following, we introduce graph neural networks and some well-known variants of it.
+Graph neural networks (GNNs) are machine learning models for learning functions on graphs with vertex and edge features. Approaches include spectral graph convolutions~\citep{BruEtAl14}, message-passing neural networks (MPNNs)~\citep{GilEtAl17}, and graph transformers~\citep{MulEtAl24,StoEtAl25}. In the following, we introduce graph neural networks and some well-known variants of it.
 
 \subsubsection{Message-passing graph neural networks framework}
-Given an undirected graph $G=(V,E)$ with finite vertex set $V$ and edge set $E\subseteq\{\{u,v\}\subseteq V\mid u\neq v\}$. For each vertex $v\in V$, we denote $N(v)=\{u\in V\mid\{u,v\}\in E\}$ its set of neighbours. Each vertex is assigned an initial representation $h_v^{(0)}\in\mathbb{R}^{d_0}$, and $e_{vu}$ denotes the attributes of edge $\{v,u\}$ when available. An $L$-layer graph neural networks includes $L$ message passing layers, each computing
+Given an undirected graph $G=(V,E)$ with finite vertex set $V$ and edge set $E\subseteq\{\{u,v\}\subseteq V\mid u\neq v\}$. For each vertex $v\in V$, we denote $N(v)=\{u\in V\mid\{u,v\}\in E\}$ its set of neighbours. Each vertex is assigned an initial representation $h_v^{(0)}\in\mathbb{R}^{d_0}$, and $e_{vu}$ denotes the attributes of edge $\{v,u\}$ when available. At layer $t$, write $\mathcal{M}_v^{(t-1)}=\{\!\{(h_u^{(t-1)},e_{vu})\mid u\in N(v)\}\!\}$ for the multiset of neighbour representations and edge attributes. An $L$-layer message-passing graph neural network computes
 \begin{equation}
 \label{eq:ch07:message-passing}
 \begin{aligned}
     m_v^{(t)} &= \operatorname{AGG}^{(t)}\!\left(
-        \left\{\!\left\{
-        \left(h_v^{(t-1)},h_u^{(t-1)},e_{vu}\right)
-        \mid u\in N(v)
-        \right\}\!\right\}
-        \right), \\
+        h_v^{(t-1)},\mathcal{M}_v^{(t-1)}\right), \\
     h_v^{(t)} &= \operatorname{UPD}^{(t)}\!\left(h_v^{(t-1)},m_v^{(t)}\right)
         \in\mathbb{R}^{d_t}, \qquad t=1,\ldots,L.
 \end{aligned}
 \end{equation}
-The aggregation function $\operatorname{AGG}^{(t)}$ is a neural network (\emph{i.e.}, MLP) that transforms and combines the neighbourhood information, while $\operatorname{UPD}^{(t)}$ is another neural network that computes the next vertex representation from the aggregate and the previous representation. The network $\operatorname{AGG}$ and $\operatorname{UPD}$ share parameters across all vertices within each layer. An important property of the aggregation function is that it is aggregation invariant to the ordering of neighbours. Consequently, the vertex representations are permutation equivariant: shuffeling the vertices of the graphs will not change the resulting representation of each of them. Another property of the message passing neural networks is that each layer propagates information across one edge, such that $L$ layers provide access to information from at most $L$ hops away through message passing.
+Here, $m_v^{(t)}$ is the neighbourhood aggregate for vertex $v$ at layer $t$, computed from its neighbours' representations at layer $t-1$. The update combines this aggregate with the previous representation $h_v^{(t-1)}$ to produce $h_v^{(t)}$. Both $\operatorname{AGG}^{(t)}$ and $\operatorname{UPD}^{(t)}$ can contain learned transformations as well as fixed operations such as summation. Their learnable parameters are shared across vertices within each layer. Aggregation is invariant to the ordering of neighbours, making the vertex representations permutation equivariant: relabelling vertices relabels their output representations in the same way. Each layer propagates information across one edge, so $L$ layers provide access to information from at most $L$ hops away through message passing.
 
 For graph-level prediction, a permutation-invariant readout maps the final vertex representations to a graph representation,
 \begin{equation}
@@ -41,126 +40,193 @@ For graph-level prediction, a permutation-invariant readout maps the final verte
         \left\{\!\left\{h_v^{(L)}\mid v\in V\right\}\!\right\}
         \right).
 \end{equation}
-Common readouts include sum and mean pooling~\citep{GilEtAl17,XuEtAl19}. A prediction head then maps $h_G$ to the target quantities. 
+Common readouts include sum and mean pooling~\citep{GilEtAl17,XuEtAl19}. A prediction head then maps $h_G$ to the target quantities.
 
 \subsubsection{Message-passing architectures}
-We introduce several well-known graph neural networks architectures, all fullfiling the general framework introduced above. These architectures differentiate through different neighbourhood aggregation and update functions. Vertex representations are treated as column vectors.
+We introduce several well-known graph neural networks architectures, all fullfiling the general framework introduced above. These architectures differentiate through different neighbourhood aggregation and update functions. Vertex representations are treated as column vectors. We write learned transformations as $\operatorname{MLP}$ functions, using a single linear layer when the architecture specifies a linear projection and an affine layer when it also includes a bias. Subscripts distinguish transformations with separate parameters. Products are written with $\cdot$; between vectors in the gated layers, this denotes elementwise multiplication.
 
 \paragraph{GCN.}
-The graph convolutional network (GCN)~\citep{KipWel17} applies a shared linear transformation to vertex representations and aggregates them as a sum with symmetric degree normalisation:
+The graph convolutional network (GCN)~\citep{KipWel17} adds a self loop for each node and uses symmetric degree normalisation to aggregate and update the node representations,
 \begin{equation}
 \label{eq:ch07:gcn}
-    h_v^{(t)}=\sigma\!\left(
-        \sum_{u\in N(v)\cup\{v\}}
-        \frac{W^{(t)}h_u^{(t-1)}}{\sqrt{\widehat d_v\widehat d_u}}
-        \right),
-    \qquad \widehat d_v=|N(v)|+1.
+\begin{aligned}
+    \operatorname{AGG}^{(t)}\!\left(h_v^{(t-1)},\mathcal{M}_v^{(t-1)}\right)
+        &=\sum_{u\in N(v)}
+        \frac{\operatorname{MLP}^{(t)}\!\left(h_u^{(t-1)}\right)}{\sqrt{\widehat d_v\cdot\widehat d_u}}, \\
+    \operatorname{UPD}^{(t)}\!\left(h_v^{(t-1)},m_v^{(t)}\right)
+        &=\sigma\!\left(\frac{\operatorname{MLP}^{(t)}\!\left(h_v^{(t-1)}\right)}{\widehat d_v}+m_v^{(t)}\right).
+\end{aligned}
 \end{equation}
-The self-loop includes the current vertex in the aggregation, while the degree factors rescale contributions according to the connectivity of both endpoints. Thus, GCN performs a degree-normalised mixing of local representations. The coefficients are determined by graph structure rather than learned separately for each edge.
+As a self loop is added, $\widehat d_v=|N(v)|+1$. The same $\operatorname{MLP}^{(t)}$ is shared by aggregation and update, and $\sigma$ is a nonlinear activation function.
+% The same learnable transformation $\operatorname{MLP}^{(t)}$ is used in both $\operatorname{AGG}^{(t)}$ and $\operatorname{UPD}^{(t)}$, sharing the transformation between neighbour and self contributions. The self-loop is the term $\operatorname{MLP}^{(t)}\!\left(h_v^{(t-1)}\right)/\widehat d_v$ in the update: for $u=v$, its normalisation factor is $1/\sqrt{\widehat d_v\cdot\widehat d_v}=1/\widehat d_v$.
+% Substituting the aggregate into the update therefore gives
+% \begin{equation}
+% \label{eq:ch07:gcn-self-loop}
+%     h_v^{(t)}=\sigma\!\left(
+%         \sum_{u\in N(v)\cup\{v\}}
+%         \frac{\operatorname{MLP}^{(t)}\!\left(h_u^{(t-1)}\right)}{\sqrt{\widehat d_v\cdot\widehat d_u}}
+%         \right).
+% \end{equation}
+The degree $\widehat d_v=|N(v)|+1$ includes this self-loop. The degree factors rescale contributions according to the connectivity of both endpoints and are determined by graph structure.
 
 \paragraph{GIN.}
-The graph isomorphism network (GIN) of~\citet{XuEtAl19} replaces degree-normalised aggregation with a sum of neighbour representations, followed by a multilayer perceptron:
+The graph isomorphism network (GIN)\citep{XuEtAl19} uses a sum aggregation and an MLP update:
 \begin{equation}
 \label{eq:ch07:gin}
-    h_v^{(t)}=\operatorname{MLP}^{(t)}\!\left(
-        (1+\epsilon^{(t)})h_v^{(t-1)}
-        +\sum_{u\in N(v)}h_u^{(t-1)}
-        \right).
+\begin{aligned}
+    \operatorname{AGG}^{(t)}\!\left(h_v^{(t-1)},\mathcal{M}_v^{(t-1)}\right)
+        &=\sum_{u\in N(v)}h_u^{(t-1)}, \\
+    \operatorname{UPD}^{(t)}\!\left(h_v^{(t-1)},m_v^{(t)}\right)
+        &=\operatorname{MLP}^{(t)}\!\left((1+\epsilon^{(t)})\cdot h_v^{(t-1)}+m_v^{(t)}\right).
+\end{aligned}
 \end{equation}
-The scalar $\epsilon^{(t)}$ controls the contribution of the current vertex and can be fixed or learned. Sum aggregation can distinguish multisets that have the same mean but different multiplicities. Under the injectivity assumptions of~\citet{XuEtAl19}, GIN with an appropriate readout matches the distinguishing power of the one-dimensional Weisfeiler--Leman graph isomorphism test. This concerns the ability to distinguish graph structures and does not guarantee superior predictive performance on a particular task.
+The scalar $\epsilon^{(t)}$ controls the contribution of the current vertex and can be fixed or learned. By using sum aggregation instead of symmetric degree normalisation as used by GCN, GIN can distinguish neighbours that have the same mean but different sums, allowing to better distinguish the structure of graphs.
+
+Under suitable injectivity assumptions (\emph{i.e.}, different inputs to the aggregation, update, and readout functions result in different outputs), GIN with sufficiently many layers and an appropriate graph readout matches the distinguishing power of the one-dimensional Weisfeiler--Leman graph isomorphism test~\citep{XuEtAl19}, which is used to test whether two graphs have the same structure up to vertex relabelling, although it does not resolve every case.
+
+This result concerns representational capacity and does not guarantee that every trained model satisfies these assumptions.
+
 
 \paragraph{GatedGCN.}
-Residual gated graph convolutional networks (GatedGCN) introduce learned, feature-dependent gates on neighbour contributions~\citep{BreLau17}. A basic gated propagation rule is
+Neighbour information can differ in relevance to the prediction task. Residual gated graph convolutional networks (GatedGCN) learn which information to retain through feature-dependent gates on neighbour contributions~\citep{BreLau17}. For equal input and output dimensions, a residual gated layer is defined by
 \begin{equation}
 \label{eq:ch07:gated-gcn}
+\begin{gathered}
+    \eta_{vu}^{(t)} = \operatorname{sigmoid}\!\left(
+        \operatorname{MLP}_{a}^{(t)}(h_v^{(t-1)})+\operatorname{MLP}_{b}^{(t)}(h_u^{(t-1)})\right), \\
 \begin{aligned}
-    \eta_{vu}^{(t)} &= \operatorname{sigmoid}\!\left(
-        A^{(t)}h_v^{(t-1)}+B^{(t)}h_u^{(t-1)}\right), \\
-    h_v^{(t)} &= \sigma\!\left(
-        W_0^{(t)}h_v^{(t-1)}
-        +\sum_{u\in N(v)}\eta_{vu}^{(t)}\odot
-        W_1^{(t)}h_u^{(t-1)}\right),
+    \operatorname{AGG}^{(t)}\!\left(h_v^{(t-1)},\mathcal{M}_v^{(t-1)}\right)
+        &=\sum_{u\in N(v)}\eta_{vu}^{(t)}\cdot \operatorname{MLP}_1^{(t)}\!\left(h_u^{(t-1)}\right), \\
+    \operatorname{UPD}^{(t)}\!\left(h_v^{(t-1)},m_v^{(t)}\right)
+        &=h_v^{(t-1)} \\
+        &\quad+\sigma\!\left(\operatorname{MLP}_0^{(t)}\!\left(h_v^{(t-1)}\right)+m_v^{(t)}\right).
 \end{aligned}
+\end{gathered}
 \end{equation}
-where $\odot$ denotes elementwise multiplication. Unlike the fixed degree coefficients in GCN, the gates depend on the endpoint representations and can weight different feature dimensions separately. Residual connections add the input of a layer to its output when their dimensions agree, supporting the training of deeper networks. Implementations can additionally maintain edge representations and use them to determine the gates.
+The gate $\eta_{vu}^{(t)}$ lets the model reduce the influence of less relevant neighbour information based on the representations of both vertices. The additive term $h_v^{(t-1)}$ outside $\sigma$ in $\operatorname{UPD}^{(t)}$ is the residual connection, allowing for better gradient to pass through the network.
 
-\subsubsection{Enhanced architectures: GCN+, GIN+, and Gated GCN+}
+\subsubsection{GNN+ architectures: GCN+, GIN+, and Gated GCN+}
 \label{sec:ch07:gnn-plus}
-GNN+ augments the preceding propagation rules with normalisation, regularisation, and vertex-wise transformations~\citep{LuoEtAl25}. For a fixed hidden dimension $d$, define the backbone outputs $q_{v,M}^{(t)}$. Without edge attributes, these are
-\begin{align}
-    q_{v,\mathrm{GCN}}^{(t)}
-        &=\sum_{u\in N(v)\cup\{v\}}
-            \frac{W^{(t)}h_u^{(t-1)}}{\sqrt{\widehat d_v\widehat d_u}},
-        \label{eq:ch07:gcn-plus-propagation}\\
-    q_{v,\mathrm{GIN}}^{(t)}
-        &=\operatorname{MLP}^{(t)}\!\left(
-            (1+\epsilon^{(t)})h_v^{(t-1)}
-            +\sum_{u\in N(v)}h_u^{(t-1)}\right),
-        \label{eq:ch07:gin-plus-propagation}\\
-    q_{v,\mathrm{GatedGCN}}^{(t)}
-        &=W_0^{(t)}h_v^{(t-1)}
-            +\sum_{u\in N(v)}\eta_{vu}^{(t)}\odot
-                W_1^{(t)}h_u^{(t-1)}.
-        \label{eq:ch07:gated-plus-propagation}
-\end{align}
-Degree factors and gates follow~\cref{eq:ch07:gcn,eq:ch07:gated-gcn}. With residual and feed-forward components enabled, the enhanced block is
+\citet{LuoEtAl25} introduced the GNN+ architectures, which augment the base models with normalisation, regularisation, and vertex-wise transformations. GCN+, GIN+, and GatedGCN+ retain the aggregation functions of GCN, GIN, and GatedGCN, respectively. Each model computes an intermediate vertex representation within the update; aggregation still uses the representations from the previous layer. With residual and feed-forward components enabled, the rules are as follows. In the following we define the modified update functions for the three layers defined above.
+
+GCN+ is defined as
 \begin{equation}
-\label{eq:ch07:gnn-plus-block}
-\begin{aligned}
-    z_v^{(t)}&=h_v^{(t-1)}+\operatorname{Dropout}\!\left(
-        \sigma\!\left(\operatorname{BN}_1^{(t)}
-        (q_{v,M}^{(t)})\right)\right),\\
-    h_v^{(t)}&=\operatorname{BN}_2^{(t)}\!\left(
-        z_v^{(t)}+\operatorname{FFN}^{(t)}(z_v^{(t)})\right),\\
-    \operatorname{FFN}^{(t)}(z)&=U_2^{(t)}\sigma(U_1^{(t)}z).
-\end{aligned}
+\label{eq:ch07:gcn-plus-propagation}
+\begin{split}
+    \widetilde h_{v,\mathrm{GCN+}}^{(t)}
+        &=h_v^{(t-1)}+\operatorname{Dropout}\bigl(\sigma\bigl(\\
+        &\quad\operatorname{BN}_1^{(t)}\bigl(\tfrac{\operatorname{MLP}^{(t)}(h_v^{(t-1)})}{\widehat d_v}+m_v^{(t)}\bigr)\bigr)\bigr).
+\end{split}
 \end{equation}
-BN denotes batch normalisation; FFN acts independently at each vertex. Dropout is active during training. Choosing $M=\mathrm{GCN}$, $\mathrm{GIN}$, or $\mathrm{GatedGCN}$ defines GCN+, GIN+, or Gated GCN+, respectively. Omitting optional blocks yields the corresponding configuration choices in GNN+.
-
-Node attributes $x_v$ and positional encodings $p_v$ can be encoded through $h_v^{(0)}=W_{\mathrm{in}}[x_v\Vert p_v]$, where $\Vert$ denotes concatenation. When edge-feature integration is enabled, the operator $q_{v,M}^{(t)}$ is replaced by its edge-aware version, so messages or gates can depend on $e_{vu}$. Edge and positional information are optional configuration choices in GNN+.
-
-\subsubsection{SAT-specific architecture: GraSS}
-\label{sec:ch07:grass}
-\textsc{GraSS}~\citep[Section~3.3]{ZhaEtAl24b} operates on an attributed LCG with vertex partition $V=V_C\mathbin{\dot\cup}V_+\mathbin{\dot\cup}V_-$ for clauses, positive literals, and negative literals. Directed edge sets $E_r$ distinguish clause-to-literal, literal-to-clause, and complementary-literal relations. Define $N_r(v)=\{u\mid(u,v)\in E_r\}$ and let $R(v)$ contain the relation types with target vertex type matching $v$. Initial representations contain SAT-specific features and, for clauses, positional encodings.
-
-The heterogeneous update separates aggregation within relations from aggregation across relations:
 \begin{equation}
-\label{eq:ch07:grass-update}
-\begin{aligned}
-    m_{vu,r}^{(t)} &= \phi_r^{(t)}\!\left(h_v^{(t-1)},h_u^{(t-1)}\right), \\
-    \overline m_{v,r}^{(t)} &= \rho_r^{(t)}\!\left(
-        \left\{\!\left\{m_{vu,r}^{(t)}\mid u\in N_r(v)\right\}\!\right\}
-        \right), \\
-    h_v^{(t)} &= \delta^{(t)}\!\left(
-        \left\{\!\left\{
-        \psi_r^{(t)}\!\left(h_v^{(t-1)},\overline m_{v,r}^{(t)}\right)
-        \mid r\in R(v)
-        \right\}\!\right\}
-        \right).
-\end{aligned}
+\label{eq:ch07:gcn-plus-update}
+\begin{gathered}
+    \operatorname{UPD}_{\mathrm{GCN+}}^{(t)}\!\left(h_v^{(t-1)},m_v^{(t)}\right)\\
+        =\operatorname{BN}_2^{(t)}\bigl(\widetilde h_{v,\mathrm{GCN+}}^{(t)}+\operatorname{MLP}_{\mathrm{FFN}}^{(t)}(\widetilde h_{v,\mathrm{GCN+}}^{(t)})\bigr).
+\end{gathered}
 \end{equation}
-Here, $\phi_r^{(t)}$ and $\psi_r^{(t)}$ are learnable relation-specific message and update functions; $\rho_r^{(t)}$ aggregates neighbours and $\delta^{(t)}$ combines relation outputs. The original model uses two rounds of GCN-style convolutions with ReLU activations and mean aggregation.
 
-For final representations $h_v^{(L)}\in\mathbb{R}^{d}$, mean pooling and a linear classifier yield probabilities over $K$ candidate solvers:
+
+Similarly, GIN+ is defined as
 \begin{equation}
-\label{eq:ch07:grass-readout}
-\begin{aligned}
-    h_G &= \frac{1}{|V|}\sum_{v\in V}h_v^{(L)}, \\
-    p(G) &= \operatorname{softmax}\!\left(W_{\mathrm{out}}h_G+b_{\mathrm{out}}\right),
-    \qquad \widehat k=\arg\max_{k\in\{1,\ldots,K\}}p_k(G).
-\end{aligned}
+\label{eq:ch07:gin-plus-propagation}
+\begin{split}
+    \widetilde h_{v,\mathrm{GIN+}}^{(t)}
+        &=h_v^{(t-1)}+\operatorname{Dropout}\bigl(\sigma\bigl(\\
+        &\quad\operatorname{BN}_1^{(t)}\bigl(\operatorname{MLP}^{(t)}\bigl((1+\epsilon^{(t)})\cdot h_v^{(t-1)}+m_v^{(t)}\bigr)\bigr)\bigr)\bigr).
+\end{split}
 \end{equation}
-The parameters $W_{\mathrm{out}}\in\mathbb{R}^{K\times d}$ and $b_{\mathrm{out}}\in\mathbb{R}^{K}$ are learned using the runtime-sensitive loss in~\cref{eq:ch07:selection-loss}, together with the convolution parameters. In our benchmark, \textsc{GraSS} is evaluated on attributed LCGs.
+\begin{equation}
+\label{eq:ch07:gin-plus-update}
+\begin{gathered}
+    \operatorname{UPD}_{\mathrm{GIN+}}^{(t)}\!\left(h_v^{(t-1)},m_v^{(t)}\right)\\
+        =\operatorname{BN}_2^{(t)}\bigl(\widetilde h_{v,\mathrm{GIN+}}^{(t)}+\operatorname{MLP}_{\mathrm{FFN}}^{(t)}(\widetilde h_{v,\mathrm{GIN+}}^{(t)})\bigr).
+\end{gathered}
+\end{equation}
 
+Finally, GatedGCN+ is defined as
+\begin{equation}
+\label{eq:ch07:gated-plus-propagation}
+\begin{split}
+    \widetilde h_{v,\mathrm{GatedGCN+}}^{(t)}
+        &=h_v^{(t-1)}+\operatorname{Dropout}\bigl(\sigma\bigl(\\
+        &\quad\operatorname{BN}_1^{(t)}\bigl(\operatorname{MLP}_0^{(t)}(h_v^{(t-1)})+m_v^{(t)}\bigr)\bigr)\bigr).
+\end{split}
+\end{equation}
+\begin{equation}
+\label{eq:ch07:gated-plus-update}
+\begin{gathered}
+    \operatorname{UPD}_{\mathrm{GatedGCN+}}^{(t)}\!\left(h_v^{(t-1)},m_v^{(t)}\right)\\
+        =\operatorname{BN}_2^{(t)}\bigl(\widetilde h_{v,\mathrm{GatedGCN+}}^{(t)}+\operatorname{MLP}_{\mathrm{FFN}}^{(t)}(\widetilde h_{v,\mathrm{GatedGCN+}}^{(t)})\bigr).
+\end{gathered}
+\end{equation}
+
+The intermediate representation retains the core transformation of the corresponding base update, with batch normalisation (BN), dropout, and a residual connection around the transformed neighbourhood information. We note that, GatedGCN already includes this residual connection in its base form. 
+Each plus variant then applies an additional vertex-wise $\operatorname{MLP}_{\mathrm{FFN}}^{(t)}$ to the intermediate representation, adds a residual connection around this MLP, and applies a second batch normalisation. These modifications aim to stabilise training through normalisation and residual connections, reduce overfitting through dropout, and increase the capacity to transform vertex representations through the additional MLP. 
+
+% Node attributes $x_v$ and positional encodings $p_v$ can be encoded through $h_v^{(0)}=\operatorname{MLP}_{\mathrm{in}}([x_v\Vert p_v])$, where $\Vert$ denotes concatenation. When edge-feature integration is enabled, the aggregation and update functions use their edge-aware versions, so messages or gates can depend on $e_{vu}$. Edge and positional information are optional configuration choices in GNN+.
 \subsection{Graph-based machine learning for SAT}
 \label{sec:ch07:gnn-sat}
 Several studies have explored using GNNs or MPNNs to predict formula satisfiability, e.g.,~\citet{SelEtAl19}, using the literal-clause graph. Such predictions do not by themselves provide the satisfying assignments or proofs of unsatisfiability required to replace a complete SAT solver~\citep{SelEtAl19,LiEtAl24c}.  Other research has integrated MPNNs into existing SAT solvers to replace or guide solver heuristics~\citep{WanEtAl24,TonGro25}. These approaches retain the soundness and completeness guarantees of classical solvers while potentially accelerating solving. Nonetheless, benchmarking novel MPNN architectures in this setting is challenging because it requires extensive pretraining and large-scale evaluation.  A complementary line of work applies MPNNs to algorithm selection in SAT~\citep{ZhaEtAl24b,Shavit23}, predicting the most effective solver for a given instance directly from graph-based representations.
 
-\subsubsection{Previous benchmarks}
+\subsubsection{GraSS: Algorithm selection of SAT solvers using graph neural networks}
+\label{sec:ch07:grass}
+\textsc{GraSS}~\citep{ZhaEtAl24b} is a specialised architecture for algorithm selection of SAT solvers. It operates on an LCG with clause vertices $V_C$ and literal vertices $V_L$. For each literal vertex $v$, let $\overline v$ denote the vertex representing the complementary literal. We denote the clause-to-literal, literal-to-clause, and complementary-literal relation types by $c$, $l$, and $n$, respectively, with directed edge sets
+\begin{equation}
+\label{eq:ch07:grass-relations}
+\begin{aligned}
+    E_c&=\{(u,v)\in V_C\times V_L\mid v\text{ occurs in clause }u\},\\
+    E_l&=\{(v,u)\mid(u,v)\in E_c\},\\
+    E_n&=\{(\overline v,v)\mid v\in V_L\}.
+\end{aligned}
+\end{equation}
+Additionally, we define $N_c(v)$ as the set of clauses containing literal $v$, and $N_l(v)$ as the set of literals occurring in clause $v$. The complementary-literal neighbour of a literal vertex $v$ is $\overline v$. 
+
+GraSS uses relation specific mean aggregate defined as
+\begin{equation}
+\label{eq:ch07:grass-aggregation}
+\begin{aligned}
+    \overline m_{v,c}^{(t)}
+        &=\frac{1}{|N_c(v)|}\cdot\sum_{u\in N_c(v)}
+        \operatorname{MLP}_{c,\mathrm{msg}}^{(t)}(h_v^{(t-1)},h_u^{(t-1)}),
+        &&v\in V_L,\\
+    \overline m_{v,l}^{(t)}
+        &=\frac{1}{|N_l(v)|}\cdot\sum_{u\in N_l(v)}
+        \operatorname{MLP}_{l,\mathrm{msg}}^{(t)}(h_v^{(t-1)},h_u^{(t-1)}),
+        &&v\in V_C,\\
+    \overline m_{v,n}^{(t)}
+        &=\operatorname{MLP}_{n,\mathrm{msg}}^{(t)}(h_v^{(t-1)},h_{\overline v}^{(t-1)}),
+        &&v\in V_L.
+\end{aligned}
+\end{equation}
+The complementary-literal relation has exactly one incoming neighbour. Therefore, its mean is the message from that neighbour.
+
+As clause vertices receive messages through relation $l$ only, while literal vertices receive messages through relations $c$ and $n$, the vertex representation update is defined as
+\begin{equation}
+\label{eq:ch07:grass-update}
+    h_v^{(t)}=
+    \begin{cases}
+        \operatorname{ReLU}\!\bigl(\operatorname{MLP}_{l,\mathrm{upd}}^{(t)}(h_v^{(t-1)},\overline m_{v,l}^{(t)})\bigr),
+            &v\in V_C,\\[4pt]
+        \begin{aligned}[t]
+        \tfrac12\cdot\bigl(&\operatorname{ReLU}\!\bigl(\operatorname{MLP}_{c,\mathrm{upd}}^{(t)}(h_v^{(t-1)},\overline m_{v,c}^{(t)})\bigr)\\
+            &+\operatorname{ReLU}\!\bigl(\operatorname{MLP}_{n,\mathrm{upd}}^{(t)}(h_v^{(t-1)},\overline m_{v,n}^{(t)})\bigr)\bigr),
+        \end{aligned}
+            &v\in V_L.
+    \end{cases}
+\end{equation}
+
+Finally, GraSS uses mean aggregation over all node representations to provide a graph representation, which is then used together with an MLP to select a solver for the given formula.
+
+
+
+\subsubsection{Benchmarks for algorithm selection of SAT solvers}
+
 Earlier studies of graph-based SAT algorithm selection used more restricted datasets. For example, \citet{Shavit23} used a dataset of 3\,000 synthetically generated SAT instances, while \citet{ZhaEtAl24b} used a proprietary dataset and the 2022 Anniversary track of the SAT Competition, after removing large instances. Outside of the graph domain, the \textsc{ASlib} benchmark suite is used to benchmark algorithm selection methods~\citep{BisEtAl16b}. \textsc{ASlib} contains multiple algorithm-selection datasets across various domains, including SAT and TSP. Each dataset contains features extracted from instances (such as \textsc{SATzilla}) as well as the computation times of several algorithms on those instances. \textsc{ASlib} provides SAT scenarios based on a subset of SAT competitions, including instances and solvers from specific years. In contrast, our dataset comprises all available SAT competition instances, as well as numerous instances from other sources.
 
-\section{Benchmark construction}
+\section{Dataset creation}
 \label{sec:ch07:benchmark}
+The first step for relaiable algorithm selection and performance prediciton of SAT solvers is to construct a large-scale scenario of solvers and formulas.
 \subsection{Instance collection and generation}
 We collected all SAT Competition instances via GBD~\citep{IseJab24} and added all SAT instances from the AClib benchmark for algorithm configuration~\citep{HutEtAl14d}. Together, these sources include SAT formulae from diverse real-world applications and synthetically generated instances. To further enrich the dataset, we generated additional formulae using three well-established SAT instance generators, i.e.,
 
@@ -234,7 +300,7 @@ In addition to the graph structure, we add node features to provide the GNN with
 
 % \begin{table}[htbp]
 % 	\centering
-% 	\caption[Node features for the variable-clause graph]{Node features for the variable-clause graph (VCG). Variable nodes carry 12 features, and clause nodes carry 22 features. Edges between variables and clauses are attributed with the literal polarity ($+1$/$-1$); reverse edges are included.}
+% 	\caption[Node features for the variable-clause graph]{Node features for the variable-clause graph (VCG). Variable nodes carry 12 features, and clause nodes carry 22 features. Edges between variables and clauses carry the literal polarity ($+1$/$-1$); reverse edges are included.}
 % 	\label{tab:ch07:vcg_features}
 % 	\renewcommand{\arraystretch}{1.2}
 % 	\maxsizebox{\linewidth}{!}{\begin{tabular}{@{} p{0.22\textwidth} c p{0.62\textwidth} @{}}
@@ -341,8 +407,8 @@ In addition to the graph structure, we add node features to provide the GNN with
 
 The graph attributes describe individual vertices and edges; the SATzilla 2024 feature vectors used by the tabular baselines summarise an entire formula. The two representations therefore provide different inputs derived from the same SAT instance.
 
-\subsection{Properties of the prediction problem}
-The benchmark presents several challenges beyond standard supervised regression. Solver running times can vary across repeated executions, introducing noise into the targets. Runs that reach the cutoff are right-censored: their true running times are known only to exceed the budget. In addition, formula sizes vary substantially, and the largest encodings can require graphs with millions of vertices or edges. These properties motivate evaluating predictive quality and computational feasibility separately. The timeout treatment used for the supervised targets is defined in~\cref{sec:ch07:tasks}; the graph-size restrictions encountered during evaluation are described in~\cref{sec:ch07:protocol}.
+% \subsection{Properties of the prediction problem}
+
 \FloatBarrier
 
 \section{Learning tasks and evaluation metrics}
@@ -352,13 +418,13 @@ Let $\Pi=\{x_1,\ldots,x_n\}$ be a set of SAT instances and $\{a_1,\ldots,a_K\}$ 
 \label{eq:ch07:penalised-time}
     r_i^k=\begin{cases}
         t_i^k, & \text{if the solver completes within cutoff }c,\\
-        10c, & \text{otherwise},
+        10\cdot c, & \text{otherwise},
     \end{cases}
 \end{equation}
 where $t_i^k$ is the measured computation time of a completed run. For a selector $s$ that returns a solver index, the $\mathrm{PAR}_{10}$ score is
 \begin{equation}
 \label{eq:ch07:par10}
-    \mathrm{PAR}_{10}(s,\Pi)=\frac{1}{n}\sum_{i=1}^n r_i^{s(x_i)}.
+    \mathrm{PAR}_{10}(s,\Pi)=\frac{1}{n}\cdot\sum_{i=1}^n r_i^{s(x_i)}.
 \end{equation}
 A fixed solver is the special case in which $s$ returns the same index for every instance. This penalty assigns a finite cost to timeouts; it does not recover their unobserved completion times.
 
@@ -371,7 +437,7 @@ The regression task predicts a separate running-time target for each instance--s
 following the use of log-scaled running times in empirical performance modelling~\citep{HutEtAl14e}. The logarithm reduces the numerical range of the targets. For solver $a_k$, prediction quality is measured by
 \begin{equation}
 \label{eq:ch07:rmse}
-    \mathrm{RMSE}_k=\sqrt{\frac{1}{n}\sum_{i=1}^n
+    \mathrm{RMSE}_k=\sqrt{\frac{1}{n}\cdot\sum_{i=1}^n
         (\widehat y_i^k-y_i^k)^2}.
 \end{equation}
 Lower RMSE indicates more accurate predictions on the log-time scale. A relative reduction in this RMSE is not a corresponding percentage reduction in solver running time.
@@ -380,8 +446,8 @@ Lower RMSE indicates more accurate predictions on the log-time scale. A relative
 Algorithm selection requires choosing a solver rather than estimating every running time accurately. A regression model can select the solver with the smallest predicted time, but a selector can also be trained directly. For the direct graph selectors, we use the runtime-sensitive objective of~\citet{ZhaEtAl24b}:
 \begin{equation}
 \label{eq:ch07:selection-loss}
-    \mathcal{L}_{\mathrm{AS}}=\frac{1}{N}\sum_{i=1}^N
-        \left(\sum_{k=1}^K p_i^k r_i^k-r_i^*\right)^2,
+    \mathcal{L}_{\mathrm{AS}}=\frac{1}{N}\cdot\sum_{i=1}^N
+        \left(\sum_{k=1}^K p_i^k\cdot r_i^k-r_i^*\right)^2,
     \qquad r_i^*=\min_k r_i^k,
 \end{equation}
 where $N$ is the number of training instances and $p_i^k$ is the predicted probability of selecting solver $a_k$. Unlike a classification objective based only on the identity of the best solver, this loss distinguishes errors by their running-time cost.
@@ -395,37 +461,35 @@ We evaluate selectors using the \new{closed gap} (CG), relative to the single be
 \end{equation}
 A value of zero matches the SBS, and a value of one matches the VBS. Negative values indicate performance worse than the SBS. Differences in CG measure fractions of the SBS--VBS performance gap, rather than percentage changes in running time.
 
-\section{Experimental setup}
+\section{Setup of Experiments}
 \label{sec:ch07:ExpSetup}
 \subsection{Graph models and input conditions}
-We evaluate GIN, GCN, GIN+, GCN+, and Gated GCN+ on VG, VCG, and LCG representations. Each architecture is evaluated both with and without the supplied node features. These conditions test whether learned graph representations benefit from the syntactic and positional attributes described in~\cref{sec:ch07:encodings}. Removing node features does not remove the graph structure or imply that edge attributes such as literal polarity are discarded. \textsc{GraSS} requires node features and is therefore evaluated only on attributed LCGs.
+We evaluate GIN, GCN, GIN+, GCN+, and Gated GCN+ on VG, VCG, and LCG representations. Each architecture is evaluated both with and without the supplied node features. These conditions test whether learned graph representations benefit from the syntactic and positional attributes described in~\cref{sec:ch07:encodings}. \textsc{GraSS} requires node features and is therefore evaluated only on LCGs with node features.
 
-The graph models follow an encoder-processor-decoder organisation, also used in~\citet{BecEtAl25,StoEtAl25}. The encoder maps input features to a hidden dimension $d\in\mathbb{N}$. When input attributes are absent, learned embeddings provide the initial representations. The processor applies the selected message-passing architecture, with its associated normalisation, residual, and feed-forward components. Writing $H^{(t)}$ for the matrix of vertex representations, this stage has the general form
+The graph neural networks models follow an encoder-processor-decoder organisation, also used in~\citet{BecEtAl25,StoEtAl25}. The encoder maps input features to a hidden dimension $d\in\mathbb{N}$. When input attributes are absent, learned embeddings provide the initial representations. The processor applies the selected message-passing architecture, with its associated normalisation, residual, and feed-forward components. Writing $H^{(t)}$ for the matrix of vertex representations, this stage has the general form
 \begin{equation}
 \label{eq:ch07:processor_eq}
     H^{(t)}=\phi^{(t)}(H^{(t-1)},G),
 \end{equation}
 where $\phi^{(t)}$ is instantiated by the architecture described in~\cref{sec:ch07:gnn-background}. Its precise aggregation rule and additional blocks therefore depend on the model family.
 
-A graph-level readout supplies a representation to the prediction head. For the general-purpose models, the decoder is a two-layer MLP using GELU activations~\citep{HenGim16}; its output dimension is determined by the prediction task. Regression outputs estimate log-scaled running times, while a direct selector produces solver scores converted to probabilities. The original \textsc{GraSS} architecture and classifier are specified separately in~\cref{sec:ch07:grass}.
+A graph-level readout supplies a representation to the prediction head. For the general-purpose models, the decoder is a two-layer MLP using GELU activations~\citep{HenGim16}. 
 
 \subsection{Tabular baselines}
 \label{sec:ch07:tabular-baselines}
-For performance prediction, we use random forest (RF)~\citep{Breiman01b} and XGBoost (XGB)~\citep{CheGue16b} with SATzilla 2024 features. Both predict the log-scaled target in~\cref{eq:ch07:runtime-target}. These are established EPM families~\citep{BanEtAl22b,EggEtAl15b,HutEtAl14c}, implemented here through the ASF library.
+For performance prediction, we use random forest (RF)~\citep{Breiman01b} and XGBoost (XGB)~\citep{CheGue16b} with SATzilla 2024 features, as described in~\autoref{ch:ch04:rev_SATzilla}. Both predict the log-scaled target in~\cref{eq:ch07:runtime-target}. These are established EPM families~\citep{BanEtAl22b,EggEtAl15b,HutEtAl14c}, implemented through the ASF library.
 
 For algorithm selection, we compare three random-forest-based formulations on the same feature vectors. \new{Pairwise regression} (PR) predicts the performance difference for each solver pair and selects a solver by aggregating these differences~\citep{KerEtAl18b}. \new{Pairwise classification} (PC) predicts the preferred solver for each pair and aggregates the decisions by voting~\citep{XuEtAl12b,LinEtAl19c}. \new{Multi-class classification} (MC) directly predicts the identity of the best solver~\citep{Kotthoff13b}. These baselines separate the effect of the learning formulation from the choice of graph or tabular input. The tabular selectors are tuned with SMAC3 for 50 trials.
 
 \subsection{Evaluation protocol and computational scope}
 \label{sec:ch07:protocol}
-We use a fixed training--validation--test partition rather than ten-fold cross-validation, reflecting the size of the collection and the cost of training graph models. Selected graph configurations are evaluated over three random seeds. The reported means and sample standard deviations characterise variation across these runs on the fixed partition; they are not confidence intervals across independently sampled instance collections. A displayed standard deviation of $0.00$ reflects the precision of the tables.
-
-The graph experiments cover the \dataset{small} regime. Training on medium and large formulae produced out-of-memory errors even on an H100 GPU. Clause graphs also exceeded the available memory and are excluded from the model comparisons. Graph transformers were considered, but computing their positional embeddings required more than a CPU day in the attempted setting, so they were not included in the reported SAT results. These observations delimit the evaluated configurations and hardware; they do not establish that the larger datasets are inaccessible to every possible graph-learning method. Tabular baselines are reported for all three size regimes.
+We use a fixed training--validation--test partition rather than ten-fold cross-validation due to the size of the collection and the cost of training graph models. The graph experiments cover the \dataset{small} regime, as training on medium and large formulae produced out-of-memory errors on an H100 GPU. Clause graphs also exceeded the available memory and are excluded from the model comparisons. Graph transformers were considered, but computing their positional embeddings required more than a CPU day, and therefore declared as timed-out. 
 
 \subsection{Hyperparameter optimisation}
 \label{sec:ch07:hpo}
 We tune graph models using the multi-fidelity facade of SMAC3~\citep{LinEtAl22b}. Bayesian optimisation and its role in selecting configurations are introduced in~\cref{sec:ch02:bac_bo}. Here, the fidelity is the number of training steps, allowing unpromising configurations to be stopped before full training. This combines model-based configuration proposals with early elimination, as in multi-fidelity approaches such as Hyperband and BOHB~\citep{LiEtAl17b,FalEtAl18}.
 
-Each graph-model tuning run uses 200 trials, with minimum and maximum budgets of 3\,000 and 100\,000 steps. Training uses bfloat16 mixed precision and batch size 16. Tuning is performed separately for the conditions with and without node features. \Cref{tab:ch07:hpo_cs} gives the configuration space. The 50-trial protocol for the tabular selectors is described in~\cref{sec:ch07:tabular-baselines}; their search budget differs from that of the graph models.
+Each graph-model tuning run uses 200 trials, with minimum and maximum budgets of 3\,000 and 100\,000 steps. Training uses bfloat16 mixed precision and batch size 16. Tuning is performed separately for the conditions with and without node features. \Cref{tab:ch07:hpo_cs} gives the configuration space. 
 
 \begin{table}[htbp]
 	\centering
@@ -451,11 +515,11 @@ Each graph-model tuning run uses 200 trials, with minimum and maximum budgets of
 
 \section{Results}
 \label{sec:ch07:results}
-We first compare performance prediction on small instances, then examine algorithm selection and the tabular results on the larger size regimes. All comparisons below concern the reported means. The tables provide seed variation, but do not support claims of statistical significance or end-to-end speedups.
+We first compare performance prediction on small instances, then examine algorithm selection and the tabular results on the larger size regimes. 
 
 \subsection{Performance prediction on small instances}
 \label{sec:ch07:prediction-results}
-\Cref{tab:ch07:sat_epm_res_small_no_feat,tab:ch07:sat_epm_res_small_with_feat} report log-time RMSE for four solvers from the 2024 SAT Competition portfolio. Without node features, GCN+ has the lowest reported mean for all four solvers: $0.54$, $0.51$, and $0.59$ on VCG for \solver{Kissat}, \solver{BreakIDKissat}, and \solver{KissatMABDC}, respectively, and $0.64$ on LCG for \solver{AMSAT}. Each of these results improves on both tabular baselines. This advantage is configuration-dependent: several other graph-model settings have larger errors than RF and XGB.
+\Cref{tab:ch07:sat_epm_res_small_no_feat,tab:ch07:sat_epm_res_small_with_feat} report log-time RMSE for four solvers from the 2024 SAT Competition portfolio. Without node features, GCN+ has the lowest reported mean for all four solvers: $0.54$, $0.51$, and $0.59$ on VCG for \solver{Kissat}, \solver{BreakIDKissat}, and \solver{KissatMABDC}, respectively, and $0.64$ on LCG for \solver{AMSAT}. Each of these results improves on both tabular baselines. However, several other graph-model settings have larger errors than RF and XGB.
 
 \begin{table}[htbp]
   \tabledefaults
@@ -504,7 +568,7 @@ We first compare performance prediction on small instances, then examine algorit
     \bottomrule
   \end{tabular}}
 \end{table}
-With node features, GCN on VCG has the lowest mean RMSE for every solver: $0.38$, $0.39$, $0.38$, and $0.42$ in the same order. Relative to XGB errors of $0.64$, $0.67$, $0.69$, and $0.74$, these correspond to reductions of approximately $40.6\%$, $41.8\%$, $44.9\%$, and $43.2\%$ in log-time RMSE. Thus, the strongest attributed graph configurations improve prediction for all four evaluated targets, rather than only for one solver.
+With node features, GCN on VCG has the lowest mean RMSE for every solver: $0.38$, $0.39$, $0.38$, and $0.42$ in the same order. Relative to XGB errors of $0.64$, $0.67$, $0.69$, and $0.74$, these correspond to reductions of approximately $40.6\%$, $41.8\%$, $44.9\%$, and $43.2\%$ in log-time RMSE. Thus, the strongest graph configurations with node features improve prediction for all four evaluated targets, rather than only for one solver.
 
 \begin{table}[htbp]
   \tabledefaults
@@ -559,10 +623,17 @@ With node features, GCN on VCG has the lowest mean RMSE for every solver: $0.38$
 \end{table}
 \FloatBarrier
 \paragraph{Effect of node features.}
-The best attributed configuration reduces RMSE by $23.5\%$--$35.6\%$ relative to the best configuration without node features, depending on the solver. This comparison changes the winning model from GCN+ to GCN, so it is not an isolated feature ablation. A matched comparison across the five general-purpose architectures, three representations, and four solvers gives a more detailed view: 53 of the 60 reported mean errors decrease when node features are supplied. All seven increases occur for GCN+. For example, its VCG error rises from $0.54$ to $0.68$ for \solver{Kissat}, and from $0.51$ to $0.83$ for \solver{BreakIDKissat}. Node attributes are therefore useful across many configurations, but their benefit depends on the architecture and its separately tuned training configuration.
+Comparing the results with and without node features, we find that the best model with node features (GCN) reduces RMSE by $23.5\%$--$35.6\%$ relative to the best model without node features (GCN+), depending on the solver. 
+Additionally, when comparing for each model the results with and without node features we observed that 53 of the 60 reported mean errors decrease when node features are supplied. All seven increases occur for GCN+. For example, its VCG error rises from $0.54$ to $0.68$ for \solver{Kissat}, and from $0.51$ to $0.83$ for \solver{BreakIDKissat}. Node features therefore generally improve prediction accuracy, but the benefit depends on the architecture and its tuned configuration.
 
-\paragraph{Representation and architecture.}
-VCG gives the lowest attributed GCN error for all four solvers, whereas the strongest configuration without node features uses LCG for \solver{AMSAT}. There is consequently no representation-independent ranking of the models. \textsc{GraSS} achieves LCG errors of $0.49$, $0.49$, $0.49$, and $0.55$, compared with $0.39$, $0.40$, $0.39$, and $0.43$ for attributed GCN on the same representation. The general-purpose GCN is stronger in this evaluation. This finding concerns the tested configurations and training procedures; it does not imply that SAT-specific architectural choices are generally unhelpful.
+\paragraph{Choice of architecture.}
+We compare which architecture achieves the lowest prediction error in each node-feature condition, allowing each architecture to use its best graph representation. Without node features, GCN+ has the lowest mean RMSE for all four solvers. With node features, GCN has the lowest mean RMSE for all four solvers. The enhancements of GCN+ therefore do not provide a uniform advantage: the strongest architecture depends on whether node features are supplied.
+
+\paragraph{Choice of graph representation.}
+We next examine the graph representations used by these best-performing architectures. With node features, GCN performs best on VCG for all four solvers. Without node features, GCN+ performs best on VCG for \solver{Kissat}, \solver{BreakIDKissat}, and \solver{KissatMABDC}, but on LCG for \solver{AMSAT}. VCG is therefore the most frequent choice among the strongest configurations, although the result for \solver{AMSAT} without node features shows that it is not always the best choice.
+
+\paragraph{Comparison with GraSS.}
+Finally, we compare the SAT-specific \textsc{GraSS} architecture with GCN while keeping the graph representation and node-feature condition the same. Both models use LCG with node features, and GCN has lower mean RMSE for all four solvers. For example, the RMSE for \solver{Kissat} is $0.39$ for GCN and $0.49$ for \textsc{GraSS}. The SAT-specific design of \textsc{GraSS} therefore offers no prediction advantage over GCN in these experiments.
 \FloatBarrier
 
 \subsection{Algorithm selection}
@@ -600,7 +671,7 @@ VCG gives the lowest attributed GCN error for all four solvers, whereas the stro
     \bottomrule
   \end{tabular}}
 \end{table}
-With node features, GCN on LCG reaches $0.59\pm0.00$, followed by the same architecture on VCG at $0.55\pm0.01$. The best attributed score exceeds PR by $0.21$ of the SBS--VBS gap and exceeds the best score without node features by $0.10$. These differences refer to closed gap, not proportional reductions in wall-clock running time. Attributed \textsc{GraSS} reaches $0.48\pm0.02$ on LCG: it exceeds PR on small instances but falls below GCN on the same representation.
+With node features, GCN on LCG reaches $0.59\pm0.00$, followed by the same architecture on VCG at $0.55\pm0.01$. The best score with node features exceeds PR by $0.21$ of the SBS--VBS gap and exceeds the best score without node features by $0.10$. These differences refer to closed gap, not proportional reductions in wall-clock running time. With node features, \textsc{GraSS} reaches $0.48\pm0.02$ on LCG: it exceeds PR on small instances but falls below GCN on the same representation.
 
 \begin{table}[htbp]
   \tabledefaults
@@ -635,15 +706,19 @@ With node features, GCN on LCG reaches $0.59\pm0.00$, followed by the same archi
   \end{tabular}}
 \end{table}
 \FloatBarrier
-\paragraph{Input conditions.}
+\paragraph{Vertex features.}
 Node features increase the reported mean closed gap in 12 of the 15 matched architecture--representation settings. The exceptions are GCN+ on VCG and LCG, and Gated GCN+ on VG. For example, Gated GCN+ on VG decreases from $0.28$ to $0.07$, whereas its VCG score increases from $0.30$ to $0.53$. This is consistent with the regression results in showing that additional attributes do not benefit every architecture uniformly.
 
-The best representation also depends on the task. Attributed GCN gives the lowest running-time prediction error on VCG for all four solvers, but its highest closed gap is obtained on LCG. Regression accuracy for individual solvers and the quality of their relative ranking are different objectives. The results support evaluating both directly instead of treating a lower RMSE as sufficient evidence of better algorithm selection.
+\paragraph{Choice of architecture.}
+We compare architectures within each node-feature condition using the mean closed gap. Without node features, GCN+ scores higher than GCN on all three graph representations and achieves the highest overall score on VCG ($0.49$). With node features, GCN scores higher than GCN+ on all three representations and leads the other architectures on VCG ($0.55$) and LCG ($0.59$). On VG with node features, however, GIN and GIN+ share the highest mean score ($0.54$). As in the EPM task, the enhancements of GCN+ do not provide a uniform advantage; the strongest architecture depends on both the graph representation and the availability of node features.
+
+\paragraph{Choice of graph representation.}
+We next compare representations within individual architectures. With node features, GCN performs best on LCG ($0.59$), GIN on VG ($0.54$), and Gated GCN+ on VCG ($0.53$). The preferred representation also changes with the node-feature condition: GIN performs best on LCG without node features ($0.41$), while Gated GCN+ likewise favours LCG without node features ($0.47$). These results show that the representation should be selected together with the architecture and node-feature condition. The preferred representation also depends on the learning task: GCN with node features gives the lowest running-time prediction error on VCG for all four solvers, but its highest closed gap is obtained on LCG. Lower prediction RMSE therefore does not by itself establish which representation gives the best algorithm selector.
 \FloatBarrier
 
 \subsection{Tabular baselines on the larger size regimes}
 \label{sec:ch07:larger-results}
-\Cref{tab:ch07:sat_epm_res_med_large} reports RF and XGB prediction errors on the medium and large datasets. XGB has a lower displayed mean than RF in six of the eight solver--regime comparisons, and ties in two. Every difference is at most $0.01$. The two model families therefore provide similar reference performance at the precision reported here. These results establish baselines for future scalable graph models; they do not provide a graph--tabular comparison beyond the small regime.
+\Cref{tab:ch07:sat_epm_res_med_large} reports RF and XGB prediction errors on the medium and large datasets. XGB has a lower displayed mean than RF in six of the eight solver--regime comparisons, and ties in two. Every difference is at most $0.01$. The two model families therefore provide similar reference performance at the precision reported here. We provide these results establish baselines for future scalable graph models.
 
 \begin{table}[htbp]
   \tabledefaults
@@ -709,28 +784,17 @@ For algorithm selection, PR remains the strongest tabular formulation on all thr
 All three tabular selectors obtain their highest closed gap on the large dataset. However, the datasets are nested and their instance composition changes. A larger closed gap can reflect differences in solver complementarity, the SBS--VBS denominator, and which instances are added. The aggregate scores alone do not identify a causal effect of instance size or establish that larger formulae are intrinsically easier to select for.
 \FloatBarrier
 
-\section{Discussion and limitations}
-\label{sec:ch07:discussion}
-\subsection{Learned structure and supplied attributes}
-The small-instance results show that graph representations can support EPMs that improve on the reported SATzilla-based baselines. Useful structural information is available even without supplied node attributes, since the best such configurations improve on the tabular prediction and selection results. Nevertheless, the strongest overall results use attributes. Graph learning in this setting benefits from combining relational structure with local syntactic and positional information, rather than eliminating feature design entirely.
-
-The ranking of architectures changes with the input condition. GCN+ is strongest without node features, whereas attributed GCN gives the best prediction results and the highest closed gap. Consequently, the enhancements in GNN+ do not yield a uniform advantage on this SAT task. The appropriate comparison is between complete, tuned representation--architecture combinations. Since the conditions are tuned separately, the tables do not identify which individual architectural or optimisation component causes the differences.
-
-\subsection{Prediction quality and practical solver selection}
-The distinction between regression and selection matters both statistically and computationally. RMSE weights errors in individual log-time predictions, whereas closed gap evaluates the running-time cost of the selected solver relative to two portfolio baselines. A model can preserve the ranking needed for selection without estimating every running time accurately. Conversely, improvements in average prediction error need not improve decisions on instances with a large performance difference between solvers.
-
-The closed-gap improvements provide evidence for the value of graph-based selection in the evaluated small-instance setting. Establishing deployment benefits additionally requires measuring graph construction, attribute extraction, model loading, and inference together with solver execution. The reported prediction errors and aggregate selection scores do not separately quantify those costs, so they cannot establish that the strongest predictor is also the most economical end-to-end system.
-
-\subsection{Scalability and scope of the evidence}
-Memory requirements are a central limitation. The complete collection contains formulae with more than 25 million variables and 871 million clauses, while the graph-model results cover only the small regime. The tabular models therefore retain a broader demonstrated computational scope in this chapter. Scalable message passing, sampling, and graph compression are possible directions for extending the comparison, but their predictive and computational trade-offs remain to be evaluated.
-
-The fixed split and three training seeds also limit the conclusions. Seed variation does not quantify uncertainty under new application domains, source-disjoint splits, or changes in the solver portfolio. Similarly, the timeout penalty defines a supervised target for censored observations but does not model the distribution of their unobserved completion times. Finally, different tuning budgets and architectural constraints mean that the reported comparisons assess the implemented baselines under their respective protocols, rather than isolating an intrinsic advantage of one learning family at equal computational cost.
-
 \clearpage
 \section{Conclusions}
 \label{sec:ch07:conclusions}
 This chapter introduced the SAT component of \gb{} as a benchmark for graph-based empirical performance prediction and algorithm selection. It combines a broad instance collection and an eleven-solver portfolio with VG, VCG, and LCG encodings, supplied node attributes, and SATzilla 2024 feature vectors. The two prediction tasks expose complementary aspects of model quality: numerical accuracy of running-time estimates and the running-time consequences of solver choices.
 
-On small instances, the strongest graph configurations improve on the reported tabular baselines for both tasks. Attributed GCN on VCG has the lowest prediction error for all four evaluated solvers, while attributed GCN on LCG closes $0.59$ of the SBS--VBS gap. The advantage of node attributes is widespread but not universal, and neither the GNN+ enhancements nor the SAT-specific \textsc{GraSS} model dominate the simpler GCN across these experiments. These findings make representation, architecture, and learning objective joint empirical choices.
+On small instances, the strongest graph configurations improve on the reported tabular baselines for both tasks. GCN on VCG with node features has the lowest prediction error for all four evaluated solvers, while GCN on LCG with node features closes $0.59$ of the SBS--VBS gap. The advantage of node features is widespread but not universal, and neither the GNN+ enhancements nor the SAT-specific \textsc{GraSS} model dominate the simpler GCN across these experiments. These findings make representation, architecture, and learning objective joint empirical choices.
 
-The main remaining challenge is scalability. Future evaluation should cover larger formulae, source-disjoint generalisation, and the complete selection overhead. The chapter demonstrates that explicit relational structure can improve EPM quality on small instances, while computational feasibility limits the scope of that advantage.
+Graph models also improve on the reported tabular baselines without node features, showing that learned structural representations can provide useful information for prediction and selection. Nevertheless, the strongest overall results use node features. The evidence therefore supports combining learned relational structure with local syntactic and positional information, with feature design continuing to complement graph learning.
+
+Scalability remains the main computational limitation. The complete collection contains formulae with more than 25 million variables and 871 million clauses, but memory requirements restrict the graph-model results to the small regime. The tabular models consequently retain a broader demonstrated computational scope. Scalable message passing, sampling, and graph compression are possible directions for extending the comparison, although their predictive and computational trade-offs remain to be evaluated.
+
+The scope of the evidence also limits generalisation. The fixed split and three training seeds do not quantify uncertainty under new application domains, source-disjoint splits, or changes in the solver portfolio. The timeout penalty provides a supervised target for censored observations but does not model the distribution of unobserved completion times. Different tuning budgets and architectural constraints also mean that the comparisons assess the implemented baselines under their respective protocols and do not isolate an intrinsic advantage at equal computational cost.
+
+Future evaluation should therefore cover larger formulae, source-disjoint generalisation, and the complete selection overhead. The chapter demonstrates that explicit relational structure can improve EPM quality on small instances, while computational feasibility limits the scope of that advantage.
