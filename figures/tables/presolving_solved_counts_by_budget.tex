@@ -1,0 +1,62 @@
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{clccccc}
+\toprule
+Budget (s) & Scenario & \shortstack{ASAPv2} & \shortstack{Aspeed} & \shortstack{Greedy} & \shortstack{Static3S} & \shortstack{Submodular} \\
+\midrule
+\multirow{10}{*}{10} & ASP-POTASSCO & 657 & 660 & 773 & 773 & \textbf{780} \\
+ & BNSL-2016 & 407 & 394 & 431 & \textbf{498} & 478 \\
+ & CSP-Minizinc-Time-2016 & 49 & 51 & 57 & 56 & \textbf{61} \\
+ & IPC2018 & 36 & 42 & 46 & \textbf{50} & \textbf{50} \\
+ & MAXSAT19-UCMS & 153 & 150 & 209 & \textbf{210} & 186 \\
+ & MIP-2016 & 51 & 43 & \textbf{73} & \textbf{73} & 60 \\
+ & QBF-2016 & 584 & 591 & 543 & \textbf{616} & 608 \\
+ & SAT12-INDU & 199 & 186 & \textbf{291} & 286 & 237 \\
+ & SAT20-MAIN & 19 & 25 & 27 & \textbf{28} & 22 \\
+ & TSP-LION2015 & 7360 & 6280 & \textbf{13170} & \textbf{13170} & 8460 \\
+\midrule
+\multirow{10}{*}{20} & ASP-POTASSCO & 657 & 742 & \textbf{881} & 878 & 832 \\
+ & BNSL-2016 & 408 & 481 & 577 & \textbf{604} & 549 \\
+ & CSP-Minizinc-Time-2016 & 49 & 58 & \textbf{62} & 61 & 61 \\
+ & IPC2018 & 36 & 45 & 58 & \textbf{61} & 56 \\
+ & MAXSAT19-UCMS & 153 & 181 & 225 & \textbf{249} & 213 \\
+ & MIP-2016 & 51 & 52 & 84 & \textbf{93} & 77 \\
+ & QBF-2016 & 585 & 609 & 618 & \textbf{626} & 624 \\
+ & SAT12-INDU & 200 & 243 & 327 & \textbf{373} & 321 \\
+ & SAT20-MAIN & 19 & 30 & 34 & \textbf{42} & 32 \\
+ & TSP-LION2015 & 7360 & 10240 & 15070 & \textbf{18130} & 13340 \\
+\midrule
+\multirow{10}{*}{30} & ASP-POTASSCO & 657 & 777 & 892 & \textbf{934} & 882 \\
+ & BNSL-2016 & 408 & 515 & 599 & \textbf{663} & 610 \\
+ & CSP-Minizinc-Time-2016 & 49 & 58 & 61 & \textbf{62} & \textbf{62} \\
+ & IPC2018 & 36 & 48 & 62 & \textbf{69} & 59 \\
+ & MAXSAT19-UCMS & 153 & 190 & 240 & \textbf{276} & 247 \\
+ & MIP-2016 & 51 & 59 & 84 & \textbf{99} & 84 \\
+ & QBF-2016 & 588 & 608 & 642 & \textbf{647} & 636 \\
+ & SAT12-INDU & 200 & 285 & 345 & \textbf{432} & 335 \\
+ & SAT20-MAIN & 19 & 31 & 34 & \textbf{48} & 37 \\
+ & TSP-LION2015 & 7360 & 10350 & 15650 & \textbf{20300} & 15150 \\
+\midrule
+\multirow{10}{*}{50} & ASP-POTASSCO & 657 & 847 & 892 & \textbf{968} & 942 \\
+ & BNSL-2016 & 408 & 566 & 599 & \textbf{710} & 664 \\
+ & CSP-Minizinc-Time-2016 & 49 & 59 & 61 & 64 & \textbf{65} \\
+ & IPC2018 & 36 & 53 & 62 & \textbf{78} & 72 \\
+ & MAXSAT19-UCMS & 153 & 202 & 240 & \textbf{302} & 277 \\
+ & MIP-2016 & 51 & 63 & 84 & \textbf{114} & 98 \\
+ & QBF-2016 & 588 & 630 & 642 & \textbf{675} & 636 \\
+ & SAT12-INDU & 200 & 317 & 345 & \textbf{496} & 413 \\
+ & SAT20-MAIN & 19 & 35 & 34 & \textbf{61} & 45 \\
+ & TSP-LION2015 & 7360 & 11930 & 15650 & \textbf{24690} & 19000 \\
+\midrule
+\multirow{10}{*}{100} & ASP-POTASSCO & 763 & 922 & 892 & \textbf{1036} & 957 \\
+ & BNSL-2016 & 495 & 677 & 599 & \textbf{826} & 683 \\
+ & CSP-Minizinc-Time-2016 & 58 & 61 & 61 & \textbf{68} & 65 \\
+ & IPC2018 & 49 & 65 & 62 & \textbf{104} & 71 \\
+ & MAXSAT19-UCMS & 206 & 260 & 240 & \textbf{341} & 288 \\
+ & MIP-2016 & 68 & 72 & 84 & \textbf{137} & 105 \\
+ & QBF-2016 & 605 & 641 & 642 & \textbf{695} & 636 \\
+ & SAT12-INDU & 272 & 366 & 345 & \textbf{610} & 414 \\
+ & SAT20-MAIN & 25 & 46 & 34 & \textbf{76} & 46 \\
+ & TSP-LION2015 & 13000 & 12920 & 15650 & \textbf{27330} & 22490 \\
+\bottomrule
+\end{tabular}
