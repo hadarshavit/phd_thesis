@@ -50,6 +50,7 @@
 /publications/
 /.dblp_cache/
 /biber_cache/
+/chapter_pdfs/
 /tmp
 __pycache__/
 *.py[cod]
