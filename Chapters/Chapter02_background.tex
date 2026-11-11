@@ -1,7 +1,7 @@
 
 \chapter{Background}\label{ch:ch02:background}
 
-In this chapter we provide background on empirical performance prediction, algorithm selection, and Bayesian optimisation.
+This chapter establishes the shared foundations for the contribution chapters: empirical performance prediction and its distributional variants, algorithm selection, and Bayesian optimisation. It also collects the SATzilla history used by the SAT chapters. Domain and benchmark descriptions follow in~\cref{ch:ch03:scenarios}, while contribution-specific related work remains with the corresponding methods.
 \section{Empirical performance prediction}
 \label{sec:ch02:empirical_performance_prediction}
 
@@ -28,6 +28,19 @@ Finally, across different scenarios, the scale of the performance target can var
 
 
 The predict performance can be a single number per metric, showing the mean or median value. Alternatively, it is also possible to predict the full performance distribution distribution $p(y \mid \modelInput)$ rather than a single value to obtain a distributional EPM~\citep{EggEtAl18a}, which is particularly valuable for capturing more subtle details of the performance of the algorithm, such as its variance and skewness.
+\subsection{Applications and instance features}
+
+EPMs have been developed for a wide range of tasks, including automated algorithm selection~\citep{XuEtAl08, Kotthoff16}, algorithm configuration and parameter tuning~\citep{HutEtAl12, HutEtAl06}, data centre and cloud scheduling~\citep{LeeEtAl25, IslEtAl12, SaxEtAl23, PhaEtAl20}, compiler optimisation~\citep{YotEtAl03, AshEtAl19}, and database query optimisation~\citep{WuEtAl13}. EPMs require a set of features describing instances as an input to the model. For $\mathcal{NP}$-complete problems, high-level properties of instances are encoded to serve as an instance identifier, such as the SATzilla features for propositional satisfiability (SAT)~\citep{HutEtAl14,ShaHoo24} and causal-graph or planning-graph features for automated planning~\citep{FawEtAl14}.
+
+\subsection{Performance distribution prediction}
+\label{sec:ch02:distribution_prediction}
+
+For stochastic algorithms, the performance of $\mathcal{A}$ on a fixed instance $I$ is a random variable. Traditional EPMs handle this stochasticity by either modelling an aggregate statistic calculated from repeated runs (\emph{e.g.}, the empirical mean or median) or training directly on noisy, single-run observations. In both cases, the EPM outputs a single scalar value, discarding all information about the variance and shape of the underlying distribution.
+
+To capture the complete run-to-run variation of stochastic algorithms, \citet{EggEtAl18} introduced \emph{DistNet}, a neural network that predicts the parameters of a per-instance running time distribution (\emph{e.g.}, a log-normal distribution). DistNet is trained by minimising the negative log-likelihood (NLL) of individual run observations, which is more efficient and numerically stable than a two-stage approach that first fits distribution parameters per instance and then regresses on those parameters.
+
+To improve predictive quality in data-scarce regimes, \emph{BayesDistNet}~\citep{TueBur21} replaces the deterministic network with a Bayesian neural network (BNN). During inference, BayesDistNet generates running-time samples by repeatedly evaluating the BNN with different weight samples, subsequently fitting a parametric distribution post-hoc. While effective with few training runs, this sampling-based inference introduces substantial computational overhead. Furthermore, because BNN predictions rely on stochastic weight samples, feature attribution becomes unstable and computationally prohibitive, making it ill-suited for explainability.
+
 \section{Algorithm selection}
 \label{sec:ch02:algorithm_selection}
 
@@ -159,75 +172,109 @@ In that case, selecting the second-best algorithm is a reasonable error.
 A plain multi-class classifier, however, treats this outcome as equally wrong as choosing an algorithm that performs very poorly on the instance.
 As we show in our ASlib experiments (\cref{sec:ch10:aslib_appendix}), multi-class classifiers can indeed perform far below the other methods in practice.
 
+\subsection{SATzilla features and their applications}
+\label{sec:ch02:satzilla_features}
+
+The SATZilla features were first introduced by Nudelman~et~al.~\cite{NudEtAl04} to construct EPMs, \emph{i.e.}, machine learning models that predict the running time of various SAT solvers given the features representing SAT instances. The authors identified key features that contribute the most towards having a good EPM prediction.
+Consequently, they used the EPMs as a basis for algorithm selection, in which the algorithm that is selected corresponds to the one with the lowest predicted running time.
+They leveraged the \textit{performance complementarity} phenomenon of SAT solvers, where no SAT solver dominates all others over all instances.
+Therefore, selecting the best solver for each instance results in substantially better performance compared to choosing any standalone solver for all instances.
+The SATZilla features were also successfully used for the satisfiability prediction task for SAT instances from various distributions~\cite{DevOSu08}.
+
+Further developments in algorithm selection led to the 2007 version of the SATZilla algorithm selector~\cite{XuEtAl08}, which combined running time and satisfiability prediction with other improvements. It won multiple medals in the SAT competition. This shows that extracting features from SAT instances can also speed up the solving process, and not only help understanding SAT. A newer version of the SATZilla algorithm selector was introduced in 2012~\cite{XuEtAl12}, winning multiple awards as well. It used a random forest as a predictor, and introduced an ensemble of pairwise classifiers to establish a ranking of the solvers, instead of predicting the running times directly. Additional features were introduced thereafter, revealing further important information about SAT instances.
+
+Another common usage of the SATZilla features is (model-based) algorithm configuration. To this end, the hyperparameters of SAT solvers are optimised such that their performance is as good as possible on all instances. As running SAT solvers is computationally expensive, a surrogate model is employed; it takes as an input a configuration of hyperparameters and instance features and predicts the performance of the SAT solver using a given configuration on a given instance. The instance features boost the accuracy of the surrogate model. An example of that is SMAC~\cite{HutEtAl11}, which successfully used the SATZilla features to optimise the performance of a wide range of SAT solvers on various benchmarks.
+
+Last but not least, feature-based EPMs are proven to be useful for benchmark generation~\cite{LeyEtAl09}. In this context, given a new instance, we compute the features, which is usually cheaper than running a SAT solver, and use the EPM to predict whether the instance is hard (or not) for the solvers at hand.
+
+\subsection{Performance prediction versus ranking}
+
+To model performance, one should account for the distribution of the performance, which can require preprocessing of the labels, such as log-transformation~\citep{HutEtAl14}. However, EPM-based algorithm selection is often not the practically best approach, essentially because accurately predicting exact performance values is generally a harder task than determining the relative ranking of algorithms.
+
 \section{Bayesian optimisation}
+\label{sec:ch02:bayesian_optimisation}
 
-In this section, we define the \gls{hpo} problem and describe the working mechanisms of the \gls{bo} framework.
-We also cover related work on dynamic design choices related to the components of \gls{bo}, as well as using ensembles in \gls{bo}.
+This section introduces hyperparameter optimisation and the surrogate-based search framework used in \cref{ch:ch06:dymbo,ch:ch08:noisy_oracle}.
 
-\subsection{Hyperparameter optimisation} Let $\mathcal{A}$ be a learning algorithm with $n$ hyperparameters, $\Lambda_{i}$ the domain of the $i$-th hyperparameter, and $\boldsymbol{\Lambda} = \Lambda_{1} \times \Lambda_{2} \times \dots \Lambda_{n}$ the overall hyperparameter configuration space.
-We denote a hyperparameter configuration by $\boldsymbol{\lambda} \in \boldsymbol{\Lambda}$, and the algorithm $\mathcal{A}$ with its hyperparameters instantiated to $\boldsymbol{\lambda}$ by $\mathcal{A}_{\boldsymbol{\lambda}}$.
-Given a dataset $D$, the objective of \gls{hpo} is to find a hyperparameter configuration $\boldsymbol{\lambda}^{*}$ that minimises the loss $\mathcal{L}$ of a model fitted by algorithm $\mathcal{A}$ with hyperparameters $\boldsymbol{\lambda}$ on training data ${D}_{train}$, and evaluated on validation data ${D}_{validate}$, for a given loss function $\mathcal{L}$, \emph{i.e.},
+\subsection{Hyperparameter optimisation} Let $\mathcal{A}$ be a learning algorithm with $n$ hyperparameters, $\Lambda_{i}$ the domain of the $i$-th hyperparameter, and $\mathbf{\Lambda} = \Lambda_{1} \times \Lambda_{2} \times \dots \Lambda_{n}$ the overall hyperparameter configuration space.
+We denote a hyperparameter configuration by $\mathbf{\lambda} \in \mathbf{\Lambda}$, and the algorithm $\mathcal{A}$ with its hyperparameters instantiated to $\mathbf{\lambda}$ by $\mathcal{A}_{\mathbf{\lambda}}$.
+Given a dataset $D$, the objective of HPO is to find a hyperparameter configuration $\mathbf{\lambda}^{*}$ that minimises the loss $\mathcal{L}$ of a model fitted by algorithm $\mathcal{A}$ with hyperparameters $\mathbf{\lambda}$ on training data ${D}_{train}$, and evaluated on validation data ${D}_{validate}$, for a given loss function $\mathcal{L}$, \emph{i.e.},
 \begin{equation}
 \label{eq:ch02:def-hpo}
-\boldsymbol{\lambda}^{*} \in \argmin_{\boldsymbol{\lambda} \in \boldsymbol{\Lambda}}
-\mathcal{L}(\mathcal{A}_{\boldsymbol{\lambda}}, {D}_{train}, {D}_{validate}) = \argmin_{\boldsymbol{\lambda} \in \boldsymbol{\Lambda}} c(\boldsymbol{\lambda})
+\mathbf{\lambda}^{*} \in \argmin_{\mathbf{\lambda} \in \mathbf{\Lambda}}
+\mathcal{L}(\mathcal{A}_{\mathbf{\lambda}}, {D}_{train}, {D}_{validate}) = \argmin_{\mathbf{\lambda} \in \mathbf{\Lambda}} c(\mathbf{\lambda})
 \end{equation}
-Here, $c(\boldsymbol{\lambda})$ is a shorthand for the loss function when $\mathcal{A}_{\boldsymbol{\lambda}}$ and $D$ are fixed.
-Note that $c(\boldsymbol{\lambda})$ is a black-box function, without a closed-form expression nor analytic gradient information.
+Here, $c(\mathbf{\lambda})$ is a shorthand for the loss function when $\mathcal{A}_{\mathbf{\lambda}}$ and $D$ are fixed.
+Note that $c(\mathbf{\lambda})$ is a black-box function, without a closed-form expression nor analytic gradient information.
 
 \subsection{Bayesian optimisation}
 \label{sec:ch02:bac_bo}
-Bayesian optimisation (\gls{bo})~\citep{Mockus12,Garnett23,Frazier18,Kushner62,Kushner64} is a family of surrogate-based algorithms for efficient global optimisation of black-box problems.
-Typically, \gls{bo} consists of three main modules: an \emph{initial design}, \emph{i.e.}, in \gls{hpo}, a set of hyperparameter configuration candidates $\boldsymbol{\lambda} = (\lambda^{(1)},\ldots, \lambda^{(r)})$ and their evaluations
+
+Bayesian optimisation (BO)~\citep{Mockus12b,Garnett23,Frazier18b,Kushner62,Kushner64b} is a family of surrogate-based algorithms for efficient global optimisation of black-box problems.
+Typically, BO consists of three main components: an \emph{initial design}, \emph{i.e.}, in HPO, a set of candidate hyperparameter configurations $\boldsymbol{\lambda} = (\lambda^{(1)},\ldots, \lambda^{(r)})$ and their evaluations
 $c(\boldsymbol{\lambda}) = (c(\lambda^{(1)}),\ldots, c(\lambda^{(r)}))$; a \emph{surrogate model} (fitted to the
-
-observations) that returns an approximation $\hat{c}(\boldsymbol{\lambda})$ of the unknown loss function $c(\boldsymbol{\lambda})$ while capturing the uncertainty in the prediction $\hat{\sigma}(\boldsymbol{\lambda})$ on unobserved points in the search space; and an \emph{acquisition function}, which is optimised to suggest solution candidates to be evaluated next, usually balancing exploration and exploitation of the search space.
-\gls{bo} then evaluates the most promising candidates.
-
-To approximate the expensive objective function, \gls{bo} typically employs a Gaussian process (GP) model as the surrogate. The GP model defines a distribution over functions on the configuration space $c(\lambda)\sim\mathcal{GP}_c(\mu(\lambda),k(\lambda,\lambda'))$, where
+observations) that returns an approximation $\hat{c}(\mathbf{\lambda})$ of the unknown loss function $c(\mathbf{\lambda})$ while capturing the uncertainty in the prediction $\hat{\sigma}(\mathbf{\lambda})$ on unobserved points in the search space; and an \emph{acquisition function}, which is optimised to suggest candidate solutions to be evaluated next, usually balancing exploration and exploitation of the search space.
+BO then evaluates the most promising candidate solutions.
+To approximate the expensive objective function, BO typically employs a Gaussian process (GP) model as the surrogate. The GP model defines a distribution over functions on the configuration space $c(\lambda)\sim\mathcal{GP}_c(\mu(\lambda),\text{cov}(\lambda,\lambda'))$, where
 $\mu(\cdot)$
 is a mean function and
-$k(\cdot,\cdot)$
+$\text{cov}(\cdot,\cdot)$
 is a covariance function. If we consider an observation model
 $y_i = c(\lambda^{(i)}) + \varepsilon_i$
 with normally distributed noise,
 $\varepsilon_i\sim\mathcal{N}(0,\sigma^2_\varepsilon)$,
 the predicted value by the GP model at one unknown configuration
 $\lambda$ will also follow a normal distribution with mean
-$\mu(\lambda)=K_{\lambda,\boldsymbol{\lambda}}(K_{\boldsymbol{\lambda},\boldsymbol{\lambda}}+\sigma^2_\varepsilon I)^{-1}\boldsymbol{y}$ and variance $\sigma^2(\lambda)=k(\lambda,\lambda)-K_{\lambda,\boldsymbol{\lambda}}(K_{\boldsymbol{\lambda},\boldsymbol{\lambda}}+\sigma^2_\varepsilon I)^{-1} K_{\boldsymbol{\lambda},\lambda}$,
-where $\boldsymbol{y}=(y_1,\ldots,y_r)$ is the vector of observations, $K_{\boldsymbol{\lambda},\boldsymbol{\lambda}}=[k(\lambda^{(i)},\lambda^{(j)})]_{\lambda^{(i)},\lambda^{(j)}\in\boldsymbol{\lambda}}$ is the covariance matrix, and $K_{\lambda,\boldsymbol{\lambda}}=[k(\lambda^{(i)},\lambda)]_{\lambda^{(i)}\in\boldsymbol{\lambda}}$ is the correlation vector for all samples.
-
+$\mu(\lambda)=K_{\lambda,\boldsymbol{\lambda}}(K_{\boldsymbol{\lambda},\boldsymbol{\lambda}}+\sigma^2_\varepsilon I)^{-1}\boldsymbol{y}$ and variance $\sigma^2(\lambda)=\text{cov}(\lambda,\lambda)-K_{\lambda,\boldsymbol{\lambda}}(K_{\boldsymbol{\lambda},\boldsymbol{\lambda}}+\sigma^2_\varepsilon I)^{-1} K_{\boldsymbol{\lambda},\lambda}$,
+where $\boldsymbol{y}=(y_1,\ldots,y_r)$ is the vector of observations, $K_{\boldsymbol{\lambda},\boldsymbol{\lambda}}=[\text{cov}(\lambda^{(i)},\lambda^{(j)})]_{\lambda^{(i)},\lambda^{(j)}\in\boldsymbol{\lambda}}$ is the covariance matrix, and $K_{\lambda,\boldsymbol{\lambda}}=[\text{cov}(\lambda^{(i)},\lambda)]_{\lambda^{(i)}\in\boldsymbol{\lambda}}$ is the correlation vector for all samples.
 GPs as a surrogate model inherently provide both the mean and the variance vector.
 
-However, GPs are not the only surrogate model used in \gls{bo}. Another common choice for a surrogate model are tree-based models,
+However, GPs are not the only surrogate model used in BO. Another common choice for a surrogate model are tree-based models,
 such as random forests (RFs).
 Tree-based models traditionally predict only the mean of the given data (\emph{e.g.}, in a regression setting).
 In this case, the variance is defined based on the variance of the predictions of the leaves~\citep{HutEtAl11}.
-With $t(\lambda)$ being the prediction of a tree $t \in T$, we calculate the mean $\mu(\lambda)$ and variance $\sigma(\lambda)$ for a set of trees $T$ as follows:
-
+With $t(\lambda)$ being the prediction of a tree $t \in T$, we calculate the mean $\mu(\lambda)$ and variance $\sigma^2(\lambda)$ for a set of trees $T$ as follows:
 \begin{equation}
     \mu(\lambda)=\frac{1}{|T|} \cdot \sum_{t\in T} t(\lambda) \; ,
 \end{equation}
 \begin{equation}
-    \sigma(\lambda)=\frac{1}{|T|} \cdot \sum_{t\in T} (t(\lambda) - \mu(\lambda))^2 \; .
+    \sigma^2(\lambda)=\frac{1}{|T|} \cdot \sum_{t\in T} (t(\lambda) - \mu(\lambda))^2 \; .
 \end{equation}
-
-Alternatively, uncertainty can be estimated via quantile regression~\citep{KoeBas78}, using two separate models to predict the upper and lower quantile of the output distribution, and deriving variance from the spread between these quantiles.
-We adopt this approach to estimate uncertainty for another tree-based model, gradient boosting (GB); this is done similarly to the implementation in the \textsc{scikit-optimize} package.\footnote{\url{https://github.com/scikit-optimize/scikit-optimize}}
-
-\Gls{bo} proceeds iteratively until a termination criterion is met. In each iteration, it optimises the acquisition function
-by repeatedly querying the surrogate model to generate a pool of solution candidates. It then evaluates the most high-potential solutions (\emph{i.e.}, the solutions that maximise the acquisition function) from this pool,
+BO proceeds iteratively until a termination criterion is met. In each iteration, it optimises the acquisition function by repeatedly querying the surrogate model to generate a pool of candidate solutions. It then evaluates the most high-potential solutions (\emph{i.e.}, the solutions that maximise the acquisition function) from this pool,
 refines the surrogate model based on the new observations, and updates the optimum if the new point improves upon the true function value of the best observation so far.
 
-Among the many variants of \gls{bo} from the literature, in this work, we focus on the state-of-the-art method for \gls{hpo} to empirically evaluate our ensembling method: HEBO~\citep{CowEtAl22}.
-HEBO (Heteroscedastic and Evolutionary Bayesian optimisation) is a \gls{bo}-based optimiser with several advancements
+\subsection{Acquisition functions}
+\label{sec:ch02:acquisition_functions}
 
-targeting each of the core \gls{bo} modules described above.
-For the surrogate model, HEBO uses GP with two key transformations: a power transformation applied to the output observations $\boldsymbol{y}$ and a Kumaraswamy transformation applied to the input configurations $\boldsymbol{\lambda}$;
+For the acquisition functions below, we use the notation of \cref{ch:ch08:noisy_oracle}.
 
-jointly, these address heteroscedasticity in the noise $\epsilon$ and non-stationarity in the covariance matrix $K_{\boldsymbol{\lambda},\boldsymbol{\lambda}}$.
-\citet{CowEtAl22} showed that these transformations enhance the ability of GPs to accurately approximate the mapping between configurations and corresponding performances, which is crucial for \gls{hpo}.
+Given a black-box function $f:\sR^n\rightarrow\sR$, the goal of an optimiser is to find its minimum, denoted by $x^*$, such that $f(x^*)\leq f(x)$ for every $x\in\sR^n$. The optimiser iteratively samples configurations $x_1, x_2, ..., x_n$, where $x_i$ is the configuration sampled at iteration $i$.
+At each iteration, the optimiser observes the performance $f(x_i)$, producing the set of observations $\train=\{(x_1, f(x_1)), (x_2, f(x_2)),..., (x_n, f(x_n))\}$.
 
-For the acquisition function, rather than optimising a single criterion, HEBO samples new candidate configurations by maximising MACE~\citep{LyuEtAl18}, a multi-objective acquisition function that simultaneously considers expected improvement (EI)~\citep{Mockus75}, probability of improvement (PI)~\citep{Kushner64}, and upper confidence bound (UCB)~\citep{ForEtAl08}, providing a more robust balance between exploration and exploitation of the search space than any single acquisition function alone.
+Bayesian optimisation~\citep{Garnett23} uses a surrogate model to decide on the next configuration to sample. At iteration $i$, the surrogate model $S$ takes an unseen configuration $x$ together with the observation set $\train$ and estimates a predictive distribution for $x$, typically summarized through a mean $\mu_S(x)$ and variance $\sigma_S^2(x)$.
+GPs are a common choice for such a surrogate model, but random forests~\citep{HutEtAl11} and other machine-learning techniques that can provide uncertainty estimates are also used.
 
-Additional details on HEBO can be found in~\cref{sec:ch06:imp_det}.
+Following the fitting of a surrogate model, an acquisition function is used to determine the next point to sample, balancing exploration and exploitation by considering the predicted mean and variance. Here, we consider three popular acquisition functions. First, expected improvement (EI) quantifies the expected improvement in the known optimum by sampling a configuration $x$; formally:
+\begin{multline}
+    EI(x)=\mathbb{E}[max(0, f(x_{best})-\mu_S(x))]=\\(f(x_{best})-\mu_S(x))\cdot\Phi(z)+\sigma_S(x)\cdot\phi(z)
+\end{multline}
+
+\begin{equation*}
+    z=\frac{f(x_{best})-\mu_S(x)}{\sigma_S(x)},
+\end{equation*}
+where $f(x_{best})=\min_{j=1, 2, ..., n} f(x _j)$ is the best observed function value up to iteration $n$, also known as the incumbent.
+Similarly, probability improvement (PI) quantifies the probability that configuration $x$ improves over the known optimum:
+\begin{equation*}
+    PI(x)=P(f(x_{best})-\mu_S(x) > 0)=\Phi(z)
+\end{equation*}
+Finally, the lower confidence bound (LCB) is the weighted sum of the predicted performance $\mu_S(x)$ and the uncertainty $\sigma(x)$:
+\begin{equation*}
+    LCB(x)=-(\mu_S(x)-\lambda\sigma_S(x))
+\end{equation*}
+
+The acquisition function $AF$ is then optimised to find a candidate configuration $x_{next} \in \argmax_{x\in\sR^n}AF(x)$. Different methods have been proposed to optimise the acquisition function, including local search, evolutionary algorithms and gradient-based methods. Since evaluating the acquisition function is relatively cheap, many such evaluations can be used to obtain a strong candidate. The candidate is then evaluated on the target function $f$, after which $\train$ is updated as $\train=\train \cup \{(x_{next}, f(x_{next}))\}$. This process continues until a pre-defined evaluation budget is exhausted.
+
+
+\section{Chapter summary}
+
+Empirical performance models connect observations to predictions; algorithm selection and Bayesian optimisation use those predictions to make decisions. Distributional models additionally describe variation across repeated algorithm runs. These foundations support the thesis's investigation of representations, predictive models, explanations, and reusable software. The next chapter introduces the problem domains and benchmark scenarios in which the contributions are evaluated.

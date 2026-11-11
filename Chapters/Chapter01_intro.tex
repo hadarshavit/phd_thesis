@@ -116,10 +116,6 @@ contributes a benchmark for graph-based \gls{sat} empirical performance predicti
 Its main contribution is to show that learned graph representations can be competitive for performance prediction and algorithm selection, and can in some settings outperform hand-crafted features.
 This provides a complementary answer to the feature-engineering work in \cref{ch:ch04:rev_SATzilla}: instead of only improving hand-crafted features, we can also learn representations from the structure of the instance itself.
 
-The automated machine learning chapter studies empirical performance prediction in automated machine learning.
-Its role in the thesis is to connect the algorithm selection and optimisation themes to machine learning pipelines, where the objects being selected are not solvers for a single combinatorial problem but learning algorithms and their configurations.
-This chapter strengthens the cross-domain argument of the dissertation: the same core difficulties of representation, prediction, and decision making appear in \gls{sat}, black-box optimisation, and automated machine learning, even though the data structures and performance measures differ.
-
 \cref{ch:ch08:noisy_oracle}, based on
 \begin{itemize}
     \item \fullcite{ShaHoo25}
@@ -151,7 +147,7 @@ This final contribution turns the methodological work of the thesis into reusabl
 \section{Structure of the dissertation}
 
 The order of the dissertation follows the dependency structure of empirical performance prediction.
-Part~I introduces the necessary background on algorithm selection, Bayesian optimisation, and related concepts.
+Part~I introduces empirical performance prediction, algorithm selection, Bayesian optimisation, and the problem domains and benchmark scenarios used in the contribution chapters.
 Part~II, \emph{Better Features}, starts with the inputs to performance models: reliable hand-crafted features, task-aware dimensionality reduction, and adaptive information about which surrogate models are appropriate during optimisation.
 Part~III, \emph{Better Models}, then studies how to improve the models themselves, from graph neural empirical performance models to surrogate models whose accuracy is aligned with optimisation performance.
 Part~IV, \emph{Better Insights}, asks how these methods can be explained and used more broadly, through distribution-level explanations and reusable algorithm selection software.

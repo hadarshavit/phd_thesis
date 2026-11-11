@@ -3,18 +3,11 @@
 
 \section{Introduction}
 
-Bayesian optimisation (\gls{bo}) has emerged as a powerful technique for solving black-box optimisation problems, particularly for functions that are expensive to evaluate. The ability of \gls{bo} to efficiently reach good solutions within relatively few evaluations has made it an important approach in a variety of domains, ranging from hyperparameter tuning in machine learning~\citep{SnoEtAl12} to engineering design~\citep{JonEtAl98} and scientific discovery~\citep{LooEtAl19}. Bayesian optimisation relies on a surrogate model, which serves as a (computationally) inexpensive approximation of the objective function. This surrogate model is used to predict both the value of the objective function at unobserved points and the uncertainty associated with those predictions. These predictions are then combined by means of an acquisition function, which balances the trade-off between exploring unknown regions of the search space and exploiting regions known to contain high-quality solutions~\citep{Garnett23}.
+The previous chapter evaluated predictive models through running-time prediction and solver selection. This chapter examines a different connection between prediction and decisions: the effect of surrogate-model accuracy on Bayesian optimisation (\gls{bo}). It also returns to the modelling choices of~\cref{ch:ch06:dymbo}. Whereas DyMBO adapts the influence of complementary surrogates, the present chapter asks where their predictions need to be accurate to guide optimisation effectively.
 
-The surrogate model is a key component of Bayesian optimisation algorithms. Among the most commonly used surrogate models are Gaussian processes (GPs), which
-can be seen as a probabilistic model of a given objective function~\citep{RasWil06}.
-While GPs offer many advantages, notably flexibility and the ability to quantify uncertainty, they also have limitations; for instance, their computational cost scales poorly with the number of observations.
+The BO framework and acquisition functions are introduced in~\cref{sec:ch02:bayesian_optimisation,sec:ch02:acquisition_functions}. Standard prediction metrics aggregate errors over a test set, but the optimiser uses predictions to choose its next evaluation. An error that makes a poor configuration appear promising may therefore matter more than a comparable error elsewhere. This motivates evaluating the location and consequences of prediction errors rather than only their aggregate size.
 
-Furthermore, due to their continuous nature, GPs cannot model categorical inputs naturally. Beyond GPs, other models, including random forests \citep{HutEtAl11}, deep neural networks \citep{BalajiLakshminarayanan17} and conformal predictors \citep{ShaVov08}, have been employed as surrogates, each with their own strengths and weaknesses. The choice of surrogate model can significantly influence the performance of a Bayesian optimisation procedure, and therefore, it is of considerable interest to understand how these models perform under different conditions.
-
-One of the key challenges in evaluating surrogate models is determining how their accuracy impacts the overall optimisation process. In traditional machine learning tasks, model performance is often assessed using metrics such as accuracy, mean squared error or log-likelihood on a held-out test set. However, these metrics may not directly correlate with optimisation performance in the context of Bayesian optimisation. For example, while it is commonly assumed that higher accuracy near the optimum is more important than accuracy in other regions (see, e.g., \citealp{Frazier18b}),
-inaccuracies in less critical regions can still have detrimental effects. Such inaccuracies may lead to misleading acquisition function values, ultimately causing the optimiser to waste evaluations in suboptimal areas of the search space.  However, to the best of our knowledge, no prior work validated these assumptions and conducted a through evaluation.
-
-In this work, we aim to understand what makes the prediction of a surrogate model effective for Bayesian optimisation.
+In this chapter, we aim to understand what makes the prediction of a surrogate model effective for Bayesian optimisation.
 Towards this end, we introduce the \textit{noisy oracle} surrogate model,
 which provides noisy predictions of the ground-truth values of the objective function. The level of noise is determined by a weighting scheme that reflects the importance of different regions of the search space. By systematically varying these weighting schemes, we can study how accuracy in different regions influences the optimisation process itself, rather than a simple aggregation of prediction error. With this methodology we aim to achieve a targeted view of surrogate-model quality.
 Using it in a series of computational experiments, we find evidence that a good surrogate model needs to be accurate in regions where the target function has good values, and that being accurate only around the optimum can still result in suboptimal \gls{bo} performance.
@@ -23,34 +16,7 @@ We support our empirical experiments with a theoretical analysis that derives ex
 
 We note that, while real surrogate models might suffer from problems such as oversmoothing~\citep{HvaEtAl24}, uncalibrated uncertainty predictions~\citep{FolEtAl23b}, heteroskedastic noise~\citep{CowEtAl22} and other types of error, our goal here is to take a first step towards understanding a more general question: where in the optimisation landscape does the surrogate model need to be accurate to effectively support Bayesian optimisation, independent of the details of a particular surrogate class. By simplifying the surrogate to an oracle with controlled noise, we aim to isolate the accuracy question from other factors such as uncertainty calibration, model class, and learning dynamics. We view this as a necessary foundation upon which future work can build by progressively relaxing these simplifications.
 
-In the following sections, we first review existing approaches to surrogate-model evaluation and related assumptions regarding surrogate model accuracy. We then formalise the noisy oracle framework and introduce the weighting schemes used in our experiments. Next, we present an empirical evaluation of how these different accuracy patterns affect optimisation performance, followed by an analysis of how a GP and a random forest behave on a real optimisation trajectory. We then provide theoretical analysis of the noisy oracle framework. Finally, we conclude with implications for the design of Bayesian optimisation algorithms and surrogate models.
-
-\section{Background}
-Given a black-box function $f:\sR^n\rightarrow\sR$, the goal of an optimiser is to find its minimum, denoted by $x^*$, such that $f(x^*)\leq f(x)$ for every $x\in\sR^n$. The optimiser iteratively samples configurations $x_1, x_2, ..., x_n$, where $x_i$ is the configuration sampled at iteration $i$.
-At each iteration, the optimiser observes the performance $f(x_i)$, producing the set of observations $\train=\{(x_1, f(x_1)), (x_2, f(x_2)),..., (x_n, f(x_n))\}$.
-
-Bayesian optimisation~\citep{Garnett23} uses a surrogate model to decide on the next configuration to sample. At iteration $i$, the surrogate model $S$ takes an unseen configuration $x$ together with the observation set $\train$ and estimates a predictive distribution for $x$, typically summarized through a mean $\mu_S(x)$ and variance $\sigma_S^2(x)$.
-GPs are a common choice for such a surrogate model, but random forests~\citep{HutEtAl11} and other machine-learning techniques that can provide uncertainty estimates are also used.
-
-Following the fitting of a surrogate model, an acquisition function is used to determine the next point to sample, balancing exploration and exploitation by considering the predicted mean and variance. Here, we consider three popular acquisition functions. First, expected improvement (EI) quantifies the expected improvement in the known optimum by sampling a configuration $x$; formally:
-\begin{multline}
-    EI(x)=\mathbb{E}[max(0, f(x_{best})-\mu_S(x))]=\\(f(x_{best})-\mu_S(x))\cdot\Phi(z)+\sigma_S(x)\cdot\phi(z)
-\end{multline}
-
-\begin{equation*}
-    z=\frac{f(x_{best})-\mu_S(x)}{\sigma_S(x)},
-\end{equation*}
-where $f(x_{best})=\min_{j=1, 2, ..., n} f(x _j)$ is the best observed function value up to iteration $n$, also known as the incumbent.
-Similarly, probability improvement (PI) quantifies the probability that configuration $x$ improves over the known optimum:
-\begin{equation*}
-    PI(x)=P(f(x_{best})-\mu_S(x) > 0)=\Phi(z)
-\end{equation*}
-Finally, the lower confidence bound (LCB) is the weighted sum of the predicted performance $\mu_S(x)$ and the uncertainty $\sigma(x)$:
-\begin{equation*}
-    LCB(x)=-(\mu_S(x)-\lambda\sigma_S(x))
-\end{equation*}
-
-The acquisition function $AF$ is then optimised to find a candidate configuration $x_{next} \in \argmax_{x\in\sR^n}AF(x)$. Different methods have been proposed to optimise the acquisition function, including local search, evolutionary algorithms and gradient-based methods. Since evaluating the acquisition function is relatively cheap, many such evaluations can be used to obtain a strong candidate. The candidate is then evaluated on the target function $f$, after which $\train$ is updated as $\train=\train \cup \{(x_{next}, f(x_{next}))\}$. This process continues until a pre-defined evaluation budget is exhausted.
+Building on the shared acquisition-function definitions, we first review existing approaches to surrogate-model evaluation and related assumptions regarding surrogate model accuracy. We then formalise the noisy oracle framework and introduce the weighting schemes used in our experiments. Next, we present an empirical evaluation of how these different accuracy patterns affect optimisation performance, followed by an analysis of how a GP and a random forest behave on a real optimisation trajectory. We then provide theoretical analysis of the noisy oracle framework. Finally, we conclude with implications for the design of Bayesian optimisation algorithms and surrogate models.
 
 \section{Related Work}
 In this section, we cover existing work related to our goal of assessing where surrogate models need to be accurate. We first look at local Bayesian optimisation approaches and then discuss several metrics for surrogate models.
@@ -202,12 +168,11 @@ We present the results of our experiments with the noisy oracle in several stage
 
 \subsection{Setup of Experiments}
 We experiment with both synthetic and real-world functions.
-As synthetic functions, we used the BBOB~\citep{HanEtAl21} set through IOHExperimenter~\citep{DoeEtAl18}. BBOB contains 24 functions, ranging from a simple sphere function to more complex functions with various properties, such as multiple local optima or weak global structure. Each BBOB function has different instances, which are created by modifying the original function through rotation, the addition of constants and other transformations.
+The synthetic BBOB functions are described in \cref{sec:ch03:bbob}.
 We used the first 11 instances of each function and ran the optimisation using 5 pseudo-random seeds. We used dimensions 2, 4 and 8 of the BBOB functions.
 
-We also used the PD1 surrogate-based benchmark~\citep{MalEtAl23}, which is a hyperparameter optimisation benchmark for neural networks.
-In PD1, each target function is a combination of a dataset and a neural network architecture (for example, wide ResNet on CIFAR100).
-PD1 contains four target functions, and the goal is to optimise the hyperparameters of a neural network in order to minimise the error. PD1 contains purely continuous hyperparameters. We used 55 pseudo-random seeds in our PD1 experiments.
+The PD1 benchmark is described in \cref{sec:ch03:pd1}.
+We used 55 pseudo-random seeds in our PD1 experiments.
 
 To compute the noise levels, we needed to know the location of the minimum and maximum of the target functions. For BBOB, the location of the minimum is already known from analytical solutions. To find the location of the maximal values, as well as the minimum and maximum of PD1, we ran 100 times three optimisation algorithms: differential evolution, L-BFGS-B~\citep{ByrEtAl95} and CMA-ES~\citep{HanOst01}, using default settings for all three algorithms. For the first two algorithms, we used  SciPy~\citep{VirEtAl20} implementation; for CMA-ES, we used the PyCMA~\citep{HanEtAl19} package.
 We chose these algorithms as they are popular optimisation procedures designed for non-constrained budgets (as opposed to Bayesian optimisation).
@@ -989,9 +954,9 @@ We also find that this conclusion is robust across acquisition functions, acquis
 
 Our findings also suggest one possible explanation for why multi-fidelity and multi-instance algorithm-configuration techniques can be effective. For example, SMAC~\citep{HutEtAl11} configures algorithms over a set of instances (e.g., minimizing the running time of a \gls{sat} solver over a set of \gls{sat} instances). SMAC employs an aggressive racing approach (known as ROAR~\citep{HutEtAl11}) to test a new candidate configuration on a small subset of problem instances, and only configurations that perform well are evaluated on a larger number of instances. As a result, the surrogate receives comparatively rich information about well-performing configurations while still receiving enough information to identify many low-performing regions as unpromising. This interpretation is consistent with our results, although our experiments do not isolate these methods directly.
 
-Furthermore, multi-fidelity hyperparameter-optimisation methods such as BOHB~\citep{FalEtAl18} and DyHPO~\citep{WisEtAl22} stop early, eliminating poorly performing configurations and allocating the full budget only to a small subset of configurations. A key difference between these methods is that BOHB trains the surrogate only on configurations that utilise the entire budget, while DyHPO is trained on both low and high budgets. This suggests that DyHPO may retain more information about low-performing regions than BOHB. The reported comparison between the two algorithms is therefore at least qualitatively aligned with our findings, although our paper does not establish this as a causal explanation.
+Furthermore, multi-fidelity hyperparameter-optimisation methods such as BOHB~\citep{FalEtAl18} and DyHPO~\citep{WisEtAl22} stop early, eliminating poorly performing configurations and allocating the full budget only to a small subset of configurations. A key difference between these methods is that BOHB trains the surrogate only on configurations that utilise the entire budget, while DyHPO is trained on both low and high budgets. This suggests that DyHPO may retain more information about low-performing regions than BOHB. The reported comparison between the two algorithms is therefore at least qualitatively aligned with our findings, although this chapter does not establish this as a causal explanation.
 
-The examples above suggest that it may be useful to prioritise high-performance regions while still retaining enough information to recognise low-performance regions as poor. Continuing this line of research by studying how to gather cheaper or coarser information in clearly low-performing regions, while preserving the distinctions that matter for \gls{bo}, is an important direction for future work. Another direction is to investigate how surrogate-model training procedures can be adapted more explicitly to the accuracy patterns highlighted in this paper.
+The examples above suggest that it may be useful to prioritise high-performance regions while still retaining enough information to recognise low-performance regions as poor. Continuing this line of research by studying how to gather cheaper or coarser information in clearly low-performing regions, while preserving the distinctions that matter for \gls{bo}, is an important direction for future work. Another direction is to investigate how surrogate-model training procedures can be adapted more explicitly to the accuracy patterns highlighted in this chapter.
 
 Our results also connect naturally to the idea of training surrogates with value-weighted losses. Instead of minimising a standard mean squared error that treats all observations equally, one could weight the loss contribution of each training point by its proximity to the incumbent in objective value. For instance, using weights proportional to $\exp(-\alpha \cdot \hat{m}(x_i))$, where $\hat{m}(x_i)$ is the normalised objective metric and $\alpha$ controls the concentration of the weighting. This would encourage the surrogate to fit high-value regions more accurately, at the expense of lower-value regions, directly operationalising the value-based accuracy principle we identify. Such a weighting could be applied to GPs (by rescaling the likelihood), random forests (by sample weighting in tree construction), or neural-network surrogates (by reweighting the training loss). We leave the empirical validation of value-weighted surrogate training as a concrete and promising direction for future work.
 
@@ -999,7 +964,6 @@ This study is a first step towards a principled understanding of where surrogate
 
 Overall, we believe that empirical performance prediction, especially in the context of \gls{bo}, is an important research topic that offers several avenues for improving the current state of the art. Our results provide a concrete starting point for exploring such improvements in a more targeted way.
 
-\paragraph{Connection to the thesis}~
 This chapter clarifies what kind of model accuracy matters for Bayesian optimisation: not uniform accuracy over the whole space, but accuracy that prevents the optimiser from being attracted to misleadingly good predictions.
 It closes the modelling part of the dissertation by linking prediction quality directly to decision quality.
 The next part shifts from building better models to understanding and using them, starting with explanations of full algorithm performance distributions.

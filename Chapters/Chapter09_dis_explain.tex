@@ -4,39 +4,23 @@
 \section{Introduction}
 \label{sec:ch09:intro}
 
-Empirical performance models (EPMs) are data-driven predictive models that learn the relationship between problem instance features and an algorithm performance metric, such as expected running time or solution quality. They serve as critical components in automated algorithm selection, configuration, and parameter tuning across various domains, including compiler optimisation, database query optimisation, and machine learning.
+The preceding part examined how representations and surrogate accuracy affect prediction and decisions. This chapter begins the thesis's study of the insights that performance models can provide. It asks how instance features affect the variability and shape of algorithm performance, extending the analysis beyond a single expected running time.
 
-While traditional EPMs predict a single expected value (typically mean running time), they fail to account for the stochastic nature of modern randomised algorithms. For combinatorial search and optimisation, state-of-the-art solvers rely heavily on randomisation to navigate vast search spaces, resulting in running times that vary substantially across runs on the same instance~\citep{HooStu04, EggEtAl18}. Consequently, capturing and explaining the full performance distribution, rather than just the mean, can reveal important aspects of the target algorithm which are overlooked when looking at the mean alone.
-To address this, approaches such as DistNet~\citep{EggEtAl18} model full per-instance running time distributions.
+The EPM and distributional prediction foundations are introduced in~\cref{sec:ch02:empirical_performance_prediction,sec:ch02:distribution_prediction}. Randomised solvers can have substantially different running times across repeated runs on the same instance~\citep{HooStu04,EggEtAl18}. Distribution predictors such as DistNet capture this variation, but explanations based only on scalar predictions do not reveal which instance properties affect spread, skewness, or tail behaviour. The challenge addressed here is to make these distribution predictions interpretable through statistics that describe algorithm behaviour.
 
-However, while EPMs have traditionally been used to analyse algorithm behaviour (see, \emph{e.g.},~\citealp{HutEtAl13}), these techniques are restricted to single-value predictors and analyse algorithm performance based on the mean or single runs only. This creates a fundamental discrepancy: the algorithms of interest exhibit complex, stochastic distributions, yet their explanations are derived from simplified, deterministic approximations. As a result, critical behaviours like tail risks and performance variance remain obscure.
-
-In this work, we fill this gap. Our contributions are:
+In this chapter, we address this gap through three contributions:
 \begin{itemize}
     \item We propose explainability measures for distribution predictors by decomposing predicted distributions into interpretable statistics (such as mean, variance, and skewness) and analysing feature effects using permutation importance and individual conditional expectation (ICE) curves.
     \item We present a tree-based XGBoost approach to performance distribution prediction that matches the accuracy of neural-network-based models on seven performance prediction scenarios. Our XGBoost-based predictor achieves a substantially lower computational cost. In addition, the XGBoost predictor allows one to apply explainability techniques that fail on the neural-network-based methods.
     \item We empirically evaluate our explainability approach on SAT solving and automated planning, demonstrating that different instance features govern scale vs. shape statistics, yielding new insights into algorithm behaviour.
 \end{itemize}
 
+The chapter first reviews EPM-based explainability, then introduces the statistics-based explanation framework in~\cref{sec:ch09:explainability} and the distribution predictor in~\cref{sec:ch09:xgboost}. \Cref{sec:ch09:exp} specifies the evaluation protocol for the scenarios introduced in~\cref{sec:ch03:stochastic_solvers}. The results assess predictive quality and feature effects, and~\cref{sec:ch09:concl} discusses their implications and limitations.
+
 \section{Background and related work}
 \label{sec:ch09:bg}
 
-In this section, we formally define empirical performance models, review existing EPM-based explainability methods, and discuss prior approaches to predicting performance distributions.
-
-\subsection{Empirical performance models}
-\label{sec:ch09:epm}
-
-Given an algorithm $\mathcal{A}$ that operates on
-instances $I\in\mathcal{I}$, with an associated feature vector $\mathbf{z}_{I}\in\mathcal{F}$ that describes $I$, and a measured performance $p_I\in\mathcal{P}$ (\emph{e.g.}, running time, solution quality or accuracy), an empirical performance model (EPM) is a predictor
-$f: \mathcal{F} \to \mathcal{P}$ that generalises from a set of observed pairs $\mathcal{D}_\text{train}=\{(\mathbf{z}_{I},p_I) \mid I\in\mathcal{I}_\text{train}\}$ to unseen instances $\mathcal{D}_\text{test}=\{(\mathbf{z}_{I},p_I) \mid I\in\mathcal{I}_\text{test}\}$.
-
-EPMs have been developed for a wide range of tasks, including automated algorithm selection~\citep{XuEtAl08, Kotthoff16}, algorithm configuration and parameter tuning~\citep{HutEtAl12, HutEtAl06}, data centre and cloud scheduling~\citep{LeeEtAl25, IslEtAl12, SaxEtAl23, PhaEtAl20}, compiler optimisation~\citep{YotEtAl03, AshEtAl19}, and database query optimisation~\citep{WuEtAl13}. EPMs require a set of features describing instances as an input to the model. For $\mathcal{NP}$-complete problems, high-level properties of instances are encoded to serve as an instance identifier, such as the SATzilla features for propositional satisfiability (SAT)~\citep{HutEtAl14,ShaHoo24} and causal-graph or planning-graph features for automated planning~\citep{FawEtAl14}.
-
-For stochastic algorithms, the performance of $\mathcal{A}$ on a fixed instance $I$ is a random variable. Traditional EPMs handle this stochasticity by either modelling an aggregate statistic calculated from repeated runs (\emph{e.g.}, the empirical mean or median) or training directly on noisy, single-run observations. In both cases, the EPM outputs a single scalar value, discarding all information about the variance and shape of the underlying distribution.
-
-To capture the complete run-to-run variation of stochastic algorithms, \citet{EggEtAl18} introduced \emph{DistNet}, a neural network that predicts the parameters of a per-instance running time distribution (\emph{e.g.}, a log-normal distribution). DistNet is trained by minimising the negative log-likelihood (NLL) of individual run observations, which is more efficient and numerically stable than a two-stage approach that first fits distribution parameters per instance and then regresses on those parameters.
-
-To improve predictive quality in data-scarce regimes, \emph{BayesDistNet}~\citep{TueBur21} replaces the deterministic network with a Bayesian neural network (BNN). During inference, BayesDistNet generates running-time samples by repeatedly evaluating the BNN with different weight samples, subsequently fitting a parametric distribution post-hoc. While effective with few training runs, this sampling-based inference introduces substantial computational overhead. Furthermore, because BNN predictions rely on stochastic weight samples, feature attribution becomes unstable and computationally prohibitive, making it ill-suited for explainability.
+The EPM and distributional prediction foundations are given in \cref{sec:ch02:empirical_performance_prediction,sec:ch02:distribution_prediction}. This section reviews the explanation methods that motivate the contribution of this chapter.
 
 \subsection{Explainability of algorithms using EPMs}
 To gain insights into why an algorithm performs well or poorly on specific instances, researchers have leveraged EPMs for feature and parameter attribution. For example, \citet{HutEtAl13} used forward selection to identify key parameter-feature interactions, and \citet{HutEtAl14b} proposed functional ANOVA to quantify hyperparameter importance. More recently, model-agnostic explanation tools have been applied to EPMs, such as partial dependence plots (PDP) and individual conditional expectation (ICE) curves to visualise feature effects~\citep{MooEtAl21}, and SHAP interactions to analyse hyperparameter relationships~\citep{WevEtAl26}.
@@ -103,8 +87,7 @@ This per-parameter base score allows for improved convergence.
 \section{Setup of experiments}
 \label{sec:ch09:exp}
 
-We empirically evaluated our approach on seven scenarios introduced by~\citet{EggEtAl18}: six from SAT solving and one from the automated planning domain, each with 2\,000--12\,000 instances and 100 solver runs per instance.
-The performance metric is the running time of the solver; running times, instance features, and preprocessing steps follow~\citet{EggEtAl18}.
+We use the seven stochastic solver scenarios described in \cref{sec:ch03:stochastic_solvers}.
 Models predict log-normal distribution parameters;
 results for other parametric distribution families, such as inverse Gaussian, can be found in our GitHub repository.
 Predictive performance was estimated by 10-fold cross-validation over instances (\emph{i.e.}, all runs of a given instance were assigned to the same fold), using the Kolmogorov-Smirnov (KS) distance between the predicted and empirical cumulative distribution functions.
@@ -634,11 +617,11 @@ Their ICE curves increase most strongly near the upper end of the observed verte
 \section{Conclusions and future work}
 \label{sec:ch09:concl}
 
-In this work, we proposed a methodology for explaining distribution predictions in the context of algorithm running time distributions. To this end, we used an XGBoost-based probabilistic model, which offers a computationally efficient and stable alternative to neural network approaches. Our explanation framework decomposes predicted distributions into interpretable scale and shape statistics, allowing the application of permutation importance and ICE curves to analyse how specific features influence different aspects of solver performance.
+In this chapter, we developed a methodology for explaining distribution predictions in the context of algorithm running time distributions. To this end, we used an XGBoost-based probabilistic model, which offers a computationally efficient and stable alternative to neural network approaches. Our explanation framework decomposes predicted distributions into interpretable scale and shape statistics, allowing the application of permutation importance and ICE curves to analyse how specific features influence different aspects of solver performance.
 
 Our empirical analysis on SAT solving and automated planning yields concrete insights for researchers. Specifically, we demonstrated that in SAT solving (the Spear solver on SWGCP instances), scale statistics (mean and variance) are influenced by early local search probing dynamics, while shape statistics (skewness and kurtosis) are affected more by DPLL-simplification features.
 In automated planning (the LPG planner on Zenotravel instances), scale statistics are explained by SAT-encoding characteristics, whereas tail risks are impacted by planning-native domain transition graph sizes.
 
 Our work can be extended in several directions. Firstly, performance distribution prediction has been applied only to running time data of solvers for $\mathcal{NP}$-complete problems. In the future, it is possible to study the performance distributions of additional algorithms for fundamentally different problems, such as machine learning (\emph{e.g.}, training time or hyperparameter tuning stability of deep neural networks). Additionally, while XGBoost matched the predictive quality of DistNet, there remains a gap in modelling low-data regimes (1–8 observations per instance), where neural network approaches still hold a performance edge. Future research can focus on bridging this gap by exploring tree-based architectures with probabilistic priors or hybrid neural-tree models that maintain high explainability without compromising data efficiency.
 
-Overall, we believe that the performance of randomised algorithms should not be evaluated and explained based on a single statistic, such as the mean, but on the full distribution, to better understand the full range of algorithm behaviour.
+The chapter therefore supports explaining randomised algorithm behaviour through the full predicted distribution, while interpretation remains conditional on the fitted model and available observations. This extends the thesis from predicting typical performance to understanding variability. The next chapter turns to practical reuse through ASF, a common framework for prediction and selection pipelines.

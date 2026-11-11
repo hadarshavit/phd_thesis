@@ -3,13 +3,16 @@
 \providecommand{\gb}{GraphBench}
 
 \section{Introduction}
+
+This chapter opens the modelling part of the thesis by returning to the SAT representation problem of~\cref{ch:ch04:rev_SATzilla}. Instead of supplying only hand-crafted summaries to a tabular model, we investigate models that learn from the relationships within a formula. This offers a complementary route to better empirical performance prediction, with computational feasibility forming part of the assessment.
+
 SAT solvers exhibit \emph{performance complementarity}: the most effective solver depends on the instance. Empirical performance models (EPMs) can exploit this variation by predicting solver running times, while algorithm selectors use instance information to choose a solver~\citep{Rice76b,XuEtAl08b,HutEtAl14e}. As discussed in~\cref{ch:ch04:rev_SATzilla}, the SATzilla features summarise syntactic properties, graph statistics, and observations from short solver runs to describe a SAT instance for such purposes. These summaries make performance prediction and algorithm selection possible through tabular learning, but the learning algorithm does not directly observe the relationships between variables and clauses from which those summaries were derived, thus might miss important information.
 
 As introduced in~\cref{sec:ch03:sat-graphs}, SAT formulae can be represented as graphs that preserve the relationships between variables and clauses. SATzilla uses statistics of such graphs as hand-crafted features. Graph neural networks (GNNs) instead learn vertex and graph representations by passing information along the edges, allowing the predictive model to use these relationships directly.
 
 Previously, \textsc{GraSS}~\citep{ZhaEtAl24b} used GNNs to select SAT solvers from literal-clause graphs enriched with hand-crafted node features and clause positional encodings. This demonstrates the potential of graph-based solver selection and motivates investigating whether GNNs can also serve as EPMs that predict individual solver running times.
 
-In this chapter, we investigate using GNNs for building EPMs and for SAT solvers, learning directly from graph representations of SAT instances. For this purpose, we create the largest running time dataset of SAT solvers running times, including 1 solvers and more than 100\,000 instances. We study the applicability of various GNN architectures on several graph representations, both with and without supplied hand-crafted node features, to examine how the learned representations support this task. Additionally, we use the dataset to assess algorithm selection methods for SAT solving, including graph-based ones. The central question is whether this method improves prediction and selection relative to established SATzilla-based models, and how its effectiveness depends on the graph representation, architecture, and node features.
+In this chapter, we investigate GNNs as EPMs for SAT solvers, learning directly from graph representations of SAT instances. We construct a running-time dataset covering eleven solvers and more than 100\,000 instances. We study the applicability of various GNN architectures on several graph representations, both with and without supplied hand-crafted node features, to examine how the learned representations support this task. Additionally, we use the dataset to assess algorithm selection methods for SAT solving, including graph-based ones. The central question is whether this method improves prediction and selection relative to established SATzilla-based models, and how its effectiveness depends on the graph representation, architecture, and node features.
 
 We find that, on small instances, GNNs improve both running-time prediction and algorithm selection over the tested SATzilla-based baselines. The strongest configurations use GCN with node features, with VCG giving the lowest prediction errors and LCG giving the highest closed gap for algorithm selection. More complex architectures do not consistently improve on GCN, and memory requirements currently restrict the graph-model evaluation to small instances. However, a main limitation of these methods remain with processing large SAT instances.
 
@@ -163,8 +166,8 @@ Finally, GatedGCN+ is defined as
 \end{gathered}
 \end{equation}
 
-The intermediate representation retains the core transformation of the corresponding base update, with batch normalisation (BN), dropout, and a residual connection around the transformed neighbourhood information. We note that, GatedGCN already includes this residual connection in its base form. 
-Each plus variant then applies an additional vertex-wise $\operatorname{MLP}_{\mathrm{FFN}}^{(t)}$ to the intermediate representation, adds a residual connection around this MLP, and applies a second batch normalisation. These modifications aim to stabilise training through normalisation and residual connections, reduce overfitting through dropout, and increase the capacity to transform vertex representations through the additional MLP. 
+The intermediate representation retains the core transformation of the corresponding base update, with batch normalisation (BN), dropout, and a residual connection around the transformed neighbourhood information. We note that, GatedGCN already includes this residual connection in its base form.
+Each plus variant then applies an additional vertex-wise $\operatorname{MLP}_{\mathrm{FFN}}^{(t)}$ to the intermediate representation, adds a residual connection around this MLP, and applies a second batch normalisation. These modifications aim to stabilise training through normalisation and residual connections, reduce overfitting through dropout, and increase the capacity to transform vertex representations through the additional MLP.
 
 % Node attributes $x_v$ and positional encodings $p_v$ can be encoded through $h_v^{(0)}=\operatorname{MLP}_{\mathrm{in}}([x_v\Vert p_v])$, where $\Vert$ denotes concatenation. When edge-feature integration is enabled, the aggregation and update functions use their edge-aware versions, so messages or gates can depend on $e_{vu}$. Edge and positional information are optional configuration choices in GNN+.
 \subsection{Graph-based machine learning for SAT}
@@ -182,7 +185,7 @@ Several studies have explored using GNNs or MPNNs to predict formula satisfiabil
     E_n&=\{(\overline v,v)\mid v\in V_L\}.
 \end{aligned}
 \end{equation}
-Additionally, we define $N_c(v)$ as the set of clauses containing literal $v$, and $N_l(v)$ as the set of literals occurring in clause $v$. The complementary-literal neighbour of a literal vertex $v$ is $\overline v$. 
+Additionally, we define $N_c(v)$ as the set of clauses containing literal $v$, and $N_l(v)$ as the set of literals occurring in clause $v$. The complementary-literal neighbour of a literal vertex $v$ is $\overline v$.
 
 GraSS uses relation specific mean aggregate defined as
 \begin{equation}
@@ -475,7 +478,7 @@ The graph neural networks models follow an encoder-processor-decoder organisatio
 \end{equation}
 where $\phi^{(t)}$ is instantiated by the architecture described in~\cref{sec:ch07:gnn-background}. Its precise aggregation rule and additional blocks therefore depend on the model family.
 
-A graph-level readout supplies a representation to the prediction head. For the general-purpose models, the decoder is a two-layer MLP using GELU activations~\citep{HenGim16}. 
+A graph-level readout supplies a representation to the prediction head. For the general-purpose models, the decoder is a two-layer MLP using GELU activations~\citep{HenGim16}.
 
 \subsection{Tabular baselines}
 \label{sec:ch07:tabular-baselines}
@@ -485,13 +488,13 @@ For algorithm selection, we compare three random-forest-based formulations on th
 
 \subsection{Evaluation protocol and computational scope}
 \label{sec:ch07:protocol}
-We use a fixed training--validation--test partition rather than ten-fold cross-validation due to the size of the collection and the cost of training graph models. The graph experiments cover the \dataset{small} regime, as training on medium and large formulae produced out-of-memory errors on an H100 GPU. Clause graphs also exceeded the available memory and are excluded from the model comparisons. Graph transformers were considered, but computing their positional embeddings required more than a CPU day, and therefore declared as timed-out. 
+We use a fixed training--validation--test partition rather than ten-fold cross-validation due to the size of the collection and the cost of training graph models. The graph experiments cover the \dataset{small} regime, as training on medium and large formulae produced out-of-memory errors on an H100 GPU. Clause graphs also exceeded the available memory and are excluded from the model comparisons. Graph transformers were considered, but computing their positional embeddings required more than a CPU day, and therefore declared as timed-out.
 
 \subsection{Hyperparameter optimisation}
 \label{sec:ch07:hpo}
 We tune graph models using the multi-fidelity facade of SMAC3~\citep{LinEtAl22b}. Bayesian optimisation and its role in selecting configurations are introduced in~\cref{sec:ch02:bac_bo}. Here, the fidelity is the number of training steps, allowing unpromising configurations to be stopped before full training. This combines model-based configuration proposals with early elimination, as in multi-fidelity approaches such as Hyperband and BOHB~\citep{LiEtAl17b,FalEtAl18}.
 
-Each graph-model tuning run uses 200 trials, with minimum and maximum budgets of 3\,000 and 100\,000 steps. Training uses bfloat16 mixed precision and batch size 16. Tuning is performed separately for the conditions with and without node features. \Cref{tab:ch07:hpo_cs} gives the configuration space. 
+Each graph-model tuning run uses 200 trials, with minimum and maximum budgets of 3\,000 and 100\,000 steps. Training uses bfloat16 mixed precision and batch size 16. Tuning is performed separately for the conditions with and without node features. \Cref{tab:ch07:hpo_cs} gives the configuration space.
 
 \begin{table}[htbp]
 	\centering
@@ -517,7 +520,7 @@ Each graph-model tuning run uses 200 trials, with minimum and maximum budgets of
 
 \section{Results}
 \label{sec:ch07:results}
-We first compare performance prediction on small instances, then examine algorithm selection and the tabular results on the larger size regimes. 
+We first compare performance prediction on small instances, then examine algorithm selection and the tabular results on the larger size regimes.
 
 \subsection{Performance prediction on small instances}
 \label{sec:ch07:prediction-results}
@@ -625,7 +628,7 @@ With node features, GCN on VCG has the lowest mean RMSE for every solver: $0.38$
 \end{table}
 \FloatBarrier
 \paragraph{Effect of node features.}
-Comparing the results with and without node features, we find that the best model with node features (GCN) reduces RMSE by $23.5\%$--$35.6\%$ relative to the best model without node features (GCN+), depending on the solver. 
+Comparing the results with and without node features, we find that the best model with node features (GCN) reduces RMSE by $23.5\%$--$35.6\%$ relative to the best model without node features (GCN+), depending on the solver.
 Additionally, when comparing for each model the results with and without node features we observed that 53 of the 60 reported mean errors decrease when node features are supplied. All seven increases occur for GCN+. For example, its VCG error rises from $0.54$ to $0.68$ for \solver{Kissat}, and from $0.51$ to $0.83$ for \solver{BreakIDKissat}. Node features therefore generally improve prediction accuracy, but the benefit depends on the architecture and its tuned configuration.
 
 \paragraph{Choice of architecture.}
@@ -799,3 +802,7 @@ Scalability remains the main computational limitation. The complete collection c
 The scope of the evidence also limits generalisation. The fixed split and three training seeds do not quantify uncertainty under new application domains, source-disjoint splits, or changes in the solver portfolio. The timeout penalty provides a supervised target for censored observations but does not model the distribution of unobserved completion times. Different tuning budgets and architectural constraints also mean that the comparisons assess the implemented baselines under their respective protocols and do not isolate an intrinsic advantage at equal computational cost.
 
 Future evaluation should therefore cover larger formulae, source-disjoint generalisation, and the complete selection overhead. The results show that learning from explicit relational structure can improve EPM quality on small instances, while computational feasibility limits the scope of the method.
+
+Together with~\cref{ch:ch04:rev_SATzilla}, this chapter shows two complementary ways to improve the inputs available to performance models: reliable hand-crafted feature extraction and learned representations of explicit relational structure. The strongest graph configurations combine structural learning with supplied node features, while the large-instance limitation keeps feature engineering relevant.
+
+The next chapter shifts from the information a model receives to the errors it makes. In Bayesian optimisation, it asks where accurate predictions are needed for effective decisions, separating that question from the choice of model architecture.

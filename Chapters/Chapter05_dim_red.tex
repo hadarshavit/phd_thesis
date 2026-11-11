@@ -2,6 +2,9 @@
 \chapter{Task-driven Assessment of Dimensionality Reduction Methods for Machine Learning and Black-Box Optimisation}\label{ch:ch05:dim_red}
 \section{Introduction}
 \label{sec:ch05:intro}
+
+The preceding chapter improved the reliability of hand-crafted instance features. This chapter considers a complementary representation problem: how should high-dimensional data and search spaces be reduced while preserving what matters for a downstream task? Its role in the thesis is to assess representation quality through its consequences for prediction and optimisation, rather than through a single generic measure of information preservation.
+
 High-dimensional data is ubiquitous in numerous application domains of machine learning and black-box optimisation.
 In areas ranging from computer vision~\citep{SchEtAl15}, genome sequencing~\citep{VanEtAl22} and anomaly detection~\citep{TalEtAl21} to engineering~\citep{PreEtAl24}, hyperparameter optimisation~\citep{SehEtAl22} and neural architecture search~\citep{ElsEtAl19}, complex datasets with a large number of features defining
 a space to be searched for desirable design choices or solutions
@@ -69,7 +72,7 @@ In particular, the results indicated that, while the benchmarked dimensionality 
 For the latter two tasks, depending on the setting at hand, we observed strong performance complementarity between the dimensionality reduction methods, emphasising the need for a careful selection of the dimensionality reduction method with respect to its intended use.
 Therefore, our analysis aims to provide insights into how these methods leverage their working mechanisms depending on the task at hand, highlighting the crucial need for a thorough understanding of the intended use of the reduced space before choosing the appropriate method.
 
-The remainder of this paper is organised as follows: in \cref{sec:ch05:dim_red}, we give an overview of dimensionality reduction, position our study in the broader related work context, introduce the methods selected for benchmarking, and give details on the transformation scheme required for dimensionality reduction methods to operate in the context of optimisation.
+The remainder of this chapter is organised as follows: in \cref{sec:ch05:dim_red}, we give an overview of dimensionality reduction, position our study in the broader related work context, introduce the methods selected for benchmarking, and give details on the transformation scheme required for dimensionality reduction methods to operate in the context of optimisation.
 In \cref{sec:ch05:tasks}, we outline our methodology and present the four tasks designed to assess the performance of dimensionality reduction methods.
 In \cref{sec:ch05:exp_setup}, we introduce the benchmark problem suites used in our empirical investigation and provide details on the setup of the experiments.
 We present our results in \cref{sec:ch05:res}, analyse the running times of dimensionality reduction methods in \cref{sec:ch05:rt}, critically discuss our findings in \cref{sec:ch05:disc}, and provide concluding remarks in \cref{sec:ch05:concl}.
@@ -381,9 +384,7 @@ Because of its computational requirements, Slipmap was evaluated only for $k=5$;
 \label{sec:ch05:ml_setup}
 
 \paragraph*{Benchmarks}
-We used the OpenML~CC-18~\citep{BisEtAl21} and the classification datasets from the AutoML Benchmark~\citep{GijEtAl24},
-a well-known dataset collection used for benchmarking tabular machine learning algorithms. The collection contains various tabular classification datasets from different domains, with different sizes, numbers of classes, and other characteristics.
-Each dataset comes with a set of pre-defined splits for $10$-fold cross-validation.
+The tabular data collections are described in \cref{sec:ch03:tabular_data}.
 We chose     high-dimensional datasets with at least 20 features, as in most applications 20 is a cut-off dimension at which the problem becomes considered as high-dimensional. The number of features in the datasets ranges up to $3072$.
 
 For computational reasons, we used datasets with up to 20\,000 samples.
@@ -454,14 +455,7 @@ We optimised all classifiers using SMAC3~\citep{LinEtAl22b}, a popular hyperpara
 \label{sec:ch05:bbo_setup}
 
 \paragraph*{Synthetic benchmarks}
-We considered the Black-Box Optimisation Benchmark (BBOB) noiseless problem collection from the COCO framework~\citep{HanEtAl21}, accessible via the IOHprofiler tool~\citep{DoeEtAl18,WanEtAl22,DeNEtAl24}.
-BBOB is a widely used benchmarking suite for assessing the performance of black-box optimisers, designed to cover a range of representative problems that are
-widely used in scientific studies of  numerical  black-box optimisation;
-for this reason, it is a particularly appropriate choice for our use-case.
-It is composed of 24 continuous, noiseless, single-objective and scalable test functions defined on $[-5,5]^D$, with known difficulty (\emph{e.g.,} nonseparability, ill-conditioning, different levels of multimodality, adequate or weak global structure, etc.).
-For each function, we can generate arbitrarily many different instances by applying transformations (typically translations and rotations) to both the search space and the objective space.
-The BBOB problems are categorised into the following five classes: separable functions (f1-f5), functions with low or moderate conditioning (f6-f9),
-functions with high conditioning and unimodal structure (f10-f14), multimodal functions with appropriate global structure (f15-f19), and multimodal functions with weak global structure (f20-f24).
+The BBOB collection is described in \cref{sec:ch03:bbob}.
 
 In this work, we focussed on the first 31 instances of each BBOB problem
 in seven different original dimensionalities, $D \in \{ 20,40,60,120,240,500,1000 \}$.
@@ -2403,12 +2397,7 @@ Taken together, these findings suggest that the task objective strongly shapes w
 \section{Conclusions and future work}
 \label{sec:ch05:concl}
 
-In this work, we assessed the performance of a broad range of dimensionality reduction methods based on four carefully chosen downstream tasks from two different fields: machine learning and black-box optimisation.
-Each task allows for empirically evaluating different aspects of dimensionality reduction methods, highlighting the task-dependent differences in their performance.
-Specifically, we conducted a thorough benchmarking study of 30 dimensionality reduction methods
-(based on feature extraction)
-on these four tasks across a range of different settings (\emph{i.e.,} original dimensionality, target dimensionality, budget available for training dimensionality reduction methods),
-and derived practical insights into their suitability depending on their intended use.
+This chapter assessed 30 feature-extraction-based dimensionality reduction methods across four downstream tasks in machine learning and black-box optimisation. Varying the original and target dimensionalities and the training budget allowed us to assess their suitability for different uses.
 
 In general,
 we observed that the choice of dimensionality reduction method depends on the task and experimental setting, with no method performing best throughout.
@@ -2418,3 +2407,4 @@ this shows that there is \textit{performance complementarity}~\cite{Rice76,FreEt
 In practice, dimensionality reduction methods are typically chosen based on good performance in similar scenarios.
 We expect that meta-learning which method to use in which case can yield substantial performance gains and intend to further pursue research in this direction in future work.
 
+This chapter establishes a task-dependent view of representation quality within the evaluated tasks, datasets, functions, and budgets. Success on clustering or classification does not establish suitability for prediction or optimisation. The next chapter studies another form of task dependence: adapting the influence of complementary surrogate models as optimisation observations accumulate.

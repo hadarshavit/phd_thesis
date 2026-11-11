@@ -2,32 +2,11 @@
 
 \section{Introduction}
 \label{sec:ch06:intro}
-The performance of machine learning (ML) and deep learning (DL) models crucially depends on how their hyperparameters are tuned~\citep{LavDav06,BisEtAl23}.
-Tuning the hyperparameters in order to achieve peak performance of the model on  a specific task is challenging even for experts.
-This process is often addressed through trial-and-error methods, requiring significant effort and resources.
-Hyperparameter optimisation (HPO) techniques alleviate this burden by automatically searching for well-performing hyperparameter configurations, removing the need for human intervention~\citep{SnoEtAl12}.
-While automated HPO techniques have shown great potential for classical ML models~\citep{SnoEtAl12,FeuEtAl22}, they are not as easily applicable to more complex ML and DL domains, where evaluating a single configuration of a model can be very expensive~\citep{BroEtAl20}.
-Moreover, due to the lack of access to an explicit problem formulation, HPO is handled as a black-box problem.
-Consequently, all automated HPO techniques rely on the only available information about the problem, \emph{i.e.}, evaluating the quality of candidate configurations, to steer the search towards the most promising regions of the search space and a good estimate of the global optimum.
-Throughout this article, we consider HPO in the batched setting, in which $k$ candidate configurations are proposed and evaluated per BO iteration, as is standard practice in large-scale HPO~\citep{CowEtAl22,BisEtAl23}.
+The preceding chapters studied the availability and suitability of representations. This chapter turns to the models that use the resulting observations to guide optimisation. In hyperparameter optimisation (HPO), different surrogate models can be suitable for different search spaces and stages of a run. The central question is whether their complementary strengths can be exploited dynamically, rather than choosing one surrogate before optimisation begins.
 
-Bayesian optimisation (BO)~\citep{Mockus12b,Garnett23,Frazier18b,Kushner62,Kushner64b} is a surrogate-based, sample-efficient approach for global optimisation of expensive-to-evaluate black-box problems.
-BO is particularly well-suited for settings with a very limited budget of available evaluations (relative to the size of the search space), such as HPO.
-Various BO-based HPO techniques have been developed and successfully applied to this end; a prominent example is
-HEBO~\citep{CowEtAl22}, the winner of the NeurIPS BBO competition~\citep{TurEtAl20}.
-One of the key components of BO is a
-\emph{surrogate model}, which is built on an initial sample of candidate solutions to approximate the objective function while also quantifying its uncertainty.
-At each iteration of BO, new candidate solutions are selected to be evaluated next by means of maximising an acquisition function defined on the surrogate.
-The surrogate is then iteratively refined with newly observed candidate solutions, until the total budget of available evaluations has been exhausted.
-Fitting the surrogate model to the observed data is a prediction task that often involves probabilistic models.
-BO then uses these probabilistic predictions of function values across the search space to guide the search towards a good estimate of the global optimum.
+The HPO and Bayesian optimisation (BO) framework is introduced in~\cref{sec:ch02:bayesian_optimisation}. BO uses predictive means and uncertainty estimates to guide evaluations of an expensive black-box objective. Here, we consider the batched setting, in which $k$ configurations are proposed and evaluated per iteration, as in large-scale HPO~\citep{CowEtAl22,BisEtAl23}.
 
-The choice of the surrogate model strongly affects BO performance and is often linked to the dimensionality of the problem at hand and the nature of the corresponding search space.
-For continuous search spaces, Gaussian processes (GPs)~\citep{RasWil06} are the most widely adopted surrogate model and tend to be particularly effective in continuous search spaces~\citep{EggEtAl13,EggEtAl21,BenEtAl25}.
-On the other hand, random forests (RFs)~\citep{Breiman01} as surrogate models natively support discrete and conditional search spaces, and tend to excel in higher problem dimensionalities, where GPs suffer from prohibitive computational complexity and reduced accuracy due to the increased volume of the search space
-~\citep{EggEtAl13,JenEtAl17,LiEtAl18}.
-For complex HPO tasks in mixed domains, with numerical, ordinal and categorical hyperparameters, it is highly desirable to leverage the complementary strengths of inherently different surrogate models.
-One natural way to achieve this is via ensemble methods, which have demonstrated their versatility in the context of BO-based HPO techniques for treating a wide range of heterogeneous problems~\citep{TurEtAl20,HofEtAl11b}.
+The choice of surrogate affects both prediction quality and computational cost. Gaussian processes (GPs) are widely used for continuous search spaces~\citep{RasWil06,EggEtAl13,EggEtAl21,BenEtAl25}, whereas random forests (RFs) naturally support discrete and conditional inputs and can be effective in higher-dimensional settings~\citep{Breiman01,EggEtAl13,JenEtAl17,LiEtAl18}. Mixed HPO spaces therefore motivate adapting the influence of different model families. This chapter develops that idea through dynamic ensembling and selection, using HEBO~\citep{CowEtAl22} as the optimisation framework.
 
 \begin{figure}[!htbp]
     \centering
@@ -76,7 +55,7 @@ One natural way to achieve this is via ensemble methods, which have demonstrated
     \label{fig:ch06:diagram}
 \end{figure}
 
-We propose a novel approach to enhance BO-based HPO performance by dynamically tailoring the surrogate model(s) during the optimisation process.
+In this chapter, we propose an approach to enhance BO-based HPO performance by dynamically tailoring the surrogate model(s) during the optimisation process.
 Our approach, dubbed \texttt{DyMBO}, dynamically adjusts the influence of multiple surrogate models used at each BO iteration, ranging from a weighted ensemble of complementary surrogates to a selection of a single best-performing surrogate.
 To this end, \texttt{DyMBO}
 assigns the largest weight to the surrogate model with the highest accuracy
@@ -102,67 +81,21 @@ We provide the code, instructions for reproducibility, as well as all figures in
     \label{fig:ch06:box_plot_mean_rank}
 \end{figure}
 
-The remainder of this paper is organised as follows: in~\cref{sec:ch06:back-rw}, we define the HPO problem, describe how BO operates, and position our approach with respect to related work on dynamically adapting BO components and using ensembles for enhancing BO performance.~\cref{sec:ch06:method} introduces
-our methodology for
-dynamic ensembling and selection
-of surrogate models.
-In~\cref{sec:ch06:experiments}, we provide the technical details on the experimental setup and describe the benchmarks and baselines chosen for our empirical analysis. We present results and critically discuss them in~\cref{sec:ch06:res}. Finally, in~\cref{sec:ch06:concl-fw}, we provide concluding remarks and outline directions for future research.
+\Cref{sec:ch06:back-rw} specifies the local surrogate and HEBO choices and positions DyMBO relative to dynamic BO components and ensembles. \Cref{sec:ch06:method} introduces the weighting and selection mechanism. \Cref{sec:ch06:experiments} describes the experimental protocol, using the benchmark families introduced in~\cref{sec:ch03:hpo_benchmarks}. Results and ablations follow in~\cref{sec:ch06:res}, and \cref{sec:ch06:concl-fw} discusses the conclusions and remaining limitations.
 
 \section{Background and related work}
 \label{sec:ch06:back-rw}
 
-In this section, we define the HPO problem and describe the working mechanisms of the BO framework.
-We also cover related work on dynamic design choices related to the components of BO, as well as using ensembles in BO.
+The HPO and BO foundations are given in \cref{sec:ch02:bayesian_optimisation}. Here, we specify the surrogate and HEBO choices used in this chapter and discuss related work on dynamic component selection and ensembling.
 
-\subsection{Hyperparameter optimisation} Let $\mathcal{A}$ be a learning algorithm with $n$ hyperparameters, $\Lambda_{i}$ the domain of the $i$-th hyperparameter, and $\mathbf{\Lambda} = \Lambda_{1} \times \Lambda_{2} \times \dots \Lambda_{n}$ the overall hyperparameter configuration space.
-We denote a hyperparameter configuration by $\mathbf{\lambda} \in \mathbf{\Lambda}$, and the algorithm $\mathcal{A}$ with its hyperparameters instantiated to $\mathbf{\lambda}$ by $\mathcal{A}_{\mathbf{\lambda}}$.
-Given a dataset $D$, the objective of HPO is to find a hyperparameter configuration $\mathbf{\lambda}^{*}$ that minimises the loss $\mathcal{L}$ of a model fitted by algorithm $\mathcal{A}$ with hyperparameters $\mathbf{\lambda}$ on training data ${D}_{train}$, and evaluated on validation data ${D}_{validate}$, for a given loss function $\mathcal{L}$, \emph{i.e.},
-\begin{equation}
-\label{eq:ch06:def-hpo}
-\mathbf{\lambda}^{*} \in \argmin_{\mathbf{\lambda} \in \mathbf{\Lambda}}
-\mathcal{L}(\mathcal{A}_{\mathbf{\lambda}}, {D}_{train}, {D}_{validate}) = \argmin_{\mathbf{\lambda} \in \mathbf{\Lambda}} c(\mathbf{\lambda})
-\end{equation}
-Here, $c(\mathbf{\lambda})$ is a shorthand for the loss function when $\mathcal{A}_{\mathbf{\lambda}}$ and $D$ are fixed.
-Note that $c(\mathbf{\lambda})$ is a black-box function, without a closed-form expression nor analytic gradient information.
+\subsection{Surrogate choices and HEBO}
+\label{sec:ch06:hebo}
 
-\subsection{Bayesian optimisation}
-\label{sec:ch06:bac_bo}
+The GP and RF foundations are given in~\cref{sec:ch02:bac_bo}. For the gradient-boosting surrogate, we use a different uncertainty estimate.
 
-Bayesian optimisation (BO)~\citep{Mockus12b,Garnett23,Frazier18b,Kushner62,Kushner64b} is a family of surrogate-based algorithms for efficient global optimisation of black-box problems.
-Typically, BO consists of three main components: an \emph{initial design}, \emph{i.e.}, in HPO, a set of candidate hyperparameter configurations $\boldsymbol{\lambda} = (\lambda^{(1)},\ldots, \lambda^{(r)})$ and their evaluations
-$c(\boldsymbol{\lambda}) = (c(\lambda^{(1)}),\ldots, c(\lambda^{(r)}))$; a \emph{surrogate model} (fitted to the
-observations) that returns an approximation $\hat{c}(\mathbf{\lambda})$ of the unknown loss function $c(\mathbf{\lambda})$ while capturing the uncertainty in the prediction $\hat{\sigma}(\mathbf{\lambda})$ on unobserved points in the search space; and an \emph{acquisition function}, which is optimised to suggest candidate solutions to be evaluated next, usually balancing exploration and exploitation of the search space.
-BO then evaluates the most promising candidate solutions.
-To approximate the expensive objective function, BO typically employs a Gaussian process (GP) model as the surrogate. The GP model defines a distribution over functions on the configuration space $c(\lambda)\sim\mathcal{GP}_c(\mu(\lambda),\text{cov}(\lambda,\lambda'))$, where
-$\mu(\cdot)$
-is a mean function and
-$\text{cov}(\cdot,\cdot)$
-is a covariance function. If we consider an observation model
-$y_i = c(\lambda^{(i)}) + \varepsilon_i$
-with normally distributed noise,
-$\varepsilon_i\sim\mathcal{N}(0,\sigma^2_\varepsilon)$,
-the predicted value by the GP model at one unknown configuration
-$\lambda$ will also follow a normal distribution with mean
-$\mu(\lambda)=K_{\lambda,\boldsymbol{\lambda}}(K_{\boldsymbol{\lambda},\boldsymbol{\lambda}}+\sigma^2_\varepsilon I)^{-1}\boldsymbol{y}$ and variance $\sigma^2(\lambda)=\text{cov}(\lambda,\lambda)-K_{\lambda,\boldsymbol{\lambda}}(K_{\boldsymbol{\lambda},\boldsymbol{\lambda}}+\sigma^2_\varepsilon I)^{-1} K_{\boldsymbol{\lambda},\lambda}$,
-where $\boldsymbol{y}=(y_1,\ldots,y_r)$ is the vector of observations, $K_{\boldsymbol{\lambda},\boldsymbol{\lambda}}=[\text{cov}(\lambda^{(i)},\lambda^{(j)})]_{\lambda^{(i)},\lambda^{(j)}\in\boldsymbol{\lambda}}$ is the covariance matrix, and $K_{\lambda,\boldsymbol{\lambda}}=[\text{cov}(\lambda^{(i)},\lambda)]_{\lambda^{(i)}\in\boldsymbol{\lambda}}$ is the correlation vector for all samples.
-GPs as a surrogate model inherently provide both the mean and the variance vector.
-
-However, GPs are not the only surrogate model used in BO. Another common choice for a surrogate model are tree-based models,
-such as random forests (RFs).
-Tree-based models traditionally predict only the mean of the given data (\emph{e.g.}, in a regression setting).
-In this case, the variance is defined based on the variance of the predictions of the leaves~\citep{HutEtAl11}.
-With $t(\lambda)$ being the prediction of a tree $t \in T$, we calculate the mean $\mu(\lambda)$ and variance $\sigma^2(\lambda)$ for a set of trees $T$ as follows:
-\begin{equation}
-    \mu(\lambda)=\frac{1}{|T|} \cdot \sum_{t\in T} t(\lambda) \; ,
-\end{equation}
-\begin{equation}
-    \sigma^2(\lambda)=\frac{1}{|T|} \cdot \sum_{t\in T} (t(\lambda) - \mu(\lambda))^2 \; .
-\end{equation}
 Alternatively, uncertainty can be estimated via quantile regression~\citep{KoeBas78}, using two separate models to predict the upper and lower quantile of the output distribution, and deriving variance from the spread between these quantiles.
 We adopt this approach to estimate uncertainty for another tree-based model, gradient boosting (GB); this is done similarly to the implementation in the \textsc{scikit-optimize} package.\footnote{\url{https://github.com/scikit-optimize/scikit-optimize}}
 
-BO proceeds iteratively until a termination criterion is met. In each iteration, it optimises the acquisition function by repeatedly querying the surrogate model to generate a pool of candidate solutions. It then evaluates the most high-potential solutions (\emph{i.e.}, the solutions that maximise the acquisition function) from this pool,
-refines the surrogate model based on the new observations, and updates the optimum if the new point improves upon the true function value of the best observation so far.
 Throughout this work, we consider the batched setting, in which $k$ configurations are proposed and evaluated per BO iteration; see~\cref{sec:ch06:method}. This is reflected in the acquisition and update steps described here.
 
 Among the many variants of BO from the literature, in this work, we focus on the state-of-the-art method for HPO to empirically evaluate our method: HEBO~\citep{CowEtAl22}.
@@ -292,7 +225,7 @@ First, especially in early BO iterations, ranking loss is estimated from very fe
 In this case, an exponential moving average with $\alpha < 1$ dampens the effect of any single noisy update.
 Second, because different surrogate models tend to suit different regions of the search space, and the focus of the acquisition function narrows as optimisation proceeds, a surrogate that performed poorly during the more exploratory early phase may become preferable locally, near the optimum.
 
-We note that the acquisition function in HEBO trades off exploration and exploitation by combining EI, PI and UCB in a multi-objective way (for additional details, see \cref{sec:ch06:bac_bo,sec:ch06:ablations}).
+We note that the acquisition function in HEBO trades off exploration and exploitation by combining EI, PI and UCB in a multi-objective way (for additional details, see \cref{sec:ch06:hebo,sec:ch06:ablations}).
 We also provide details on acquisition functions used in different baselines in~\cref{sec:ch06:baselines}.
 
 \paragraph{Pseudocode.}
@@ -415,40 +348,7 @@ For other HPO baselines, which are well-known methods that have been curated to 
 \subsection{Benchmark details}
 \label{sec:ch06:benchs}
 
-\textbf{Yet Another HPO Benchmark (YAHPO) Gym}~\citep{PfiEtAl22} is a surrogate-based benchmark for hyperparameter optimisation on tabular machine learning tasks.
-The benchmark consists of multiple datasets from OpenML and various machine learning algorithms.
-The authors provide a surrogate model for each machine learning algorithm and a dataset that predicts different objectives, such as accuracy, training time, and more.
-
-% YAHPO Gym contains several scenarios.
-% Each scenario has a configuration space and is based on a machine learning algorithm.
-% Each scenario contains multiple datasets, which are called instances.
-% The YAHPO Gym scenarios are: \\
-% \textbf{rbv2\_ranger}~\citep{BinEtAl20}: RF using the ranger R implementation.\\
-%     \textbf{rbv2\_rpart}~\citep{BinEtAl20}: decision tree using the mlr implementation.\\
-%     \textbf{rbv2\_glmnet}~\citep{BinEtAl20}: generalised linear models (GLM) with elastic net regularisation using the mlr implementation.\\
-%     \textbf{rbv2\_svm}~\citep{BinEtAl20}: support vector machine (SVM) with the mlr implementation.\\
-%     \textbf{rbv2\_xgboost}~\citep{BinEtAl20}: gradient boosting using XGBoost.\\
-%     \textbf{rbv2\_aknn}~\citep{BinEtAl20}: k-nearest neighbours using the mlr implementation.\\
-%     \textbf{rbv2\_super}~\citep{BinEtAl20}: a combined algorithm selection and hyperparameter optimisation (CASH) scenario that uses all the above rbv2 scenarios.\\
-%     \textbf{iaml\_glment}~\citep{PfiEtAl22}: generalised linear models (GLM) with elastic net regularisation using the mlr implementation.\\
-%     \textbf{iaml\_rpart}~\citep{PfiEtAl22}: decision tree using the mlr implementation.\\
-%     \textbf{iaml\_ranger}~\citep{PfiEtAl22}: RF using the ranger R implementation.\\
-%     \textbf{iaml\_xgboost}~\citep{PfiEtAl22}: gradient boosting using XGBoost.\\
-%     \textbf{iaml\_super}~\citep{PfiEtAl22}: combined algorithm selection and hyperparameter optimisation (CASH) scenario that uses all the above iaml scenarios.\\
-%     \textbf{LCBench}~\citep{ZimEtAl21b}: optimising the training hyperparameters and architecture of multi-layer perceptron on tabular datasets.\\
-%     \textbf{FCNet}~\citep{FalEtAl18}: hyperparameter optimisation of a fully-connected network for tabular data.\\
-%     \textbf{NAS-Bench-301}~\citep{ZelEtAl22}: neural architecture search (NAS) scenario using a constant set of training hyperparameters. The search space describes a cell of the neural network and the hyperparameters are different operations done in each cell.
-
-For details on configuration spaces, we refer the reader to original papers.
-The configuration spaces for the rbv2 scenarios are taken from~\citep{BinEtAl20}.
-For rbv2\_super, the configuration space contains all the configuration spaces of individual algorithms, with an additional hyperparameter which selects the algorithm.
-The configuration spaces for the iaml scenarios are taken from~\citep{PfiEtAl22}; the iaml\_super scenario is similar to rbv2\_super, where there is an additional hyperparameter to select the algorithm.
-While the iaml and rbv2 scenarios look similar, there are a few differences in the configuration space.
-First, the configuration space of rbv2 contains the input imputation used, while in iaml the input imputation is constant.
-Another difference is a different range of hyperparameters (for example, the number of rounds in XGBoost).
-In all scenarios, the target metric is accuracy, as defined in~\citep{PfiEtAl22}.
-The configuration spaces for LCBench, FCNet and NAS-Bench-301 are taken from~\citep{ZimEtAl21b,FalEtAl18,ZelEtAl22}, respectively.
-Additionally, we benchmarked our method on \textbf{JAHS-Bench-201}~\citep{BanEtAl22}: a neural architecture search (NAS) benchmark that optimises both the architecture of the neural network and the training hyperparameters. The benchmark contains three datasets: CIFAR10, Fashion MNIST and Colorectal Histology.
+The benchmark families and configuration spaces are described in \cref{sec:ch03:hpo_benchmarks}. The following budget calculation applies to the experiments in this chapter.
 
 \paragraph{Evaluation budget.}
 All YAHPO Gym and JAHS-Bench-201 surrogates predict the running time required to train and evaluate the model using a specific configuration.
@@ -464,7 +364,7 @@ In \cref{sec:ch06:res}, we compared \texttt{DyMBO} to several frameworks and alg
 \subsubsection{HEBO Variants}
 \label{sec:ch06:surrogates}
 We used the following four surrogate models with HEBO:\\
-\textbf{Gaussian processes} (GPs): In~\cref{sec:ch06:bac_bo}, we gave an introduction on GPs, which defines them as a distribution over functions. GPs are a popular choice for surrogate models in BO due to their flexibility and ability to model complex functions.
+\textbf{Gaussian processes} (GPs): In~\cref{sec:ch02:bac_bo}, we gave an introduction on GPs, which defines them as a distribution over functions. GPs are a popular choice for surrogate models in BO due to their flexibility and ability to model complex functions.
     The GP in HEBO uses a Matérn kernel with Gamma hyperpriors. We used the native implementation of GPs in HEBO.\\
     \textbf{Random forest} (RF)~\citep{Breiman01} is a \emph{bagged} ensemble of decision trees. This means that each tree is fitted on a different random subset of the data, which helps avoid overfitting and improve the prediction accuracy. RFs are known as strong performance predictors~\citep{HutEtAl14} and have been used in BO pipelines as surrogate models~\citep{HutEtAl11}.\\
     \textbf{Extremely randomised trees}~\citep{GeuEtAl06}, also known as extra trees (ET), are an ensemble of random trees, where the splitting threshold is determined randomly, instead of based on a predetermined criterion. Furthermore, each tree is built on the whole dataset. ET is known to have lower variance than RFs. They are the default surrogate model in the \texttt{forest\_minimize} function of \textsc{scikit-optimize}.\footnote{\url{https://scikit-optimize.github.io/stable/modules/generated/skopt.forest_minimize.htm}}\\
@@ -1582,7 +1482,7 @@ We furthermore looked into the pairwise distance between the sampled points, whi
 \section{Conclusions, limitations and future work}
 \label{sec:ch06:concl-fw}
 
-In this work, we proposed a novel dynamic tailoring approach for surrogate models in BO-based HPO, spanning weighted ensembling and greedy selection.
+In this chapter, we developed a dynamic tailoring approach for surrogate models in BO-based HPO, spanning weighted ensembling and greedy selection.
 Our method assesses the accuracy of different surrogates throughout the optimisation process and dynamically determines whether to combine them or select among them by assigning and updating the model weights accordingly.
 We experimented with a wide variety of HPO benchmark tasks
 and baselines, and we found that, despite different mean ranks of BO with single surrogate models
@@ -1612,6 +1512,10 @@ in case a single surrogate model is chosen, the overhead of ensembling would thu
 
 Overall, we believe that combining multiple surrogate models in BO is a promising direction for achieving better surrogate predictions, thus allowing for faster convergence and increased sample efficiency.
 \texttt{DyMBO} is the first method that dynamically leverages the potential of complementary surrogates within the BO procedure itself.
+
+This chapter extends the thesis's task-dependent view of representations to the suitability of predictive models: useful information includes evidence about which surrogate is currently effective. Its results support dynamic adaptation within the tested portfolios, while the overhead and sensitivity to weak portfolio members remain important constraints.
+
+The next part examines predictive models from two complementary perspectives. \Cref{ch:ch07:gnns_epms} returns to SAT to ask whether models can learn directly from relational structure; \cref{ch:ch08:noisy_oracle} returns to BO to isolate where surrogate accuracy matters for optimisation decisions.
 
 \section*{Acknowledgements}
 This work has been partly funded by the Alexander von Humboldt Foundation through an Alexander von Humboldt Professorship awarded to Holger Hoos.
