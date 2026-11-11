@@ -314,6 +314,7 @@ For each of the unsupervised feature extraction methods that we benchmark, the i
 In this section, we introduce four different tasks to assess the effectiveness of dimensionality reduction methods.
 The tasks are specifically designed to benchmark different aspects of dimensionality reduction methods, offering complementary views into these different use-cases.
 
+\FloatBarrier
 \subsection{Task 1: Clustering ability}
 \label{sec:ch05:method-ml-task1}
 In this task, we investigated how the different dimensionality reduction methods affect the clustering of the samples in datasets in the reduced space, \emph{i.e.}, the final performance of an unsupervised machine learning approach.
@@ -323,6 +324,7 @@ To do so, given a dataset $\mathcal{D}$ with a train-test split $\mathcal{D}_{\t
 We then transform the test set instances $\mathcal{D}_{\text{test}}$ to the lower dimensionality and cluster the samples in $\mathcal{D}_{\text{test}}$ based on the features in the reduced space using a clustering algorithm $C$, without access to test labels for both supervised and unsupervised methods.
 We measure the quality of the clusters $C(\T(\mathcal{D}_{\text{test}}))$ using two well-established clustering metrics~\citep{RosHir07}: homogeneity (which measures whether each cluster contains samples from the same true class) and completeness (which checks that all samples which belong to the same true class are in the same cluster).
 
+\FloatBarrier
 \subsection{Task 2: Tabular classification accuracy}
 \label{sec:ch05:method-ml-task2}
 In this task, we assessed the effect of
@@ -332,6 +334,7 @@ To do so, we train a dimensionality reduction method $\T$ on the training set $\
 We evaluate the performance of well-known classical machine learning algorithms (random forest, multi-layer perceptron and gradient boosting) for solving the classification tasks using inputs from the reduced space.
 Performance is measured using standard metrics such as accuracy, balanced accuracy and F1 score. The last two metrics are robust against imbalanced datasets, as some datasets might have more samples in some classes than others.
 
+\FloatBarrier
 \subsection{Task 3: Target function approximation}
 \label{sec:ch05:method-bbo-task2}
 
@@ -344,6 +347,7 @@ We argue that the ability of a dimensionality reduction method to retain meaning
 permits us to perform our tasks in a reduced space, thereby naturally decreasing the complexity of the task.
 Furthermore, transforming to a lower-dimensional space often leads to additional gains in terms of predictive performance, as the function becomes easier to approximate via the machine learning model.
 
+\FloatBarrier
 \subsection{Task 4: Black-box optimiser performance}
 \label{sec:ch05:method-bbo-task3}
 In this task, we assessed how the optimisation process is affected by operating in the reduced space using a Bayesian optimisation algorithm.
@@ -351,7 +355,8 @@ Bayesian optimisation~\citep{Garnett23}
 is a sample-efficient global optimisation framework, particularly well-suited for expensive-to-evaluate tasks.
 We argue that performance gains in terms of optimisation and in terms of predictive performance (investigated in Task 3) do not always positively correlate with one another.
 In fact, the essential knowledge about the problem that enhances the optimisation process might very well be different from knowledge needed to boost the predictive power of machine learning algorithms.
-To assess this, we first fitted each dimensionality reduction method on a Sobol sample with observed objective values. The resulting mapping $\T$ was fixed before Bayesian optimisation begins. In the main experiment, a separate 30-point Sobol design was used to initialise the optimiser; these points were transformed by $\T$ and are used, together with their objective values, to fit the initial Gaussian process in the reduced space. By keeping the reducer-training and optimiser-initialisation samples separate, we aimed to isolate the effect of the learned mapping and permit controlled variation of reducer-training sample size. We additionally report in~\cref{app:ch05:bop-initial-sample} the practically relevant alternative, in which the reducer-training observations were reused to initialise the Gaussian process.
+To assess this, we first fitted each dimensionality reduction method on a Sobol sample with observed objective values. The resulting mapping $\T$ was fixed before Bayesian optimisation begins. In the main experiment, a separate 30-point Sobol design was used to initialise the optimiser; these points were transformed by $\T$ and are used, together with their objective values, to fit the initial Gaussian process in the reduced space. By keeping the reducer-training and optimiser-initialisation samples separate, we aimed to isolate the effect of the learned mapping and permit controlled variation of reducer-training sample size.
+% We additionally report in~\cref{app:ch05:bop-initial-sample} the practically relevant alternative, in which the reducer-training observations were reused to initialise the Gaussian process.
 The Gaussian process predicts in the reduced space, and its mean and variance define expected improvement (EI)~\citep{ForEtAl08b}. To optimise EI, we chose a genetic algorithm over candidates in the original space, similarly to the baseline used in HEBO~\citep{CowEtAl22}. Candidate points generated by the genetic algorithm were not evaluated with the black-box objective, but rather mapped through $\T$; EI was evaluated in the reduced space, and only the original-space candidate with the largest EI was evaluated by the objective.
 The selected point and its observed objective value were added to the data, after which the Gaussian process was refitted in the reduced space.
 We iterated this process until a stopping criterion was met.
@@ -390,7 +395,8 @@ We provide results for other clustering metrics such as AMI, ARI and V-measure i
 Due to limited additional insight they bring, we do not discuss them in detail in this study.
 \subsubsection*{Task 2: Tabular classification accuracy.}
 We considered the following three classification algorithms that are traditionally used for tabular data~\citep{GriEtAl22}: random forest, gradient boosting and multi-layer perceptron (MLP), all in their scikit-learn~\citep{PedEtAl11} implementations.
-We optimised all classifiers using SMAC3~\citep{LinEtAl22b}, a popular hyperparameter optimiser, with a budget of 30 evaluations. We provide the configuration spaces in~\cref{app:ch05:config-spaces}.
+We optimised all classifiers using SMAC3~\citep{LinEtAl22b}, a popular hyperparameter optimiser, with a budget of 30 evaluations.
+%  We provide the configuration spaces in~\cref{app:ch05:config-spaces}.
 
 % \section{Classifier configuration spaces for task 2}
 % \label{app:ch05:config-spaces}
@@ -499,8 +505,7 @@ The total Bayesian optimisation budget was set at $300$ evaluations including th
 %     \item OpenML version 0.15.0
 % \end{itemize}
 
-\subsection{Results with tuned dimensionality reduction methods}
-\label{app:ch05:tuned-results}
+\subsection{Experiments with tuned dimensionality reduction methods}
 
 In addition to the main experiments which use the default hyperparameter settings for each considered dimensionality reduction method, here we assess
 
@@ -516,55 +521,55 @@ For target function approximation and Bayesian optimisation, one configuration i
 
 For machine learning, OpenML tasks 12, 28, and 43 are used only for tuning. Ten tasks sampled with seed 0 from the remaining eligible tasks are used for testing: 16, 9946, 10090, 14952, 14954, 146817, 146824, 359958, 359967, and 359970. Prediction configurations are tuned separately for each reducer, \(k\), and classifier family by maximising mean accuracy. Clustering runs two independent SMAC optimisations per reducer and \(k\), maximising homogeneity and completeness separately. Tuning uses fold 0; final evaluation uses every available fold of the held-out tasks.
 
-In the domains below, \emph{log} indicates logarithmic sampling, \(N\) is the initial sample size for reducer training, and \(k\) is target dimensionality.
+% In the domains below, \emph{log} indicates logarithmic sampling, \(N\) is the initial sample size for reducer training, and \(k\) is target dimensionality.
 
-\begin{table*}[h]
-    \centering
-    \caption[Configuration spaces for classical and probabilistic reducers]{Configuration spaces for classical and probabilistic dimensionality reduction methods.}
-    \label{tab:ch05:reducer-cs-classical}
-    \scriptsize
-    \setlength{\tabcolsep}{4pt}
-    \begin{tabular}{p{0.25\textwidth}p{0.23\textwidth}p{0.27\textwidth}p{0.12\textwidth}}
-        \toprule
-        Method & Hyperparameter & Domain & Sampling \\
-        \midrule
-        PCA (RBF), PCA (Sigmoid) & \texttt{gamma} & \([10^{-4},1]\) & log \\
-        PCA (Polynomial) & \texttt{degree}; \texttt{gamma} & \(\{2,3,4,5\}\); \([10^{-4},1]\) & uniform; log \\
-        FastICA & \texttt{tol}; \texttt{max\_iter} & \([10^{-5},10^{-2}]\); integers \([100,1000]\) & log; log \\
-        LLE & \texttt{n\_neighbors}; \texttt{reg} & integers \([\max(k+1,5),\min(N-1,50)]\); \([10^{-4},10^{-1}]\) & uniform; log \\
-        NMF & \texttt{alpha\_W}; \texttt{alpha\_H} & \([10^{-5},10^{-1}]\); \([10^{-5},10^{-1}]\) & log; log \\
-        Dictionary learning & \texttt{alpha}; \texttt{max\_iter} & \([10^{-4},10]\); integers \([100,1000]\) & log; uniform \\
-        Latent Dirichlet allocation & \texttt{learning\_decay}; \texttt{max\_iter} & \([0.5,0.9]\); integers \([10,100]\) & uniform; log \\
-        Bernoulli RBM & \texttt{learning\_rate}; \texttt{n\_iter}; \texttt{batch\_size} & \([10^{-3},10^{-1}]\); integers \([10,100]\); integers \([10,\min(N,128)]\) & log; log; log \\
-        \bottomrule
-    \end{tabular}
-\end{table*}
+% \begin{table*}[h]
+%     \centering
+%     \caption[Configuration spaces for classical and probabilistic reducers]{Configuration spaces for classical and probabilistic dimensionality reduction methods.}
+%     \label{tab:ch05:reducer-cs-classical}
+%     \scriptsize
+%     \setlength{\tabcolsep}{4pt}
+%     \begin{tabular}{p{0.25\textwidth}p{0.23\textwidth}p{0.27\textwidth}p{0.12\textwidth}}
+%         \toprule
+%         Method & Hyperparameter & Domain & Sampling \\
+%         \midrule
+%         PCA (RBF), PCA (Sigmoid) & \texttt{gamma} & \([10^{-4},1]\) & log \\
+%         PCA (Polynomial) & \texttt{degree}; \texttt{gamma} & \(\{2,3,4,5\}\); \([10^{-4},1]\) & uniform; log \\
+%         FastICA & \texttt{tol}; \texttt{max\_iter} & \([10^{-5},10^{-2}]\); integers \([100,1000]\) & log; log \\
+%         LLE & \texttt{n\_neighbors}; \texttt{reg} & integers \([\max(k+1,5),\min(N-1,50)]\); \([10^{-4},10^{-1}]\) & uniform; log \\
+%         NMF & \texttt{alpha\_W}; \texttt{alpha\_H} & \([10^{-5},10^{-1}]\); \([10^{-5},10^{-1}]\) & log; log \\
+%         Dictionary learning & \texttt{alpha}; \texttt{max\_iter} & \([10^{-4},10]\); integers \([100,1000]\) & log; uniform \\
+%         Latent Dirichlet allocation & \texttt{learning\_decay}; \texttt{max\_iter} & \([0.5,0.9]\); integers \([10,100]\) & uniform; log \\
+%         Bernoulli RBM & \texttt{learning\_rate}; \texttt{n\_iter}; \texttt{batch\_size} & \([10^{-3},10^{-1}]\); integers \([10,100]\); integers \([10,\min(N,128)]\) & log; log; log \\
+%         \bottomrule
+%     \end{tabular}
+% \end{table*}
 
-\begin{table*}[h]
-    \centering
-    \caption[Configuration spaces for manifold and neural reducers]{Configuration spaces for manifold and neural dimensionality reduction methods. Supervised and unsupervised variants use the same domains where listed together.}
-    \label{tab:ch05:reducer-cs-nonlinear}
-    \scriptsize
-    \setlength{\tabcolsep}{4pt}
-    \begin{tabular}{p{0.25\textwidth}p{0.23\textwidth}p{0.27\textwidth}p{0.12\textwidth}}
-        \toprule
-        Method & Hyperparameter & Domain & Sampling \\
-        \midrule
-        UMAP, parametric UMAP (both variants) & \texttt{n\_neighbors}; \texttt{min\_dist} & integers \([5,\min(N-1,50)]\); \([0,0.8]\) & uniform; uniform \\
-        LocalMAP, PaCMAP & \texttt{n\_neighbors}; \texttt{MN\_ratio}; \texttt{FP\_ratio} & integers \([5,\min(N-1,50)]\); \([0.1,1]\); \([1,4]\) & uniform \\
-        ParamPaCMAP & \texttt{n\_neighbors}; \texttt{n\_MN}; \texttt{n\_FP} & integers \([5,\min(N-1,50)]\); integers \([2,\min(N-1,20)]\); integers \([5,\min(N-1,50)]\) & uniform \\
-        ParamPaCMAP & \texttt{lr}; \texttt{batch\_size}; \texttt{num\_epochs} & \([10^{-4},10^{-2}]\); \(\{32,64,128\}\); integers \([50,250]\) & log; categorical; log \\
-        Slipmap & \texttt{prototypes}; \texttt{lasso}; \texttt{ridge} & \([0.05,0.5]\); \([10^{-5},10^{-2}]\); \([10^{-5},10^{-2}]\) & uniform; log; log \\
-        Ivis & \texttt{k}; \texttt{batch\_size} & integers \([5,\min(N-1,30)]\); \(\{32,64,128\}\) & uniform; categorical \\
-        Autoencoder (both depths) & \texttt{epochs}; \texttt{batch\_size}; \texttt{learning\_rate} & integers \([20,120]\); \(\{32,64,128\}\); \([10^{-4},10^{-2}]\) & log; categorical; log \\
-        Denoising autoencoder (both depths) & autoencoder parameters; \texttt{noise\_std} & as above; \([0.01,0.2]\) & as above; uniform \\
-        VAE (both depths) & autoencoder parameters; \texttt{beta} & as above; \([10^{-4},10^{-1}]\) & as above; log \\
-        \bottomrule
-    \end{tabular}
-\end{table*}
+% \begin{table*}[h]
+%     \centering
+%     \caption[Configuration spaces for manifold and neural reducers]{Configuration spaces for manifold and neural dimensionality reduction methods. Supervised and unsupervised variants use the same domains where listed together.}
+%     \label{tab:ch05:reducer-cs-nonlinear}
+%     \scriptsize
+%     \setlength{\tabcolsep}{4pt}
+%     \begin{tabular}{p{0.25\textwidth}p{0.23\textwidth}p{0.27\textwidth}p{0.12\textwidth}}
+%         \toprule
+%         Method & Hyperparameter & Domain & Sampling \\
+%         \midrule
+%         UMAP, parametric UMAP (both variants) & \texttt{n\_neighbors}; \texttt{min\_dist} & integers \([5,\min(N-1,50)]\); \([0,0.8]\) & uniform; uniform \\
+%         LocalMAP, PaCMAP & \texttt{n\_neighbors}; \texttt{MN\_ratio}; \texttt{FP\_ratio} & integers \([5,\min(N-1,50)]\); \([0.1,1]\); \([1,4]\) & uniform \\
+%         ParamPaCMAP & \texttt{n\_neighbors}; \texttt{n\_MN}; \texttt{n\_FP} & integers \([5,\min(N-1,50)]\); integers \([2,\min(N-1,20)]\); integers \([5,\min(N-1,50)]\) & uniform \\
+%         ParamPaCMAP & \texttt{lr}; \texttt{batch\_size}; \texttt{num\_epochs} & \([10^{-4},10^{-2}]\); \(\{32,64,128\}\); integers \([50,250]\) & log; categorical; log \\
+%         Slipmap & \texttt{prototypes}; \texttt{lasso}; \texttt{ridge} & \([0.05,0.5]\); \([10^{-5},10^{-2}]\); \([10^{-5},10^{-2}]\) & uniform; log; log \\
+%         Ivis & \texttt{k}; \texttt{batch\_size} & integers \([5,\min(N-1,30)]\); \(\{32,64,128\}\) & uniform; categorical \\
+%         Autoencoder (both depths) & \texttt{epochs}; \texttt{batch\_size}; \texttt{learning\_rate} & integers \([20,120]\); \(\{32,64,128\}\); \([10^{-4},10^{-2}]\) & log; categorical; log \\
+%         Denoising autoencoder (both depths) & autoencoder parameters; \texttt{noise\_std} & as above; \([0.01,0.2]\) & as above; uniform \\
+%         VAE (both depths) & autoencoder parameters; \texttt{beta} & as above; \([10^{-4},10^{-1}]\) & as above; log \\
+%         \bottomrule
+%     \end{tabular}
+% \end{table*}
 
 \FloatBarrier
-\section{Results}
+\section{Main experimental results}
 \label{sec:ch05:res}
 
 Figure labels use AE for autoencoder, RP for random projection, 2L for two layers, and unsup. for unsupervised; Param. abbreviates parametric.
@@ -580,6 +585,7 @@ We present and discuss selected results from our experiments for the four assess
 % For Task 1 and Task 2, in particular, we additionally report the mean classification accuracy for a subset of OpenML datasets required to include Slipmap among the results.
 % For Task 4, we additionally report the mean rank trajectories over the complete optimisation process, while the main text reports final performance only.
 
+\FloatBarrier
 \subsection{Task 1: Clustering ability}
 \label{sec:ch05:res-ml-task1}
 
@@ -593,7 +599,7 @@ For the cluster completeness metric (\cref{fig:ch05:cluster_all_agg_completeness
 As the target dimensionality increases, several methods exhibit performance improvement; among those, FastICA, factor analysis and Gaussian random projection improve most substantially, particularly for $k = 20$ and $k = 40$.
 As these methods simultaneously exhibit low homogeneity, as seen in~\cref{fig:ch05:cluster_all_agg_homogeneity}, their high completeness likely reflects coarser clusterings, in which many samples are assigned to a small number of clusters or labelled as noise, rather than a true preservation of class structure.
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
@@ -618,7 +624,7 @@ We now investigate the effect of input dimensionality by grouping the datasets i
 UMAP and parametric UMAP remain the strongest methods for homogeneity in all three groups, with their largest advantage on medium-dimensional datasets (\cref{fig:ch05:cluster_homogeneity_dataset_sizes_homogeneity}). LocalMAP is also competitive on medium- and high-dimensional data, supporting the conclusion that neighbourhood-preserving methods are particularly effective for Task 1.
 With respect to cluster completeness (\cref{fig:ch05:cluster_homogeneity_dataset_sizes_completeness}), the ordering is more dependent on input dimensionality. UMAP has the highest mean completeness on low-dimensional datasets, followed by factor analysis, whereas parametric UMAP and UMAP lead on medium- and high-dimensional datasets. The comparison in~\cref{fig:ch05:cluster_le1000} (see Appendix) includes Slipmap by restricting all methods to the same six datasets with at most 1000 samples.
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
@@ -813,171 +819,7 @@ With respect to cluster completeness (\cref{fig:ch05:cluster_homogeneity_dataset
 
 % \clearpage
 % \clearpage
-\clearpage
-\subsubsection{Task 1: Clustering ability}
-
-For Task 1, we tune hyperparameters of dimensionality reduction methods independently for homogeneity and completeness. The matched-objective results are shown in~\cref{fig:ch05:tuned-ml-cluster-hh,fig:ch05:tuned-ml-cluster-cc}; cross-metric effects are shown in~\cref{fig:ch05:tuned-ml-cluster-hc,fig:ch05:tuned-ml-cluster-ch}. As in the full default-configuration benchmark, UMAP has the highest mean homogeneity across all target dimensionalities. The ordering for completeness is less stable: UMAP has the highest mean completeness at $k=5$, FastICA leads at $k=10$ and $k=20$, and parametric UMAP performs best at $k=40$.
-
-\begin{figure}[H]
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml_cluster_tuning/agg_5_tuned_homogeneity_homogeneity.pdf}
-\caption{$k=5$}
-\end{subfigure}
-\par\vspace{6pt}
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml_cluster_tuning/agg_10_tuned_homogeneity_homogeneity.pdf}
-\caption{$k=10$}
-\end{subfigure}
-\par\vspace{6pt}
-
-    \caption[Homogeneity after tuning for homogeneity]{Homogeneity after tuning reducer hyperparameters for homogeneity; higher is better.}
-    \label{fig:ch05:tuned-ml-cluster-hh}
-\Description{Homogeneity after tuning reducer hyperparameters for homogeneity; higher is better.}
-\end{figure}
-\begin{figure}[H]
-\ContinuedFloat
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml_cluster_tuning/agg_20_tuned_homogeneity_homogeneity.pdf}
-\caption{$k=20$}
-\end{subfigure}
-\par\vspace{6pt}
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml_cluster_tuning/agg_40_tuned_homogeneity_homogeneity.pdf}
-\caption{$k=40$}
-\end{subfigure}
-\par\vspace{6pt}
-
-    \caption[]{\textit{Continued.} Homogeneity after tuning reducer hyperparameters for homogeneity; higher is better.}
-
-\Description{\textit{Continued.} Homogeneity after tuning reducer hyperparameters for homogeneity; higher is better.}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml_cluster_tuning/agg_5_tuned_completeness_completeness.pdf}
-\caption{$k=5$}
-\end{subfigure}
-\par\vspace{6pt}
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml_cluster_tuning/agg_10_tuned_completeness_completeness.pdf}
-\caption{$k=10$}
-\end{subfigure}
-\par\vspace{6pt}
-
-    \caption[Completeness after tuning for completeness]{Completeness after tuning reducer hyperparameters for completeness; higher is better.}
-    \label{fig:ch05:tuned-ml-cluster-cc}
-\Description{Completeness after tuning reducer hyperparameters for completeness; higher is better.}
-\end{figure}
-\begin{figure}[H]
-\ContinuedFloat
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml_cluster_tuning/agg_20_tuned_completeness_completeness.pdf}
-\caption{$k=20$}
-\end{subfigure}
-\par\vspace{6pt}
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml_cluster_tuning/agg_40_tuned_completeness_completeness.pdf}
-\caption{$k=40$}
-\end{subfigure}
-\par\vspace{6pt}
-
-    \caption[]{\textit{Continued.} Completeness after tuning reducer hyperparameters for completeness; higher is better.}
-
-\Description{\textit{Continued.} Completeness after tuning reducer hyperparameters for completeness; higher is better.}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml_cluster_tuning/agg_5_tuned_homogeneity_completeness.pdf}
-\caption{$k=5$}
-\end{subfigure}
-\par\vspace{6pt}
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml_cluster_tuning/agg_10_tuned_homogeneity_completeness.pdf}
-\caption{$k=10$}
-\end{subfigure}
-\par\vspace{6pt}
-
-    \caption[Completeness after tuning for homogeneity]{Completeness obtained when reducer hyperparameters are tuned for homogeneity; higher is better.}
-    \label{fig:ch05:tuned-ml-cluster-hc}
-\Description{Completeness obtained when reducer hyperparameters are tuned for homogeneity; higher is better.}
-\end{figure}
-\begin{figure}[H]
-\ContinuedFloat
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml_cluster_tuning/agg_20_tuned_homogeneity_completeness.pdf}
-\caption{$k=20$}
-\end{subfigure}
-\par\vspace{6pt}
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml_cluster_tuning/agg_40_tuned_homogeneity_completeness.pdf}
-\caption{$k=40$}
-\end{subfigure}
-\par\vspace{6pt}
-
-    \caption[]{\textit{Continued.} Completeness obtained when reducer hyperparameters are tuned for homogeneity; higher is better.}
-
-\Description{\textit{Continued.} Completeness obtained when reducer hyperparameters are tuned for homogeneity; higher is better.}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml_cluster_tuning/agg_5_tuned_completeness_homogeneity.pdf}
-\caption{$k=5$}
-\end{subfigure}
-\par\vspace{6pt}
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml_cluster_tuning/agg_10_tuned_completeness_homogeneity.pdf}
-\caption{$k=10$}
-\end{subfigure}
-\par\vspace{6pt}
-
-    \caption[Homogeneity after tuning for completeness]{Homogeneity obtained when reducer hyperparameters are tuned for completeness; higher is better.}
-    \label{fig:ch05:tuned-ml-cluster-ch}
-\Description{Homogeneity obtained when reducer hyperparameters are tuned for completeness; higher is better.}
-\end{figure}
-\begin{figure}[H]
-\ContinuedFloat
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml_cluster_tuning/agg_20_tuned_completeness_homogeneity.pdf}
-\caption{$k=20$}
-\end{subfigure}
-\par\vspace{6pt}
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml_cluster_tuning/agg_40_tuned_completeness_homogeneity.pdf}
-\caption{$k=40$}
-\end{subfigure}
-\par\vspace{6pt}
-
-    \caption[]{\textit{Continued.} Homogeneity obtained when reducer hyperparameters are tuned for completeness; higher is better.}
-
-\Description{\textit{Continued.} Homogeneity obtained when reducer hyperparameters are tuned for completeness; higher is better.}
-\end{figure}
-
+\FloatBarrier
 \subsection{Task 2: Tabular classification accuracy}
 \label{sec:ch05:res-ml-task2}
 
@@ -990,7 +832,7 @@ they rank among the worst-performing methods in the prediction task.
 This suggests that the distance-based properties that random projections are designed to preserve do not necessarily retain the discriminative information required for predictive modelling.
 Overall, while most methods achieve comparable accuracy, Ivis consistently performs best for random forest and gradient boosting, and for MLP up to $k=20$. LoLP and the PCA variants become increasingly competitive as the target dimensionality grows, with PCA (Sigmoid) narrowly leading for MLP at $k=40$. At $k=5$, UMAP, parametric UMAP, PaCMAP and LocalMAP follow behind Ivis, showing that manifold-preserving methods are particularly effective in low target dimensions.
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
@@ -1010,7 +852,7 @@ Overall, while most methods achieve comparable accuracy, Ivis consistently perfo
     \label{fig:ch05:ml_pred_all}
 \Description{Mean classification accuracy of dimensionality reduction methods across OpenML~CC-18 datasets for different target dimensionalities $k$ on \textbf{Task 2: tabular classification accuracy}. From top to bottom, the panels show random forest, gradient boosting and MLP results; higher values are better.}
 \end{figure}
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \ContinuedFloat
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
@@ -1033,7 +875,7 @@ In contrast, Ivis is strongest across all three input-dimensionality groups and 
 One possible explanation for the consistently strong performance of Ivis is that its joint triplet and classification objective encourages the embedding to retain both neighbourhood structure and class information, even under the substantial compression imposed by $k=5$. The competitiveness of PaCMAP and LocalMAP on high-dimensional datasets may reflect their treatment of relationships beyond a fixed nearest-neighbour graph: PaCMAP balances nearby, mid-near and distant pairs, while LocalMAP additionally revises neighbourhood connections during optimisation. These mechanisms may help retain class-relevant structure when neighbourhoods estimated in the original space are unreliable. However, the input-dimensionality groups contain different datasets, so dimensionality is confounded with other dataset characteristics; these explanations remain hypotheses rather than mechanisms established by our experiments.
 The comparison in~\cref{fig:ch05:ml_pred_le1000} (see Appendix) includes Slipmap by restricting all methods to the same six datasets with at most $1000$ samples.
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
@@ -1053,7 +895,7 @@ The comparison in~\cref{fig:ch05:ml_pred_le1000} (see Appendix) includes Slipmap
     \label{fig:ch05:ml_pred_sizes}
 \Description{Mean classification accuracy of dimensionality reduction methods on low-, medium- and high-dimensional OpenML~CC-18 datasets for $k=5$ on \textbf{Task 2: tabular classification accuracy}. From top to bottom, the panels show random forest, gradient boosting and MLP results; higher values are better. }
 \end{figure}
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \ContinuedFloat
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
@@ -1333,131 +1175,7 @@ The comparison in~\cref{fig:ch05:ml_pred_le1000} (see Appendix) includes Slipmap
 
 % \clearpage
 % \clearpage
-\clearpage
-\subsubsection{Task 2: Tabular classification accuracy}
-
-For Task 2, we analyse classification accuracy on ten held-out OpenML tasks in~\crefrange{fig:ch05:tuned-ml-pred-rf}{fig:ch05:tuned-ml-pred-mlp}. Consistent with the full default-configuration benchmark, Ivis has the highest mean accuracy for random forests and gradient boosting across all target dimensionalities, and for MLPs at lower target dimensionalities. At larger target dimensionalities, the linear methods become more competitive for MLPs: PCA (Linear) and PCA (Cosine) provide the strongest results.
-
-\begin{figure}[H]
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml_pred_tuning/agg_5_rf_acc.pdf}
-\caption{$k=5$}
-\end{subfigure}
-\par\vspace{6pt}
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml_pred_tuning/agg_10_rf_acc.pdf}
-\caption{$k=10$}
-\end{subfigure}
-\par\vspace{6pt}
-
-    \caption[Random forest accuracy with tuned reducers]{Classification accuracy with tuned reducers and random forests on ten held-out OpenML tasks; higher is better.}
-    \label{fig:ch05:tuned-ml-pred-rf}
-\Description{Classification accuracy with tuned reducers and random forests on ten held-out OpenML tasks; higher is better.}
-\end{figure}
-\begin{figure}[H]
-\ContinuedFloat
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml_pred_tuning/agg_20_rf_acc.pdf}
-\caption{$k=20$}
-\end{subfigure}
-\par\vspace{6pt}
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml_pred_tuning/agg_40_rf_acc.pdf}
-\caption{$k=40$}
-\end{subfigure}
-\par\vspace{6pt}
-
-    \caption[]{\textit{Continued.} Classification accuracy with tuned reducers and random forests on ten held-out OpenML tasks; higher is better.}
-
-\Description{\textit{Continued.} Classification accuracy with tuned reducers and random forests on ten held-out OpenML tasks; higher is better.}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml_pred_tuning/agg_5_gb_acc.pdf}
-\caption{$k=5$}
-\end{subfigure}
-\par\vspace{6pt}
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml_pred_tuning/agg_10_gb_acc.pdf}
-\caption{$k=10$}
-\end{subfigure}
-\par\vspace{6pt}
-
-    \caption[Gradient boosting accuracy with tuned reducers]{Classification accuracy with tuned reducers and gradient boosting on ten held-out OpenML tasks; higher is better.}
-    \label{fig:ch05:tuned-ml-pred-gb}
-\Description{Classification accuracy with tuned reducers and gradient boosting on ten held-out OpenML tasks; higher is better.}
-\end{figure}
-\begin{figure}[H]
-\ContinuedFloat
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml_pred_tuning/agg_20_gb_acc.pdf}
-\caption{$k=20$}
-\end{subfigure}
-\par\vspace{6pt}
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml_pred_tuning/agg_40_gb_acc.pdf}
-\caption{$k=40$}
-\end{subfigure}
-\par\vspace{6pt}
-
-    \caption[]{\textit{Continued.} Classification accuracy with tuned reducers and gradient boosting on ten held-out OpenML tasks; higher is better.}
-
-\Description{\textit{Continued.} Classification accuracy with tuned reducers and gradient boosting on ten held-out OpenML tasks; higher is better.}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml_pred_tuning/agg_5_mlp_acc.pdf}
-\caption{$k=5$}
-\end{subfigure}
-\par\vspace{6pt}
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml_pred_tuning/agg_10_mlp_acc.pdf}
-\caption{$k=10$}
-\end{subfigure}
-\par\vspace{6pt}
-
-    \caption[MLP accuracy with tuned reducers]{Classification accuracy with tuned reducers and MLP classifiers on ten held-out OpenML tasks; higher is better.}
-    \label{fig:ch05:tuned-ml-pred-mlp}
-\Description{Classification accuracy with tuned reducers and MLP classifiers on ten held-out OpenML tasks; higher is better.}
-\end{figure}
-\begin{figure}[H]
-\ContinuedFloat
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml_pred_tuning/agg_20_mlp_acc.pdf}
-\caption{$k=20$}
-\end{subfigure}
-\par\vspace{6pt}
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml_pred_tuning/agg_40_mlp_acc.pdf}
-\caption{$k=40$}
-\end{subfigure}
-\par\vspace{6pt}
-
-    \caption[]{\textit{Continued.} Classification accuracy with tuned reducers and MLP classifiers on ten held-out OpenML tasks; higher is better.}
-
-\Description{\textit{Continued.} Classification accuracy with tuned reducers and MLP classifiers on ten held-out OpenML tasks; higher is better.}
-\end{figure}
-
+\FloatBarrier
 \subsection{Task 3: Target function approximation}
 \label{sec:ch05:res-bbo-task1}
 
@@ -1467,7 +1185,7 @@ PLS regression has the lowest mean normalised RMSE for $k\in\{5,10,20\}$, wherea
 This aligns with expectations, as PLS components are explicitly optimised to maximise the predictive power of the target variables, which is especially suitable when dimensionality reduction is used as a preprocessing step for regression.
 PCA (RBF) and Ivis follow at low target dimensionalities. As the target dimensionality increases, PCA (RBF) keeps improving performance and eventually outperforms PLS regression, which is consistent with a larger embedding retaining more useful information even without explicit supervision.
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \centering
 \includegraphics{figures/05/epm/summary_red_dim_100_120.pdf}
 \par\vspace{6pt}
@@ -1481,7 +1199,7 @@ PCA (RBF) and Ivis follow at low target dimensionalities. As the target dimensio
 Second, we look into the effect of varying the input dimensionality $D$, keeping the target dimensionality fixed at $k = 20$ and the initial sample size at $N = 100$. This is illustrated in~\cref{fig:ch05:res-bbo-task1_inpt_dim}.
 The mean normalised errors of the methods exhibit less variance at lower input dimensionalities; the distributional box plots are provided in the appendix. Up to $D=120$, PLS regression consistently outperforms other methods, with Ivis and parametric UMAP also performing strongly. Conversely, for $D\geq240$, PCA (RBF) has the lowest mean normalised RMSE. Together with the sample-size results below, this suggests an advantage for PCA (RBF) when the training sample is small relative to the input dimensionality, rather than an inherent limitation of PLS regression on high-dimensional inputs.
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \centering
 \includegraphics{figures/05/epm/summary_inpt_dim_100_20.pdf}
 \par\vspace{6pt}
@@ -1496,7 +1214,7 @@ We now analyse the effect of varying initial sample sizes for training dimension
 For low-dimensional inputs ($D = 40$,~\cref{fig:ch05:res-bbo-task2_samp_sizes-40-5}), PLS regression is strongest at $N=100$, whereas Ivis leads for $N\geq200$; parametric UMAP is second for $N\in\{500,1000\}$. Thus, even when the smallest sample already exceeds the input dimensionality, additional observations can benefit learned non-linear representations.
 For high-dimensional inputs ($D = 1000$,~\cref{fig:ch05:res-bbo-task2_samp_sizes-1000-40}), PCA (RBF) leads for $N\in\{100,200\}$, while PLS regression becomes strongest for $N\in\{500,1000\}$. This indicates that supervised component extraction depends on sufficient training data when the input dimensionality is large, whereas PCA (RBF) remains robust in the strongly undersampled regime.
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
@@ -1519,7 +1237,7 @@ For high-dimensional inputs ($D = 1000$,~\cref{fig:ch05:res-bbo-task2_samp_sizes
 
 So far, our assessment has focussed on synthetic benchmarks for black-box optimisation. \cref{fig:ch05:res-bbo-task1_real} shows the results on real-world benchmarks.~\cref{fig:ch05:res-bbo-task1_real-k} illustrates performance across varying target dimensionalities, with the initial sample size fixed at $N = 1000$ (note that input dimensionality is determined by the benchmark and cannot be controlled). Across all target dimensionalities, PLS regression consistently outperforms other methods, reflecting its ability to extract components that are directly predictive of the target variables. Ivis and parametric UMAP closely follow in performance, although their ordering varies with $k$.~\cref{fig:ch05:res-bbo-task1_real-n} shows the effect of varying the initial sample size while keeping the target dimensionality fixed at $k = 5$. PLS regression is strongest throughout, including at $N=100$, while Ivis and parametric UMAP again provide the closest alternatives. Increasing the sample size generally strengthens Ivis, but does not change the overall advantage of PLS regression on these real-world target function approximation problems.
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
@@ -1819,38 +1537,14 @@ A possible explanation is that PLS regression concentrates the limited embedding
 
 % \clearpage
 % \clearpage
-\clearpage
-\subsubsection{Task 3: Target function approximation}
-
-For Task 3, we report the results obtained with task-specific reducer configurations in~\cref{fig:ch05:tuned-epm}. At the lower input dimensionality, PLS regression has the lowest median normalised RMSE, followed by parametric UMAP and PCA (RBF). At the higher input dimensionality, PCA (RBF) is strongest, followed by PLS regression and parametric UMAP. This is consistent with the default-configuration results: PLS regression is strongest at moderate input dimensionality, whereas PCA (RBF) takes the lead as the input dimensionality $D$ increases.
-
-\begin{figure}[H]
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/epm_tuning/agg_sample_red_inpt_100_120_10.pdf}
-\caption{$D=120$}
-\end{subfigure}
-\par\vspace{6pt}
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/epm_tuning/agg_sample_red_inpt_100_240_10.pdf}
-\caption{$D=240$}
-\end{subfigure}
-\par\vspace{6pt}
-
-    \caption[Function approximation with task-specifically tuned reducers]{Target function approximation with task-specifically tuned reducers for the initial sample size \(N=100\) and target dimensionality \(k=10\). The boxes show min--max normalised RMSE over synthetic BBOB functions and cross-validation folds; lower is better.}
-    \label{fig:ch05:tuned-epm}
-\Description{Target function approximation with task-specifically tuned reducers for \(N=100\) and \(k=10\). The boxes show min--max normalised RMSE over synthetic BBOB functions and cross-validation folds; lower is better.}
-\end{figure}
-
+\FloatBarrier
 \subsection{Task 4: Black-box optimiser performance}
 \label{sec:ch05:res-bbo-task2}
 
 We now focus on the results of the black-box optimiser performance task, where Bayesian optimisation is assisted by the dimensionality reduction methods. As in the previous task, we varied the target dimensionality $k$, while fixing both the initial sample size to $N = 100$ and the original input dimensionality to $D = 120$. The aggregated results across all synthetic benchmark problems are shown in \cref{fig:ch05:res-bbo-task2_red_dim}.
 In contrast to Task 3, PCA (RBF) consistently exhibits the best performance across all target dimensionalities. Ivis and LLE form the next group, while PCA (Cosine), UMAP and truncated SVD are competitive in selected settings. Thus, local and learned non-linear representations can assist optimisation effectively, but PCA (RBF) remains the most robust choice across $k$.
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \centering
 \includegraphics{figures/05/bop/summary_red_dim_100_120.pdf}
 \par\vspace{6pt}
@@ -1864,7 +1558,7 @@ In contrast to Task 3, PCA (RBF) consistently exhibits the best performance acro
 Next, we analyse the effect of varying input dimensionalities $D$ while fixing the initial sample size at $N = 100$ and the target dimensionality at $k = 20$.~\cref{fig:ch05:res-bbo-task2_diff_dims} shows the results aggregated across all synthetic benchmark problems. PCA (RBF) has the lowest mean normalised final value across all input dimensionalities.
 Ivis is second at $D=40$ and $D=60$, and remains among the strongest alternatives throughout. LLE and PCA (Cosine) are particularly competitive at lower and moderate input dimensionalities. For higher-dimensional inputs, LatentDA and ParamPaCMAP improve, whereas PLS regression does not preserve its dominance from Task 3. This shift reflects the difference in task objectives: accurate function approximation does not by itself ensure that the reduced representation supports an effective sequential search.
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \centering
 \includegraphics{figures/05/bop/summary_inpt_dim_100_20.pdf}
 \par\vspace{6pt}
@@ -1877,7 +1571,7 @@ Ivis is second at $D=40$ and $D=60$, and remains among the strongest alternative
 
 We further examined the effect of varying initial sample sizes $N$ on performance, as shown in \cref{fig:ch05:res-bbo-task2_samples}.~\cref{fig:ch05:res-bbo-task2_samples-40-5} corresponds to low-dimensional inputs ($D = 40$) with target dimensionality fixed at $k = 5$. PCA (RBF) has the lowest mean normalised final value at all four sample sizes, followed by Ivis. LLE remains competitive, particularly for $N\leq500$. The identity of the best method therefore varies with the reducer training sample even in this comparatively low-dimensional setting.~\cref{fig:ch05:res-bbo-task2_samples-1000-40} shows the results for high-dimensional inputs ($D = 1000$) with target dimensionality fixed at $k = 40$. PCA (RBF) leads at every sample size. LatentDA is second for $N\in\{100,200\}$, whereas PLS regression becomes the closest alternative for $N\in\{500,1000\}$.
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
@@ -1918,7 +1612,7 @@ Finally, through high variability of observed behaviours across all settings, we
 Across tasks, Ivis is broadly competitive: it leads much of the classification comparison, is among the strongest alternatives for target function approximation, and frequently performs well in Bayesian optimisation. PCA (RBF) is particularly strong across the two black-box tasks when the training sample is small relative to input dimensionality, and leads the synthetic optimisation comparisons. Neither is uniformly strongest: UMAP variants lead cluster homogeneity, PLS regression leads many function approximation settings, and autoencoders become strongest on the real-world optimisation benchmarks at larger training sample sizes. Conversely, Bernoulli RBM and random projections are consistently weak for classification, especially under strong compression, but random projections achieve competitive cluster completeness at larger target dimensionalities, albeit with low homogeneity. These results identify broadly competitive methods and task-specific weaknesses. They do not establish that a method is dominated
 on every individual problem.
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
@@ -2207,12 +1901,353 @@ on every individual problem.
 % \end{figure}
 
 % \clearpage
-\clearpage
-\subsubsection{Task 4: Black-box optimiser performance}
+\FloatBarrier
+\section{Effect of tuning}
+\label{app:ch05:tuned-results}
+
+\FloatBarrier
+\subsection{Task 1: Clustering ability}
+
+
+
+\FloatBarrier
+For Task 1, we tune hyperparameters of dimensionality reduction methods independently for homogeneity and completeness. As in the full default-configuration benchmark, UMAP has the highest mean homogeneity across all target dimensionalities.
+
+\begin{figure}[!htbp]
+\centering
+\begin{subfigure}[t]{1.0\textwidth}
+\centering
+\includegraphics{figures/05/ml_cluster_tuning/agg_5_tuned_homogeneity_homogeneity.pdf}
+\caption{$k=5$}
+\end{subfigure}
+\par\vspace{6pt}
+\begin{subfigure}[t]{1.0\textwidth}
+\centering
+\includegraphics{figures/05/ml_cluster_tuning/agg_10_tuned_homogeneity_homogeneity.pdf}
+\caption{$k=10$}
+\end{subfigure}
+\par\vspace{6pt}
+
+    \caption[Homogeneity after tuning for homogeneity]{Homogeneity after tuning reducer hyperparameters for homogeneity; higher is better.}
+    \label{fig:ch05:tuned-ml-cluster-hh}
+\Description{Homogeneity after tuning reducer hyperparameters for homogeneity; higher is better.}
+\end{figure}
+
+\begin{figure}[!htbp]
+\ContinuedFloat
+\centering
+\begin{subfigure}[t]{1.0\textwidth}
+\centering
+\includegraphics{figures/05/ml_cluster_tuning/agg_20_tuned_homogeneity_homogeneity.pdf}
+\caption{$k=20$}
+\end{subfigure}
+\par\vspace{6pt}
+\begin{subfigure}[t]{1.0\textwidth}
+\centering
+\includegraphics{figures/05/ml_cluster_tuning/agg_40_tuned_homogeneity_homogeneity.pdf}
+\caption{$k=40$}
+\end{subfigure}
+\par\vspace{6pt}
+
+    \caption[]{\textit{Continued.} Homogeneity after tuning reducer hyperparameters for homogeneity; higher is better.}
+
+\Description{\textit{Continued.} Homogeneity after tuning reducer hyperparameters for homogeneity; higher is better.}
+\end{figure}
+
+\FloatBarrier
+The ordering for completeness is less stable: UMAP has the highest mean completeness at $k=5$, FastICA leads at $k=10$ and $k=20$, and parametric UMAP performs best at $k=40$.
+
+\begin{figure}[!htbp]
+\centering
+\begin{subfigure}[t]{1.0\textwidth}
+\centering
+\includegraphics{figures/05/ml_cluster_tuning/agg_5_tuned_completeness_completeness.pdf}
+\caption{$k=5$}
+\end{subfigure}
+\par\vspace{6pt}
+\begin{subfigure}[t]{1.0\textwidth}
+\centering
+\includegraphics{figures/05/ml_cluster_tuning/agg_10_tuned_completeness_completeness.pdf}
+\caption{$k=10$}
+\end{subfigure}
+\par\vspace{6pt}
+
+    \caption[Completeness after tuning for completeness]{Completeness after tuning reducer hyperparameters for completeness; higher is better.}
+    \label{fig:ch05:tuned-ml-cluster-cc}
+\Description{Completeness after tuning reducer hyperparameters for completeness; higher is better.}
+\end{figure}
+
+\begin{figure}[!htbp]
+\ContinuedFloat
+\centering
+\begin{subfigure}[t]{1.0\textwidth}
+\centering
+\includegraphics{figures/05/ml_cluster_tuning/agg_20_tuned_completeness_completeness.pdf}
+\caption{$k=20$}
+\end{subfigure}
+\par\vspace{6pt}
+\begin{subfigure}[t]{1.0\textwidth}
+\centering
+\includegraphics{figures/05/ml_cluster_tuning/agg_40_tuned_completeness_completeness.pdf}
+\caption{$k=40$}
+\end{subfigure}
+\par\vspace{6pt}
+
+    \caption[]{\textit{Continued.} Completeness after tuning reducer hyperparameters for completeness; higher is better.}
+
+\Description{\textit{Continued.} Completeness after tuning reducer hyperparameters for completeness; higher is better.}
+\end{figure}
+
+\FloatBarrier
+The matched-objective results are shown in~\cref{fig:ch05:tuned-ml-cluster-hh,fig:ch05:tuned-ml-cluster-cc}; cross-metric effects are shown in~\cref{fig:ch05:tuned-ml-cluster-hc,fig:ch05:tuned-ml-cluster-ch}.
+
+\begin{figure}[!htbp]
+\centering
+\begin{subfigure}[t]{1.0\textwidth}
+\centering
+\includegraphics{figures/05/ml_cluster_tuning/agg_5_tuned_homogeneity_completeness.pdf}
+\caption{$k=5$}
+\end{subfigure}
+\par\vspace{6pt}
+\begin{subfigure}[t]{1.0\textwidth}
+\centering
+\includegraphics{figures/05/ml_cluster_tuning/agg_10_tuned_homogeneity_completeness.pdf}
+\caption{$k=10$}
+\end{subfigure}
+\par\vspace{6pt}
+
+    \caption[Completeness after tuning for homogeneity]{Completeness obtained when reducer hyperparameters are tuned for homogeneity; higher is better.}
+    \label{fig:ch05:tuned-ml-cluster-hc}
+\Description{Completeness obtained when reducer hyperparameters are tuned for homogeneity; higher is better.}
+\end{figure}
+
+\begin{figure}[!htbp]
+\ContinuedFloat
+\centering
+\begin{subfigure}[t]{1.0\textwidth}
+\centering
+\includegraphics{figures/05/ml_cluster_tuning/agg_20_tuned_homogeneity_completeness.pdf}
+\caption{$k=20$}
+\end{subfigure}
+\par\vspace{6pt}
+\begin{subfigure}[t]{1.0\textwidth}
+\centering
+\includegraphics{figures/05/ml_cluster_tuning/agg_40_tuned_homogeneity_completeness.pdf}
+\caption{$k=40$}
+\end{subfigure}
+\par\vspace{6pt}
+
+    \caption[]{\textit{Continued.} Completeness obtained when reducer hyperparameters are tuned for homogeneity; higher is better.}
+
+\Description{\textit{Continued.} Completeness obtained when reducer hyperparameters are tuned for homogeneity; higher is better.}
+\end{figure}
+
+\begin{figure}[!htbp]
+\centering
+\begin{subfigure}[t]{1.0\textwidth}
+\centering
+\includegraphics{figures/05/ml_cluster_tuning/agg_5_tuned_completeness_homogeneity.pdf}
+\caption{$k=5$}
+\end{subfigure}
+\par\vspace{6pt}
+\begin{subfigure}[t]{1.0\textwidth}
+\centering
+\includegraphics{figures/05/ml_cluster_tuning/agg_10_tuned_completeness_homogeneity.pdf}
+\caption{$k=10$}
+\end{subfigure}
+\par\vspace{6pt}
+
+    \caption[Homogeneity after tuning for completeness]{Homogeneity obtained when reducer hyperparameters are tuned for completeness; higher is better.}
+    \label{fig:ch05:tuned-ml-cluster-ch}
+\Description{Homogeneity obtained when reducer hyperparameters are tuned for completeness; higher is better.}
+\end{figure}
+
+\begin{figure}[!htbp]
+\ContinuedFloat
+\centering
+\begin{subfigure}[t]{1.0\textwidth}
+\centering
+\includegraphics{figures/05/ml_cluster_tuning/agg_20_tuned_completeness_homogeneity.pdf}
+\caption{$k=20$}
+\end{subfigure}
+\par\vspace{6pt}
+\begin{subfigure}[t]{1.0\textwidth}
+\centering
+\includegraphics{figures/05/ml_cluster_tuning/agg_40_tuned_completeness_homogeneity.pdf}
+\caption{$k=40$}
+\end{subfigure}
+\par\vspace{6pt}
+
+    \caption[]{\textit{Continued.} Homogeneity obtained when reducer hyperparameters are tuned for completeness; higher is better.}
+
+\Description{\textit{Continued.} Homogeneity obtained when reducer hyperparameters are tuned for completeness; higher is better.}
+\end{figure}
+
+\FloatBarrier
+\subsection{Task 2: Tabular classification accuracy}
+
+
+
+\FloatBarrier
+For Task 2, we analyse classification accuracy on ten held-out OpenML tasks in~\crefrange{fig:ch05:tuned-ml-pred-rf}{fig:ch05:tuned-ml-pred-mlp}. Consistent with the full default-configuration benchmark, Ivis has the highest mean accuracy for random forests and gradient boosting across all target dimensionalities, and for MLPs at lower target dimensionalities.
+
+\begin{figure}[!htbp]
+\centering
+\begin{subfigure}[t]{1.0\textwidth}
+\centering
+\includegraphics{figures/05/ml_pred_tuning/agg_5_rf_acc.pdf}
+\caption{$k=5$}
+\end{subfigure}
+\par\vspace{6pt}
+\begin{subfigure}[t]{1.0\textwidth}
+\centering
+\includegraphics{figures/05/ml_pred_tuning/agg_10_rf_acc.pdf}
+\caption{$k=10$}
+\end{subfigure}
+\par\vspace{6pt}
+
+    \caption[Random forest accuracy with tuned reducers]{Classification accuracy with tuned reducers and random forests on ten held-out OpenML tasks; higher is better.}
+    \label{fig:ch05:tuned-ml-pred-rf}
+\Description{Classification accuracy with tuned reducers and random forests on ten held-out OpenML tasks; higher is better.}
+\end{figure}
+
+\begin{figure}[!htbp]
+\ContinuedFloat
+\centering
+\begin{subfigure}[t]{1.0\textwidth}
+\centering
+\includegraphics{figures/05/ml_pred_tuning/agg_20_rf_acc.pdf}
+\caption{$k=20$}
+\end{subfigure}
+\par\vspace{6pt}
+\begin{subfigure}[t]{1.0\textwidth}
+\centering
+\includegraphics{figures/05/ml_pred_tuning/agg_40_rf_acc.pdf}
+\caption{$k=40$}
+\end{subfigure}
+\par\vspace{6pt}
+
+    \caption[]{\textit{Continued.} Classification accuracy with tuned reducers and random forests on ten held-out OpenML tasks; higher is better.}
+
+\Description{\textit{Continued.} Classification accuracy with tuned reducers and random forests on ten held-out OpenML tasks; higher is better.}
+\end{figure}
+
+\begin{figure}[!htbp]
+\centering
+\begin{subfigure}[t]{1.0\textwidth}
+\centering
+\includegraphics{figures/05/ml_pred_tuning/agg_5_gb_acc.pdf}
+\caption{$k=5$}
+\end{subfigure}
+\par\vspace{6pt}
+\begin{subfigure}[t]{1.0\textwidth}
+\centering
+\includegraphics{figures/05/ml_pred_tuning/agg_10_gb_acc.pdf}
+\caption{$k=10$}
+\end{subfigure}
+\par\vspace{6pt}
+
+    \caption[Gradient boosting accuracy with tuned reducers]{Classification accuracy with tuned reducers and gradient boosting on ten held-out OpenML tasks; higher is better.}
+    \label{fig:ch05:tuned-ml-pred-gb}
+\Description{Classification accuracy with tuned reducers and gradient boosting on ten held-out OpenML tasks; higher is better.}
+\end{figure}
+
+\begin{figure}[!htbp]
+\ContinuedFloat
+\centering
+\begin{subfigure}[t]{1.0\textwidth}
+\centering
+\includegraphics{figures/05/ml_pred_tuning/agg_20_gb_acc.pdf}
+\caption{$k=20$}
+\end{subfigure}
+\par\vspace{6pt}
+\begin{subfigure}[t]{1.0\textwidth}
+\centering
+\includegraphics{figures/05/ml_pred_tuning/agg_40_gb_acc.pdf}
+\caption{$k=40$}
+\end{subfigure}
+\par\vspace{6pt}
+
+    \caption[]{\textit{Continued.} Classification accuracy with tuned reducers and gradient boosting on ten held-out OpenML tasks; higher is better.}
+
+\Description{\textit{Continued.} Classification accuracy with tuned reducers and gradient boosting on ten held-out OpenML tasks; higher is better.}
+\end{figure}
+
+\FloatBarrier
+At larger target dimensionalities, the linear methods become more competitive for MLPs: PCA (Linear) and PCA (Cosine) provide the strongest results.
+
+\begin{figure}[!htbp]
+\centering
+\begin{subfigure}[t]{1.0\textwidth}
+\centering
+\includegraphics{figures/05/ml_pred_tuning/agg_5_mlp_acc.pdf}
+\caption{$k=5$}
+\end{subfigure}
+\par\vspace{6pt}
+\begin{subfigure}[t]{1.0\textwidth}
+\centering
+\includegraphics{figures/05/ml_pred_tuning/agg_10_mlp_acc.pdf}
+\caption{$k=10$}
+\end{subfigure}
+\par\vspace{6pt}
+
+    \caption[MLP accuracy with tuned reducers]{Classification accuracy with tuned reducers and MLP classifiers on ten held-out OpenML tasks; higher is better.}
+    \label{fig:ch05:tuned-ml-pred-mlp}
+\Description{Classification accuracy with tuned reducers and MLP classifiers on ten held-out OpenML tasks; higher is better.}
+\end{figure}
+
+\begin{figure}[!htbp]
+\ContinuedFloat
+\centering
+\begin{subfigure}[t]{1.0\textwidth}
+\centering
+\includegraphics{figures/05/ml_pred_tuning/agg_20_mlp_acc.pdf}
+\caption{$k=20$}
+\end{subfigure}
+\par\vspace{6pt}
+\begin{subfigure}[t]{1.0\textwidth}
+\centering
+\includegraphics{figures/05/ml_pred_tuning/agg_40_mlp_acc.pdf}
+\caption{$k=40$}
+\end{subfigure}
+\par\vspace{6pt}
+
+    \caption[]{\textit{Continued.} Classification accuracy with tuned reducers and MLP classifiers on ten held-out OpenML tasks; higher is better.}
+
+\Description{\textit{Continued.} Classification accuracy with tuned reducers and MLP classifiers on ten held-out OpenML tasks; higher is better.}
+\end{figure}
+
+\FloatBarrier
+\subsection{Task 3: Target function approximation}
+
+For Task 3, we report the results obtained with task-specific reducer configurations in~\cref{fig:ch05:tuned-epm}. At the lower input dimensionality, PLS regression has the lowest median normalised RMSE, followed by parametric UMAP and PCA (RBF). At the higher input dimensionality, PCA (RBF) is strongest, followed by PLS regression and parametric UMAP. This is consistent with the default-configuration results: PLS regression is strongest at moderate input dimensionality, whereas PCA (RBF) takes the lead as the input dimensionality $D$ increases.
+
+\begin{figure}[!htbp]
+\centering
+\begin{subfigure}[t]{1.0\textwidth}
+\centering
+\includegraphics{figures/05/epm_tuning/agg_sample_red_inpt_100_120_10.pdf}
+\caption{$D=120$}
+\end{subfigure}
+\par\vspace{6pt}
+\begin{subfigure}[t]{1.0\textwidth}
+\centering
+\includegraphics{figures/05/epm_tuning/agg_sample_red_inpt_100_240_10.pdf}
+\caption{$D=240$}
+\end{subfigure}
+\par\vspace{6pt}
+
+    \caption[Function approximation with task-specifically tuned reducers]{Target function approximation with task-specifically tuned reducers for the initial sample size \(N=100\) and target dimensionality \(k=10\). The boxes show min--max normalised RMSE over synthetic BBOB functions and cross-validation folds; lower is better.}
+    \label{fig:ch05:tuned-epm}
+\Description{Target function approximation with task-specifically tuned reducers for \(N=100\) and \(k=10\). The boxes show min--max normalised RMSE over synthetic BBOB functions and cross-validation folds; lower is better.}
+\end{figure}
+
+\FloatBarrier
+\subsection{Task 4: Black-box optimiser performance}
 
 For Task 4, the tuned Bayesian optimisation results in~\cref{fig:ch05:tuned-bop} identify PCA (RBF) as the most consistently strong method across both input dimensionalities. At the lower input dimensionality, LocalMAP and Ivis form the next group, while Ivis, NMF, and PaCMAP provide the strongest alternatives at the higher input dimensionality.
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \centering
 \begin{subfigure}[t]{0.49\textwidth}
 \centering
@@ -2233,34 +2268,35 @@ For Task 4, the tuned Bayesian optimisation results in~\cref{fig:ch05:tuned-bop}
 \Description{Mean ranks during Bayesian optimisation with task-specifically tuned reducers for \(N=100\) and \(k=10\). Rank 1 is best.}
 \end{figure}
 
-\clearpage
-\subsubsection{Task 4: Bayesian optimisation using the reducer training sample}
-\label{app:ch05:bop-initial-sample}
+% \FloatBarrier
+% \subsubsection{Task 4: Bayesian optimisation using the reducer training sample}
+% \label{app:ch05:bop-initial-sample}
 
-The main Bayesian optimisation experiments used a separate 30-point Sobol design to initialise the Gaussian process after fitting the dimensionality reduction method on \(N\) points. We additionally evaluated a reuse strategy in which the same \(N=100\) Sobol points used to fit the reducer also initialise Bayesian optimisation. This avoids an additional initial design and allows all reducer-training observations to inform the first surrogate. Under the fixed budget of 300 function evaluations, the reuse variant begins with 100 observations and performs 200 adaptive steps, whereas the main variant begins with 30 observations and performs 270 adaptive steps.
+% The main Bayesian optimisation experiments used a separate 30-point Sobol design to initialise the Gaussian process after fitting the dimensionality reduction method on \(N\) points. We additionally evaluated a reuse strategy in which the same \(N=100\) Sobol points used to fit the reducer also initialise Bayesian optimisation. This avoids an additional initial design and allows all reducer-training observations to inform the first surrogate. Under the fixed budget of 300 function evaluations, the reuse variant begins with 100 observations and performs 200 adaptive steps, whereas the main variant begins with 30 observations and performs 270 adaptive steps.
 
-\begin{figure}[H]
-\centering
-\begin{subfigure}[t]{0.49\textwidth}
-\centering
-\includegraphics{figures/05/bop_initial_sample/heatmap_100_120_10.pdf}
-\caption{$D=120$}
-\end{subfigure}
-\hfill
-\begin{subfigure}[t]{0.49\textwidth}
-\centering
-\includegraphics{figures/05/bop_initial_sample/heatmap_100_240_10.pdf}
-\caption{$D=240$}
-\end{subfigure}
-\par\vspace{6pt}
-\includegraphics{figures/05/bop_initial_sample/heatmap_100_120_10_colorbar.pdf}
+% \begin{figure}[!htbp]
+% \centering
+% \begin{subfigure}[t]{0.49\textwidth}
+% \centering
+% \includegraphics{figures/05/bop_initial_sample/heatmap_100_120_10.pdf}
+% \caption{$D=120$}
+% \end{subfigure}
+% \hfill
+% \begin{subfigure}[t]{0.49\textwidth}
+% \centering
+% \includegraphics{figures/05/bop_initial_sample/heatmap_100_240_10.pdf}
+% \caption{$D=240$}
+% \end{subfigure}
+% \par\vspace{6pt}
+% \includegraphics{figures/05/bop_initial_sample/heatmap_100_120_10_colorbar.pdf}
 
-    \caption[Optimisation ranks with reuse of reducer-training observations]{Mean ranks during Bayesian optimisation when the initial sample of \(N=100\) reducer-training observations is reused as the BO initial design (for the target dimensionality \(k=10\)). Rank 1 is best.}
-    \label{fig:ch05:bop-initial-sample}
-\Description{Mean ranks during Bayesian optimisation when the \(N=100\) reducer-training observations are reused as the BO initial design (\(k=10\)). Rank 1 is best.}
-\end{figure}
+%     \caption[Optimisation ranks with reuse of reducer-training observations]{Mean ranks during Bayesian optimisation when the initial sample of \(N=100\) reducer-training observations is reused as the BO initial design (for the target dimensionality \(k=10\)). Rank 1 is best.}
+%     \label{fig:ch05:bop-initial-sample}
+% \Description{Mean ranks during Bayesian optimisation when the \(N=100\) reducer-training observations are reused as the BO initial design (\(k=10\)). Rank 1 is best.}
+% \end{figure}
 
-With reuse, Ivis has the best final mean rank at $D=120$, closely followed by PCA (RBF); at $D=240$, PCA (RBF) leads, followed by LLE and Ivis. Thus, PCA (RBF) remains competitive under this alternative initialisation, although the ordering is not identical. These rank trajectories do not establish an absolute performance gain from reuse.
+% With reuse, Ivis has the best final mean rank at $D=120$, closely followed by PCA (RBF); at $D=240$, PCA (RBF) leads, followed by LLE and Ivis. Thus, PCA (RBF) remains competitive under this alternative initialisation, although the ordering is not identical. These rank trajectories do not establish an absolute performance gain from reuse.
+\FloatBarrier
 \section{Running times}
 \label{sec:ch05:rt}
 
@@ -2282,7 +2318,7 @@ For the high-dimensional dataset with fewer elements (\cref{fig:ch05:res-rt-c,fi
 in terms of training time, followed by parametric UMAP and ParamPaCMAP. Dictionary learning and the autoencoder variants form the next group, whereas the non-linear PCA variants are relatively inexpensive in this setting.
 We found that Gaussian and sparse random projections consistently incur low running times, and that PLS regression is quite competitive in this regard for both datasets.
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
@@ -2301,7 +2337,7 @@ We found that Gaussian and sparse random projections consistently incur low runn
     \label{fig:ch05:res-rt}
 \Description{Running times in terms of CPU hours for dimensionality reduction training (a, c) and transformation (b, d) of OpenML datasets 9985 (51 features and 6618 elements) and 9981 (856 features and 1080 elements).}
 \end{figure}
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \ContinuedFloat
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
@@ -2321,6 +2357,7 @@ We found that Gaussian and sparse random projections consistently incur low runn
 \Description{\textit{Continued.} Running times in terms of CPU hours for dimensionality reduction training (a, c) and transformation (b, d) of OpenML datasets 9985 (51 features and 6618 elements) and 9981 (856 features and 1080 elements).}
 \end{figure}
 
+\FloatBarrier
 \section{Discussion}
 \label{sec:ch05:disc}
 
