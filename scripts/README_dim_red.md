@@ -31,9 +31,10 @@ The compressed snapshot includes every active chapter panel, including the
 appendix's default, tuned, timing and initial-sample comparisons.
 
 Full-width panels use the template's 336 TeX pt text width; paired BO heatmaps
-use 49% of that width. Type remains 9 pt at inclusion size (8 pt for BO row
-labels). Heatmaps use a white–cyan–teal–green sequential scale built from the
-muted thesis palette; darker means better. Colourbars retain the original units
+use 49% of that width. Labels use 7.5 pt at inclusion size (7 pt for BO row
+labels); axis and colourbar titles use 8.25 pt, below the thesis body text.
+Heatmaps use a white–cyan–teal–green sequential scale built from the muted
+thesis palette; darker means better. Colourbars retain the original units
 and shared limits. Boxplots use muted outlines and pale fills. BO heatmaps show
 actual mean ranks in a fixed method order. Their longer labels use the
 abbreviations explained in the chapter.

@@ -40,6 +40,7 @@ def make_figures(data):
     pio.templates['thesis'] = go.layout.Template(data['template'])
     # P052 is the installed Palatino-compatible font on the thesis build machine.
     pio.templates['thesis'].layout.font.family = 'P052, ' + data['template']['layout']['font']['family']
+    pio.templates['thesis'].layout.font.size = 10
     palette = data['palette']
     # A sequential scale derived only from the thesis palette; darker means better.
     sequential = [[0, '#FFFFFF'], [.25, palette['cyan']], [.6, palette['teal']], [1, palette['green']]]
@@ -56,9 +57,9 @@ def make_figures(data):
                           height=round(height_pt * PX_PER_TEX_PT), showlegend=False,
                           margin=dict(l=116 if portrait else 48, r=8, t=8,
                                       b=42 if portrait else 208))
-        fig.update_xaxes(tickfont_size=12, title_font_size=13.33,
+        fig.update_xaxes(tickfont_size=10, title_font_size=11,
                          title_standoff=5, showgrid=False)
-        fig.update_yaxes(tickfont_size=12, title_font_size=13.33,
+        fig.update_yaxes(tickfont_size=10, title_font_size=11,
                          title_standoff=5)
         if heatmap:
             trace = source.data[0]
@@ -74,11 +75,11 @@ def make_figures(data):
                                 z=z, coloraxis='coloraxis')
                 low, high = 1, len(data['method_order'])
                 title, colorscale = 'Mean rank', reverse
-                fig.update_yaxes(autorange='reversed', tickfont_size=10.67,
+                fig.update_yaxes(autorange='reversed', tickfont_size=9.33,
                                  showline=False, ticks='', showgrid=False,
                                  tickmode='array', tickvals=list(fig.data[0].y),
                                  ticktext=list(fig.data[0].y))
-                fig.update_xaxes(title_text='Evaluations', tickfont_size=10.67,
+                fig.update_xaxes(title_text='Evaluations', tickfont_size=9.33,
                                  tickvals=source.layout.xaxis.tickvals,
                                  ticktext=source.layout.xaxis.ticktext)
             else:
@@ -138,8 +139,8 @@ def make_figures(data):
                                     colorbar=dict(orientation='h', x=.5, y=1,
                                                   xanchor='center', yanchor='top', len=.9,
                                                   thickness=10, outlinewidth=0, ypad=0,
-                                                  tickfont_size=12,
-                                                  title=dict(text=title, side='bottom', font_size=13.33))))
+                                                  tickfont_size=10,
+                                                  title=dict(text=title, side='bottom', font_size=11))))
         if title == 'Mean rank':
             bar.data[0].marker.colorbar.update(tickmode='array', tickvals=[low, 10, 20, high])
         bar.update_layout(width=round(data['text_width_pt'] * PX_PER_TEX_PT),
@@ -156,7 +157,8 @@ def main():
     chapter = (THESIS / 'Chapters/Chapter05_dim_red.tex').read_text()
     chapter = re.sub(r'(?m)(?<!\\)%.*', '', chapter)
     refs = set(re.findall(r'\\includegraphics(?:\[[^]]*\])?\{figures/05/([^}]+)\}', chapter))
-    assert figures.keys() == refs, (figures.keys() - refs, refs - figures.keys())
+    # Commented-out panels can remain in the saved data for later reuse.
+    assert refs <= figures.keys(), refs - figures.keys()
     target = THESIS / 'figures/05'
     with tempfile.TemporaryDirectory(prefix='.dim_red_', dir=THESIS) as temporary:
         paths = [Path(temporary) / f'{i}.pdf' for i in range(len(figures))]
@@ -169,7 +171,7 @@ def main():
             dest.parent.mkdir(parents=True, exist_ok=True)
             path.replace(dest)
         for path in target.rglob('*.pdf'):
-            if str(path.relative_to(target)) not in refs:
+            if str(path.relative_to(target)) not in figures:
                 path.unlink()
     print(f'Replaced {len(figures)} chapter-5 PDFs in {target}')
 
