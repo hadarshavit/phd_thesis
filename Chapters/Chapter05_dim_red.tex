@@ -886,1061 +886,1061 @@ Here, we emphasise that, despite substantial work on specialised high-dimensiona
 Along these lines,~\citet{RapEtAl25} showed that global sensitivity analysis, when used as a dimensionality reduction technique, might oversimplify the landscape of the optimisation problem at hand, which renders it poorly suitable for these purposes.
 At the same time, they emphasise the importance dimensionality reduction methods might have in the optimisation context.
 
-\section{Classifier configuration spaces for task 2}
-\label{app:ch05:config-spaces}
-
-We present in~\cref{tab:ch05:rf_cs}-\cref{tab:ch05:gb_cs} the configuration spaces used to tune the hyperparameters of the machine learning algorithms for Task 2.
-All configuration spaces were implemented using the ConfigSpace library to tune the hyperparameters of the machine learning models using SMAC3.
-\begin{table}[H]
-    \centering
-    \caption[Random forest configuration space]{Configuration space for random forest}
-    \label{tab:ch05:rf_cs}
-    \begin{tabular}{cc}
-        \toprule
-        Hyperparameter & Range\\\midrule
-        \# estimators & [$16$, $128$] \\
-        max fraction of features & [$0.1$, $1.0$] \\
-        min samples split & [$2$, $20$] \\
-        min samples leaf & [$1$, $20$]\\
-        bootstrap & \{Yes,No\}\\\bottomrule
-    \end{tabular}
-
-\end{table}
-
-\begin{table}[H]
-    \centering
-    \caption[MLP configuration space]{Configuration space for MLP}
-    \label{tab:ch05:mlp_cs}
-    \begin{tabular}{cc}
-        \toprule
-        Hyperparameter & Range\\\midrule
-        depth & [$1$, $3$] \\
-        width & [$16$, $1024$] \\
-        alpha & [$10^{-8}$, $1$] \\
-        learning rate init & [$10^{-5}$, $1$]\\\bottomrule
-    \end{tabular}
-
-\end{table}
-
-\begin{table}[H]
-    \centering
-    \caption[Gradient boosting configuration space]{Configuration space for gradient boosting}
-    \label{tab:ch05:gb_cs}
-    \begin{tabular}{cc}
-        \toprule
-        Hyperparameter & Range\\\midrule
-        max depth & [$6$, $30$] \\
-        max leaf nodes & [$2$, $64$] \\
-        learning rate & [$2^{-10}$, $1$] \\
-        l2 regularisation & [$2^{-10}$, $2^{10}$]\\\bottomrule
-    \end{tabular}
-
-\end{table}
-\section{Software packages}
-In our experiments, we used Python 3.10 with the following packages:
-\begin{itemize}
-    \item SMAC3 version 2.2.0
-    \item scikit-learn version 1.2.2
-    \item LoLP version 0.0.4
-    \item BoTorch version 0.12.0
-    \item EvoTorch version 0.5.1
-    \item PyTorch version 2.5.0
-    \item IOHExperimenter version 0.3.17
-    \item OpenML version 0.15.0
-\end{itemize}
-
-\section{Detailed results with default configurations}
-\label{app:ch05:detailed-default-results}
-
-This section provides the distributional box plots underlying the compact mean heatmaps in the main text.
-
-For each task, we show detailed results obtained when varying one at a time target dimensionality $k$, input dimensionality $D$ and initial sample size $N$.
-For Task 1 and Task 2, in particular, we additionally report the mean classification accuracy for a subset of OpenML datasets required to include Slipmap among the results.
-For Task 4, we additionally report the mean rank trajectories over the complete optimisation process, while the main text reports final performance only.
-
-\subsection{Task 1: Clustering ability}
-
-\begin{figure}[htbp]
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml/agg_5_homogeneity.pdf}
-\caption{$k=5$; homogeneity}
-\end{subfigure}
-\par\vspace{6pt}
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml/agg_10_homogeneity.pdf}
-\caption{$k=10$; homogeneity}
-\end{subfigure}
-\par\vspace{6pt}
-
-    \caption[Detailed clustering results across target dimensionalities]{Clustering performance for $k\in\{5,10\}$, measured by homogeneity; higher is better.}
-\Description{Clustering performance for $k\in\{5,10\}$, measured by homogeneity; higher is better.}
-\end{figure}
-\begin{figure}[htbp]
-\ContinuedFloat
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml/agg_20_homogeneity.pdf}
-\caption{$k=20$; homogeneity}
-\end{subfigure}
-\par\vspace{6pt}
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml/agg_40_homogeneity.pdf}
-\caption{$k=40$; homogeneity}
-\end{subfigure}
-\par\vspace{6pt}
-
-    \caption[]{Clustering performance for $k\in\{20,40\}$, measured by homogeneity; higher is better.}
-\Description{Clustering performance for $k\in\{20,40\}$, measured by homogeneity; higher is better.}
-\end{figure}
-\begin{figure}[htbp]
-\ContinuedFloat
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml/agg_5_completeness.pdf}
-\caption{$k=5$; completeness}
-\end{subfigure}
-\par\vspace{6pt}
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml/agg_10_completeness.pdf}
-\caption{$k=10$; completeness}
-\end{subfigure}
-\par\vspace{6pt}
-
-    \caption[]{Clustering performance for $k\in\{5,10\}$, measured by completeness; higher is better.}
-\Description{Clustering performance for $k\in\{5,10\}$, measured by completeness; higher is better.}
-\end{figure}
-\begin{figure}[htbp]
-\ContinuedFloat
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml/agg_20_completeness.pdf}
-\caption{$k=20$; completeness}
-\end{subfigure}
-\par\vspace{6pt}
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml/agg_40_completeness.pdf}
-\caption{$k=40$; completeness}
-\end{subfigure}
-\par\vspace{6pt}
-
-    \caption[]{Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is better.
-}
-\label{fig:ch05:details-cluster_all_agg}
-\Description{Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is better.
-}
-\end{figure}
-
-\begin{figure}[htbp]
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml/summary_k_le1000_homogeneity.pdf}
-\caption{Homogeneity}
-\end{subfigure}
-\par\vspace{6pt}
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml/summary_k_le1000_completeness.pdf}
-\caption{Completeness}
-\end{subfigure}
-\par\vspace{6pt}
-\includegraphics{figures/05/ml/summary_k_le1000_homogeneity_colorbar.pdf}
-
-    \caption[Clustering results on datasets with at most 1\,000 samples]{Clustering performance for $k\in\{5,10,20,40\}$ on the six OpenML datasets with at most 1\,000 samples, including Slipmap, measured by homogeneity and completeness; higher is better.}
-    \label{fig:ch05:cluster_le1000}
-\Description{Clustering performance for $k\in\{5,10,20,40\}$ on the six OpenML datasets with at most 1\,000 samples, including Slipmap, measured by homogeneity and completeness; higher is better.}
-\end{figure}
-
-\begin{figure}[htbp]
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml/agg_small_5_homogeneity.pdf}
-\caption{Small $D$; homogeneity}
-\end{subfigure}
-\par\vspace{6pt}
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml/agg_medium_5_homogeneity.pdf}
-\caption{Medium $D$; homogeneity}
-\end{subfigure}
-\par\vspace{6pt}
-
-    \caption[Detailed clustering results by input dimensionality]{Clustering performance on low-, medium- and high-dimensional datasets for $k=5$, measured by homogeneity; higher is better.}
-\Description{Clustering performance on low-, medium- and high-dimensional datasets for $k=5$, measured by homogeneity; higher is better.}
-\end{figure}
-\begin{figure}[htbp]
-\ContinuedFloat
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml/agg_large_5_homogeneity.pdf}
-\caption{Large $D$; homogeneity}
-\end{subfigure}
-\par\vspace{6pt}
-
-    \caption[]{\textit{Continued.} Clustering performance on low-, medium- and high-dimensional datasets for $k=5$, measured by homogeneity; higher is better.}
-\Description{\textit{Continued.} Clustering performance on low-, medium- and high-dimensional datasets for $k=5$, measured by homogeneity; higher is better.}
-\end{figure}
-\begin{figure}[htbp]
-\ContinuedFloat
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml/agg_small_5_completeness.pdf}
-\caption{Small $D$; completeness}
-\end{subfigure}
-\par\vspace{6pt}
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml/agg_medium_5_completeness.pdf}
-\caption{Medium $D$; completeness}
-\end{subfigure}
-\par\vspace{6pt}
-
-\caption[]{Clustering performance on low-, medium- and high-dimensional datasets for $k=5$, measured by completeness; higher is better.
-}
-\label{fig:ch05:details-cluster_homogeneity_dataset_sizes}
-\Description{Clustering performance on low-, medium- and high-dimensional datasets for $k=5$, measured by completeness; higher is better.
-}
-\end{figure}
-\begin{figure}[htbp]
-\ContinuedFloat
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml/agg_large_5_completeness.pdf}
-\caption{Large $D$; completeness}
-\end{subfigure}
-\par\vspace{6pt}
-
-\caption[]{\textit{Continued.} Clustering performance on low-, medium- and high-dimensional datasets for $k=5$, measured by completeness; higher is better.
-}
-
-\Description{\textit{Continued.} Clustering performance on low-, medium- and high-dimensional datasets for $k=5$, measured by completeness; higher is better.
-}
-\end{figure}
-
-\clearpage
-\clearpage
-\subsection{Task 2: Tabular classification accuracy}
-
-\begin{figure}[htbp]
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml/agg_5_rf_acc.pdf}
-\caption{Random forest; $k=5$}
-\end{subfigure}
-\par\vspace{6pt}
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml/agg_10_rf_acc.pdf}
-\caption{Random forest; $k=10$}
-\end{subfigure}
-\par\vspace{6pt}
-
-    \caption[Detailed classification results across target dimensionalities]{Classification accuracy with random forests for $k\in\{5,10,20,40\}$; higher is better.}
-\Description{Classification accuracy with random forests for $k\in\{5,10,20,40\}$; higher is better.}
-\end{figure}
-\begin{figure}[htbp]
-\ContinuedFloat
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml/agg_20_rf_acc.pdf}
-\caption{Random forest; $k=20$}
-\end{subfigure}
-\par\vspace{6pt}
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml/agg_40_rf_acc.pdf}
-\caption{Random forest; $k=40$}
-\end{subfigure}
-\par\vspace{6pt}
-
-    \caption[]{\textit{Continued.} Classification accuracy with random forests for $k\in\{5,10,20,40\}$; higher is better.}
-\Description{\textit{Continued.} Classification accuracy with random forests for $k\in\{5,10,20,40\}$; higher is better.}
-\end{figure}
-\begin{figure}[htbp]
-\ContinuedFloat
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml/agg_5_gb_acc.pdf}
-\caption{Gradient boosting; $k=5$}
-\end{subfigure}
-\par\vspace{6pt}
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml/agg_10_gb_acc.pdf}
-\caption{Gradient boosting; $k=10$}
-\end{subfigure}
-\par\vspace{6pt}
-
-    \caption[]{Classification accuracy with gradient boosting for $k\in\{5,10,20,40\}$; higher is better.}
-\Description{Classification accuracy with gradient boosting for $k\in\{5,10,20,40\}$; higher is better.}
-\end{figure}
-\begin{figure}[htbp]
-\ContinuedFloat
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml/agg_20_gb_acc.pdf}
-\caption{Gradient boosting; $k=20$}
-\end{subfigure}
-\par\vspace{6pt}
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml/agg_40_gb_acc.pdf}
-\caption{Gradient boosting; $k=40$}
-\end{subfigure}
-\par\vspace{6pt}
-
-    \caption[]{\textit{Continued.} Classification accuracy with gradient boosting for $k\in\{5,10,20,40\}$; higher is better.}
-\Description{\textit{Continued.} Classification accuracy with gradient boosting for $k\in\{5,10,20,40\}$; higher is better.}
-\end{figure}
-\begin{figure}[htbp]
-\ContinuedFloat
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml/agg_5_mlp_acc.pdf}
-\caption{MLP; $k=5$}
-\end{subfigure}
-\par\vspace{6pt}
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml/agg_10_mlp_acc.pdf}
-\caption{MLP; $k=10$}
-\end{subfigure}
-\par\vspace{6pt}
-
-\caption[]{\textit{Continued.} Classification accuracy with MLP for $k\in\{5,10,20,40\}$; higher is better.
-}
-\label{fig:ch05:details-ml_pred_all}
-\Description{\textit{Continued.} Classification accuracy with MLP for $k\in\{5,10,20,40\}$; higher is better.
-}
-\end{figure}
-\begin{figure}[htbp]
-\ContinuedFloat
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml/agg_20_mlp_acc.pdf}
-\caption{MLP; $k=20$}
-\end{subfigure}
-\par\vspace{6pt}
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml/agg_40_mlp_acc.pdf}
-\caption{MLP; $k=40$}
-\end{subfigure}
-\par\vspace{6pt}
-
-\caption[]{\textit{Continued.} Classification accuracy with MLP for $k\in\{5,10,20,40\}$; higher is better.
-}
-
-\Description{\\textit{Continued.} Classification accuracy with MLP for $k\in\{5,10,20,40\}$; higher is better.
-}
-\end{figure}
-
-\begin{figure}[htbp]
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml/summary_k_le1000_rf_acc.pdf}
-\caption{Random forest}
-\end{subfigure}
-\par\vspace{6pt}
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml/summary_k_le1000_gb_acc.pdf}
-\caption{Gradient boosting}
-\end{subfigure}
-\par\vspace{6pt}
-\includegraphics{figures/05/ml/summary_k_le1000_rf_acc_colorbar.pdf}
-
-    \caption[Classification results on datasets with at most 1\,000 samples]{Mean classification accuracy for $k\in\{5,10,20,40\}$ on the six OpenML datasets with at most 1\,000 samples, including Slipmap, for random forest and gradient boosting; higher is better.}
-    \label{fig:ch05:ml_pred_le1000}
-\Description{Mean classification accuracy for $k\in\{5,10,20,40\}$ on the six OpenML datasets with at most 1\,000 samples, including Slipmap, for random forest, gradient boosting and MLP; higher is better.}
-\end{figure}
-\begin{figure}[htbp]
-\ContinuedFloat
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml/summary_k_le1000_mlp_acc.pdf}
-\caption{MLP}
-\end{subfigure}
-\par\vspace{6pt}
-\includegraphics{figures/05/ml/summary_k_le1000_mlp_acc_colorbar.pdf}
-
-    \caption[]{\textit{Continued.} Mean classification accuracy for $k\in\{5,10,20,40\}$ on the six OpenML datasets with at most 1\,000 samples, including Slipmap, for MLP; higher is better.}
-
-\Description{\textit{Continued.} Mean classification accuracy for $k\in\{5,10,20,40\}$ on the six OpenML datasets with at most 1\,000 samples, including Slipmap, for random forest, gradient boosting and MLP; higher is better.}
-\end{figure}
-
-\begin{figure}[htbp]
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml/agg_small_5_rf_acc.pdf}
-\caption{Random forest; small $D$}
-\end{subfigure}
-\par\vspace{6pt}
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml/agg_medium_5_rf_acc.pdf}
-\caption{Random forest; medium $D$}
-\end{subfigure}
-\par\vspace{6pt}
-
-    \caption[Detailed classification results by input dimensionality]{Classification accuracy with random forests on low-, medium- and high-dimensional datasets for $k=5$; higher is better.}
-\Description{Classification accuracy with random forests on low-, medium- and high-dimensional datasets for $k=5$; higher is better.}
-\end{figure}
-\begin{figure}[htbp]
-\ContinuedFloat
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml/agg_large_5_rf_acc.pdf}
-\caption{Random forest, large $D$}
-\end{subfigure}
-\par\vspace{6pt}
-
-    \caption[]{\textit{Continued.} Classification accuracy with random forests on low-, medium- and high-dimensional datasets for $k=5$; higher is better.}
-\Description{\textit{Continued.} Classification accuracy with random forests on low-, medium- and high-dimensional datasets for $k=5$; higher is better.}
-\end{figure}
-\begin{figure}[htbp]
-\ContinuedFloat
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml/agg_small_5_gb_acc.pdf}
-\caption{Gradient boosting; small $D$}
-\end{subfigure}
-\par\vspace{6pt}
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml/agg_medium_5_gb_acc.pdf}
-\caption{Gradient boosting; medium $D$}
-\end{subfigure}
-\par\vspace{6pt}
-
-    \caption[]{Classification accuracy with gradient boosting on low-, medium- and high-dimensional datasets for $k=5$; higher is better.}
-\Description{Classification accuracy with gradient boosting on low-, medium- and high-dimensional datasets for $k=5$; higher is better.}
-\end{figure}
-\begin{figure}[htbp]
-\ContinuedFloat
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml/agg_large_5_gb_acc.pdf}
-\caption{Gradient boosting; large $D$}
-\end{subfigure}
-\par\vspace{6pt}
-
-    \caption[]{\textit{Continued.} Classification accuracy with gradient boosting on low-, medium- and high-dimensional datasets for $k=5$; higher is better.}
-\Description{\textit{Continued.} Classification accuracy with gradient boosting on low-, medium- and high-dimensional datasets for $k=5$; higher is better.}
-\end{figure}
-\begin{figure}[htbp]
-\ContinuedFloat
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml/agg_small_5_mlp_acc.pdf}
-\caption{MLP; small $D$}
-\end{subfigure}
-\par\vspace{6pt}
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml/agg_medium_5_mlp_acc.pdf}
-\caption{MLP; medium $D$}
-\end{subfigure}
-\par\vspace{6pt}
-
-\caption[]{Classification accuracy with MLP on low-, medium- and high-dimensional datasets for $k=5$; higher is better.
-}
-\label{fig:ch05:details-ml_pred_sizes}
-\Description{Classification accuracy with MLP on low-, medium- and high-dimensional datasets for $k=5$; higher is better.
-}
-\end{figure}
-\begin{figure}[htbp]
-\ContinuedFloat
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/ml/agg_large_5_mlp_acc.pdf}
-\caption{MLP; large $D$}
-\end{subfigure}
-\par\vspace{6pt}
-
-\caption[]{\textit{Continued.}
-Classification accuracy with MLP on low-, medium- and high-dimensional datasets for $k=5$; higher is better.
-}
-
-\Description{\textit{Continued.}
-Classification accuracy with MLP on low-, medium- and high-dimensional datasets for $k=5$; higher is better.
-}
-\end{figure}
-
-\clearpage
-\clearpage
-\subsection{Task 3: Target function approximation}
-
-\begin{figure}[htbp]
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/epm/agg_sample_red_inpt_100_120_5.pdf}
-\caption{$k=5$}
-\end{subfigure}
-\par\vspace{6pt}
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/epm/agg_sample_red_inpt_100_120_10.pdf}
-\caption{$k=10$}
-\end{subfigure}
-\par\vspace{6pt}
-
-    \caption[Detailed function approximation results across target dimensionalities]{    Target function approximation for $k\in\{5,10,20,40\}$, with $D=120$ and $N=100$, measured by min--max normalised mean RMSE; lower is better.
-    }
-    \label{fig:ch05:details-res-bbo-task1_red_dim_inpt_dim}
-\Description{        Target function approximation for $k\in\{5,10,20,40\}$, with $D=120$ and $N=100$, measured by min--max normalised mean RMSE; lower is better.
-    }
-\end{figure}
-\begin{figure}[htbp]
-\ContinuedFloat
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/epm/agg_sample_red_inpt_100_120_20.pdf}
-\caption{$k=20$}
-\end{subfigure}
-\par\vspace{6pt}
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/epm/agg_sample_red_inpt_100_120_40.pdf}
-\caption{$k=40$}
-\end{subfigure}
-\par\vspace{6pt}
-
-    \caption[]{\textit{Continued.}
-    Target function approximation for $k\in\{5,10,20,40\}$, with $D=120$ and $N=100$, measured by min--max normalised mean RMSE; lower is better.
-    }
-
-\Description{\textit{Continued.}
-       Target function approximation for $k\in\{5,10,20,40\}$, with $D=120$ and $N=100$, measured by min--max normalised mean RMSE; lower is better.
-    }
-\end{figure}
-\begin{figure}[htbp]
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/epm/agg_sample_red_inpt_100_40_20.pdf}
-\caption{$D=40$}
-\end{subfigure}
-\par\vspace{6pt}
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/epm/agg_sample_red_inpt_100_60_20.pdf}
-\caption{$D=60$}
-\end{subfigure}
-\par\vspace{6pt}
-
-    \caption[Detailed function approximation results across input dimensionalities]{Target function approximation for $D\in\{40,60,120,240,500,1000\}$, with $k=20$ and $N=100$, measured by min--max normalised mean RMSE; lower is better.}
-\Description{Target function approximation for $D\in\{40,60,120,240,500,1000\}$, with $k=20$ and $N=100$, measured by min--max normalised mean RMSE; lower is better.}
-\end{figure}
-\begin{figure}[htbp]
-\ContinuedFloat
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/epm/agg_sample_red_inpt_100_120_20.pdf}
-\caption{$D=120$}
-\end{subfigure}
-\par\vspace{6pt}
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/epm/agg_sample_red_inpt_100_240_20.pdf}
-\caption{$D=240$}
-\end{subfigure}
-\par\vspace{6pt}
-
-    \caption[]{\textit{Continued.} Target function approximation for $D\in\{40,60,120,240,500,1000\}$, with $k=20$ and $N=100$, measured by min--max normalised mean RMSE; lower is better.}
-\Description{\textit{Continued.} Target function approximation for $D\in\{40,60,120,240,500,1000\}$, with $k=20$ and $N=100$, measured by min--max normalised mean RMSE; lower is better.}
-\end{figure}
-\begin{figure}[htbp]
-\ContinuedFloat
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/epm/agg_sample_red_inpt_100_500_20.pdf}
-\caption{$D=500$}
-\end{subfigure}
-\par\vspace{6pt}
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/epm/agg_sample_red_inpt_100_1000_20.pdf}
-\caption{$D=1000$}
-\end{subfigure}
-\par\vspace{6pt}
-
-    \caption[]{    \textit{Continued.}
-    Target function approximation for $D\in\{40,60,120,240,500,1000\}$, with $k=20$ and $N=100$, measured by min--max normalised mean RMSE; lower is better.
-    }
-    \label{fig:ch05:details-res-bbo-task1_inpt_dim}
-\Description{       \textit{Continued.}
-    Target function approximation for $D\in\{40,60,120,240,500,1000\}$, with $k=20$ and $N=100$, measured by min--max normalised mean RMSE; lower is better.
-    }
-\end{figure}
-\begin{figure}[htbp]
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/epm/agg_sample_red_inpt_100_40_5.pdf}
-\caption{$D=40$, $k=5$, $N=100$}
-\end{subfigure}
-\par\vspace{6pt}
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/epm/agg_sample_red_inpt_200_40_5.pdf}
-\caption{$D=40$, $k=5$, $N=200$}
-\end{subfigure}
-\par\vspace{6pt}
-
-    \caption[Detailed function approximation results across training sample sizes]{Target function approximation for $N\in\{100,200,500,1000\}$, with $D=40$ and $k=5$, measured by min--max normalised mean RMSE; lower is better.}
-\Description{Target function approximation for $N\in\{100,200,500,1000\}$, with $D=40$ and $k=5$, measured by min--max normalised mean RMSE; lower is better.}
-\end{figure}
-\begin{figure}[htbp]
-\ContinuedFloat
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/epm/agg_sample_red_inpt_500_40_5.pdf}
-\caption{$D=40$, $k=5$, $N=500$}
-\end{subfigure}
-\par\vspace{6pt}
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/epm/agg_sample_red_inpt_1000_40_5.pdf}
-\caption{$D=40$, $k=5$, $N=1000$}
-\end{subfigure}
-\par\vspace{6pt}
-
-    \caption[]{\textit{Continued.} Target function approximation for $N\in\{100,200,500,1000\}$, with $D=40$ and $k=5$, measured by min--max normalised mean RMSE; lower is better.}
-\Description{\textit{Continued.} Target function approximation for $N\in\{100,200,500,1000\}$, with $D=40$ and $k=5$, measured by min--max normalised mean RMSE; lower is better.}
-\end{figure}
-\begin{figure}[htbp]
-\ContinuedFloat
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/epm/agg_sample_red_inpt_100_1000_40.pdf}
-\caption{$D=1000$, $k=40$, $N=100$}
-\end{subfigure}
-\par\vspace{6pt}
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/epm/agg_sample_red_inpt_200_1000_40.pdf}
-\caption{$D=1000$, $k=40$, $N=200$}
-\end{subfigure}
-\par\vspace{6pt}
-
-    \caption[]{    Target function approximation for $N\in\{100,200,500,1000\}$, with $D=1000$ and $k=40$, measured by min--max normalised mean RMSE; lower is better.
-    }
-    \label{fig:ch05:details-res-bbo-task2_samp_sizes}
-\Description{    Target function approximation for $N\in\{100,200,500,1000\}$, with $D=1000$ and $k=40$, measured by min--max normalised mean RMSE; lower is better.
-    }
-\end{figure}
-\begin{figure}[htbp]
-\ContinuedFloat
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/epm/agg_sample_red_inpt_500_1000_40.pdf}
-\caption{$D=1000$, $k=40$, $N=500$}
-\end{subfigure}
-\par\vspace{6pt}
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/epm/agg_sample_red_inpt_1000_1000_40.pdf}
-\caption{$D=1000$, $k=40$, $N=1000$}
-\end{subfigure}
-\par\vspace{6pt}
-
-    \caption[]{\textit{Continued.}
-    Target function approximation for $N\in\{100,200,500,1000\}$, with $D=1000$ and $k=40$, measured by min--max normalised mean RMSE; lower is better.
-    }
-
-\Description{\textit{Continued.}
-    Target function approximation for $N\in\{100,200,500,1000\}$, with $D=1000$ and $k=40$, measured by min--max normalised mean RMSE; lower is better.
-    }
-\end{figure}
-\begin{figure}[htbp]
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/epm/real_agg_sample_red_dim_1000_5.pdf}
-\caption{$N=1000$, $k=5$}
-\end{subfigure}
-\par\vspace{6pt}
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/epm/real_agg_sample_red_dim_1000_10.pdf}
-\caption{$N=1000$, $k=10$}
-\end{subfigure}
-\par\vspace{6pt}
-
-    \caption[Detailed function approximation results on real-world benchmarks]{Target function approximation on real-world benchmarks for $k\in\{5,10,20,40\}$ and $N=1000$, measured by min--max normalised mean RMSE; lower is better.}
-\Description{Target function approximation on real-world benchmarks for $k\in\{5,10,20,40\}$ and $N=1000$, measured by min--max normalised mean RMSE; lower is better.}
-\end{figure}
-\begin{figure}[htbp]
-\ContinuedFloat
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/epm/real_agg_sample_red_dim_1000_20.pdf}
-\caption{$N=1000$, $k=20$}
-\end{subfigure}
-\par\vspace{6pt}
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/epm/real_agg_sample_red_dim_1000_40.pdf}
-\caption{$N=1000$, $k=40$}
-\end{subfigure}
-\par\vspace{6pt}
-
-    \caption[]{\textit{Continued.} Target function approximation on real-world benchmarks for $k\in\{5,10,20,40\}$ and $N=1000$, measured by min--max normalised mean RMSE; lower is better.}
-\Description{\textit{Continued.} Target function approximation on real-world benchmarks for $k\in\{5,10,20,40\}$ and $N=1000$, measured by min--max normalised mean RMSE; lower is better.}
-\end{figure}
-\begin{figure}[htbp]
-\ContinuedFloat
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/epm/real_agg_sample_red_dim_100_5.pdf}
-\caption{$k=5$, $N=100$}
-\end{subfigure}
-\par\vspace{6pt}
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/epm/real_agg_sample_red_dim_200_5.pdf}
-\caption{$k=5$, $N=200$}
-\end{subfigure}
-\par\vspace{6pt}
-
-    \caption[]{    Target function approximation on real-world benchmarks for $N\in\{100,200,500,1000\}$ and $k=5$, measured by min--max normalised mean RMSE; lower is better.
-    }
-    \label{fig:ch05:details-res-bbo-task1_real}
-\Description{        Target function approximation on real-world benchmarks for $N\in\{100,200,500,1000\}$ and $k=5$, measured by min--max normalised mean RMSE; lower is better.
-    }
-\end{figure}
-\begin{figure}[htbp]
-\ContinuedFloat
-\centering
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/epm/real_agg_sample_red_dim_500_5.pdf}
-\caption{$k=5$, $N=500$}
-\end{subfigure}
-\par\vspace{6pt}
-\begin{subfigure}[t]{1.0\textwidth}
-\centering
-\includegraphics{figures/05/epm/real_agg_sample_red_dim_1000_5.pdf}
-\caption{$k=5$, $N=1000$}
-\end{subfigure}
-\par\vspace{6pt}
-
-    \caption[]{\textit{Continued.}
-    Target function approximation on real-world benchmarks for $N\in\{100,200,500,1000\}$ and $k=5$, measured by min--max normalised mean RMSE; lower is better.
-    }
-
-\Description{\textit{Continued.}
-        Target function approximation on real-world benchmarks for $N\in\{100,200,500,1000\}$ and $k=5$, measured by min--max normalised mean RMSE; lower is better.
-    }
-\end{figure}
-
-\clearpage
-\clearpage
-\subsection{Task 4: Black-box optimiser performance}
-
-\begin{figure}[htbp]
-\centering
-\begin{subfigure}[t]{0.49\textwidth}
-\centering
-\includegraphics{figures/05/bop/heatmap_100_120_5.pdf}
-\caption{$k=5$}
-\end{subfigure}
-\hfill
-\begin{subfigure}[t]{0.49\textwidth}
-\centering
-\includegraphics{figures/05/bop/heatmap_100_120_10.pdf}
-\caption{$k=10$}
-\end{subfigure}
-\par\vspace{6pt}
-\includegraphics{figures/05/bop/heatmap_100_120_5_colorbar.pdf}
-
-    \caption[Optimisation rank trajectories across target dimensionalities]{    Mean rank trajectories throughout the optimisation on synthetic benchmarks for $k\in\{5,10,20,40\}$ with $D = 120$ and $N = 100$; rank 1 is best.
-    }
-    \label{fig:ch05:details-res-bbo-task2_red_dim}
-\Description{Mean rank trajectories throughout the optimisation on synthetic benchmarks for $k\in\{5,10,20,40\}$ with $D = 120$ and $N = 100$; rank 1 is best.}
-\end{figure}
-\begin{figure}[htbp]
-\ContinuedFloat
-\centering
-\begin{subfigure}[t]{0.49\textwidth}
-\centering
-\includegraphics{figures/05/bop/heatmap_100_120_20.pdf}
-\caption{$k=20$}
-\end{subfigure}
-\hfill
-\begin{subfigure}[t]{0.49\textwidth}
-\centering
-\includegraphics{figures/05/bop/heatmap_100_120_40.pdf}
-\caption{$k=40$}
-\end{subfigure}
-\par\vspace{6pt}
-\includegraphics{figures/05/bop/heatmap_100_120_20_colorbar.pdf}
-
-    \caption[]{\textit{Continued.}     Mean rank trajectories throughout the optimisation on synthetic benchmarks for $k\in\{5,10,20,40\}$ with $D = 120$ and $N = 100$; rank 1 is best.}
-
-\Description{\textit{Continued.}     Mean rank trajectories throughout the optimisation on synthetic benchmarks for $k\in\{5,10,20,40\}$ with $D = 120$ and $N = 100$; rank 1 is best.}
-\end{figure}
-\begin{figure}[htbp]
-\centering
-\begin{subfigure}[t]{0.49\textwidth}
-\centering
-\includegraphics{figures/05/bop/heatmap_100_40_20.pdf}
-\caption{$D=40$}
-\end{subfigure}
-\hfill
-\begin{subfigure}[t]{0.49\textwidth}
-\centering
-\includegraphics{figures/05/bop/heatmap_100_60_20.pdf}
-\caption{$D=60$}
-\end{subfigure}
-\par\vspace{6pt}
-\includegraphics{figures/05/bop/heatmap_100_40_20_colorbar.pdf}
-
-    \caption[Optimisation rank trajectories across input dimensionalities]{Mean rank trajectories throughout the optimisation on synthetic benchmarks for $D\in\{40,60,120,240,500,1000\}$ with $k = 20$ and $N = 100$; rank 1 is best.}
-\Description{Mean rank trajectories throughout the optimisation on synthetic benchmarks for $D\in\{40,60,120,240,500,1000\}$ with $k = 20$ and $N = 100$; rank 1 is best.}
-\end{figure}
-\begin{figure}[htbp]
-\ContinuedFloat
-\centering
-\begin{subfigure}[t]{0.49\textwidth}
-\centering
-\includegraphics{figures/05/bop/heatmap_100_120_20.pdf}
-\caption{$D=120$}
-\end{subfigure}
-\hfill
-\begin{subfigure}[t]{0.49\textwidth}
-\centering
-\includegraphics{figures/05/bop/heatmap_100_240_20.pdf}
-\caption{$D=240$}
-\end{subfigure}
-\par\vspace{6pt}
-\includegraphics{figures/05/bop/heatmap_100_120_20_colorbar.pdf}
-
-    \caption[]{\textit{Continued.} Mean rank trajectories throughout the optimisation on synthetic benchmarks for $D\in\{40,60,120,240,500,1000\}$ with $k = 20$ and $N = 100$; rank 1 is best.}
-\Description{\textit{Continued.} Mean rank trajectories throughout the optimisation on synthetic benchmarks for $D\in\{40,60,120,240,500,1000\}$ with $k = 20$ and $N = 100$; rank 1 is best.}
-\end{figure}
-\begin{figure}[htbp]
-\ContinuedFloat
-\centering
-\begin{subfigure}[t]{0.49\textwidth}
-\centering
-\includegraphics{figures/05/bop/heatmap_100_500_20.pdf}
-\caption{$D=500$}
-\end{subfigure}
-\hfill
-\begin{subfigure}[t]{0.49\textwidth}
-\centering
-\includegraphics{figures/05/bop/heatmap_100_1000_20.pdf}
-\caption{$D=1000$}
-\end{subfigure}
-\par\vspace{6pt}
-\includegraphics{figures/05/bop/heatmap_100_500_20_colorbar.pdf}
-
-    \caption[]{\textit{Continued.} Mean rank trajectories throughout the optimisation on synthetic benchmarks for $D\in\{40,60,120,240,500,1000\}$ with $k = 20$ and $N = 100$; rank 1 is best.}
-    \label{fig:ch05:details-res-bbo-task2_diff_dims}
-\Description{Mean rank trajectories throughout the optimisation on synthetic benchmarks for $D\in\{40,60,120,240,500,1000\}$ with $k = 20$ and $N = 100$; rank 1 is best.}
-\end{figure}
-\begin{figure}[htbp]
-\centering
-\begin{subfigure}[t]{0.49\textwidth}
-\centering
-\includegraphics{figures/05/bop/heatmap_100_40_5.pdf}
-\caption{$D=40$, $k=5$, $N=100$}
-\end{subfigure}
-\hfill
-\begin{subfigure}[t]{0.49\textwidth}
-\centering
-\includegraphics{figures/05/bop/heatmap_200_40_5.pdf}
-\caption{$D=40$, $k=5$, $N=200$}
-\end{subfigure}
-\par\vspace{6pt}
-\includegraphics{figures/05/bop/heatmap_100_40_5_colorbar.pdf}
-
-    \caption[Optimisation rank trajectories across training sample sizes]{Mean rank trajectories throughout the optimisation on synthetic benchmarks for $N\in\{100,200,500,1000\}$ with $D = 40$ and $k = 5$; rank 1 is best.}
-\Description{Mean rank trajectories throughout the optimisation on synthetic benchmarks for $N\in\{100,200,500,1000\}$ with $D = 40$ and $k = 5$; rank 1 is best.}
-\end{figure}
-\begin{figure}[htbp]
-\ContinuedFloat
-\centering
-\begin{subfigure}[t]{0.49\textwidth}
-\centering
-\includegraphics{figures/05/bop/heatmap_500_40_5.pdf}
-\caption{$D=40$, $k=5$, $N=500$}
-\end{subfigure}
-\hfill
-\begin{subfigure}[t]{0.49\textwidth}
-\centering
-\includegraphics{figures/05/bop/heatmap_1000_40_5.pdf}
-\caption{$D=40$, $k=5$, $N=1000$}
-\end{subfigure}
-\par\vspace{6pt}
-\includegraphics{figures/05/bop/heatmap_500_40_5_colorbar.pdf}
-
-    \caption[]{\textit{Continued.} Mean rank trajectories throughout the optimisation on synthetic benchmarks for $N\in\{100,200,500,1000\}$ with $D = 40$ and $k = 5$; rank 1 is best.}
-\Description{\textit{Continued.} Mean rank trajectories throughout the optimisation on synthetic benchmarks for $N\in\{100,200,500,1000\}$ with $D = 40$ and $k = 5$; rank 1 is best.}
-\end{figure}
-\begin{figure}[htbp]
-\ContinuedFloat
-\centering
-\begin{subfigure}[t]{0.49\textwidth}
-\centering
-\includegraphics{figures/05/bop/heatmap_100_1000_40.pdf}
-\caption{$D=1000$, $k=40$, $N=100$}
-\end{subfigure}
-\hfill
-\begin{subfigure}[t]{0.49\textwidth}
-\centering
-\includegraphics{figures/05/bop/heatmap_200_1000_40.pdf}
-\caption{$D=1000$, $k=40$, $N=200$}
-\end{subfigure}
-\par\vspace{6pt}
-\includegraphics{figures/05/bop/heatmap_100_1000_40_colorbar.pdf}
-
-    \caption[]{Mean rank trajectories throughout the optimisation on synthetic benchmarks for $N\in\{100,200,500,1000\}$ with $D = 1000$ and $k = 40$; rank 1 is best.}
-    \label{fig:ch05:details-res-bbo-task2_samples}
-\Description{Mean rank trajectories throughout the optimisation on synthetic benchmarks for $N\in\{100,200,500,1000\}$ with $D = 1000$ and $k = 40$; rank 1 is best.}
-\end{figure}
-\begin{figure}[htbp]
-\ContinuedFloat
-\centering
-\begin{subfigure}[t]{0.49\textwidth}
-\centering
-\includegraphics{figures/05/bop/heatmap_500_1000_40.pdf}
-\caption{$D=1000$, $k=40$, $N=500$}
-\end{subfigure}
-\hfill
-\begin{subfigure}[t]{0.49\textwidth}
-\centering
-\includegraphics{figures/05/bop/heatmap_1000_1000_40.pdf}
-\caption{$D=1000$, $k=40$, $N=1000$}
-\end{subfigure}
-\par\vspace{6pt}
-\includegraphics{figures/05/bop/heatmap_500_1000_40_colorbar.pdf}
-
-    \caption[]{\textit{Continued.} Mean rank trajectories throughout the optimisation on synthetic benchmarks for $N\in\{100,200,500,1000\}$ with $D = 1000$ and $k = 40$; rank 1 is best.}
-
-\Description{\textit{Continued.} Mean rank trajectories throughout the optimisation on synthetic benchmarks for $N\in\{100,200,500,1000\}$ with $D = 1000$ and $k = 40$; rank 1 is best.}
-\end{figure}
-\begin{figure}[htbp]
-\centering
-\begin{subfigure}[t]{0.49\textwidth}
-\centering
-\includegraphics{figures/05/bop/heatmap_real_100_5.pdf}
-\caption{$N=100$, $k=5$}
-\end{subfigure}
-\hfill
-\begin{subfigure}[t]{0.49\textwidth}
-\centering
-\includegraphics{figures/05/bop/heatmap_real_100_10.pdf}
-\caption{$N=100$, $k=10$}
-\end{subfigure}
-\par\vspace{6pt}
-\includegraphics{figures/05/bop/heatmap_real_100_5_colorbar.pdf}
-
-    \caption[Optimisation rank trajectories on real-world benchmarks]{Mean rank trajectories throughout the optimisation on real-world benchmarks for $k\in\{5,10,20,40\}$ with $N = 100$; rank 1 is best.}
-\Description{Mean rank trajectories throughout the optimisation on real-world benchmarks for $k\in\{5,10,20,40\}$ with $N = 100$; rank 1 is best.}
-\end{figure}
-\begin{figure}[htbp]
-\ContinuedFloat
-\centering
-\begin{subfigure}[t]{0.49\textwidth}
-\centering
-\includegraphics{figures/05/bop/heatmap_real_100_20.pdf}
-\caption{$N=100$, $k=20$}
-\end{subfigure}
-\hfill
-\begin{subfigure}[t]{0.49\textwidth}
-\centering
-\includegraphics{figures/05/bop/heatmap_real_100_40.pdf}
-\caption{$N=100$, $k=40$}
-\end{subfigure}
-\par\vspace{6pt}
-\includegraphics{figures/05/bop/heatmap_real_100_20_colorbar.pdf}
-
-    \caption[]{\textit{Continued.} Mean rank trajectories throughout the optimisation on real-world benchmarks for $k\in\{5,10,20,40\}$ with $N = 100$; rank 1 is best.}
-\Description{\textit{Continued.} Mean rank trajectories throughout the optimisation on real-world benchmarks for $k\in\{5,10,20,40\}$ with $N = 100$; rank 1 is best.}
-\end{figure}
-\begin{figure}[htbp]
-\ContinuedFloat
-\centering
-\begin{subfigure}[t]{0.49\textwidth}
-\centering
-\includegraphics{figures/05/bop/heatmap_real_100_5.pdf}
-\caption{$k=5$, $N=100$}
-\end{subfigure}
-\hfill
-\begin{subfigure}[t]{0.49\textwidth}
-\centering
-\includegraphics{figures/05/bop/heatmap_real_200_5.pdf}
-\caption{$k=5$, $N=200$}
-\end{subfigure}
-\par\vspace{6pt}
-\includegraphics{figures/05/bop/heatmap_real_100_5_colorbar.pdf}
-
-    \caption[]{ Mean rank trajectories throughout the optimisation on real-world benchmarks for $N\in\{100,200,500,1000\}$ with $k = 5$; rank 1 is best.}
-    \label{fig:ch05:details-res-bbo-task2-real-world}
-\Description{ Mean rank trajectories throughout the optimisation on real-world benchmarks for $N\in\{100,200,500,1000\}$ with $k = 5$; rank 1 is best.}
-\end{figure}
-\begin{figure}[htbp]
-\ContinuedFloat
-\centering
-\begin{subfigure}[t]{0.49\textwidth}
-\centering
-\includegraphics{figures/05/bop/heatmap_real_500_5.pdf}
-\caption{$k=5$, $N=500$}
-\end{subfigure}
-\hfill
-\begin{subfigure}[t]{0.49\textwidth}
-\centering
-\includegraphics{figures/05/bop/heatmap_real_1000_5.pdf}
-\caption{$k=5$, $N=1000$}
-\end{subfigure}
-\par\vspace{6pt}
-\includegraphics{figures/05/bop/heatmap_real_500_5_colorbar.pdf}
-
-    \caption[]{\textit{Continued.}  Mean rank trajectories throughout the optimisation on real-world benchmarks for $N\in\{100,200,500,1000\}$ with $k = 5$; rank 1 is best.}
-
-\Description{\textit{Continued.}  Mean rank trajectories throughout the optimisation on real-world benchmarks for $N\in\{100,200,500,1000\}$ with $k = 5$; rank 1 is best.}
-\end{figure}
-
-\clearpage
+% \section{Classifier configuration spaces for task 2}
+% \label{app:ch05:config-spaces}
+
+% We present in~\cref{tab:ch05:rf_cs}-\cref{tab:ch05:gb_cs} the configuration spaces used to tune the hyperparameters of the machine learning algorithms for Task 2.
+% All configuration spaces were implemented using the ConfigSpace library to tune the hyperparameters of the machine learning models using SMAC3.
+% \begin{table}[H]
+%     \centering
+%     \caption[Random forest configuration space]{Configuration space for random forest}
+%     \label{tab:ch05:rf_cs}
+%     \begin{tabular}{cc}
+%         \toprule
+%         Hyperparameter & Range\\\midrule
+%         \# estimators & [$16$, $128$] \\
+%         max fraction of features & [$0.1$, $1.0$] \\
+%         min samples split & [$2$, $20$] \\
+%         min samples leaf & [$1$, $20$]\\
+%         bootstrap & \{Yes,No\}\\\bottomrule
+%     \end{tabular}
+
+% \end{table}
+
+% \begin{table}[H]
+%     \centering
+%     \caption[MLP configuration space]{Configuration space for MLP}
+%     \label{tab:ch05:mlp_cs}
+%     \begin{tabular}{cc}
+%         \toprule
+%         Hyperparameter & Range\\\midrule
+%         depth & [$1$, $3$] \\
+%         width & [$16$, $1024$] \\
+%         alpha & [$10^{-8}$, $1$] \\
+%         learning rate init & [$10^{-5}$, $1$]\\\bottomrule
+%     \end{tabular}
+
+% \end{table}
+
+% \begin{table}[H]
+%     \centering
+%     \caption[Gradient boosting configuration space]{Configuration space for gradient boosting}
+%     \label{tab:ch05:gb_cs}
+%     \begin{tabular}{cc}
+%         \toprule
+%         Hyperparameter & Range\\\midrule
+%         max depth & [$6$, $30$] \\
+%         max leaf nodes & [$2$, $64$] \\
+%         learning rate & [$2^{-10}$, $1$] \\
+%         l2 regularisation & [$2^{-10}$, $2^{10}$]\\\bottomrule
+%     \end{tabular}
+
+% \end{table}
+% \section{Software packages}
+% In our experiments, we used Python 3.10 with the following packages:
+% \begin{itemize}
+%     \item SMAC3 version 2.2.0
+%     \item scikit-learn version 1.2.2
+%     \item LoLP version 0.0.4
+%     \item BoTorch version 0.12.0
+%     \item EvoTorch version 0.5.1
+%     \item PyTorch version 2.5.0
+%     \item IOHExperimenter version 0.3.17
+%     \item OpenML version 0.15.0
+% \end{itemize}
+
+% \section{Detailed results with default configurations}
+% \label{app:ch05:detailed-default-results}
+
+% This section provides the distributional box plots underlying the compact mean heatmaps in the main text.
+
+% For each task, we show detailed results obtained when varying one at a time target dimensionality $k$, input dimensionality $D$ and initial sample size $N$.
+% For Task 1 and Task 2, in particular, we additionally report the mean classification accuracy for a subset of OpenML datasets required to include Slipmap among the results.
+% For Task 4, we additionally report the mean rank trajectories over the complete optimisation process, while the main text reports final performance only.
+
+% \subsection{Task 1: Clustering ability}
+
+% \begin{figure}[htbp]
+% \centering
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/ml/agg_5_homogeneity.pdf}
+% \caption{$k=5$; homogeneity}
+% \end{subfigure}
+% \par\vspace{6pt}
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/ml/agg_10_homogeneity.pdf}
+% \caption{$k=10$; homogeneity}
+% \end{subfigure}
+% \par\vspace{6pt}
+
+%     \caption[Detailed clustering results across target dimensionalities]{Clustering performance for $k\in\{5,10\}$, measured by homogeneity; higher is better.}
+% \Description{Clustering performance for $k\in\{5,10\}$, measured by homogeneity; higher is better.}
+% \end{figure}
+% \begin{figure}[htbp]
+% \ContinuedFloat
+% \centering
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/ml/agg_20_homogeneity.pdf}
+% \caption{$k=20$; homogeneity}
+% \end{subfigure}
+% \par\vspace{6pt}
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/ml/agg_40_homogeneity.pdf}
+% \caption{$k=40$; homogeneity}
+% \end{subfigure}
+% \par\vspace{6pt}
+
+%     \caption[]{Clustering performance for $k\in\{20,40\}$, measured by homogeneity; higher is better.}
+% \Description{Clustering performance for $k\in\{20,40\}$, measured by homogeneity; higher is better.}
+% \end{figure}
+% \begin{figure}[htbp]
+% \ContinuedFloat
+% \centering
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/ml/agg_5_completeness.pdf}
+% \caption{$k=5$; completeness}
+% \end{subfigure}
+% \par\vspace{6pt}
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/ml/agg_10_completeness.pdf}
+% \caption{$k=10$; completeness}
+% \end{subfigure}
+% \par\vspace{6pt}
+
+%     \caption[]{Clustering performance for $k\in\{5,10\}$, measured by completeness; higher is better.}
+% \Description{Clustering performance for $k\in\{5,10\}$, measured by completeness; higher is better.}
+% \end{figure}
+% \begin{figure}[htbp]
+% \ContinuedFloat
+% \centering
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/ml/agg_20_completeness.pdf}
+% \caption{$k=20$; completeness}
+% \end{subfigure}
+% \par\vspace{6pt}
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/ml/agg_40_completeness.pdf}
+% \caption{$k=40$; completeness}
+% \end{subfigure}
+% \par\vspace{6pt}
+
+%     \caption[]{Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is better.
+% }
+% \label{fig:ch05:details-cluster_all_agg}
+% \Description{Clustering performance for $k\in\{20,40\}$, measured by completeness; higher is better.
+% }
+% \end{figure}
+
+% \begin{figure}[htbp]
+% \centering
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/ml/summary_k_le1000_homogeneity.pdf}
+% \caption{Homogeneity}
+% \end{subfigure}
+% \par\vspace{6pt}
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/ml/summary_k_le1000_completeness.pdf}
+% \caption{Completeness}
+% \end{subfigure}
+% \par\vspace{6pt}
+% \includegraphics{figures/05/ml/summary_k_le1000_homogeneity_colorbar.pdf}
+
+%     \caption[Clustering results on datasets with at most 1\,000 samples]{Clustering performance for $k\in\{5,10,20,40\}$ on the six OpenML datasets with at most 1\,000 samples, including Slipmap, measured by homogeneity and completeness; higher is better.}
+%     \label{fig:ch05:cluster_le1000}
+% \Description{Clustering performance for $k\in\{5,10,20,40\}$ on the six OpenML datasets with at most 1\,000 samples, including Slipmap, measured by homogeneity and completeness; higher is better.}
+% \end{figure}
+
+% \begin{figure}[htbp]
+% \centering
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/ml/agg_small_5_homogeneity.pdf}
+% \caption{Small $D$; homogeneity}
+% \end{subfigure}
+% \par\vspace{6pt}
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/ml/agg_medium_5_homogeneity.pdf}
+% \caption{Medium $D$; homogeneity}
+% \end{subfigure}
+% \par\vspace{6pt}
+
+%     \caption[Detailed clustering results by input dimensionality]{Clustering performance on low-, medium- and high-dimensional datasets for $k=5$, measured by homogeneity; higher is better.}
+% \Description{Clustering performance on low-, medium- and high-dimensional datasets for $k=5$, measured by homogeneity; higher is better.}
+% \end{figure}
+% \begin{figure}[htbp]
+% \ContinuedFloat
+% \centering
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/ml/agg_large_5_homogeneity.pdf}
+% \caption{Large $D$; homogeneity}
+% \end{subfigure}
+% \par\vspace{6pt}
+
+%     \caption[]{\textit{Continued.} Clustering performance on low-, medium- and high-dimensional datasets for $k=5$, measured by homogeneity; higher is better.}
+% \Description{\textit{Continued.} Clustering performance on low-, medium- and high-dimensional datasets for $k=5$, measured by homogeneity; higher is better.}
+% \end{figure}
+% \begin{figure}[htbp]
+% \ContinuedFloat
+% \centering
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/ml/agg_small_5_completeness.pdf}
+% \caption{Small $D$; completeness}
+% \end{subfigure}
+% \par\vspace{6pt}
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/ml/agg_medium_5_completeness.pdf}
+% \caption{Medium $D$; completeness}
+% \end{subfigure}
+% \par\vspace{6pt}
+
+% \caption[]{Clustering performance on low-, medium- and high-dimensional datasets for $k=5$, measured by completeness; higher is better.
+% }
+% \label{fig:ch05:details-cluster_homogeneity_dataset_sizes}
+% \Description{Clustering performance on low-, medium- and high-dimensional datasets for $k=5$, measured by completeness; higher is better.
+% }
+% \end{figure}
+% \begin{figure}[htbp]
+% \ContinuedFloat
+% \centering
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/ml/agg_large_5_completeness.pdf}
+% \caption{Large $D$; completeness}
+% \end{subfigure}
+% \par\vspace{6pt}
+
+% \caption[]{\textit{Continued.} Clustering performance on low-, medium- and high-dimensional datasets for $k=5$, measured by completeness; higher is better.
+% }
+
+% \Description{\textit{Continued.} Clustering performance on low-, medium- and high-dimensional datasets for $k=5$, measured by completeness; higher is better.
+% }
+% \end{figure}
+
+% \clearpage
+% \clearpage
+% \subsection{Task 2: Tabular classification accuracy}
+
+% \begin{figure}[htbp]
+% \centering
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/ml/agg_5_rf_acc.pdf}
+% \caption{Random forest; $k=5$}
+% \end{subfigure}
+% \par\vspace{6pt}
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/ml/agg_10_rf_acc.pdf}
+% \caption{Random forest; $k=10$}
+% \end{subfigure}
+% \par\vspace{6pt}
+
+%     \caption[Detailed classification results across target dimensionalities]{Classification accuracy with random forests for $k\in\{5,10,20,40\}$; higher is better.}
+% \Description{Classification accuracy with random forests for $k\in\{5,10,20,40\}$; higher is better.}
+% \end{figure}
+% \begin{figure}[htbp]
+% \ContinuedFloat
+% \centering
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/ml/agg_20_rf_acc.pdf}
+% \caption{Random forest; $k=20$}
+% \end{subfigure}
+% \par\vspace{6pt}
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/ml/agg_40_rf_acc.pdf}
+% \caption{Random forest; $k=40$}
+% \end{subfigure}
+% \par\vspace{6pt}
+
+%     \caption[]{\textit{Continued.} Classification accuracy with random forests for $k\in\{5,10,20,40\}$; higher is better.}
+% \Description{\textit{Continued.} Classification accuracy with random forests for $k\in\{5,10,20,40\}$; higher is better.}
+% \end{figure}
+% \begin{figure}[htbp]
+% \ContinuedFloat
+% \centering
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/ml/agg_5_gb_acc.pdf}
+% \caption{Gradient boosting; $k=5$}
+% \end{subfigure}
+% \par\vspace{6pt}
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/ml/agg_10_gb_acc.pdf}
+% \caption{Gradient boosting; $k=10$}
+% \end{subfigure}
+% \par\vspace{6pt}
+
+%     \caption[]{Classification accuracy with gradient boosting for $k\in\{5,10,20,40\}$; higher is better.}
+% \Description{Classification accuracy with gradient boosting for $k\in\{5,10,20,40\}$; higher is better.}
+% \end{figure}
+% \begin{figure}[htbp]
+% \ContinuedFloat
+% \centering
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/ml/agg_20_gb_acc.pdf}
+% \caption{Gradient boosting; $k=20$}
+% \end{subfigure}
+% \par\vspace{6pt}
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/ml/agg_40_gb_acc.pdf}
+% \caption{Gradient boosting; $k=40$}
+% \end{subfigure}
+% \par\vspace{6pt}
+
+%     \caption[]{\textit{Continued.} Classification accuracy with gradient boosting for $k\in\{5,10,20,40\}$; higher is better.}
+% \Description{\textit{Continued.} Classification accuracy with gradient boosting for $k\in\{5,10,20,40\}$; higher is better.}
+% \end{figure}
+% \begin{figure}[htbp]
+% \ContinuedFloat
+% \centering
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/ml/agg_5_mlp_acc.pdf}
+% \caption{MLP; $k=5$}
+% \end{subfigure}
+% \par\vspace{6pt}
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/ml/agg_10_mlp_acc.pdf}
+% \caption{MLP; $k=10$}
+% \end{subfigure}
+% \par\vspace{6pt}
+
+% \caption[]{\textit{Continued.} Classification accuracy with MLP for $k\in\{5,10,20,40\}$; higher is better.
+% }
+% \label{fig:ch05:details-ml_pred_all}
+% \Description{\textit{Continued.} Classification accuracy with MLP for $k\in\{5,10,20,40\}$; higher is better.
+% }
+% \end{figure}
+% \begin{figure}[htbp]
+% \ContinuedFloat
+% \centering
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/ml/agg_20_mlp_acc.pdf}
+% \caption{MLP; $k=20$}
+% \end{subfigure}
+% \par\vspace{6pt}
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/ml/agg_40_mlp_acc.pdf}
+% \caption{MLP; $k=40$}
+% \end{subfigure}
+% \par\vspace{6pt}
+
+% \caption[]{\textit{Continued.} Classification accuracy with MLP for $k\in\{5,10,20,40\}$; higher is better.
+% }
+
+% \Description{\\textit{Continued.} Classification accuracy with MLP for $k\in\{5,10,20,40\}$; higher is better.
+% }
+% \end{figure}
+
+% \begin{figure}[htbp]
+% \centering
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/ml/summary_k_le1000_rf_acc.pdf}
+% \caption{Random forest}
+% \end{subfigure}
+% \par\vspace{6pt}
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/ml/summary_k_le1000_gb_acc.pdf}
+% \caption{Gradient boosting}
+% \end{subfigure}
+% \par\vspace{6pt}
+% \includegraphics{figures/05/ml/summary_k_le1000_rf_acc_colorbar.pdf}
+
+%     \caption[Classification results on datasets with at most 1\,000 samples]{Mean classification accuracy for $k\in\{5,10,20,40\}$ on the six OpenML datasets with at most 1\,000 samples, including Slipmap, for random forest and gradient boosting; higher is better.}
+%     \label{fig:ch05:ml_pred_le1000}
+% \Description{Mean classification accuracy for $k\in\{5,10,20,40\}$ on the six OpenML datasets with at most 1\,000 samples, including Slipmap, for random forest, gradient boosting and MLP; higher is better.}
+% \end{figure}
+% \begin{figure}[htbp]
+% \ContinuedFloat
+% \centering
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/ml/summary_k_le1000_mlp_acc.pdf}
+% \caption{MLP}
+% \end{subfigure}
+% \par\vspace{6pt}
+% \includegraphics{figures/05/ml/summary_k_le1000_mlp_acc_colorbar.pdf}
+
+%     \caption[]{\textit{Continued.} Mean classification accuracy for $k\in\{5,10,20,40\}$ on the six OpenML datasets with at most 1\,000 samples, including Slipmap, for MLP; higher is better.}
+
+% \Description{\textit{Continued.} Mean classification accuracy for $k\in\{5,10,20,40\}$ on the six OpenML datasets with at most 1\,000 samples, including Slipmap, for random forest, gradient boosting and MLP; higher is better.}
+% \end{figure}
+
+% \begin{figure}[htbp]
+% \centering
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/ml/agg_small_5_rf_acc.pdf}
+% \caption{Random forest; small $D$}
+% \end{subfigure}
+% \par\vspace{6pt}
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/ml/agg_medium_5_rf_acc.pdf}
+% \caption{Random forest; medium $D$}
+% \end{subfigure}
+% \par\vspace{6pt}
+
+%     \caption[Detailed classification results by input dimensionality]{Classification accuracy with random forests on low-, medium- and high-dimensional datasets for $k=5$; higher is better.}
+% \Description{Classification accuracy with random forests on low-, medium- and high-dimensional datasets for $k=5$; higher is better.}
+% \end{figure}
+% \begin{figure}[htbp]
+% \ContinuedFloat
+% \centering
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/ml/agg_large_5_rf_acc.pdf}
+% \caption{Random forest, large $D$}
+% \end{subfigure}
+% \par\vspace{6pt}
+
+%     \caption[]{\textit{Continued.} Classification accuracy with random forests on low-, medium- and high-dimensional datasets for $k=5$; higher is better.}
+% \Description{\textit{Continued.} Classification accuracy with random forests on low-, medium- and high-dimensional datasets for $k=5$; higher is better.}
+% \end{figure}
+% \begin{figure}[htbp]
+% \ContinuedFloat
+% \centering
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/ml/agg_small_5_gb_acc.pdf}
+% \caption{Gradient boosting; small $D$}
+% \end{subfigure}
+% \par\vspace{6pt}
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/ml/agg_medium_5_gb_acc.pdf}
+% \caption{Gradient boosting; medium $D$}
+% \end{subfigure}
+% \par\vspace{6pt}
+
+%     \caption[]{Classification accuracy with gradient boosting on low-, medium- and high-dimensional datasets for $k=5$; higher is better.}
+% \Description{Classification accuracy with gradient boosting on low-, medium- and high-dimensional datasets for $k=5$; higher is better.}
+% \end{figure}
+% \begin{figure}[htbp]
+% \ContinuedFloat
+% \centering
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/ml/agg_large_5_gb_acc.pdf}
+% \caption{Gradient boosting; large $D$}
+% \end{subfigure}
+% \par\vspace{6pt}
+
+%     \caption[]{\textit{Continued.} Classification accuracy with gradient boosting on low-, medium- and high-dimensional datasets for $k=5$; higher is better.}
+% \Description{\textit{Continued.} Classification accuracy with gradient boosting on low-, medium- and high-dimensional datasets for $k=5$; higher is better.}
+% \end{figure}
+% \begin{figure}[htbp]
+% \ContinuedFloat
+% \centering
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/ml/agg_small_5_mlp_acc.pdf}
+% \caption{MLP; small $D$}
+% \end{subfigure}
+% \par\vspace{6pt}
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/ml/agg_medium_5_mlp_acc.pdf}
+% \caption{MLP; medium $D$}
+% \end{subfigure}
+% \par\vspace{6pt}
+
+% \caption[]{Classification accuracy with MLP on low-, medium- and high-dimensional datasets for $k=5$; higher is better.
+% }
+% \label{fig:ch05:details-ml_pred_sizes}
+% \Description{Classification accuracy with MLP on low-, medium- and high-dimensional datasets for $k=5$; higher is better.
+% }
+% \end{figure}
+% \begin{figure}[htbp]
+% \ContinuedFloat
+% \centering
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/ml/agg_large_5_mlp_acc.pdf}
+% \caption{MLP; large $D$}
+% \end{subfigure}
+% \par\vspace{6pt}
+
+% \caption[]{\textit{Continued.}
+% Classification accuracy with MLP on low-, medium- and high-dimensional datasets for $k=5$; higher is better.
+% }
+
+% \Description{\textit{Continued.}
+% Classification accuracy with MLP on low-, medium- and high-dimensional datasets for $k=5$; higher is better.
+% }
+% \end{figure}
+
+% \clearpage
+% \clearpage
+% \subsection{Task 3: Target function approximation}
+
+% \begin{figure}[htbp]
+% \centering
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/epm/agg_sample_red_inpt_100_120_5.pdf}
+% \caption{$k=5$}
+% \end{subfigure}
+% \par\vspace{6pt}
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/epm/agg_sample_red_inpt_100_120_10.pdf}
+% \caption{$k=10$}
+% \end{subfigure}
+% \par\vspace{6pt}
+
+%     \caption[Detailed function approximation results across target dimensionalities]{    Target function approximation for $k\in\{5,10,20,40\}$, with $D=120$ and $N=100$, measured by min--max normalised mean RMSE; lower is better.
+%     }
+%     \label{fig:ch05:details-res-bbo-task1_red_dim_inpt_dim}
+% \Description{        Target function approximation for $k\in\{5,10,20,40\}$, with $D=120$ and $N=100$, measured by min--max normalised mean RMSE; lower is better.
+%     }
+% \end{figure}
+% \begin{figure}[htbp]
+% \ContinuedFloat
+% \centering
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/epm/agg_sample_red_inpt_100_120_20.pdf}
+% \caption{$k=20$}
+% \end{subfigure}
+% \par\vspace{6pt}
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/epm/agg_sample_red_inpt_100_120_40.pdf}
+% \caption{$k=40$}
+% \end{subfigure}
+% \par\vspace{6pt}
+
+%     \caption[]{\textit{Continued.}
+%     Target function approximation for $k\in\{5,10,20,40\}$, with $D=120$ and $N=100$, measured by min--max normalised mean RMSE; lower is better.
+%     }
+
+% \Description{\textit{Continued.}
+%        Target function approximation for $k\in\{5,10,20,40\}$, with $D=120$ and $N=100$, measured by min--max normalised mean RMSE; lower is better.
+%     }
+% \end{figure}
+% \begin{figure}[htbp]
+% \centering
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/epm/agg_sample_red_inpt_100_40_20.pdf}
+% \caption{$D=40$}
+% \end{subfigure}
+% \par\vspace{6pt}
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/epm/agg_sample_red_inpt_100_60_20.pdf}
+% \caption{$D=60$}
+% \end{subfigure}
+% \par\vspace{6pt}
+
+%     \caption[Detailed function approximation results across input dimensionalities]{Target function approximation for $D\in\{40,60,120,240,500,1000\}$, with $k=20$ and $N=100$, measured by min--max normalised mean RMSE; lower is better.}
+% \Description{Target function approximation for $D\in\{40,60,120,240,500,1000\}$, with $k=20$ and $N=100$, measured by min--max normalised mean RMSE; lower is better.}
+% \end{figure}
+% \begin{figure}[htbp]
+% \ContinuedFloat
+% \centering
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/epm/agg_sample_red_inpt_100_120_20.pdf}
+% \caption{$D=120$}
+% \end{subfigure}
+% \par\vspace{6pt}
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/epm/agg_sample_red_inpt_100_240_20.pdf}
+% \caption{$D=240$}
+% \end{subfigure}
+% \par\vspace{6pt}
+
+%     \caption[]{\textit{Continued.} Target function approximation for $D\in\{40,60,120,240,500,1000\}$, with $k=20$ and $N=100$, measured by min--max normalised mean RMSE; lower is better.}
+% \Description{\textit{Continued.} Target function approximation for $D\in\{40,60,120,240,500,1000\}$, with $k=20$ and $N=100$, measured by min--max normalised mean RMSE; lower is better.}
+% \end{figure}
+% \begin{figure}[htbp]
+% \ContinuedFloat
+% \centering
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/epm/agg_sample_red_inpt_100_500_20.pdf}
+% \caption{$D=500$}
+% \end{subfigure}
+% \par\vspace{6pt}
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/epm/agg_sample_red_inpt_100_1000_20.pdf}
+% \caption{$D=1000$}
+% \end{subfigure}
+% \par\vspace{6pt}
+
+%     \caption[]{    \textit{Continued.}
+%     Target function approximation for $D\in\{40,60,120,240,500,1000\}$, with $k=20$ and $N=100$, measured by min--max normalised mean RMSE; lower is better.
+%     }
+%     \label{fig:ch05:details-res-bbo-task1_inpt_dim}
+% \Description{       \textit{Continued.}
+%     Target function approximation for $D\in\{40,60,120,240,500,1000\}$, with $k=20$ and $N=100$, measured by min--max normalised mean RMSE; lower is better.
+%     }
+% \end{figure}
+% \begin{figure}[htbp]
+% \centering
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/epm/agg_sample_red_inpt_100_40_5.pdf}
+% \caption{$D=40$, $k=5$, $N=100$}
+% \end{subfigure}
+% \par\vspace{6pt}
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/epm/agg_sample_red_inpt_200_40_5.pdf}
+% \caption{$D=40$, $k=5$, $N=200$}
+% \end{subfigure}
+% \par\vspace{6pt}
+
+%     \caption[Detailed function approximation results across training sample sizes]{Target function approximation for $N\in\{100,200,500,1000\}$, with $D=40$ and $k=5$, measured by min--max normalised mean RMSE; lower is better.}
+% \Description{Target function approximation for $N\in\{100,200,500,1000\}$, with $D=40$ and $k=5$, measured by min--max normalised mean RMSE; lower is better.}
+% \end{figure}
+% \begin{figure}[htbp]
+% \ContinuedFloat
+% \centering
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/epm/agg_sample_red_inpt_500_40_5.pdf}
+% \caption{$D=40$, $k=5$, $N=500$}
+% \end{subfigure}
+% \par\vspace{6pt}
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/epm/agg_sample_red_inpt_1000_40_5.pdf}
+% \caption{$D=40$, $k=5$, $N=1000$}
+% \end{subfigure}
+% \par\vspace{6pt}
+
+%     \caption[]{\textit{Continued.} Target function approximation for $N\in\{100,200,500,1000\}$, with $D=40$ and $k=5$, measured by min--max normalised mean RMSE; lower is better.}
+% \Description{\textit{Continued.} Target function approximation for $N\in\{100,200,500,1000\}$, with $D=40$ and $k=5$, measured by min--max normalised mean RMSE; lower is better.}
+% \end{figure}
+% \begin{figure}[htbp]
+% \ContinuedFloat
+% \centering
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/epm/agg_sample_red_inpt_100_1000_40.pdf}
+% \caption{$D=1000$, $k=40$, $N=100$}
+% \end{subfigure}
+% \par\vspace{6pt}
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/epm/agg_sample_red_inpt_200_1000_40.pdf}
+% \caption{$D=1000$, $k=40$, $N=200$}
+% \end{subfigure}
+% \par\vspace{6pt}
+
+%     \caption[]{    Target function approximation for $N\in\{100,200,500,1000\}$, with $D=1000$ and $k=40$, measured by min--max normalised mean RMSE; lower is better.
+%     }
+%     \label{fig:ch05:details-res-bbo-task2_samp_sizes}
+% \Description{    Target function approximation for $N\in\{100,200,500,1000\}$, with $D=1000$ and $k=40$, measured by min--max normalised mean RMSE; lower is better.
+%     }
+% \end{figure}
+% \begin{figure}[htbp]
+% \ContinuedFloat
+% \centering
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/epm/agg_sample_red_inpt_500_1000_40.pdf}
+% \caption{$D=1000$, $k=40$, $N=500$}
+% \end{subfigure}
+% \par\vspace{6pt}
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/epm/agg_sample_red_inpt_1000_1000_40.pdf}
+% \caption{$D=1000$, $k=40$, $N=1000$}
+% \end{subfigure}
+% \par\vspace{6pt}
+
+%     \caption[]{\textit{Continued.}
+%     Target function approximation for $N\in\{100,200,500,1000\}$, with $D=1000$ and $k=40$, measured by min--max normalised mean RMSE; lower is better.
+%     }
+
+% \Description{\textit{Continued.}
+%     Target function approximation for $N\in\{100,200,500,1000\}$, with $D=1000$ and $k=40$, measured by min--max normalised mean RMSE; lower is better.
+%     }
+% \end{figure}
+% \begin{figure}[htbp]
+% \centering
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/epm/real_agg_sample_red_dim_1000_5.pdf}
+% \caption{$N=1000$, $k=5$}
+% \end{subfigure}
+% \par\vspace{6pt}
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/epm/real_agg_sample_red_dim_1000_10.pdf}
+% \caption{$N=1000$, $k=10$}
+% \end{subfigure}
+% \par\vspace{6pt}
+
+%     \caption[Detailed function approximation results on real-world benchmarks]{Target function approximation on real-world benchmarks for $k\in\{5,10,20,40\}$ and $N=1000$, measured by min--max normalised mean RMSE; lower is better.}
+% \Description{Target function approximation on real-world benchmarks for $k\in\{5,10,20,40\}$ and $N=1000$, measured by min--max normalised mean RMSE; lower is better.}
+% \end{figure}
+% \begin{figure}[htbp]
+% \ContinuedFloat
+% \centering
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/epm/real_agg_sample_red_dim_1000_20.pdf}
+% \caption{$N=1000$, $k=20$}
+% \end{subfigure}
+% \par\vspace{6pt}
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/epm/real_agg_sample_red_dim_1000_40.pdf}
+% \caption{$N=1000$, $k=40$}
+% \end{subfigure}
+% \par\vspace{6pt}
+
+%     \caption[]{\textit{Continued.} Target function approximation on real-world benchmarks for $k\in\{5,10,20,40\}$ and $N=1000$, measured by min--max normalised mean RMSE; lower is better.}
+% \Description{\textit{Continued.} Target function approximation on real-world benchmarks for $k\in\{5,10,20,40\}$ and $N=1000$, measured by min--max normalised mean RMSE; lower is better.}
+% \end{figure}
+% \begin{figure}[htbp]
+% \ContinuedFloat
+% \centering
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/epm/real_agg_sample_red_dim_100_5.pdf}
+% \caption{$k=5$, $N=100$}
+% \end{subfigure}
+% \par\vspace{6pt}
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/epm/real_agg_sample_red_dim_200_5.pdf}
+% \caption{$k=5$, $N=200$}
+% \end{subfigure}
+% \par\vspace{6pt}
+
+%     \caption[]{    Target function approximation on real-world benchmarks for $N\in\{100,200,500,1000\}$ and $k=5$, measured by min--max normalised mean RMSE; lower is better.
+%     }
+%     \label{fig:ch05:details-res-bbo-task1_real}
+% \Description{        Target function approximation on real-world benchmarks for $N\in\{100,200,500,1000\}$ and $k=5$, measured by min--max normalised mean RMSE; lower is better.
+%     }
+% \end{figure}
+% \begin{figure}[htbp]
+% \ContinuedFloat
+% \centering
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/epm/real_agg_sample_red_dim_500_5.pdf}
+% \caption{$k=5$, $N=500$}
+% \end{subfigure}
+% \par\vspace{6pt}
+% \begin{subfigure}[t]{1.0\textwidth}
+% \centering
+% \includegraphics{figures/05/epm/real_agg_sample_red_dim_1000_5.pdf}
+% \caption{$k=5$, $N=1000$}
+% \end{subfigure}
+% \par\vspace{6pt}
+
+%     \caption[]{\textit{Continued.}
+%     Target function approximation on real-world benchmarks for $N\in\{100,200,500,1000\}$ and $k=5$, measured by min--max normalised mean RMSE; lower is better.
+%     }
+
+% \Description{\textit{Continued.}
+%         Target function approximation on real-world benchmarks for $N\in\{100,200,500,1000\}$ and $k=5$, measured by min--max normalised mean RMSE; lower is better.
+%     }
+% \end{figure}
+
+% \clearpage
+% \clearpage
+% \subsection{Task 4: Black-box optimiser performance}
+
+% \begin{figure}[htbp]
+% \centering
+% \begin{subfigure}[t]{0.49\textwidth}
+% \centering
+% \includegraphics{figures/05/bop/heatmap_100_120_5.pdf}
+% \caption{$k=5$}
+% \end{subfigure}
+% \hfill
+% \begin{subfigure}[t]{0.49\textwidth}
+% \centering
+% \includegraphics{figures/05/bop/heatmap_100_120_10.pdf}
+% \caption{$k=10$}
+% \end{subfigure}
+% \par\vspace{6pt}
+% \includegraphics{figures/05/bop/heatmap_100_120_5_colorbar.pdf}
+
+%     \caption[Optimisation rank trajectories across target dimensionalities]{    Mean rank trajectories throughout the optimisation on synthetic benchmarks for $k\in\{5,10,20,40\}$ with $D = 120$ and $N = 100$; rank 1 is best.
+%     }
+%     \label{fig:ch05:details-res-bbo-task2_red_dim}
+% \Description{Mean rank trajectories throughout the optimisation on synthetic benchmarks for $k\in\{5,10,20,40\}$ with $D = 120$ and $N = 100$; rank 1 is best.}
+% \end{figure}
+% \begin{figure}[htbp]
+% \ContinuedFloat
+% \centering
+% \begin{subfigure}[t]{0.49\textwidth}
+% \centering
+% \includegraphics{figures/05/bop/heatmap_100_120_20.pdf}
+% \caption{$k=20$}
+% \end{subfigure}
+% \hfill
+% \begin{subfigure}[t]{0.49\textwidth}
+% \centering
+% \includegraphics{figures/05/bop/heatmap_100_120_40.pdf}
+% \caption{$k=40$}
+% \end{subfigure}
+% \par\vspace{6pt}
+% \includegraphics{figures/05/bop/heatmap_100_120_20_colorbar.pdf}
+
+%     \caption[]{\textit{Continued.}     Mean rank trajectories throughout the optimisation on synthetic benchmarks for $k\in\{5,10,20,40\}$ with $D = 120$ and $N = 100$; rank 1 is best.}
+
+% \Description{\textit{Continued.}     Mean rank trajectories throughout the optimisation on synthetic benchmarks for $k\in\{5,10,20,40\}$ with $D = 120$ and $N = 100$; rank 1 is best.}
+% \end{figure}
+% \begin{figure}[htbp]
+% \centering
+% \begin{subfigure}[t]{0.49\textwidth}
+% \centering
+% \includegraphics{figures/05/bop/heatmap_100_40_20.pdf}
+% \caption{$D=40$}
+% \end{subfigure}
+% \hfill
+% \begin{subfigure}[t]{0.49\textwidth}
+% \centering
+% \includegraphics{figures/05/bop/heatmap_100_60_20.pdf}
+% \caption{$D=60$}
+% \end{subfigure}
+% \par\vspace{6pt}
+% \includegraphics{figures/05/bop/heatmap_100_40_20_colorbar.pdf}
+
+%     \caption[Optimisation rank trajectories across input dimensionalities]{Mean rank trajectories throughout the optimisation on synthetic benchmarks for $D\in\{40,60,120,240,500,1000\}$ with $k = 20$ and $N = 100$; rank 1 is best.}
+% \Description{Mean rank trajectories throughout the optimisation on synthetic benchmarks for $D\in\{40,60,120,240,500,1000\}$ with $k = 20$ and $N = 100$; rank 1 is best.}
+% \end{figure}
+% \begin{figure}[htbp]
+% \ContinuedFloat
+% \centering
+% \begin{subfigure}[t]{0.49\textwidth}
+% \centering
+% \includegraphics{figures/05/bop/heatmap_100_120_20.pdf}
+% \caption{$D=120$}
+% \end{subfigure}
+% \hfill
+% \begin{subfigure}[t]{0.49\textwidth}
+% \centering
+% \includegraphics{figures/05/bop/heatmap_100_240_20.pdf}
+% \caption{$D=240$}
+% \end{subfigure}
+% \par\vspace{6pt}
+% \includegraphics{figures/05/bop/heatmap_100_120_20_colorbar.pdf}
+
+%     \caption[]{\textit{Continued.} Mean rank trajectories throughout the optimisation on synthetic benchmarks for $D\in\{40,60,120,240,500,1000\}$ with $k = 20$ and $N = 100$; rank 1 is best.}
+% \Description{\textit{Continued.} Mean rank trajectories throughout the optimisation on synthetic benchmarks for $D\in\{40,60,120,240,500,1000\}$ with $k = 20$ and $N = 100$; rank 1 is best.}
+% \end{figure}
+% \begin{figure}[htbp]
+% \ContinuedFloat
+% \centering
+% \begin{subfigure}[t]{0.49\textwidth}
+% \centering
+% \includegraphics{figures/05/bop/heatmap_100_500_20.pdf}
+% \caption{$D=500$}
+% \end{subfigure}
+% \hfill
+% \begin{subfigure}[t]{0.49\textwidth}
+% \centering
+% \includegraphics{figures/05/bop/heatmap_100_1000_20.pdf}
+% \caption{$D=1000$}
+% \end{subfigure}
+% \par\vspace{6pt}
+% \includegraphics{figures/05/bop/heatmap_100_500_20_colorbar.pdf}
+
+%     \caption[]{\textit{Continued.} Mean rank trajectories throughout the optimisation on synthetic benchmarks for $D\in\{40,60,120,240,500,1000\}$ with $k = 20$ and $N = 100$; rank 1 is best.}
+%     \label{fig:ch05:details-res-bbo-task2_diff_dims}
+% \Description{Mean rank trajectories throughout the optimisation on synthetic benchmarks for $D\in\{40,60,120,240,500,1000\}$ with $k = 20$ and $N = 100$; rank 1 is best.}
+% \end{figure}
+% \begin{figure}[htbp]
+% \centering
+% \begin{subfigure}[t]{0.49\textwidth}
+% \centering
+% \includegraphics{figures/05/bop/heatmap_100_40_5.pdf}
+% \caption{$D=40$, $k=5$, $N=100$}
+% \end{subfigure}
+% \hfill
+% \begin{subfigure}[t]{0.49\textwidth}
+% \centering
+% \includegraphics{figures/05/bop/heatmap_200_40_5.pdf}
+% \caption{$D=40$, $k=5$, $N=200$}
+% \end{subfigure}
+% \par\vspace{6pt}
+% \includegraphics{figures/05/bop/heatmap_100_40_5_colorbar.pdf}
+
+%     \caption[Optimisation rank trajectories across training sample sizes]{Mean rank trajectories throughout the optimisation on synthetic benchmarks for $N\in\{100,200,500,1000\}$ with $D = 40$ and $k = 5$; rank 1 is best.}
+% \Description{Mean rank trajectories throughout the optimisation on synthetic benchmarks for $N\in\{100,200,500,1000\}$ with $D = 40$ and $k = 5$; rank 1 is best.}
+% \end{figure}
+% \begin{figure}[htbp]
+% \ContinuedFloat
+% \centering
+% \begin{subfigure}[t]{0.49\textwidth}
+% \centering
+% \includegraphics{figures/05/bop/heatmap_500_40_5.pdf}
+% \caption{$D=40$, $k=5$, $N=500$}
+% \end{subfigure}
+% \hfill
+% \begin{subfigure}[t]{0.49\textwidth}
+% \centering
+% \includegraphics{figures/05/bop/heatmap_1000_40_5.pdf}
+% \caption{$D=40$, $k=5$, $N=1000$}
+% \end{subfigure}
+% \par\vspace{6pt}
+% \includegraphics{figures/05/bop/heatmap_500_40_5_colorbar.pdf}
+
+%     \caption[]{\textit{Continued.} Mean rank trajectories throughout the optimisation on synthetic benchmarks for $N\in\{100,200,500,1000\}$ with $D = 40$ and $k = 5$; rank 1 is best.}
+% \Description{\textit{Continued.} Mean rank trajectories throughout the optimisation on synthetic benchmarks for $N\in\{100,200,500,1000\}$ with $D = 40$ and $k = 5$; rank 1 is best.}
+% \end{figure}
+% \begin{figure}[htbp]
+% \ContinuedFloat
+% \centering
+% \begin{subfigure}[t]{0.49\textwidth}
+% \centering
+% \includegraphics{figures/05/bop/heatmap_100_1000_40.pdf}
+% \caption{$D=1000$, $k=40$, $N=100$}
+% \end{subfigure}
+% \hfill
+% \begin{subfigure}[t]{0.49\textwidth}
+% \centering
+% \includegraphics{figures/05/bop/heatmap_200_1000_40.pdf}
+% \caption{$D=1000$, $k=40$, $N=200$}
+% \end{subfigure}
+% \par\vspace{6pt}
+% \includegraphics{figures/05/bop/heatmap_100_1000_40_colorbar.pdf}
+
+%     \caption[]{Mean rank trajectories throughout the optimisation on synthetic benchmarks for $N\in\{100,200,500,1000\}$ with $D = 1000$ and $k = 40$; rank 1 is best.}
+%     \label{fig:ch05:details-res-bbo-task2_samples}
+% \Description{Mean rank trajectories throughout the optimisation on synthetic benchmarks for $N\in\{100,200,500,1000\}$ with $D = 1000$ and $k = 40$; rank 1 is best.}
+% \end{figure}
+% \begin{figure}[htbp]
+% \ContinuedFloat
+% \centering
+% \begin{subfigure}[t]{0.49\textwidth}
+% \centering
+% \includegraphics{figures/05/bop/heatmap_500_1000_40.pdf}
+% \caption{$D=1000$, $k=40$, $N=500$}
+% \end{subfigure}
+% \hfill
+% \begin{subfigure}[t]{0.49\textwidth}
+% \centering
+% \includegraphics{figures/05/bop/heatmap_1000_1000_40.pdf}
+% \caption{$D=1000$, $k=40$, $N=1000$}
+% \end{subfigure}
+% \par\vspace{6pt}
+% \includegraphics{figures/05/bop/heatmap_500_1000_40_colorbar.pdf}
+
+%     \caption[]{\textit{Continued.} Mean rank trajectories throughout the optimisation on synthetic benchmarks for $N\in\{100,200,500,1000\}$ with $D = 1000$ and $k = 40$; rank 1 is best.}
+
+% \Description{\textit{Continued.} Mean rank trajectories throughout the optimisation on synthetic benchmarks for $N\in\{100,200,500,1000\}$ with $D = 1000$ and $k = 40$; rank 1 is best.}
+% \end{figure}
+% \begin{figure}[htbp]
+% \centering
+% \begin{subfigure}[t]{0.49\textwidth}
+% \centering
+% \includegraphics{figures/05/bop/heatmap_real_100_5.pdf}
+% \caption{$N=100$, $k=5$}
+% \end{subfigure}
+% \hfill
+% \begin{subfigure}[t]{0.49\textwidth}
+% \centering
+% \includegraphics{figures/05/bop/heatmap_real_100_10.pdf}
+% \caption{$N=100$, $k=10$}
+% \end{subfigure}
+% \par\vspace{6pt}
+% \includegraphics{figures/05/bop/heatmap_real_100_5_colorbar.pdf}
+
+%     \caption[Optimisation rank trajectories on real-world benchmarks]{Mean rank trajectories throughout the optimisation on real-world benchmarks for $k\in\{5,10,20,40\}$ with $N = 100$; rank 1 is best.}
+% \Description{Mean rank trajectories throughout the optimisation on real-world benchmarks for $k\in\{5,10,20,40\}$ with $N = 100$; rank 1 is best.}
+% \end{figure}
+% \begin{figure}[htbp]
+% \ContinuedFloat
+% \centering
+% \begin{subfigure}[t]{0.49\textwidth}
+% \centering
+% \includegraphics{figures/05/bop/heatmap_real_100_20.pdf}
+% \caption{$N=100$, $k=20$}
+% \end{subfigure}
+% \hfill
+% \begin{subfigure}[t]{0.49\textwidth}
+% \centering
+% \includegraphics{figures/05/bop/heatmap_real_100_40.pdf}
+% \caption{$N=100$, $k=40$}
+% \end{subfigure}
+% \par\vspace{6pt}
+% \includegraphics{figures/05/bop/heatmap_real_100_20_colorbar.pdf}
+
+%     \caption[]{\textit{Continued.} Mean rank trajectories throughout the optimisation on real-world benchmarks for $k\in\{5,10,20,40\}$ with $N = 100$; rank 1 is best.}
+% \Description{\textit{Continued.} Mean rank trajectories throughout the optimisation on real-world benchmarks for $k\in\{5,10,20,40\}$ with $N = 100$; rank 1 is best.}
+% \end{figure}
+% \begin{figure}[htbp]
+% \ContinuedFloat
+% \centering
+% \begin{subfigure}[t]{0.49\textwidth}
+% \centering
+% \includegraphics{figures/05/bop/heatmap_real_100_5.pdf}
+% \caption{$k=5$, $N=100$}
+% \end{subfigure}
+% \hfill
+% \begin{subfigure}[t]{0.49\textwidth}
+% \centering
+% \includegraphics{figures/05/bop/heatmap_real_200_5.pdf}
+% \caption{$k=5$, $N=200$}
+% \end{subfigure}
+% \par\vspace{6pt}
+% \includegraphics{figures/05/bop/heatmap_real_100_5_colorbar.pdf}
+
+%     \caption[]{ Mean rank trajectories throughout the optimisation on real-world benchmarks for $N\in\{100,200,500,1000\}$ with $k = 5$; rank 1 is best.}
+%     \label{fig:ch05:details-res-bbo-task2-real-world}
+% \Description{ Mean rank trajectories throughout the optimisation on real-world benchmarks for $N\in\{100,200,500,1000\}$ with $k = 5$; rank 1 is best.}
+% \end{figure}
+% \begin{figure}[htbp]
+% \ContinuedFloat
+% \centering
+% \begin{subfigure}[t]{0.49\textwidth}
+% \centering
+% \includegraphics{figures/05/bop/heatmap_real_500_5.pdf}
+% \caption{$k=5$, $N=500$}
+% \end{subfigure}
+% \hfill
+% \begin{subfigure}[t]{0.49\textwidth}
+% \centering
+% \includegraphics{figures/05/bop/heatmap_real_1000_5.pdf}
+% \caption{$k=5$, $N=1000$}
+% \end{subfigure}
+% \par\vspace{6pt}
+% \includegraphics{figures/05/bop/heatmap_real_500_5_colorbar.pdf}
+
+%     \caption[]{\textit{Continued.}  Mean rank trajectories throughout the optimisation on real-world benchmarks for $N\in\{100,200,500,1000\}$ with $k = 5$; rank 1 is best.}
+
+% \Description{\textit{Continued.}  Mean rank trajectories throughout the optimisation on real-world benchmarks for $N\in\{100,200,500,1000\}$ with $k = 5$; rank 1 is best.}
+% \end{figure}
+
+% \clearpage
 \section{Results with tuned dimensionality reduction methods}
 \label{app:ch05:tuned-results}
 
