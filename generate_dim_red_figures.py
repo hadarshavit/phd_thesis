@@ -5,7 +5,7 @@
 """Replace chapter-5 figures using the saved original chart data and thesis theme.
 
 Run: uv run generate_dim_red_figures.py
-Requires Chrome/Chromium and Palatino (or the compatible P052 fallback).
+Requires Chrome/Chromium, pdfcrop/Ghostscript, and Palatino (or P052).
 To refresh the data or thesis/template.py theme, first run
 scripts/collect_dim_red_figure_data.py in the benchmark Python environment.
 Only figures/05 PDFs are replaced; obsolete chapter-5 PDFs are removed.
@@ -14,6 +14,7 @@ import gzip
 import json
 from pathlib import Path
 import re
+import subprocess
 import tempfile
 
 import plotly.graph_objects as go
@@ -165,6 +166,10 @@ def main():
         pio.write_images(list(figures.values()), paths,
                          width=[fig.layout.width for fig in figures.values()],
                          height=[fig.layout.height for fig in figures.values()])
+        # Crop the rendered marks, so margins stay tight when label sizes change.
+        for path in paths:
+            subprocess.run(['pdfcrop', '--margins', '2', str(path), str(path)],
+                           cwd=temporary, check=True, stdout=subprocess.DEVNULL)
         assert all(path.read_bytes().startswith(b'%PDF') for path in paths)
         for name, path in zip(figures, paths):
             dest = target / name

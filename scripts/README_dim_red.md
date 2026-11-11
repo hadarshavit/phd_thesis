@@ -9,6 +9,7 @@ uv run generate_dim_red_figures.py
 This replaces the PDFs in `figures/05/` directly and removes obsolete chapter-5
 PDFs. It does not write paper figures or touch other chapters. Chrome/Chromium
 and Palatino or its fontconfig-compatible P052 fallback must be available.
+The standard TeX Live `pdfcrop` tool and Ghostscript trim the exported PDFs.
 Plotly 6 and Kaleido 1 are declared in the script's dependency block.
 
 `scripts/dim_red_figure_data.json.gz` contains the original plotted observations,
@@ -31,7 +32,9 @@ The compressed snapshot includes every active chapter panel, including the
 appendix's default, tuned, timing and initial-sample comparisons.
 
 Full-width panels use the template's 336 TeX pt text width; paired BO heatmaps
-use 49% of that width. Labels use 7.5 pt at inclusion size (7 pt for BO row
+use 49% of that width before cropping. Exports are tightly cropped to their
+visible content with a 2 pt safety margin; LaTeX includes them at natural size
+to preserve the font sizes. Labels use 7.5 pt at inclusion size (7 pt for BO row
 labels); axis and colourbar titles use 8.25 pt, below the thesis body text.
 Heatmaps use a white–cyan–teal–green sequential scale built from the muted
 thesis palette; darker means better. Colourbars retain the original units
@@ -41,4 +44,5 @@ abbreviations explained in the chapter.
 
 The generator checks chapter coverage, shared scales and preservation of plotted
 observations before exporting. It exports the whole set to a temporary directory
-before replacing the chapter PDFs. Regeneration changes presentation only.
+and crops it before replacing the chapter PDFs. Regeneration changes
+presentation only.
