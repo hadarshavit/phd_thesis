@@ -370,15 +370,17 @@ For Tasks 1 and 2, we used the Kathleen cluster, in which each node has two AMD 
 For Tasks 3 and 4, we used the CLAIX-2023 cluster, in which each node is equipped with 2 Intel Xeon 8468 Sapphire CPUs, 210MB L3 cache and 256GB RAM, running Rocky Linux 8.
 The code to reproduce our experiments, including the analysis, is available in our GitHub repository\footnote{\url{https://github.com/hadarshavit/bench_dim_red_submission_code}}.
 
+For Bernoulli RBM, we apply feature-wise min--max scaling fitted on the training inputs and clip transformed values to $[0,1]$, allowing the method to process real-valued tabular and continuous optimisation data.
+
+\subsection{Main experiments}
+
 For all benchmarks, we considered four different target dimensionalities, $k \in \{5,10,20,40\}$, and retained only feasible configurations for which the target dimensionality is smaller than the original dimensionality, $k < D$.
 Because of its computational requirements, Slipmap was evaluated only for $k=5$; for Tasks 1 and 2, it was additionally restricted to datasets with at most 1000 instances, as its training time on these datasets reached more than 500 seconds per training run.
 
-For Bernoulli RBM, we apply feature-wise min--max scaling fitted on the training inputs and clip transformed values to $[0,1]$, allowing the method to process real-valued tabular and continuous optimisation data.
-
-\subsection{Experiments for Tasks 1 and 2}
+\subsubsection{Experiments for Tasks 1 and 2}
 \label{sec:ch05:ml_setup}
 
-\subsubsection*{Benchmarks}
+\paragraph*{Benchmarks}
 We used the OpenML~CC-18~\citep{BisEtAl21} and the classification datasets from the AutoML Benchmark~\citep{GijEtAl24},
 a well-known dataset collection used for benchmarking tabular machine learning algorithms. The collection contains various tabular classification datasets from different domains, with different sizes, numbers of classes, and other characteristics.
 Each dataset comes with a set of pre-defined splits for $10$-fold cross-validation.
@@ -388,12 +390,12 @@ For computational reasons, we used datasets with up to 20\,000 samples.
 For Tasks 1 and 2, we trained the dimensionality reduction methods on the training folds.
 We then evaluated on the test folds the clustering performance in Task 1 and the classifier performance in Task 2.
 
-\subsubsection*{Task 1: Clustering ability.}
+\paragraph*{Task 1: Clustering ability.}
 As a clustering algorithm, we used HDBSCAN~\citep{CamEtAl13}, a hierarchical density-based clustering algorithm that allows for creation of clusters of varying densities and is more robust to parameter selection than other clustering algorithms such as $k$-means~\citep{KanEtAl02} and DBSCAN~\citep{EstEtAl96}.
 We used the default implementation and default hyperparameter values of HDBSCAN.
 We provide results for other clustering metrics such as AMI, ARI and V-measure in the repository.
 Due to limited additional insight they bring, we do not discuss them in detail in this study.
-\subsubsection*{Task 2: Tabular classification accuracy.}
+\paragraph*{Task 2: Tabular classification accuracy.}
 We considered the following three classification algorithms that are traditionally used for tabular data~\citep{GriEtAl22}: random forest, gradient boosting and multi-layer perceptron (MLP), all in their scikit-learn~\citep{PedEtAl11} implementations.
 We optimised all classifiers using SMAC3~\citep{LinEtAl22b}, a popular hyperparameter optimiser, with a budget of 30 evaluations.
 %  We provide the configuration spaces in~\cref{app:ch05:config-spaces}.
@@ -448,10 +450,10 @@ We optimised all classifiers using SMAC3~\citep{LinEtAl22b}, a popular hyperpara
 %     \end{tabular}
 
 % \end{table}
-\subsection{Experiments for Tasks 3 and 4}
+\subsubsection{Experiments for Tasks 3 and 4}
 \label{sec:ch05:bbo_setup}
 
-\subsubsection*{Synthetic benchmarks}
+\paragraph*{Synthetic benchmarks}
 We considered the Black-Box Optimisation Benchmark (BBOB) noiseless problem collection from the COCO framework~\citep{HanEtAl21}, accessible via the IOHprofiler tool~\citep{DoeEtAl18,WanEtAl22,DeNEtAl24}.
 BBOB is a widely used benchmarking suite for assessing the performance of black-box optimisers, designed to cover a range of representative problems that are
 widely used in scientific studies of  numerical  black-box optimisation;
@@ -464,7 +466,7 @@ functions with high conditioning and unimodal structure (f10-f14), multimodal fu
 In this work, we focussed on the first 31 instances of each BBOB problem
 in seven different original dimensionalities, $D \in \{ 20,40,60,120,240,500,1000 \}$.
 Full documentation on the BBOB problem collection (with definitions, visualisations and practical considerations) is available in the technical report by~\citet{FinEtAl09}.
-\subsubsection*{Real-world benchmarks}
+\paragraph*{Real-world benchmarks}
 We also considered the following real-world benchmarks with different domains and dimensionalities:
 \begin{itemize}
     \item Rover trajectory planning ($100D$)~\citep{WanEtAl18} is an optimisation problem, where the goal is to find an optimal trajectory between two given points in a $2D$ environment. A trajectory is determined by fitting a B-spline to a set of points.
@@ -476,7 +478,7 @@ We also considered the following real-world benchmarks with different domains an
 \end{itemize}
 
 For all black-box optimisation benchmarks (both synthetic and real-world), we considered four different initial sample sizes to train the dimensionality reduction methods, $N \in \{100,200,500,1000 \}$.
-\subsubsection*{Task 3: Target function approximation.}
+\paragraph*{Task 3: Target function approximation.}
 To build the surrogate, we sampled $\min\{50 \cdot D, 5000\}$ using Sobol sampling.
 We employed a random forest regressor as a surrogate model, specifically using the scikit-learn implementation.
 We used log-transformation for the target values and optimised
@@ -484,7 +486,7 @@ the hyperparameter settings of the random forest using SMAC3~\citep{LinEtAl22b}.
 We used five outer cross-validation folds. Within each outer training fold, SMAC3 performed 30 trials, and each candidate configuration was evaluated using three-fold shuffled inner cross-validation.
 To aggregate the results, we used min-max normalisation per function.
 
-\subsubsection*{Task 4: Black-box optimiser performance.}
+\paragraph*{Task 4: Black-box optimiser performance.}
 We used BoTorch~\citep{BalEtAl20} for the implementation of the EI acquisition function and the Gaussian process surrogate model.
 To optimise the acquisition function, we used a genetic algorithm, similarly to the one used as a baseline in HEBO~\citep{CowEtAl22}. Unless stated otherwise, this GA used a population size of 100 and 100 generations. To reduce the cost of repeatedly transforming acquisition-function candidates, the synthetic experiments used a population size of 30 and 30 generations for UMAP, unsupervised UMAP, LocalMAP, PaCMAP and ParamPaCMAP. For the real-world experiments, this reduced setting was used for UMAP, unsupervised UMAP and ParamPaCMAP. All remaining methods, including Ivis and both parametric UMAP variants, used the full $100 \times 100$ setting.
 As an initial design, we evaluated 30 points sampled via a Sobol sequence. The synthetic experiments used the fixed Sobol seed 111, whereas the real-world experiments used the benchmark repetition seed offset by $5000$.
@@ -505,21 +507,25 @@ The total Bayesian optimisation budget was set at $300$ evaluations including th
 %     \item OpenML version 0.15.0
 % \end{itemize}
 
-\subsection{Experiments with tuned dimensionality reduction methods}
+\subsection{Effect of tuning}
 
 In addition to the main experiments which use the default hyperparameter settings for each considered dimensionality reduction method, here we assess
 
 whether task-specific hyperparameter optimisation changes the relative performance of the dimensionality reduction methods. Due to the computational cost of tuning, we focus on the 24 synthetic BBOB functions with \(N=100\), \(k=10\), and \(D\in\{120,240\}\) for the black-box optimisation tasks. For the machine learning tasks, we consider \(k\in\{5,10,20,40\}\).
 
-\subsubsection{Setup of experiments}
+\subsubsection{Tuning protocol}
 \label{app:ch05:cs}
 \label{app:ch05:tuning-protocol}
 
 We tune dimensionality reduction hyperparameters with SMAC3 using 30 trials, a deterministic scenario, and random seed 0. Each trial evaluates one candidate in parallel on up to 24 functions or datasets. Reducers without a hyperparameter in \cref{tab:ch05:reducer-cs-classical,tab:ch05:reducer-cs-nonlinear} retain implementation defaults: PCA (Linear), PCA (Cosine), incremental PCA, truncated SVD, LoLP, PLS regression, factor analysis, and Gaussian and sparse random projections.
 
-For target function approximation and Bayesian optimisation, one configuration is learned per method, input dimensionality, and target dimensionality, shared by all BBOB functions. Tuning uses instance 100 for each of the 24 functions. The target function approximation objective is mean three-fold inner-CV RMSE from a random forest with 64 trees and feature fraction 0.5. The Bayesian optimisation objective is mean base-10 logarithmic final simple regret after 300 evaluations. Final evaluation uses instances 0--30 and, for target function approximation, five outer folds.
+\subsubsection{Experiments for Tasks 1 and 2}
 
 For machine learning, OpenML tasks 12, 28, and 43 are used only for tuning. Ten tasks sampled with seed 0 from the remaining eligible tasks are used for testing: 16, 9946, 10090, 14952, 14954, 146817, 146824, 359958, 359967, and 359970. Prediction configurations are tuned separately for each reducer, \(k\), and classifier family by maximising mean accuracy. Clustering runs two independent SMAC optimisations per reducer and \(k\), maximising homogeneity and completeness separately. Tuning uses fold 0; final evaluation uses every available fold of the held-out tasks.
+
+\subsubsection{Experiments for Tasks 3 and 4}
+
+For target function approximation and Bayesian optimisation, one configuration is learned per method, input dimensionality, and target dimensionality, shared by all BBOB functions. Tuning uses instance 100 for each of the 24 functions. The target function approximation objective is mean three-fold inner-CV RMSE from a random forest with 64 trees and feature fraction 0.5. The Bayesian optimisation objective is mean base-10 logarithmic final simple regret after 300 evaluations. Final evaluation uses instances 0--30 and, for target function approximation, five outer folds.
 
 % In the domains below, \emph{log} indicates logarithmic sampling, \(N\) is the initial sample size for reducer training, and \(k\) is target dimensionality.
 
