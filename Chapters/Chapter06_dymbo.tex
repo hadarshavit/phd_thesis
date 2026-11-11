@@ -419,25 +419,25 @@ For other HPO baselines, which are well-known methods that have been curated to 
 The benchmark consists of multiple datasets from OpenML and various machine learning algorithms.
 The authors provide a surrogate model for each machine learning algorithm and a dataset that predicts different objectives, such as accuracy, training time, and more.
 
-YAHPO Gym contains several scenarios.
-Each scenario has a configuration space and is based on a machine learning algorithm.
-Each scenario contains multiple datasets, which are called instances.
-The YAHPO Gym scenarios are: \\
-\textbf{rbv2\_ranger}~\citep{BinEtAl20}: RF using the ranger R implementation.\\
-    \textbf{rbv2\_rpart}~\citep{BinEtAl20}: decision tree using the mlr implementation.\\
-    \textbf{rbv2\_glmnet}~\citep{BinEtAl20}: generalised linear models (GLM) with elastic net regularisation using the mlr implementation.\\
-    \textbf{rbv2\_svm}~\citep{BinEtAl20}: support vector machine (SVM) with the mlr implementation.\\
-    \textbf{rbv2\_xgboost}~\citep{BinEtAl20}: gradient boosting using XGBoost.\\
-    \textbf{rbv2\_aknn}~\citep{BinEtAl20}: k-nearest neighbours using the mlr implementation.\\
-    \textbf{rbv2\_super}~\citep{BinEtAl20}: a combined algorithm selection and hyperparameter optimisation (CASH) scenario that uses all the above rbv2 scenarios.\\
-    \textbf{iaml\_glment}~\citep{PfiEtAl22}: generalised linear models (GLM) with elastic net regularisation using the mlr implementation.\\
-    \textbf{iaml\_rpart}~\citep{PfiEtAl22}: decision tree using the mlr implementation.\\
-    \textbf{iaml\_ranger}~\citep{PfiEtAl22}: RF using the ranger R implementation.\\
-    \textbf{iaml\_xgboost}~\citep{PfiEtAl22}: gradient boosting using XGBoost.\\
-    \textbf{iaml\_super}~\citep{PfiEtAl22}: combined algorithm selection and hyperparameter optimisation (CASH) scenario that uses all the above iaml scenarios.\\
-    \textbf{LCBench}~\citep{ZimEtAl21b}: optimising the training hyperparameters and architecture of multi-layer perceptron on tabular datasets.\\
-    \textbf{FCNet}~\citep{FalEtAl18}: hyperparameter optimisation of a fully-connected network for tabular data.\\
-    \textbf{NAS-Bench-301}~\citep{ZelEtAl22}: neural architecture search (NAS) scenario using a constant set of training hyperparameters. The search space describes a cell of the neural network and the hyperparameters are different operations done in each cell.
+% YAHPO Gym contains several scenarios.
+% Each scenario has a configuration space and is based on a machine learning algorithm.
+% Each scenario contains multiple datasets, which are called instances.
+% The YAHPO Gym scenarios are: \\
+% \textbf{rbv2\_ranger}~\citep{BinEtAl20}: RF using the ranger R implementation.\\
+%     \textbf{rbv2\_rpart}~\citep{BinEtAl20}: decision tree using the mlr implementation.\\
+%     \textbf{rbv2\_glmnet}~\citep{BinEtAl20}: generalised linear models (GLM) with elastic net regularisation using the mlr implementation.\\
+%     \textbf{rbv2\_svm}~\citep{BinEtAl20}: support vector machine (SVM) with the mlr implementation.\\
+%     \textbf{rbv2\_xgboost}~\citep{BinEtAl20}: gradient boosting using XGBoost.\\
+%     \textbf{rbv2\_aknn}~\citep{BinEtAl20}: k-nearest neighbours using the mlr implementation.\\
+%     \textbf{rbv2\_super}~\citep{BinEtAl20}: a combined algorithm selection and hyperparameter optimisation (CASH) scenario that uses all the above rbv2 scenarios.\\
+%     \textbf{iaml\_glment}~\citep{PfiEtAl22}: generalised linear models (GLM) with elastic net regularisation using the mlr implementation.\\
+%     \textbf{iaml\_rpart}~\citep{PfiEtAl22}: decision tree using the mlr implementation.\\
+%     \textbf{iaml\_ranger}~\citep{PfiEtAl22}: RF using the ranger R implementation.\\
+%     \textbf{iaml\_xgboost}~\citep{PfiEtAl22}: gradient boosting using XGBoost.\\
+%     \textbf{iaml\_super}~\citep{PfiEtAl22}: combined algorithm selection and hyperparameter optimisation (CASH) scenario that uses all the above iaml scenarios.\\
+%     \textbf{LCBench}~\citep{ZimEtAl21b}: optimising the training hyperparameters and architecture of multi-layer perceptron on tabular datasets.\\
+%     \textbf{FCNet}~\citep{FalEtAl18}: hyperparameter optimisation of a fully-connected network for tabular data.\\
+%     \textbf{NAS-Bench-301}~\citep{ZelEtAl22}: neural architecture search (NAS) scenario using a constant set of training hyperparameters. The search space describes a cell of the neural network and the hyperparameters are different operations done in each cell.
 
 For details on configuration spaces, we refer the reader to original papers.
 The configuration spaces for the rbv2 scenarios are taken from~\citep{BinEtAl20}.
