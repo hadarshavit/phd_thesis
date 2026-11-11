@@ -563,6 +563,7 @@ In the domains below, \emph{log} indicates logarithmic sampling, \(N\) is the in
     \end{tabular}
 \end{table*}
 
+\FloatBarrier
 \section{Results}
 \label{sec:ch05:res}
 
@@ -592,7 +593,7 @@ For the cluster completeness metric (\cref{fig:ch05:cluster_all_agg_completeness
 As the target dimensionality increases, several methods exhibit performance improvement; among those, FastICA, factor analysis and Gaussian random projection improve most substantially, particularly for $k = 20$ and $k = 40$.
 As these methods simultaneously exhibit low homogeneity, as seen in~\cref{fig:ch05:cluster_all_agg_homogeneity}, their high completeness likely reflects coarser clusterings, in which many samples are assigned to a small number of clusters or labelled as noise, rather than a true preservation of class structure.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
@@ -617,7 +618,7 @@ We now investigate the effect of input dimensionality by grouping the datasets i
 UMAP and parametric UMAP remain the strongest methods for homogeneity in all three groups, with their largest advantage on medium-dimensional datasets (\cref{fig:ch05:cluster_homogeneity_dataset_sizes_homogeneity}). LocalMAP is also competitive on medium- and high-dimensional data, supporting the conclusion that neighbourhood-preserving methods are particularly effective for Task 1.
 With respect to cluster completeness (\cref{fig:ch05:cluster_homogeneity_dataset_sizes_completeness}), the ordering is more dependent on input dimensionality. UMAP has the highest mean completeness on low-dimensional datasets, followed by factor analysis, whereas parametric UMAP and UMAP lead on medium- and high-dimensional datasets. The comparison in~\cref{fig:ch05:cluster_le1000} (see Appendix) includes Slipmap by restricting all methods to the same six datasets with at most 1000 samples.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
@@ -817,7 +818,7 @@ With respect to cluster completeness (\cref{fig:ch05:cluster_homogeneity_dataset
 
 For Task 1, we tune hyperparameters of dimensionality reduction methods independently for homogeneity and completeness. The matched-objective results are shown in~\cref{fig:ch05:tuned-ml-cluster-hh,fig:ch05:tuned-ml-cluster-cc}; cross-metric effects are shown in~\cref{fig:ch05:tuned-ml-cluster-hc,fig:ch05:tuned-ml-cluster-ch}. As in the full default-configuration benchmark, UMAP has the highest mean homogeneity across all target dimensionalities. The ordering for completeness is less stable: UMAP has the highest mean completeness at $k=5$, FastICA leads at $k=10$ and $k=20$, and parametric UMAP performs best at $k=40$.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
@@ -836,7 +837,7 @@ For Task 1, we tune hyperparameters of dimensionality reduction methods independ
     \label{fig:ch05:tuned-ml-cluster-hh}
 \Description{Homogeneity after tuning reducer hyperparameters for homogeneity; higher is better.}
 \end{figure}
-\begin{figure}[htbp]
+\begin{figure}[H]
 \ContinuedFloat
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
@@ -857,7 +858,7 @@ For Task 1, we tune hyperparameters of dimensionality reduction methods independ
 \Description{\textit{Continued.} Homogeneity after tuning reducer hyperparameters for homogeneity; higher is better.}
 \end{figure}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
@@ -876,7 +877,7 @@ For Task 1, we tune hyperparameters of dimensionality reduction methods independ
     \label{fig:ch05:tuned-ml-cluster-cc}
 \Description{Completeness after tuning reducer hyperparameters for completeness; higher is better.}
 \end{figure}
-\begin{figure}[htbp]
+\begin{figure}[H]
 \ContinuedFloat
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
@@ -897,7 +898,7 @@ For Task 1, we tune hyperparameters of dimensionality reduction methods independ
 \Description{\textit{Continued.} Completeness after tuning reducer hyperparameters for completeness; higher is better.}
 \end{figure}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
@@ -916,7 +917,7 @@ For Task 1, we tune hyperparameters of dimensionality reduction methods independ
     \label{fig:ch05:tuned-ml-cluster-hc}
 \Description{Completeness obtained when reducer hyperparameters are tuned for homogeneity; higher is better.}
 \end{figure}
-\begin{figure}[htbp]
+\begin{figure}[H]
 \ContinuedFloat
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
@@ -937,7 +938,7 @@ For Task 1, we tune hyperparameters of dimensionality reduction methods independ
 \Description{\textit{Continued.} Completeness obtained when reducer hyperparameters are tuned for homogeneity; higher is better.}
 \end{figure}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
@@ -956,7 +957,7 @@ For Task 1, we tune hyperparameters of dimensionality reduction methods independ
     \label{fig:ch05:tuned-ml-cluster-ch}
 \Description{Homogeneity obtained when reducer hyperparameters are tuned for completeness; higher is better.}
 \end{figure}
-\begin{figure}[htbp]
+\begin{figure}[H]
 \ContinuedFloat
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
@@ -989,7 +990,7 @@ they rank among the worst-performing methods in the prediction task.
 This suggests that the distance-based properties that random projections are designed to preserve do not necessarily retain the discriminative information required for predictive modelling.
 Overall, while most methods achieve comparable accuracy, Ivis consistently performs best for random forest and gradient boosting, and for MLP up to $k=20$. LoLP and the PCA variants become increasingly competitive as the target dimensionality grows, with PCA (Sigmoid) narrowly leading for MLP at $k=40$. At $k=5$, UMAP, parametric UMAP, PaCMAP and LocalMAP follow behind Ivis, showing that manifold-preserving methods are particularly effective in low target dimensions.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
@@ -1009,7 +1010,7 @@ Overall, while most methods achieve comparable accuracy, Ivis consistently perfo
     \label{fig:ch05:ml_pred_all}
 \Description{Mean classification accuracy of dimensionality reduction methods across OpenML~CC-18 datasets for different target dimensionalities $k$ on \textbf{Task 2: tabular classification accuracy}. From top to bottom, the panels show random forest, gradient boosting and MLP results; higher values are better.}
 \end{figure}
-\begin{figure}[htbp]
+\begin{figure}[H]
 \ContinuedFloat
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
@@ -1032,7 +1033,7 @@ In contrast, Ivis is strongest across all three input-dimensionality groups and 
 One possible explanation for the consistently strong performance of Ivis is that its joint triplet and classification objective encourages the embedding to retain both neighbourhood structure and class information, even under the substantial compression imposed by $k=5$. The competitiveness of PaCMAP and LocalMAP on high-dimensional datasets may reflect their treatment of relationships beyond a fixed nearest-neighbour graph: PaCMAP balances nearby, mid-near and distant pairs, while LocalMAP additionally revises neighbourhood connections during optimisation. These mechanisms may help retain class-relevant structure when neighbourhoods estimated in the original space are unreliable. However, the input-dimensionality groups contain different datasets, so dimensionality is confounded with other dataset characteristics; these explanations remain hypotheses rather than mechanisms established by our experiments.
 The comparison in~\cref{fig:ch05:ml_pred_le1000} (see Appendix) includes Slipmap by restricting all methods to the same six datasets with at most $1000$ samples.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
@@ -1052,7 +1053,7 @@ The comparison in~\cref{fig:ch05:ml_pred_le1000} (see Appendix) includes Slipmap
     \label{fig:ch05:ml_pred_sizes}
 \Description{Mean classification accuracy of dimensionality reduction methods on low-, medium- and high-dimensional OpenML~CC-18 datasets for $k=5$ on \textbf{Task 2: tabular classification accuracy}. From top to bottom, the panels show random forest, gradient boosting and MLP results; higher values are better. }
 \end{figure}
-\begin{figure}[htbp]
+\begin{figure}[H]
 \ContinuedFloat
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
@@ -1337,7 +1338,7 @@ The comparison in~\cref{fig:ch05:ml_pred_le1000} (see Appendix) includes Slipmap
 
 For Task 2, we analyse classification accuracy on ten held-out OpenML tasks in~\crefrange{fig:ch05:tuned-ml-pred-rf}{fig:ch05:tuned-ml-pred-mlp}. Consistent with the full default-configuration benchmark, Ivis has the highest mean accuracy for random forests and gradient boosting across all target dimensionalities, and for MLPs at lower target dimensionalities. At larger target dimensionalities, the linear methods become more competitive for MLPs: PCA (Linear) and PCA (Cosine) provide the strongest results.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
@@ -1356,7 +1357,7 @@ For Task 2, we analyse classification accuracy on ten held-out OpenML tasks in~\
     \label{fig:ch05:tuned-ml-pred-rf}
 \Description{Classification accuracy with tuned reducers and random forests on ten held-out OpenML tasks; higher is better.}
 \end{figure}
-\begin{figure}[htbp]
+\begin{figure}[H]
 \ContinuedFloat
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
@@ -1377,7 +1378,7 @@ For Task 2, we analyse classification accuracy on ten held-out OpenML tasks in~\
 \Description{\textit{Continued.} Classification accuracy with tuned reducers and random forests on ten held-out OpenML tasks; higher is better.}
 \end{figure}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
@@ -1396,7 +1397,7 @@ For Task 2, we analyse classification accuracy on ten held-out OpenML tasks in~\
     \label{fig:ch05:tuned-ml-pred-gb}
 \Description{Classification accuracy with tuned reducers and gradient boosting on ten held-out OpenML tasks; higher is better.}
 \end{figure}
-\begin{figure}[htbp]
+\begin{figure}[H]
 \ContinuedFloat
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
@@ -1417,7 +1418,7 @@ For Task 2, we analyse classification accuracy on ten held-out OpenML tasks in~\
 \Description{\textit{Continued.} Classification accuracy with tuned reducers and gradient boosting on ten held-out OpenML tasks; higher is better.}
 \end{figure}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
@@ -1436,7 +1437,7 @@ For Task 2, we analyse classification accuracy on ten held-out OpenML tasks in~\
     \label{fig:ch05:tuned-ml-pred-mlp}
 \Description{Classification accuracy with tuned reducers and MLP classifiers on ten held-out OpenML tasks; higher is better.}
 \end{figure}
-\begin{figure}[htbp]
+\begin{figure}[H]
 \ContinuedFloat
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
@@ -1460,7 +1461,13 @@ For Task 2, we analyse classification accuracy on ten held-out OpenML tasks in~\
 \subsection{Task 3: Target function approximation}
 \label{sec:ch05:res-bbo-task1}
 
-\begin{figure}[htbp]
+We start by looking into the results on synthetic benchmarks for the target function approximation task.
+First, we show the effect of varying the target dimensionality $k$ in \cref{fig:ch05:res-bbo-task1_red_dim_inpt_dim}, keeping the input dimensionality fixed at $D = 120$ and the initial sample size at $N = 100$.
+PLS regression has the lowest mean normalised RMSE for $k\in\{5,10,20\}$, whereas PCA (RBF) leads at $k=40$.
+This aligns with expectations, as PLS components are explicitly optimised to maximise the predictive power of the target variables, which is especially suitable when dimensionality reduction is used as a preprocessing step for regression.
+PCA (RBF) and Ivis follow at low target dimensionalities. As the target dimensionality increases, PCA (RBF) keeps improving performance and eventually outperforms PLS regression, which is consistent with a larger embedding retaining more useful information even without explicit supervision.
+
+\begin{figure}[H]
 \centering
 \includegraphics{figures/05/epm/summary_red_dim_100_120.pdf}
 \par\vspace{6pt}
@@ -1471,13 +1478,10 @@ For Task 2, we analyse classification accuracy on ten held-out OpenML tasks in~\
 \Description{Mean normalised RMSE of dimensionality reduction methods across synthetic benchmark problems for varying target dimensionality $k$, with $D=120$ and $N=100$, on \textbf{Task 3: target function approximation}; lower is better.}
 \end{figure}
 
-We start by looking into the results on synthetic benchmarks for the target function approximation task.
-First, we show the effect of varying the target dimensionality $k$ in \cref{fig:ch05:res-bbo-task1_red_dim_inpt_dim}, keeping the input dimensionality fixed at $D = 120$ and the initial sample size at $N = 100$.
-PLS regression has the lowest mean normalised RMSE for $k\in\{5,10,20\}$, whereas PCA (RBF) leads at $k=40$.
-This aligns with expectations, as PLS components are explicitly optimised to maximise the predictive power of the target variables, which is especially suitable when dimensionality reduction is used as a preprocessing step for regression.
-PCA (RBF) and Ivis follow at low target dimensionalities. As the target dimensionality increases, PCA (RBF) keeps improving performance and eventually outperforms PLS regression, which is consistent with a larger embedding retaining more useful information even without explicit supervision.
+Second, we look into the effect of varying the input dimensionality $D$, keeping the target dimensionality fixed at $k = 20$ and the initial sample size at $N = 100$. This is illustrated in~\cref{fig:ch05:res-bbo-task1_inpt_dim}.
+The mean normalised errors of the methods exhibit less variance at lower input dimensionalities; the distributional box plots are provided in the appendix. Up to $D=120$, PLS regression consistently outperforms other methods, with Ivis and parametric UMAP also performing strongly. Conversely, for $D\geq240$, PCA (RBF) has the lowest mean normalised RMSE. Together with the sample-size results below, this suggests an advantage for PCA (RBF) when the training sample is small relative to the input dimensionality, rather than an inherent limitation of PLS regression on high-dimensional inputs.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \includegraphics{figures/05/epm/summary_inpt_dim_100_20.pdf}
 \par\vspace{6pt}
@@ -1488,10 +1492,11 @@ PCA (RBF) and Ivis follow at low target dimensionalities. As the target dimensio
 \Description{Mean normalised RMSE of dimensionality reduction methods across synthetic benchmark problems for varying input dimensionality $D$, with $k=20$ and $N=100$, on \textbf{Task 3: target function approximation}; lower is better.}
 \end{figure}
 
-Second, we look into the effect of varying the input dimensionality $D$, keeping the target dimensionality fixed at $k = 20$ and the initial sample size at $N = 100$. This is illustrated in~\cref{fig:ch05:res-bbo-task1_inpt_dim}.
-The mean normalised errors of the methods exhibit less variance at lower input dimensionalities; the distributional box plots are provided in the appendix. Up to $D=120$, PLS regression consistently outperforms other methods, with Ivis and parametric UMAP also performing strongly. Conversely, for $D\geq240$, PCA (RBF) has the lowest mean normalised RMSE. Together with the sample-size results below, this suggests an advantage for PCA (RBF) when the training sample is small relative to the input dimensionality, rather than an inherent limitation of PLS regression on high-dimensional inputs.
+We now analyse the effect of varying initial sample sizes for training dimensionality reduction methods. \cref{fig:ch05:res-bbo-task2_samp_sizes} shows the results for different initial sample sizes ($N \in \{100, 200, 500, 1000\}$) for two settings: low-dimensional inputs ($D = 40$, target dimensionality $k = 5$;~\cref{fig:ch05:res-bbo-task2_samp_sizes-40-5}) and high-dimensional inputs ($D = 1000$, target dimensionality $k = 40$;~\cref{fig:ch05:res-bbo-task2_samp_sizes-1000-40}).
+For low-dimensional inputs ($D = 40$,~\cref{fig:ch05:res-bbo-task2_samp_sizes-40-5}), PLS regression is strongest at $N=100$, whereas Ivis leads for $N\geq200$; parametric UMAP is second for $N\in\{500,1000\}$. Thus, even when the smallest sample already exceeds the input dimensionality, additional observations can benefit learned non-linear representations.
+For high-dimensional inputs ($D = 1000$,~\cref{fig:ch05:res-bbo-task2_samp_sizes-1000-40}), PCA (RBF) leads for $N\in\{100,200\}$, while PLS regression becomes strongest for $N\in\{500,1000\}$. This indicates that supervised component extraction depends on sufficient training data when the input dimensionality is large, whereas PCA (RBF) remains robust in the strongly undersampled regime.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
@@ -1512,11 +1517,9 @@ The mean normalised errors of the methods exhibit less variance at lower input d
 \Description{Mean normalised RMSE of dimensionality reduction methods across synthetic benchmark problems for varying initial sample size $N$. The upper panel shows $D=40$, $k=5$; the lower panel shows $D=1000$, $k=40$; lower is better.}
 \end{figure}
 
-We now analyse the effect of varying initial sample sizes for training dimensionality reduction methods. \cref{fig:ch05:res-bbo-task2_samp_sizes} shows the results for different initial sample sizes ($N \in \{100, 200, 500, 1000\}$) for two settings: low-dimensional inputs ($D = 40$, target dimensionality $k = 5$;~\cref{fig:ch05:res-bbo-task2_samp_sizes-40-5}) and high-dimensional inputs ($D = 1000$, target dimensionality $k = 40$;~\cref{fig:ch05:res-bbo-task2_samp_sizes-1000-40}).
-For low-dimensional inputs ($D = 40$,~\cref{fig:ch05:res-bbo-task2_samp_sizes-40-5}), PLS regression is strongest at $N=100$, whereas Ivis leads for $N\geq200$; parametric UMAP is second for $N\in\{500,1000\}$. Thus, even when the smallest sample already exceeds the input dimensionality, additional observations can benefit learned non-linear representations.
-For high-dimensional inputs ($D = 1000$,~\cref{fig:ch05:res-bbo-task2_samp_sizes-1000-40}), PCA (RBF) leads for $N\in\{100,200\}$, while PLS regression becomes strongest for $N\in\{500,1000\}$. This indicates that supervised component extraction depends on sufficient training data when the input dimensionality is large, whereas PCA (RBF) remains robust in the strongly undersampled regime.
+So far, our assessment has focussed on synthetic benchmarks for black-box optimisation. \cref{fig:ch05:res-bbo-task1_real} shows the results on real-world benchmarks.~\cref{fig:ch05:res-bbo-task1_real-k} illustrates performance across varying target dimensionalities, with the initial sample size fixed at $N = 1000$ (note that input dimensionality is determined by the benchmark and cannot be controlled). Across all target dimensionalities, PLS regression consistently outperforms other methods, reflecting its ability to extract components that are directly predictive of the target variables. Ivis and parametric UMAP closely follow in performance, although their ordering varies with $k$.~\cref{fig:ch05:res-bbo-task1_real-n} shows the effect of varying the initial sample size while keeping the target dimensionality fixed at $k = 5$. PLS regression is strongest throughout, including at $N=100$, while Ivis and parametric UMAP again provide the closest alternatives. Increasing the sample size generally strengthens Ivis, but does not change the overall advantage of PLS regression on these real-world target function approximation problems.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
@@ -1536,8 +1539,6 @@ For high-dimensional inputs ($D = 1000$,~\cref{fig:ch05:res-bbo-task2_samp_sizes
     \label{fig:ch05:res-bbo-task1_real}
 \Description{Mean normalised RMSE of dimensionality reduction methods across real-world benchmark problems on \textbf{Task 3: target function approximation}. The upper panel varies $k$ with $N=1000$; the lower panel varies $N$ with $k=5$; lower is better.}
 \end{figure}
-
-So far, our assessment has focussed on synthetic benchmarks for black-box optimisation. \cref{fig:ch05:res-bbo-task1_real} shows the results on real-world benchmarks.~\cref{fig:ch05:res-bbo-task1_real-k} illustrates performance across varying target dimensionalities, with the initial sample size fixed at $N = 1000$ (note that input dimensionality is determined by the benchmark and cannot be controlled). Across all target dimensionalities, PLS regression consistently outperforms other methods, reflecting its ability to extract components that are directly predictive of the target variables. Ivis and parametric UMAP closely follow in performance, although their ordering varies with $k$.~\cref{fig:ch05:res-bbo-task1_real-n} shows the effect of varying the initial sample size while keeping the target dimensionality fixed at $k = 5$. PLS regression is strongest throughout, including at $N=100$, while Ivis and parametric UMAP again provide the closest alternatives. Increasing the sample size generally strengthens Ivis, but does not change the overall advantage of PLS regression on these real-world target function approximation problems.
 
 A possible explanation is that PLS regression concentrates the limited embedding capacity on directions that covary with the objective value, whereas preserving input-space neighbourhoods or reconstruction accuracy need not retain the information most useful for regression. Its comparatively constrained linear mapping may also be easier to estimate from small samples than a flexible neural embedding, which could help explain its advantage already at $N=100$. The improvement of Ivis with increasing $N$ is consistent with its learned non-linear mapping benefiting from additional observations, while its supervised regression loss helps retain target-relevant information. Nevertheless, the continued advantage of PLS regression suggests that additional embedding flexibility is not necessarily beneficial for these benchmarks under the evaluated sample sizes and settings. This does not imply that the objective functions themselves are linear: a non-linear predictor can still exploit a representation obtained by a linear mapping. These are plausible interpretations of the aggregate results; our experiments do not isolate the effects of representation capacity, estimation error and objective alignment.
 
@@ -1823,7 +1824,7 @@ A possible explanation is that PLS regression concentrates the limited embedding
 
 For Task 3, we report the results obtained with task-specific reducer configurations in~\cref{fig:ch05:tuned-epm}. At the lower input dimensionality, PLS regression has the lowest median normalised RMSE, followed by parametric UMAP and PCA (RBF). At the higher input dimensionality, PCA (RBF) is strongest, followed by PLS regression and parametric UMAP. This is consistent with the default-configuration results: PLS regression is strongest at moderate input dimensionality, whereas PCA (RBF) takes the lead as the input dimensionality $D$ increases.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
@@ -1849,7 +1850,7 @@ For Task 3, we report the results obtained with task-specific reducer configurat
 We now focus on the results of the black-box optimiser performance task, where Bayesian optimisation is assisted by the dimensionality reduction methods. As in the previous task, we varied the target dimensionality $k$, while fixing both the initial sample size to $N = 100$ and the original input dimensionality to $D = 120$. The aggregated results across all synthetic benchmark problems are shown in \cref{fig:ch05:res-bbo-task2_red_dim}.
 In contrast to Task 3, PCA (RBF) consistently exhibits the best performance across all target dimensionalities. Ivis and LLE form the next group, while PCA (Cosine), UMAP and truncated SVD are competitive in selected settings. Thus, local and learned non-linear representations can assist optimisation effectively, but PCA (RBF) remains the most robust choice across $k$.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \includegraphics{figures/05/bop/summary_red_dim_100_120.pdf}
 \par\vspace{6pt}
@@ -1863,7 +1864,7 @@ In contrast to Task 3, PCA (RBF) consistently exhibits the best performance acro
 Next, we analyse the effect of varying input dimensionalities $D$ while fixing the initial sample size at $N = 100$ and the target dimensionality at $k = 20$.~\cref{fig:ch05:res-bbo-task2_diff_dims} shows the results aggregated across all synthetic benchmark problems. PCA (RBF) has the lowest mean normalised final value across all input dimensionalities.
 Ivis is second at $D=40$ and $D=60$, and remains among the strongest alternatives throughout. LLE and PCA (Cosine) are particularly competitive at lower and moderate input dimensionalities. For higher-dimensional inputs, LatentDA and ParamPaCMAP improve, whereas PLS regression does not preserve its dominance from Task 3. This shift reflects the difference in task objectives: accurate function approximation does not by itself ensure that the reduced representation supports an effective sequential search.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \includegraphics{figures/05/bop/summary_inpt_dim_100_20.pdf}
 \par\vspace{6pt}
@@ -1876,7 +1877,7 @@ Ivis is second at $D=40$ and $D=60$, and remains among the strongest alternative
 
 We further examined the effect of varying initial sample sizes $N$ on performance, as shown in \cref{fig:ch05:res-bbo-task2_samples}.~\cref{fig:ch05:res-bbo-task2_samples-40-5} corresponds to low-dimensional inputs ($D = 40$) with target dimensionality fixed at $k = 5$. PCA (RBF) has the lowest mean normalised final value at all four sample sizes, followed by Ivis. LLE remains competitive, particularly for $N\leq500$. The identity of the best method therefore varies with the reducer training sample even in this comparatively low-dimensional setting.~\cref{fig:ch05:res-bbo-task2_samples-1000-40} shows the results for high-dimensional inputs ($D = 1000$) with target dimensionality fixed at $k = 40$. PCA (RBF) leads at every sample size. LatentDA is second for $N\in\{100,200\}$, whereas PLS regression becomes the closest alternative for $N\in\{500,1000\}$.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
@@ -1917,7 +1918,7 @@ Finally, through high variability of observed behaviours across all settings, we
 Across tasks, Ivis is broadly competitive: it leads much of the classification comparison, is among the strongest alternatives for target function approximation, and frequently performs well in Bayesian optimisation. PCA (RBF) is particularly strong across the two black-box tasks when the training sample is small relative to input dimensionality, and leads the synthetic optimisation comparisons. Neither is uniformly strongest: UMAP variants lead cluster homogeneity, PLS regression leads many function approximation settings, and autoencoders become strongest on the real-world optimisation benchmarks at larger training sample sizes. Conversely, Bernoulli RBM and random projections are consistently weak for classification, especially under strong compression, but random projections achieve competitive cluster completeness at larger target dimensionalities, albeit with low homogeneity. These results identify broadly competitive methods and task-specific weaknesses. They do not establish that a method is dominated
 on every individual problem.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
@@ -2211,7 +2212,7 @@ on every individual problem.
 
 For Task 4, the tuned Bayesian optimisation results in~\cref{fig:ch05:tuned-bop} identify PCA (RBF) as the most consistently strong method across both input dimensionalities. At the lower input dimensionality, LocalMAP and Ivis form the next group, while Ivis, NMF, and PaCMAP provide the strongest alternatives at the higher input dimensionality.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \begin{subfigure}[t]{0.49\textwidth}
 \centering
@@ -2238,7 +2239,7 @@ For Task 4, the tuned Bayesian optimisation results in~\cref{fig:ch05:tuned-bop}
 
 The main Bayesian optimisation experiments used a separate 30-point Sobol design to initialise the Gaussian process after fitting the dimensionality reduction method on \(N\) points. We additionally evaluated a reuse strategy in which the same \(N=100\) Sobol points used to fit the reducer also initialise Bayesian optimisation. This avoids an additional initial design and allows all reducer-training observations to inform the first surrogate. Under the fixed budget of 300 function evaluations, the reuse variant begins with 100 observations and performs 200 adaptive steps, whereas the main variant begins with 30 observations and performs 270 adaptive steps.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \begin{subfigure}[t]{0.49\textwidth}
 \centering
@@ -2281,7 +2282,7 @@ For the high-dimensional dataset with fewer elements (\cref{fig:ch05:res-rt-c,fi
 in terms of training time, followed by parametric UMAP and ParamPaCMAP. Dictionary learning and the autoencoder variants form the next group, whereas the non-linear PCA variants are relatively inexpensive in this setting.
 We found that Gaussian and sparse random projections consistently incur low running times, and that PLS regression is quite competitive in this regard for both datasets.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
 \centering
@@ -2300,7 +2301,7 @@ We found that Gaussian and sparse random projections consistently incur low runn
     \label{fig:ch05:res-rt}
 \Description{Running times in terms of CPU hours for dimensionality reduction training (a, c) and transformation (b, d) of OpenML datasets 9985 (51 features and 6618 elements) and 9981 (856 features and 1080 elements).}
 \end{figure}
-\begin{figure}[htbp]
+\begin{figure}[H]
 \ContinuedFloat
 \centering
 \begin{subfigure}[t]{1.0\textwidth}
