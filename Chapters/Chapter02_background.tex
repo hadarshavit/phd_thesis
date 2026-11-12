@@ -251,7 +251,7 @@ For the acquisition functions below, we use the notation of \cref{ch:ch08:noisy_
 Given a black-box function $f:\sR^{d_c}\rightarrow\sR$, the goal of an optimiser is to find its minimum, denoted by $\configuration^*$, such that $f(\configuration^*)\leq f(\configuration)$ for every $\configuration\in\sR^{d_c}$. The optimiser iteratively samples configurations $\configuration_1, \configuration_2, ..., \configuration_n$, where $\configuration_t$ is the configuration sampled at iteration $t$.
 At each iteration, the optimiser observes the performance $f(\configuration_t)$, producing the set of observations $\train=\{(\configuration_1, f(\configuration_1)), (\configuration_2, f(\configuration_2)),..., (\configuration_n, f(\configuration_n))\}$.
 
-Bayesian optimisation~\citep{Garnett23} uses a surrogate model to decide on the next configuration to sample. At iteration $t$, the surrogate model $m$ takes an unseen configuration $\configuration$ together with the observation set $\train$ and estimates a predictive distribution for $\configuration$, typically summarized through a mean $\mu_m(\configuration)$ and variance $\sigma_m^2(\configuration)$.
+Bayesian optimisation~\citep{Garnett23} uses a surrogate model to decide on the next configuration to sample. At iteration $t$, the surrogate model $m$ takes an unseen configuration $\configuration$ together with the observation set $\train$ and estimates a predictive distribution for $\configuration$, typically summarised through a mean $\mu_m(\configuration)$ and variance $\sigma_m^2(\configuration)$.
 GPs are a common choice for such a surrogate model, but random forests~\citep{HutEtAl11} and other machine-learning techniques that can provide uncertainty estimates are also used.
 
 Following the fitting of a surrogate model, an acquisition function is used to determine the next point to sample, balancing exploration and exploitation by considering the predicted mean and variance. Here, we consider three popular acquisition functions. First, expected improvement (EI) quantifies the expected improvement in the known optimum by sampling a configuration $\configuration$; formally:
@@ -273,8 +273,3 @@ Finally, the lower confidence bound (LCB) is the weighted sum of the predicted p
 \end{equation*}
 
 The acquisition function $\alpha_t$ is then optimised to find a candidate configuration $\configuration_{\mathrm{next}} \in \argmax_{\configuration\in\sR^{d_c}}\alpha_t(\configuration)$. Different methods have been proposed to optimise the acquisition function, including local search, evolutionary algorithms and gradient-based methods. Since evaluating the acquisition function is relatively cheap, many such evaluations can be used to obtain a strong candidate. The candidate is then evaluated on the target function $f$, after which $\train$ is updated as $\train=\train \cup \{(\configuration_{\mathrm{next}}, f(\configuration_{\mathrm{next}}))\}$. This process continues until a pre-defined evaluation budget is exhausted.
-
-
-\section{Chapter summary}
-
-Empirical performance models connect observations to predictions; algorithm selection and Bayesian optimisation use those predictions to make decisions. Distributional models additionally describe variation across repeated algorithm runs. These foundations support the thesis's investigation of representations, predictive models, explanations, and reusable software. The next chapter introduces the problem domains and benchmark scenarios in which the contributions are evaluated.
