@@ -30,16 +30,16 @@ Crucially, all of these techniques assume a scalar-valued prediction target. Bec
 \section{Explainability of performance distribution predictions}
 \label{sec:ch09:explainability}
 
-Our EPM predicts the parameters $\boldsymbol\theta$ of a given parametric family (\emph{e.g.,} log-normal or inverse Gaussian) as a function of instance features, \emph{i.e.}, $\boldsymbol\theta=f(\mathbf{z}_I)$. Each summary statistic $s$ is then a function of these parameters, $s=h_s(\boldsymbol\theta)$.
-Therefore, we can represent the summary statistic function $g_s$ given instance features $\mathbf{z}_I$ as
-$g_s(\mathbf{z}_I) = h_s(f(\mathbf{z}_I))$.
+Our EPM predicts the parameters $\boldsymbol\theta$ of a given parametric family (\emph{e.g.,} log-normal or inverse Gaussian) as a function of instance features, \emph{i.e.}, $\boldsymbol\theta=\widehat f_{\theta}(\instanceFeatures_j)$. Each summary statistic $s$ is then a function of these parameters, $s=h_s(\boldsymbol\theta)$.
+Therefore, we can represent the summary statistic function $g_s$ given instance features $\instanceFeatures_j$ as
+$g_s(\instanceFeatures_j) = h_s(\widehat f_{\theta}(\instanceFeatures_j))$.
 To explain the distribution predictions, we analyse how instance features affect the following summary statistics of the predicted distribution:
 \begin{itemize}
     \item \emph{mean:} the expected (average) performance (\emph{e.g.,} running time).
     \item \emph{variance:} how strongly performance fluctuates around the mean, \emph{i.e.,} overall spread.
     \item \emph{skewness:} the degree to which the distribution is uneven toward unusually small or large performance values.
     \item \emph{kurtosis:} the extent to which  probability mass lies in the tails (which impacts the prevalence of outliers).
-    \item \emph{interquartile range (IQR):} the spread between the $25^{th}$ and $75^{th}$ percentiles, robust to extreme runs.
+    \item \emph{interquartile range (IQR):} the spread between the $25^{\mathrm{th}}$ and $75^{\mathrm{th}}$ percentiles, robust to extreme runs.
 \end{itemize}
 Together, these five statistics provide a compact and complementary characterisation of a predicted performance distribution: mean captures typical performance (location), variance captures overall uncertainty (scale), skewness and kurtosis describe asymmetry and tail heaviness (possibility for outliers), and the IQR provides a robust spread measure that is less sensitive to extreme runs.
 
@@ -55,7 +55,7 @@ In other words, the usage of statistics allows for a higher degree of explainabi
 
 To understand \emph{which features} are the most influential for each statistic, we apply permutation importance~\citep{Breiman01} to $g_s$.
 The method randomly shuffles the values of one feature across instances, breaking any association between that feature and the statistic-specific target, and measures the resulting increase in the target metric.
-As a target metric, we use mean squared error (MSE): for a statistic $s$, we measure predictive accuracy by the mean squared error between the predicted statistic $g_s(\mathbf{z}_I)$ and the corresponding statistic estimated from the observed running time distribution of instance $I$.
+As a target metric, we use mean squared error (MSE): for a statistic $s$, we measure predictive accuracy by the mean squared error between the predicted statistic $g_s(\instanceFeatures_j)$ and the corresponding statistic estimated from the observed running time distribution of instance $i_j$.
 Using this metric, important features yield a substantially larger increase in MSE, while irrelevant features cause negligible changes.
 This approach yields one importance ranking per statistic, allowing us to separate drivers of central tendency (mean) from drivers of uncertainty and tail behaviour (variance, IQR, skewness, kurtosis).
 Although permutation importance has been used previously for single-value EPMs, adjusting it to be applicable to performance distribution prediction is novel.
@@ -77,11 +77,11 @@ To this end, we adopt XGBoost~\citep{CheGue16} due to its strong performance on 
 Conceptually, our approach follows distributional regression, as in GAMLSS~\citep{RigSta05}, where each distribution parameter is modelled as a function of instance features; it is also closely related to the general probabilistic predictor XGBoostLSS~\citep{Marz19}.
 
 Similarly to DistNet, we minimise the negative log-likelihood of individual run observations.
-Let $\mathcal{D}$ denote a parametric family with density (or mass) function $p_{\mathcal{D}}(y\mid \boldsymbol\theta)$ on support $\mathcal{Y}$.
-For an observed performance value $y_{I,t}\in\mathcal{Y}$ on run $t$ of instance $I$ with predicted parameters $\boldsymbol\theta_I=\boldsymbol\theta(\mathbf{z}_I)$, we minimise the empirical mean over the training set of the per-observation loss, defined as:
-$\ell_I\bigl(y_{I,t},\boldsymbol\theta_I\bigr) = -\log p_{\mathcal{D}}\bigl(y_{I,t}\mid \boldsymbol\theta_I\bigr)$.
+Let $\mathscr F$ denote a parametric family with density (or mass) function $\rho_{\mathscr F}(y\mid \boldsymbol\theta)$ on support $\mathcal{Y}$.
+For an observed performance value $y_{j,r}\in\mathcal{Y}$ on run $r$ of instance $i_j$ with predicted parameters $\widehat{\boldsymbol\theta}_j=\widehat f_{\theta}(\instanceFeatures_j)$, we minimise the empirical mean over the training set of the per-observation loss, defined as:
+$\mathcal L_{\mathrm{NLL},j}\bigl(y_{j,r},\widehat{\boldsymbol\theta}_j\bigr) = -\log \rho_{\mathscr F}\bigl(y_{j,r}\mid \widehat{\boldsymbol\theta}_j\bigr)$.
 Positive distribution parameters are enforced via the exponential transform applied to model outputs.
-We found the optimisation sensitive to the initial parameter predictions and therefore initialise each parameter with a constant $\boldsymbol\theta_0$ obtained by directly minimising the negative log-likelihood on the training data with respect to $\boldsymbol\theta$ (no feature dependence), using L-BFGS~\citep{LiuNoc89}.
+We found the optimisation sensitive to the initial parameter predictions and therefore initialise each parameter with a constant $\boldsymbol\theta_{\mathrm{init}}$ obtained by directly minimising the negative log-likelihood on the training data with respect to $\boldsymbol\theta$ (no feature dependence), using L-BFGS~\citep{LiuNoc89}.
 This per-parameter base score allows for improved convergence.
 
 \section{Setup of experiments}
@@ -381,7 +381,7 @@ XGBoost's median inverse-Gaussian final-fit CPU time at 100 observations ranges 
     \end{subfigure}
     \par\smallskip
     \includegraphics{figures/09/figures/performances/legend.pdf}
-    \caption[Inverse-Gaussian outside-range probability mass]{Inverse-Gaussian predicted mass outside $[0,1.5\max_t y_{I,t}]$, averaged over test instances in each fold. The maximum is taken over the observed runs of each test instance. Symmetric logarithmic axes retain exact zeros, with a linear region up to $10^{-4}$; vertical ranges differ. This is a tail diagnostic, not an overall accuracy score.}
+    \caption[Inverse-Gaussian outside-range probability mass]{Inverse-Gaussian predicted mass outside $[0,1.5\max_r y_{j,r}]$, averaged over test instances in each fold. The maximum is taken over the observed runs of each test instance. Symmetric logarithmic axes retain exact zeros, with a linear region up to $10^{-4}$; vertical ranges differ. This is a tail diagnostic, not an overall accuracy score.}
     \label{fig:ch09:invgauss_mass}
 \end{figure}
 

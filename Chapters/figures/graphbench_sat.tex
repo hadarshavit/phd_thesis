@@ -9,20 +9,20 @@
     gb panel label/.style={font=\normalsize, anchor=north}
 ]
     \node[font=\normalsize] at (6.5,4.55)
-        {$(a\lor\neg b\lor c)\land(a\lor b\lor\neg c)\land(a\lor c)$};
+        {$(b_1\lor\neg b_2\lor b_3)\land(b_1\lor b_2\lor\neg b_3)\land(b_1\lor b_3)$};
 
-    \node[gb variable] (vg-a) at (.6,2.7) {$a$};
-    \node[gb variable] (vg-b) at (2.1,2.7) {$b$};
-    \node[gb variable] (vg-c) at (1.35,1.4) {$c$};
+    \node[gb variable] (vg-a) at (.6,2.7) {$b_1$};
+    \node[gb variable] (vg-b) at (2.1,2.7) {$b_2$};
+    \node[gb variable] (vg-c) at (1.35,1.4) {$b_3$};
     \draw[gb variable edge] (vg-a) -- (vg-b) -- (vg-c) -- (vg-a);
     \node[gb panel label] at (1.35,.05) {Variable graph};
 
-    \node[gb clause] (vcg-cl1) at (4.6,3.5) {$\mathrm{cl}_1$};
-    \node[gb clause] (vcg-cl2) at (7.3,3.5) {$\mathrm{cl}_2$};
-    \node[gb variable] (vcg-a) at (5.35,2.7) {$a$};
-    \node[gb variable] (vcg-b) at (6.5,2.7) {$b$};
-    \node[gb variable] (vcg-c) at (5.95,1.85) {$c$};
-    \node[gb clause] (vcg-cl3) at (5.95,.95) {$\mathrm{cl}_3$};
+    \node[gb clause] (vcg-cl1) at (4.6,3.5) {$C_1$};
+    \node[gb clause] (vcg-cl2) at (7.3,3.5) {$C_2$};
+    \node[gb variable] (vcg-a) at (5.35,2.7) {$b_1$};
+    \node[gb variable] (vcg-b) at (6.5,2.7) {$b_2$};
+    \node[gb variable] (vcg-c) at (5.95,1.85) {$b_3$};
+    \node[gb clause] (vcg-cl3) at (5.95,.95) {$C_3$};
     \draw[gb clause edge] (vcg-cl1) -- (vcg-a);
     \draw[gb clause edge] (vcg-cl1) -- (vcg-b);
     \draw[gb clause edge] (vcg-cl1.south) to[bend right=30] (vcg-c.west);
@@ -33,15 +33,15 @@
     \draw[gb clause edge] (vcg-c) -- (vcg-cl3);
     \node[gb panel label] at (5.95,.05) {Variable-clause graph};
 
-    \node[gb variable] (lcg-na) at (9.55,3.25) {$\neg a$};
-    \node[gb variable] (lcg-nb) at (9.55,2.2) {$\neg b$};
-    \node[gb variable] (lcg-nc) at (9.55,1.15) {$\neg c$};
-    \node[gb clause] (lcg-cl1) at (11.1,3.25) {$\mathrm{cl}_1$};
-    \node[gb clause] (lcg-cl2) at (11.1,2.2) {$\mathrm{cl}_2$};
-    \node[gb clause] (lcg-cl3) at (11.1,1.15) {$\mathrm{cl}_3$};
-    \node[gb variable] (lcg-a) at (12.65,3.25) {$a$};
-    \node[gb variable] (lcg-b) at (12.65,2.2) {$b$};
-    \node[gb variable] (lcg-c) at (12.65,1.15) {$c$};
+    \node[gb variable] (lcg-na) at (9.55,3.25) {$\neg b_1$};
+    \node[gb variable] (lcg-nb) at (9.55,2.2) {$\neg b_2$};
+    \node[gb variable] (lcg-nc) at (9.55,1.15) {$\neg b_3$};
+    \node[gb clause] (lcg-cl1) at (11.1,3.25) {$C_1$};
+    \node[gb clause] (lcg-cl2) at (11.1,2.2) {$C_2$};
+    \node[gb clause] (lcg-cl3) at (11.1,1.15) {$C_3$};
+    \node[gb variable] (lcg-a) at (12.65,3.25) {$b_1$};
+    \node[gb variable] (lcg-b) at (12.65,2.2) {$b_2$};
+    \node[gb variable] (lcg-c) at (12.65,1.15) {$b_3$};
     \draw[gb clause edge] (lcg-cl1) -- (lcg-a);
     \draw[gb clause edge] (lcg-cl1) -- (lcg-nb);
     \draw[gb clause edge] (lcg-cl1) -- (lcg-c);

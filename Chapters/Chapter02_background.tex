@@ -5,7 +5,7 @@ This chapter establishes the shared foundations for the contribution chapters: e
 \section{Empirical performance prediction}
 \label{sec:ch02:empirical_performance_prediction}
 
-Let $\algo$ denote a parameterised algorithm drawn from an algorithm space $\algorithmSpace$, and let $\configuration \in \configurationSpace$ be a configuration, \emph{i.e.}, an assignment of values to the parameters of $\algo$. Let $\instance\in \instanceSpace$ denote a problem instance out of the instance space $\instanceSpace$. $\instance$ is characterised by a feature vector $\instanceFeatures = [\instanceFeature_1, \ldots, \instanceFeature_m]^{\top} \in \mathbb{R}^m$. The performance of $\algo$ using configuration $\configuration$ on $\instance$ is denoted by $\performanceVector \in \mathbb{R}^l$, $l \in \mathbb{N}$. Note that, $\performanceVector$ can be have a single element, if there is only one performance metric of interest (for example, the running time of a SAT solver), or, have multiple, potentially competing performance metrics (for example, accuracy and inference speed of a neural network).
+Let $\algo$ denote a parameterised algorithm drawn from an algorithm space $\algorithmSpace$, and let $\configuration \in \configurationSpace$ be a configuration, \emph{i.e.}, an assignment of values to the parameters of $\algo$. Let $\instance\in \instanceSpace$ denote a problem instance out of the instance space $\instanceSpace$. $\instance$ is characterised by a feature vector $\instanceFeatures = [\instanceFeature_1, \ldots, \instanceFeature_{d_z}]^{\top} \in \mathbb{R}^{d_z}$. The performance of $\algo$ using configuration $\configuration$ on $\instance$ is denoted by $\performanceVector \in \mathbb{R}^{d_p}$, $d_p \in \mathbb{N}$. Note that, $\performanceVector$ can be have a single element, if there is only one performance metric of interest (for example, the running time of a SAT solver), or, have multiple, potentially competing performance metrics (for example, accuracy and inference speed of a neural network).
 
 An empirical performance model (EPM) is a learned function
 \begin{equation}
@@ -27,7 +27,7 @@ Finally, across different scenarios, the scale of the performance target can var
 
 
 
-The predict performance can be a single number per metric, showing the mean or median value. Alternatively, it is also possible to predict the full performance distribution distribution $p(y \mid \modelInput)$ rather than a single value to obtain a distributional EPM~\citep{EggEtAl18a}, which is particularly valuable for capturing more subtle details of the performance of the algorithm, such as its variance and skewness.
+The predict performance can be a single number per metric, showing the mean or median value. Alternatively, it is also possible to predict the full performance distribution distribution $\rho(y \mid \modelInput)$ rather than a single value to obtain a distributional EPM~\citep{EggEtAl18a}, which is particularly valuable for capturing more subtle details of the performance of the algorithm, such as its variance and skewness.
 \subsection{Applications and instance features}
 
 EPMs have been developed for a wide range of tasks, including automated algorithm selection~\citep{XuEtAl08, Kotthoff16}, algorithm configuration and parameter tuning~\citep{HutEtAl12, HutEtAl06}, data centre and cloud scheduling~\citep{LeeEtAl25, IslEtAl12, SaxEtAl23, PhaEtAl20}, compiler optimisation~\citep{YotEtAl03, AshEtAl19}, and database query optimisation~\citep{WuEtAl13}. EPMs require a set of features describing instances as an input to the model. For $\mathcal{NP}$-complete problems, high-level properties of instances are encoded to serve as an instance identifier, such as the SATzilla features for propositional satisfiability (SAT)~\citep{HutEtAl14,ShaHoo24} and causal-graph or planning-graph features for automated planning~\citep{FawEtAl14}.
@@ -35,7 +35,7 @@ EPMs have been developed for a wide range of tasks, including automated algorith
 \subsection{Performance distribution prediction}
 \label{sec:ch02:distribution_prediction}
 
-For stochastic algorithms, the performance of $\mathcal{A}$ on a fixed instance $I$ is a random variable. Traditional EPMs handle this stochasticity by either modelling an aggregate statistic calculated from repeated runs (\emph{e.g.}, the empirical mean or median) or training directly on noisy, single-run observations. In both cases, the EPM outputs a single scalar value, discarding all information about the variance and shape of the underlying distribution.
+For stochastic algorithms, the performance of $\algo$ on a fixed instance $\instance$ is a random variable. Traditional EPMs handle this stochasticity by either modelling an aggregate statistic calculated from repeated runs (\emph{e.g.}, the empirical mean or median) or training directly on noisy, single-run observations. In both cases, the EPM outputs a single scalar value, discarding all information about the variance and shape of the underlying distribution.
 
 To capture the complete run-to-run variation of stochastic algorithms, \citet{EggEtAl18} introduced \emph{DistNet}, a neural network that predicts the parameters of a per-instance running time distribution (\emph{e.g.}, a log-normal distribution). DistNet is trained by minimising the negative log-likelihood (NLL) of individual run observations, which is more efficient and numerically stable than a two-stage approach that first fits distribution parameters per instance and then regresses on those parameters.
 
@@ -47,9 +47,9 @@ To improve predictive quality in data-scarce regimes, \emph{BayesDistNet}~\citep
 In this section, we introduce the algorithm selection problem and its components, including a formal definition, common baselines and use cases. We also relate it to multi-class classification and empirical performance prediction.
 
 \subsection{Formal definition}
-Given a set of problem instances $\instanceSpace$ (which can be, for example, datasets), instance features $\featureSpace$, a set of algorithms $\algorithmSpace$ and a performance metric $m:\algorithmSpace \times \instanceSpace \rightarrow \mathbb{R}$ (for example, predictive accuracy or running time), the algorithm selection problem~\citep{Rice76} seeks to find a selector $S:\featureSpace\rightarrow\algorithmSpace$ such that the performance of $S$ on the instances $\instanceSpace$ is optimal according to $m$~\citep{KerEtAl19}.
+Given a set of problem instances $\instanceSpace$ (which can be, for example, datasets), instance features $\featureSpace$, a set of algorithms $\algorithmSpace$ and a performance metric $p:\algorithmSpace \times \instanceSpace \rightarrow \mathbb{R}$ (for example, predictive accuracy or running time), the algorithm selection problem~\citep{Rice76} seeks to find a selector $S:\featureSpace\rightarrow\algorithmSpace$ such that the performance of $S$ on the instances $\instanceSpace$ is optimal according to $p$~\citep{KerEtAl19}.
 
-Extensions include the use of \textit{algorithm features}, which are combined with the instance features to predict the best algorithm for each problem instance. For simplicity, for the remainder of the section, we assume that the goal is to minimise $m$.
+Extensions include the use of \textit{algorithm features}, which are combined with the instance features to predict the best algorithm for each problem instance. For simplicity, for the remainder of the section, we assume that the goal is to minimise $p$.
 In algorithm selection, the ideal goal is to reach the performance of the \gls{vbs} (\emph{i.e.}, perfect selector). Furthermore, the selection must be better than the single best solver (\gls{sbs}) in order to make the use of algorithm selection worthwhile.
 
 \subsection{Algorithm selection pipelines}
@@ -79,11 +79,11 @@ In algorithm selection, the ideal goal is to reach the performance of the \gls{v
         \node[stage] at (-4.8,-5.1) {Learn and evaluate};
 
         \node[input] (feat_sets) at (-3.45,-.2)
-            {Feature sets\\$\{\featureSpace_1,\ldots\}$};
+            {Feature sets\\$\{\mathcal H_1,\ldots\}$};
         \node[input] (instances) at (0,-.2)
-            {Instances\\$\{I_1,\ldots\}$};
+            {Instances\\$\{i_1,\ldots\}$};
         \node[input] (algos) at (3.45,-.2)
-            {Algorithms\\$\{A_1,\ldots\}$};
+            {Algorithms\\$\{a_1,\ldots\}$};
         \node[process] (feat_comp) at (-3.45,-1.55)
             {Feature\\computation};
         \node[metric] (train_metric) at (0,-1.55)
@@ -196,49 +196,49 @@ To model performance, one should account for the distribution of the performance
 
 This section introduces hyperparameter optimisation and the surrogate-based search framework used in \cref{ch:ch06:dymbo,ch:ch08:noisy_oracle}.
 
-\subsection{Hyperparameter optimisation} Let $\mathcal{A}$ be a learning algorithm with $n$ hyperparameters, $\Lambda_{i}$ the domain of the $i$-th hyperparameter, and $\mathbf{\Lambda} = \Lambda_{1} \times \Lambda_{2} \times \dots \Lambda_{n}$ the overall hyperparameter configuration space.
-We denote a hyperparameter configuration by $\mathbf{\lambda} \in \mathbf{\Lambda}$, and the algorithm $\mathcal{A}$ with its hyperparameters instantiated to $\mathbf{\lambda}$ by $\mathcal{A}_{\mathbf{\lambda}}$.
-Given a dataset $D$, the objective of HPO is to find a hyperparameter configuration $\mathbf{\lambda}^{*}$ that minimises the loss $\mathcal{L}$ of a model fitted by algorithm $\mathcal{A}$ with hyperparameters $\mathbf{\lambda}$ on training data ${D}_{train}$, and evaluated on validation data ${D}_{validate}$, for a given loss function $\mathcal{L}$, \emph{i.e.},
+\subsection{Hyperparameter optimisation} Let $\algo$ be a learning algorithm with $d_c$ hyperparameters, $\mathcal C_{h}$ the domain of the $h$-th hyperparameter, and $\configurationSpace = \mathcal C_{1} \times \mathcal C_{2} \times \dots \mathcal C_{d_c}$ the overall hyperparameter configuration space.
+We denote a hyperparameter configuration by $\configuration \in \configurationSpace$, and the algorithm $\algo$ with its hyperparameters instantiated to $\configuration$ by $\algo_{\configuration}$.
+Given a dataset $\mathcal D$, the objective of HPO is to find a hyperparameter configuration $\configuration^{*}$ that minimises the loss $\mathcal{L}$ of a model fitted by algorithm $\algo$ with hyperparameters $\configuration$ on training data ${\mathcal D}_{train}$, and evaluated on validation data ${\mathcal D}_{validate}$, for a given loss function $\mathcal{L}$, \emph{i.e.},
 \begin{equation}
 \label{eq:ch02:def-hpo}
-\mathbf{\lambda}^{*} \in \argmin_{\mathbf{\lambda} \in \mathbf{\Lambda}}
-\mathcal{L}(\mathcal{A}_{\mathbf{\lambda}}, {D}_{train}, {D}_{validate}) = \argmin_{\mathbf{\lambda} \in \mathbf{\Lambda}} c(\mathbf{\lambda})
+\configuration^{*} \in \argmin_{\configuration \in \configurationSpace}
+\mathcal{L}(\algo_{\configuration}, {\mathcal D}_{train}, {\mathcal D}_{validate}) = \argmin_{\configuration \in \configurationSpace} f(\configuration)
 \end{equation}
-Here, $c(\mathbf{\lambda})$ is a shorthand for the loss function when $\mathcal{A}_{\mathbf{\lambda}}$ and $D$ are fixed.
-Note that $c(\mathbf{\lambda})$ is a black-box function, without a closed-form expression nor analytic gradient information.
+Here, $f(\configuration)$ is a shorthand for the loss function when $\algo_{\configuration}$ and $\mathcal D$ are fixed.
+Note that $f(\configuration)$ is a black-box function, without a closed-form expression nor analytic gradient information.
 
 \subsection{Bayesian optimisation}
 \label{sec:ch02:bac_bo}
 
 Bayesian optimisation (BO)~\citep{Mockus12b,Garnett23,Frazier18b,Kushner62,Kushner64b} is a family of surrogate-based algorithms for efficient global optimisation of black-box problems.
-Typically, BO consists of three main components: an \emph{initial design}, \emph{i.e.}, in HPO, a set of candidate hyperparameter configurations $\boldsymbol{\lambda} = (\lambda^{(1)},\ldots, \lambda^{(r)})$ and their evaluations
-$c(\boldsymbol{\lambda}) = (c(\lambda^{(1)}),\ldots, c(\lambda^{(r)}))$; a \emph{surrogate model} (fitted to the
-observations) that returns an approximation $\hat{c}(\mathbf{\lambda})$ of the unknown loss function $c(\mathbf{\lambda})$ while capturing the uncertainty in the prediction $\hat{\sigma}(\mathbf{\lambda})$ on unobserved points in the search space; and an \emph{acquisition function}, which is optimised to suggest candidate solutions to be evaluated next, usually balancing exploration and exploitation of the search space.
+Typically, BO consists of three main components: an \emph{initial design}, \emph{i.e.}, in HPO, a set of candidate hyperparameter configurations $\mathcal C_{\mathrm{obs}} = (\configuration^{(1)},\ldots, \configuration^{(n_0)})$ and their evaluations
+$f(\mathcal C_{\mathrm{obs}}) = (f(\configuration^{(1)}),\ldots, f(\configuration^{(n_0)}))$; a \emph{surrogate model} (fitted to the
+observations) that returns an approximation $\hat{f}(\configuration)$ of the unknown loss function $f(\configuration)$ while capturing the uncertainty in the prediction $\hat{\sigma}(\configuration)$ on unobserved points in the search space; and an \emph{acquisition function}, which is optimised to suggest candidate solutions to be evaluated next, usually balancing exploration and exploitation of the search space.
 BO then evaluates the most promising candidate solutions.
-To approximate the expensive objective function, BO typically employs a Gaussian process (GP) model as the surrogate. The GP model defines a distribution over functions on the configuration space $c(\lambda)\sim\mathcal{GP}_c(\mu(\lambda),\text{cov}(\lambda,\lambda'))$, where
+To approximate the expensive objective function, BO typically employs a Gaussian process (GP) model as the surrogate. The GP model defines a distribution over functions on the configuration space $f(\configuration)\sim\mathcal{GP}_f(\mu(\configuration),k_{\mathrm{GP}}(\configuration,\configuration'))$, where
 $\mu(\cdot)$
 is a mean function and
-$\text{cov}(\cdot,\cdot)$
+$k_{\mathrm{GP}}(\cdot,\cdot)$
 is a covariance function. If we consider an observation model
-$y_i = c(\lambda^{(i)}) + \varepsilon_i$
+$y_j = f(\configuration^{(j)}) + \varepsilon_j$
 with normally distributed noise,
-$\varepsilon_i\sim\mathcal{N}(0,\sigma^2_\varepsilon)$,
+$\varepsilon_j\sim\mathcal{N}(0,\sigma^2_\varepsilon)$,
 the predicted value by the GP model at one unknown configuration
-$\lambda$ will also follow a normal distribution with mean
-$\mu(\lambda)=K_{\lambda,\boldsymbol{\lambda}}(K_{\boldsymbol{\lambda},\boldsymbol{\lambda}}+\sigma^2_\varepsilon I)^{-1}\boldsymbol{y}$ and variance $\sigma^2(\lambda)=\text{cov}(\lambda,\lambda)-K_{\lambda,\boldsymbol{\lambda}}(K_{\boldsymbol{\lambda},\boldsymbol{\lambda}}+\sigma^2_\varepsilon I)^{-1} K_{\boldsymbol{\lambda},\lambda}$,
-where $\boldsymbol{y}=(y_1,\ldots,y_r)$ is the vector of observations, $K_{\boldsymbol{\lambda},\boldsymbol{\lambda}}=[\text{cov}(\lambda^{(i)},\lambda^{(j)})]_{\lambda^{(i)},\lambda^{(j)}\in\boldsymbol{\lambda}}$ is the covariance matrix, and $K_{\lambda,\boldsymbol{\lambda}}=[\text{cov}(\lambda^{(i)},\lambda)]_{\lambda^{(i)}\in\boldsymbol{\lambda}}$ is the correlation vector for all samples.
+$\configuration$ will also follow a normal distribution with mean
+$\mu(\configuration)=\mathbf K_{\configuration,\mathcal C_{\mathrm{obs}}}(\mathbf K_{\mathcal C_{\mathrm{obs}},\mathcal C_{\mathrm{obs}}}+\sigma^2_\varepsilon \mathbf I)^{-1}\mathbf y$ and variance $\sigma^2(\configuration)=k_{\mathrm{GP}}(\configuration,\configuration)-\mathbf K_{\configuration,\mathcal C_{\mathrm{obs}}}(\mathbf K_{\mathcal C_{\mathrm{obs}},\mathcal C_{\mathrm{obs}}}+\sigma^2_\varepsilon \mathbf I)^{-1} \mathbf K_{\mathcal C_{\mathrm{obs}},\configuration}$,
+where $\mathbf y=(y_1,\ldots,y_{n_0})$ is the vector of observations, $\mathbf K_{\mathcal C_{\mathrm{obs}},\mathcal C_{\mathrm{obs}}}=[k_{\mathrm{GP}}(\configuration^{(j)},\configuration^{(j\prime)})]_{\configuration^{(j)},\configuration^{(j\prime)}\in\mathcal C_{\mathrm{obs}}}$ is the covariance matrix, and $\mathbf K_{\configuration,\mathcal C_{\mathrm{obs}}}=[k_{\mathrm{GP}}(\configuration^{(j)},\configuration)]_{\configuration^{(j)}\in\mathcal C_{\mathrm{obs}}}$ is the correlation vector for all samples.
 GPs as a surrogate model inherently provide both the mean and the variance vector.
 
 However, GPs are not the only surrogate model used in BO. Another common choice for a surrogate model are tree-based models,
 such as random forests (RFs).
 Tree-based models traditionally predict only the mean of the given data (\emph{e.g.}, in a regression setting).
 In this case, the variance is defined based on the variance of the predictions of the leaves~\citep{HutEtAl11}.
-With $t(\lambda)$ being the prediction of a tree $t \in T$, we calculate the mean $\mu(\lambda)$ and variance $\sigma^2(\lambda)$ for a set of trees $T$ as follows:
+With $e_{\mathrm{RF}}(\configuration)$ being the prediction of a tree $e_{\mathrm{RF}} \in \mathcal E_{\mathrm{RF}}$, we calculate the mean $\mu(\configuration)$ and variance $\sigma^2(\configuration)$ for a set of trees $\mathcal E_{\mathrm{RF}}$ as follows:
 \begin{equation}
-    \mu(\lambda)=\frac{1}{|T|} \cdot \sum_{t\in T} t(\lambda) \; ,
+    \mu(\configuration)=\frac{1}{|\mathcal E_{\mathrm{RF}}|} \cdot \sum_{e_{\mathrm{RF}}\in \mathcal E_{\mathrm{RF}}} e_{\mathrm{RF}}(\configuration) \; ,
 \end{equation}
 \begin{equation}
-    \sigma^2(\lambda)=\frac{1}{|T|} \cdot \sum_{t\in T} (t(\lambda) - \mu(\lambda))^2 \; .
+    \sigma^2(\configuration)=\frac{1}{|\mathcal E_{\mathrm{RF}}|} \cdot \sum_{e_{\mathrm{RF}}\in \mathcal E_{\mathrm{RF}}} (e_{\mathrm{RF}}(\configuration) - \mu(\configuration))^2 \; .
 \end{equation}
 BO proceeds iteratively until a termination criterion is met. In each iteration, it optimises the acquisition function by repeatedly querying the surrogate model to generate a pool of candidate solutions. It then evaluates the most high-potential solutions (\emph{i.e.}, the solutions that maximise the acquisition function) from this pool,
 refines the surrogate model based on the new observations, and updates the optimum if the new point improves upon the true function value of the best observation so far.
@@ -248,31 +248,31 @@ refines the surrogate model based on the new observations, and updates the optim
 
 For the acquisition functions below, we use the notation of \cref{ch:ch08:noisy_oracle}.
 
-Given a black-box function $f:\sR^n\rightarrow\sR$, the goal of an optimiser is to find its minimum, denoted by $x^*$, such that $f(x^*)\leq f(x)$ for every $x\in\sR^n$. The optimiser iteratively samples configurations $x_1, x_2, ..., x_n$, where $x_i$ is the configuration sampled at iteration $i$.
-At each iteration, the optimiser observes the performance $f(x_i)$, producing the set of observations $\train=\{(x_1, f(x_1)), (x_2, f(x_2)),..., (x_n, f(x_n))\}$.
+Given a black-box function $f:\sR^{d_c}\rightarrow\sR$, the goal of an optimiser is to find its minimum, denoted by $\configuration^*$, such that $f(\configuration^*)\leq f(\configuration)$ for every $\configuration\in\sR^{d_c}$. The optimiser iteratively samples configurations $\configuration_1, \configuration_2, ..., \configuration_n$, where $\configuration_t$ is the configuration sampled at iteration $t$.
+At each iteration, the optimiser observes the performance $f(\configuration_t)$, producing the set of observations $\train=\{(\configuration_1, f(\configuration_1)), (\configuration_2, f(\configuration_2)),..., (\configuration_n, f(\configuration_n))\}$.
 
-Bayesian optimisation~\citep{Garnett23} uses a surrogate model to decide on the next configuration to sample. At iteration $i$, the surrogate model $S$ takes an unseen configuration $x$ together with the observation set $\train$ and estimates a predictive distribution for $x$, typically summarized through a mean $\mu_S(x)$ and variance $\sigma_S^2(x)$.
+Bayesian optimisation~\citep{Garnett23} uses a surrogate model to decide on the next configuration to sample. At iteration $t$, the surrogate model $m$ takes an unseen configuration $\configuration$ together with the observation set $\train$ and estimates a predictive distribution for $\configuration$, typically summarized through a mean $\mu_m(\configuration)$ and variance $\sigma_m^2(\configuration)$.
 GPs are a common choice for such a surrogate model, but random forests~\citep{HutEtAl11} and other machine-learning techniques that can provide uncertainty estimates are also used.
 
-Following the fitting of a surrogate model, an acquisition function is used to determine the next point to sample, balancing exploration and exploitation by considering the predicted mean and variance. Here, we consider three popular acquisition functions. First, expected improvement (EI) quantifies the expected improvement in the known optimum by sampling a configuration $x$; formally:
+Following the fitting of a surrogate model, an acquisition function is used to determine the next point to sample, balancing exploration and exploitation by considering the predicted mean and variance. Here, we consider three popular acquisition functions. First, expected improvement (EI) quantifies the expected improvement in the known optimum by sampling a configuration $\configuration$; formally:
 \begin{multline}
-    EI(x)=\mathbb{E}[max(0, f(x_{best})-\mu_S(x))]=\\(f(x_{best})-\mu_S(x))\cdot\Phi(z)+\sigma_S(x)\cdot\phi(z)
+    EI(\configuration)=\mathbb{E}[max(0, f(\configuration^{\mathrm{inc}})-\mu_m(\configuration))]=\\(f(\configuration^{\mathrm{inc}})-\mu_m(\configuration))\cdot\Phi(\zeta)+\sigma_m(\configuration)\cdot\phi(\zeta)
 \end{multline}
 
 \begin{equation*}
-    z=\frac{f(x_{best})-\mu_S(x)}{\sigma_S(x)},
+    \zeta=\frac{f(\configuration^{\mathrm{inc}})-\mu_m(\configuration)}{\sigma_m(\configuration)},
 \end{equation*}
-where $f(x_{best})=\min_{j=1, 2, ..., n} f(x _j)$ is the best observed function value up to iteration $n$, also known as the incumbent.
-Similarly, probability improvement (PI) quantifies the probability that configuration $x$ improves over the known optimum:
+where $f(\configuration^{\mathrm{inc}})=\min_{j=1, 2, ..., n} f(\configuration _j)$ is the best observed function value up to iteration $n$, also known as the incumbent.
+Similarly, probability improvement (PI) quantifies the probability that configuration $\configuration$ improves over the known optimum:
 \begin{equation*}
-    PI(x)=P(f(x_{best})-\mu_S(x) > 0)=\Phi(z)
+    PI(\configuration)=\Pr(f(\configuration^{\mathrm{inc}})-\mu_m(\configuration) > 0)=\Phi(\zeta)
 \end{equation*}
-Finally, the lower confidence bound (LCB) is the weighted sum of the predicted performance $\mu_S(x)$ and the uncertainty $\sigma(x)$:
+Finally, the lower confidence bound (LCB) is the weighted sum of the predicted performance $\mu_m(\configuration)$ and the uncertainty $\sigma(\configuration)$:
 \begin{equation*}
-    LCB(x)=-(\mu_S(x)-\lambda\sigma_S(x))
+    LCB(\configuration)=-(\mu_m(\configuration)-\beta_{\mathrm{LCB}}\sigma_m(\configuration))
 \end{equation*}
 
-The acquisition function $AF$ is then optimised to find a candidate configuration $x_{next} \in \argmax_{x\in\sR^n}AF(x)$. Different methods have been proposed to optimise the acquisition function, including local search, evolutionary algorithms and gradient-based methods. Since evaluating the acquisition function is relatively cheap, many such evaluations can be used to obtain a strong candidate. The candidate is then evaluated on the target function $f$, after which $\train$ is updated as $\train=\train \cup \{(x_{next}, f(x_{next}))\}$. This process continues until a pre-defined evaluation budget is exhausted.
+The acquisition function $\alpha_t$ is then optimised to find a candidate configuration $\configuration_{\mathrm{next}} \in \argmax_{\configuration\in\sR^{d_c}}\alpha_t(\configuration)$. Different methods have been proposed to optimise the acquisition function, including local search, evolutionary algorithms and gradient-based methods. Since evaluating the acquisition function is relatively cheap, many such evaluations can be used to obtain a strong candidate. The candidate is then evaluated on the target function $f$, after which $\train$ is updated as $\train=\train \cup \{(\configuration_{\mathrm{next}}, f(\configuration_{\mathrm{next}}))\}$. This process continues until a pre-defined evaluation budget is exhausted.
 
 
 \section{Chapter summary}

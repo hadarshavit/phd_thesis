@@ -26,26 +26,26 @@ We find that, on small instances, GNNs improve both running-time prediction and 
 Graph neural networks (GNNs) are machine learning models for learning functions on graphs with vertex and edge features. Approaches include spectral graph convolutions~\citep{BruEtAl14}, message-passing neural networks (MPNNs)~\citep{GilEtAl17}, and graph transformers~\citep{MulEtAl24,StoEtAl25}. In the following, we introduce graph neural networks and some well-known variants of it.
 
 \subsubsection{Message-passing graph neural networks framework}
-Given an undirected graph $G=(V,E)$ with finite vertex set $V$ and edge set $E\subseteq\{\{u,v\}\subseteq V\mid u\neq v\}$. For each vertex $v\in V$, we denote $N(v)=\{u\in V\mid\{u,v\}\in E\}$ its set of neighbours. Each vertex is assigned an initial representation $h_v^{(0)}\in\mathbb{R}^{d_0}$, and $e_{vu}$ denotes the attributes of edge $\{v,u\}$ when available. At layer $t$, write $\mathcal{M}_v^{(t-1)}=\{\!\{(h_u^{(t-1)},e_{vu})\mid u\in N(v)\}\!\}$ for the multiset of neighbour representations and edge attributes. An $L$-layer message-passing graph neural network computes
+Given an undirected graph $G=(V,E)$ with finite vertex set $V$ and edge set $E\subseteq\{\{u,v\}\subseteq V\mid u\neq v\}$. For each vertex $v\in V$, we denote $\mathcal N(v)=\{u\in V\mid\{u,v\}\in E\}$ its set of neighbours. Each vertex is assigned an initial representation $\mathbf{h}_v^{(0)}\in\mathbb{R}^{d_{\mathrm{hidden},0}}$, and $\mathbf{e}_{vu}$ denotes the attributes of edge $\{v,u\}$ when available. At layer $\ell$, write $\mathcal B_v^{(\ell-1)}=\{\!\{(\mathbf{h}_u^{(\ell-1)},\mathbf{e}_{vu})\mid u\in \mathcal N(v)\}\!\}$ for the multiset of neighbour representations and edge attributes. An $L_{\mathrm{GNN}}$-layer message-passing graph neural network computes
 \begin{equation}
 \label{eq:ch07:message-passing}
 \begin{aligned}
-    m_v^{(t)} &= \operatorname{AGG}^{(t)}\!\left(
-        h_v^{(t-1)},\mathcal{M}_v^{(t-1)}\right), \\
-    h_v^{(t)} &= \operatorname{UPD}^{(t)}\!\left(h_v^{(t-1)},m_v^{(t)}\right)
-        \in\mathbb{R}^{d_t}, \qquad t=1,\ldots,L.
+    \mathbf{m}_v^{(\ell)} &= \operatorname{AGG}^{(\ell)}\!\left(
+        \mathbf{h}_v^{(\ell-1)},\mathcal B_v^{(\ell-1)}\right), \\
+    \mathbf{h}_v^{(\ell)} &= \operatorname{UPD}^{(\ell)}\!\left(\mathbf{h}_v^{(\ell-1)},\mathbf{m}_v^{(\ell)}\right)
+        \in\mathbb{R}^{d_{\mathrm{hidden},\ell}}, \qquad \ell=1,\ldots,L_{\mathrm{GNN}}.
 \end{aligned}
 \end{equation}
-Here, $m_v^{(t)}$ is the neighbourhood aggregate for vertex $v$ at layer $t$, computed from its neighbours' representations at layer $t-1$. The update combines this aggregate with the previous representation $h_v^{(t-1)}$ to produce $h_v^{(t)}$. Both $\operatorname{AGG}^{(t)}$ and $\operatorname{UPD}^{(t)}$ can contain learned transformations as well as fixed operations such as summation. Their learnable parameters are shared across vertices within each layer. Aggregation is invariant to the ordering of neighbours, making the vertex representations permutation equivariant: relabelling vertices relabels their output representations in the same way. Each layer propagates information across one edge, so $L$ layers provide access to information from at most $L$ hops away through message passing.
+Here, $\mathbf{m}_v^{(\ell)}$ is the neighbourhood aggregate for vertex $v$ at layer $\ell$, computed from its neighbours' representations at layer $\ell-1$. The update combines this aggregate with the previous representation $\mathbf{h}_v^{(\ell-1)}$ to produce $\mathbf{h}_v^{(\ell)}$. Both $\operatorname{AGG}^{(\ell)}$ and $\operatorname{UPD}^{(\ell)}$ can contain learned transformations as well as fixed operations such as summation. Their learnable parameters are shared across vertices within each layer. Aggregation is invariant to the ordering of neighbours, making the vertex representations permutation equivariant: relabelling vertices relabels their output representations in the same way. Each layer propagates information across one edge, so $L_{\mathrm{GNN}}$ layers provide access to information from at most $L_{\mathrm{GNN}}$ hops away through message passing.
 
 For graph-level prediction, a permutation-invariant readout maps the final vertex representations to a graph representation,
 \begin{equation}
 \label{eq:ch07:graph-readout}
-    h_G=\operatorname{READOUT}\!\left(
-        \left\{\!\left\{h_v^{(L)}\mid v\in V\right\}\!\right\}
+    \mathbf{h}_G=\operatorname{READOUT}\!\left(
+        \left\{\!\left\{\mathbf{h}_v^{(L_{\mathrm{GNN}})}\mid v\in V\right\}\!\right\}
         \right).
 \end{equation}
-Common readouts include sum and mean pooling~\citep{GilEtAl17,XuEtAl19}. A prediction head then maps $h_G$ to the target quantities.
+Common readouts include sum and mean pooling~\citep{GilEtAl17,XuEtAl19}. A prediction head then maps $\mathbf{h}_G$ to the target quantities.
 
 \subsubsection{Message-passing architectures}
 We introduce several well-known graph neural networks architectures, all fullfiling the general framework introduced above. These architectures differentiate through different neighbourhood aggregation and update functions. Vertex representations are treated as column vectors. We write learned transformations as $\operatorname{MLP}$ functions, using a single linear layer when the architecture specifies a linear projection and an affine layer when it also includes a bias. Subscripts distinguish transformations with separate parameters. Products are written with $\cdot$; between vectors in the gated layers, this denotes elementwise multiplication.
@@ -55,14 +55,14 @@ The graph convolutional network (GCN)~\citep{KipWel17} adds a self loop for each
 \begin{equation}
 \label{eq:ch07:gcn}
 \begin{aligned}
-    \operatorname{AGG}^{(t)}\!\left(h_v^{(t-1)},\mathcal{M}_v^{(t-1)}\right)
-        &=\sum_{u\in N(v)}
-        \frac{\operatorname{MLP}^{(t)}\!\left(h_u^{(t-1)}\right)}{\sqrt{\widehat d_v\cdot\widehat d_u}}, \\
-    \operatorname{UPD}^{(t)}\!\left(h_v^{(t-1)},m_v^{(t)}\right)
-        &=\sigma\!\left(\frac{\operatorname{MLP}^{(t)}\!\left(h_v^{(t-1)}\right)}{\widehat d_v}+m_v^{(t)}\right).
+    \operatorname{AGG}^{(\ell)}\!\left(\mathbf{h}_v^{(\ell-1)},\mathcal B_v^{(\ell-1)}\right)
+        &=\sum_{u\in \mathcal N(v)}
+        \frac{\operatorname{MLP}^{(\ell)}\!\left(\mathbf{h}_u^{(\ell-1)}\right)}{\sqrt{d_{\mathrm{deg},v}\cdot d_{\mathrm{deg},u}}}, \\
+    \operatorname{UPD}^{(\ell)}\!\left(\mathbf{h}_v^{(\ell-1)},\mathbf{m}_v^{(\ell)}\right)
+        &=\psi_{\mathrm{act}}\!\left(\frac{\operatorname{MLP}^{(\ell)}\!\left(\mathbf{h}_v^{(\ell-1)}\right)}{d_{\mathrm{deg},v}}+\mathbf{m}_v^{(\ell)}\right).
 \end{aligned}
 \end{equation}
-As a self loop is added, $\widehat d_v=|N(v)|+1$. The same $\operatorname{MLP}^{(t)}$ is shared by aggregation and update, and $\sigma$ is a nonlinear activation function.
+As a self loop is added, $d_{\mathrm{deg},v}=|\mathcal N(v)|+1$. The same $\operatorname{MLP}^{(\ell)}$ is shared by aggregation and update, and $\psi_{\mathrm{act}}$ is a nonlinear activation function.
 % The same learnable transformation $\operatorname{MLP}^{(t)}$ is used in both $\operatorname{AGG}^{(t)}$ and $\operatorname{UPD}^{(t)}$, sharing the transformation between neighbour and self contributions. The self-loop is the term $\operatorname{MLP}^{(t)}\!\left(h_v^{(t-1)}\right)/\widehat d_v$ in the update: for $u=v$, its normalisation factor is $1/\sqrt{\widehat d_v\cdot\widehat d_v}=1/\widehat d_v$.
 % Substituting the aggregate into the update therefore gives
 % \begin{equation}
@@ -72,20 +72,20 @@ As a self loop is added, $\widehat d_v=|N(v)|+1$. The same $\operatorname{MLP}^{
 %         \frac{\operatorname{MLP}^{(t)}\!\left(h_u^{(t-1)}\right)}{\sqrt{\widehat d_v\cdot\widehat d_u}}
 %         \right).
 % \end{equation}
-The degree $\widehat d_v=|N(v)|+1$ includes this self-loop. The degree factors rescale contributions according to the connectivity of both endpoints and are determined by graph structure.
+The degree $d_{\mathrm{deg},v}=|\mathcal N(v)|+1$ includes this self-loop. The degree factors rescale contributions according to the connectivity of both endpoints and are determined by graph structure.
 
 \paragraph{GIN.}
 The graph isomorphism network (GIN)\citep{XuEtAl19} uses a sum aggregation and an MLP update:
 \begin{equation}
 \label{eq:ch07:gin}
 \begin{aligned}
-    \operatorname{AGG}^{(t)}\!\left(h_v^{(t-1)},\mathcal{M}_v^{(t-1)}\right)
-        &=\sum_{u\in N(v)}h_u^{(t-1)}, \\
-    \operatorname{UPD}^{(t)}\!\left(h_v^{(t-1)},m_v^{(t)}\right)
-        &=\operatorname{MLP}^{(t)}\!\left((1+\epsilon^{(t)})\cdot h_v^{(t-1)}+m_v^{(t)}\right).
+    \operatorname{AGG}^{(\ell)}\!\left(\mathbf{h}_v^{(\ell-1)},\mathcal B_v^{(\ell-1)}\right)
+        &=\sum_{u\in \mathcal N(v)}\mathbf{h}_u^{(\ell-1)}, \\
+    \operatorname{UPD}^{(\ell)}\!\left(\mathbf{h}_v^{(\ell-1)},\mathbf{m}_v^{(\ell)}\right)
+        &=\operatorname{MLP}^{(\ell)}\!\left((1+\epsilon_{\mathrm{GIN}}^{(\ell)})\cdot \mathbf{h}_v^{(\ell-1)}+\mathbf{m}_v^{(\ell)}\right).
 \end{aligned}
 \end{equation}
-The scalar $\epsilon^{(t)}$ controls the contribution of the current vertex and can be fixed or learned. By using sum aggregation instead of symmetric degree normalisation as used by GCN, GIN can distinguish neighbours that have the same mean but different sums, allowing to better distinguish the structure of graphs.
+The scalar $\epsilon_{\mathrm{GIN}}^{(\ell)}$ controls the contribution of the current vertex and can be fixed or learned. By using sum aggregation instead of symmetric degree normalisation as used by GCN, GIN can distinguish neighbours that have the same mean but different sums, allowing to better distinguish the structure of graphs.
 
 Under suitable injectivity assumptions (\emph{i.e.}, different inputs to the aggregation, update, and readout functions result in different outputs), GIN with sufficiently many layers and an appropriate graph readout matches the distinguishing power of the one-dimensional Weisfeiler--Leman graph isomorphism test~\citep{XuEtAl19}, which is used to test whether two graphs have the same structure up to vertex relabelling, although it does not resolve every case.
 
@@ -97,18 +97,18 @@ Neighbour information can differ in relevance to the prediction task. Residual g
 \begin{equation}
 \label{eq:ch07:gated-gcn}
 \begin{gathered}
-    \eta_{vu}^{(t)} = \operatorname{sigmoid}\!\left(
-        \operatorname{MLP}_{a}^{(t)}(h_v^{(t-1)})+\operatorname{MLP}_{b}^{(t)}(h_u^{(t-1)})\right), \\
+    \boldsymbol\eta_{vu}^{(\ell)} = \operatorname{sigmoid}\!\left(
+        \operatorname{MLP}_{\mathrm{self}}^{(\ell)}(\mathbf{h}_v^{(\ell-1)})+\operatorname{MLP}_{\mathrm{nbr}}^{(\ell)}(\mathbf{h}_u^{(\ell-1)})\right), \\
 \begin{aligned}
-    \operatorname{AGG}^{(t)}\!\left(h_v^{(t-1)},\mathcal{M}_v^{(t-1)}\right)
-        &=\sum_{u\in N(v)}\eta_{vu}^{(t)}\cdot \operatorname{MLP}_1^{(t)}\!\left(h_u^{(t-1)}\right), \\
-    \operatorname{UPD}^{(t)}\!\left(h_v^{(t-1)},m_v^{(t)}\right)
-        &=h_v^{(t-1)} \\
-        &\quad+\sigma\!\left(\operatorname{MLP}_0^{(t)}\!\left(h_v^{(t-1)}\right)+m_v^{(t)}\right).
+    \operatorname{AGG}^{(\ell)}\!\left(\mathbf{h}_v^{(\ell-1)},\mathcal B_v^{(\ell-1)}\right)
+        &=\sum_{u\in \mathcal N(v)}\boldsymbol\eta_{vu}^{(\ell)}\cdot \operatorname{MLP}_1^{(\ell)}\!\left(\mathbf{h}_u^{(\ell-1)}\right), \\
+    \operatorname{UPD}^{(\ell)}\!\left(\mathbf{h}_v^{(\ell-1)},\mathbf{m}_v^{(\ell)}\right)
+        &=\mathbf{h}_v^{(\ell-1)} \\
+        &\quad+\psi_{\mathrm{act}}\!\left(\operatorname{MLP}_0^{(\ell)}\!\left(\mathbf{h}_v^{(\ell-1)}\right)+\mathbf{m}_v^{(\ell)}\right).
 \end{aligned}
 \end{gathered}
 \end{equation}
-The gate $\eta_{vu}^{(t)}$ lets the model reduce the influence of less relevant neighbour information based on the representations of both vertices. The additive term $h_v^{(t-1)}$ outside $\sigma$ in $\operatorname{UPD}^{(t)}$ is the residual connection, allowing for better gradient to pass through the network.
+The gate $\boldsymbol\eta_{vu}^{(\ell)}$ lets the model reduce the influence of less relevant neighbour information based on the representations of both vertices. The additive term $\mathbf{h}_v^{(\ell-1)}$ outside $\psi_{\mathrm{act}}$ in $\operatorname{UPD}^{(\ell)}$ is the residual connection, allowing for better gradient to pass through the network.
 
 \subsubsection{GNN+ architectures: GCN+, GIN+, and Gated GCN+}
 \label{sec:ch07:gnn-plus}
@@ -118,16 +118,16 @@ GCN+ is defined as
 \begin{equation}
 \label{eq:ch07:gcn-plus-propagation}
 \begin{split}
-    \widetilde h_{v,\mathrm{GCN+}}^{(t)}
-        &=h_v^{(t-1)}+\operatorname{Dropout}\bigl(\sigma\bigl(\\
-        &\quad\operatorname{BN}_1^{(t)}\bigl(\tfrac{\operatorname{MLP}^{(t)}(h_v^{(t-1)})}{\widehat d_v}+m_v^{(t)}\bigr)\bigr)\bigr).
+    \widetilde{\mathbf h}_{v,\mathrm{GCN+}}^{(\ell)}
+        &=\mathbf{h}_v^{(\ell-1)}+\operatorname{Dropout}\bigl(\psi_{\mathrm{act}}\bigl(\\
+        &\quad\operatorname{BN}_1^{(\ell)}\bigl(\tfrac{\operatorname{MLP}^{(\ell)}(\mathbf{h}_v^{(\ell-1)})}{d_{\mathrm{deg},v}}+\mathbf{m}_v^{(\ell)}\bigr)\bigr)\bigr).
 \end{split}
 \end{equation}
 \begin{equation}
 \label{eq:ch07:gcn-plus-update}
 \begin{gathered}
-    \operatorname{UPD}_{\mathrm{GCN+}}^{(t)}\!\left(h_v^{(t-1)},m_v^{(t)}\right)\\
-        =\operatorname{BN}_2^{(t)}\bigl(\widetilde h_{v,\mathrm{GCN+}}^{(t)}+\operatorname{MLP}_{\mathrm{FFN}}^{(t)}(\widetilde h_{v,\mathrm{GCN+}}^{(t)})\bigr).
+    \operatorname{UPD}_{\mathrm{GCN+}}^{(\ell)}\!\left(\mathbf{h}_v^{(\ell-1)},\mathbf{m}_v^{(\ell)}\right)\\
+        =\operatorname{BN}_2^{(\ell)}\bigl(\widetilde{\mathbf h}_{v,\mathrm{GCN+}}^{(\ell)}+\operatorname{MLP}_{\mathrm{FFN}}^{(\ell)}(\widetilde{\mathbf h}_{v,\mathrm{GCN+}}^{(\ell)})\bigr).
 \end{gathered}
 \end{equation}
 
@@ -136,16 +136,16 @@ Similarly, GIN+ is defined as
 \begin{equation}
 \label{eq:ch07:gin-plus-propagation}
 \begin{split}
-    \widetilde h_{v,\mathrm{GIN+}}^{(t)}
-        &=h_v^{(t-1)}+\operatorname{Dropout}\bigl(\sigma\bigl(\\
-        &\quad\operatorname{BN}_1^{(t)}\bigl(\operatorname{MLP}^{(t)}\bigl((1+\epsilon^{(t)})\cdot h_v^{(t-1)}+m_v^{(t)}\bigr)\bigr)\bigr)\bigr).
+    \widetilde{\mathbf h}_{v,\mathrm{GIN+}}^{(\ell)}
+        &=\mathbf{h}_v^{(\ell-1)}+\operatorname{Dropout}\bigl(\psi_{\mathrm{act}}\bigl(\\
+        &\quad\operatorname{BN}_1^{(\ell)}\bigl(\operatorname{MLP}^{(\ell)}\bigl((1+\epsilon_{\mathrm{GIN}}^{(\ell)})\cdot \mathbf{h}_v^{(\ell-1)}+\mathbf{m}_v^{(\ell)}\bigr)\bigr)\bigr)\bigr).
 \end{split}
 \end{equation}
 \begin{equation}
 \label{eq:ch07:gin-plus-update}
 \begin{gathered}
-    \operatorname{UPD}_{\mathrm{GIN+}}^{(t)}\!\left(h_v^{(t-1)},m_v^{(t)}\right)\\
-        =\operatorname{BN}_2^{(t)}\bigl(\widetilde h_{v,\mathrm{GIN+}}^{(t)}+\operatorname{MLP}_{\mathrm{FFN}}^{(t)}(\widetilde h_{v,\mathrm{GIN+}}^{(t)})\bigr).
+    \operatorname{UPD}_{\mathrm{GIN+}}^{(\ell)}\!\left(\mathbf{h}_v^{(\ell-1)},\mathbf{m}_v^{(\ell)}\right)\\
+        =\operatorname{BN}_2^{(\ell)}\bigl(\widetilde{\mathbf h}_{v,\mathrm{GIN+}}^{(\ell)}+\operatorname{MLP}_{\mathrm{FFN}}^{(\ell)}(\widetilde{\mathbf h}_{v,\mathrm{GIN+}}^{(\ell)})\bigr).
 \end{gathered}
 \end{equation}
 
@@ -153,21 +153,21 @@ Finally, GatedGCN+ is defined as
 \begin{equation}
 \label{eq:ch07:gated-plus-propagation}
 \begin{split}
-    \widetilde h_{v,\mathrm{GatedGCN+}}^{(t)}
-        &=h_v^{(t-1)}+\operatorname{Dropout}\bigl(\sigma\bigl(\\
-        &\quad\operatorname{BN}_1^{(t)}\bigl(\operatorname{MLP}_0^{(t)}(h_v^{(t-1)})+m_v^{(t)}\bigr)\bigr)\bigr).
+    \widetilde{\mathbf h}_{v,\mathrm{GatedGCN+}}^{(\ell)}
+        &=\mathbf{h}_v^{(\ell-1)}+\operatorname{Dropout}\bigl(\psi_{\mathrm{act}}\bigl(\\
+        &\quad\operatorname{BN}_1^{(\ell)}\bigl(\operatorname{MLP}_0^{(\ell)}(\mathbf{h}_v^{(\ell-1)})+\mathbf{m}_v^{(\ell)}\bigr)\bigr)\bigr).
 \end{split}
 \end{equation}
 \begin{equation}
 \label{eq:ch07:gated-plus-update}
 \begin{gathered}
-    \operatorname{UPD}_{\mathrm{GatedGCN+}}^{(t)}\!\left(h_v^{(t-1)},m_v^{(t)}\right)\\
-        =\operatorname{BN}_2^{(t)}\bigl(\widetilde h_{v,\mathrm{GatedGCN+}}^{(t)}+\operatorname{MLP}_{\mathrm{FFN}}^{(t)}(\widetilde h_{v,\mathrm{GatedGCN+}}^{(t)})\bigr).
+    \operatorname{UPD}_{\mathrm{GatedGCN+}}^{(\ell)}\!\left(\mathbf{h}_v^{(\ell-1)},\mathbf{m}_v^{(\ell)}\right)\\
+        =\operatorname{BN}_2^{(\ell)}\bigl(\widetilde{\mathbf h}_{v,\mathrm{GatedGCN+}}^{(\ell)}+\operatorname{MLP}_{\mathrm{FFN}}^{(\ell)}(\widetilde{\mathbf h}_{v,\mathrm{GatedGCN+}}^{(\ell)})\bigr).
 \end{gathered}
 \end{equation}
 
 The intermediate representation retains the core transformation of the corresponding base update, with batch normalisation (BN), dropout, and a residual connection around the transformed neighbourhood information. We note that, GatedGCN already includes this residual connection in its base form.
-Each plus variant then applies an additional vertex-wise $\operatorname{MLP}_{\mathrm{FFN}}^{(t)}$ to the intermediate representation, adds a residual connection around this MLP, and applies a second batch normalisation. These modifications aim to stabilise training through normalisation and residual connections, reduce overfitting through dropout, and increase the capacity to transform vertex representations through the additional MLP.
+Each plus variant then applies an additional vertex-wise $\operatorname{MLP}_{\mathrm{FFN}}^{(\ell)}$ to the intermediate representation, adds a residual connection around this MLP, and applies a second batch normalisation. These modifications aim to stabilise training through normalisation and residual connections, reduce overfitting through dropout, and increase the capacity to transform vertex representations through the additional MLP.
 
 % Node attributes $x_v$ and positional encodings $p_v$ can be encoded through $h_v^{(0)}=\operatorname{MLP}_{\mathrm{in}}([x_v\Vert p_v])$, where $\Vert$ denotes concatenation. When edge-feature integration is enabled, the aggregation and update functions use their edge-aware versions, so messages or gates can depend on $e_{vu}$. Edge and positional information are optional configuration choices in GNN+.
 \subsection{Graph-based machine learning for SAT}
@@ -176,48 +176,48 @@ Several studies have explored using GNNs or MPNNs to predict formula satisfiabil
 
 \subsubsection{GraSS: Algorithm selection of SAT solvers using graph neural networks}
 \label{sec:ch07:grass}
-\textsc{GraSS}~\citep{ZhaEtAl24b} is a specialised architecture for algorithm selection of SAT solvers. It operates on an LCG with clause vertices $V_C$ and literal vertices $V_L$. For each literal vertex $v$, let $\overline v$ denote the vertex representing the complementary literal. We denote the clause-to-literal, literal-to-clause, and complementary-literal relation types by $c$, $l$, and $n$, respectively, with directed edge sets
+\textsc{GraSS}~\citep{ZhaEtAl24b} is a specialised architecture for algorithm selection of SAT solvers. It operates on an LCG with clause vertices $V_{\mathrm{cl}}$ and literal vertices $V_{\mathrm{lit}}$. For each literal vertex $v$, let $\overline v$ denote the vertex representing the complementary literal. We denote the clause-to-literal, literal-to-clause, and complementary-literal relation types by $\mathrm{CL}$, $\mathrm{LC}$, and $\mathrm{neg}$, respectively, with directed edge sets
 \begin{equation}
 \label{eq:ch07:grass-relations}
 \begin{aligned}
-    E_c&=\{(u,v)\in V_C\times V_L\mid v\text{ occurs in clause }u\},\\
-    E_l&=\{(v,u)\mid(u,v)\in E_c\},\\
-    E_n&=\{(\overline v,v)\mid v\in V_L\}.
+    E_{\mathrm{CL}}&=\{(u,v)\in V_{\mathrm{cl}}\times V_{\mathrm{lit}}\mid v\text{ occurs in clause }u\},\\
+    E_{\mathrm{LC}}&=\{(v,u)\mid(u,v)\in E_{\mathrm{CL}}\},\\
+    E_{\mathrm{neg}}&=\{(\overline v,v)\mid v\in V_{\mathrm{lit}}\}.
 \end{aligned}
 \end{equation}
-Additionally, we define $N_c(v)$ as the set of clauses containing literal $v$, and $N_l(v)$ as the set of literals occurring in clause $v$. The complementary-literal neighbour of a literal vertex $v$ is $\overline v$.
+Additionally, we define $\mathcal N_{\mathrm{CL}}(v)$ as the set of clauses containing literal $v$, and $\mathcal N_{\mathrm{LC}}(v)$ as the set of literals occurring in clause $v$. The complementary-literal neighbour of a literal vertex $v$ is $\overline v$.
 
 GraSS uses relation specific mean aggregate defined as
 \begin{equation}
 \label{eq:ch07:grass-aggregation}
 \begin{aligned}
-    \overline m_{v,c}^{(t)}
-        &=\frac{1}{|N_c(v)|}\cdot\sum_{u\in N_c(v)}
-        \operatorname{MLP}_{c,\mathrm{msg}}^{(t)}(h_v^{(t-1)},h_u^{(t-1)}),
-        &&v\in V_L,\\
-    \overline m_{v,l}^{(t)}
-        &=\frac{1}{|N_l(v)|}\cdot\sum_{u\in N_l(v)}
-        \operatorname{MLP}_{l,\mathrm{msg}}^{(t)}(h_v^{(t-1)},h_u^{(t-1)}),
-        &&v\in V_C,\\
-    \overline m_{v,n}^{(t)}
-        &=\operatorname{MLP}_{n,\mathrm{msg}}^{(t)}(h_v^{(t-1)},h_{\overline v}^{(t-1)}),
-        &&v\in V_L.
+    \overline{\mathbf m}_{v,\mathrm{CL}}^{(\ell)}
+        &=\frac{1}{|\mathcal N_{\mathrm{CL}}(v)|}\cdot\sum_{u\in \mathcal N_{\mathrm{CL}}(v)}
+        \operatorname{MLP}_{\mathrm{CL},\mathrm{msg}}^{(\ell)}(\mathbf{h}_v^{(\ell-1)},\mathbf{h}_u^{(\ell-1)}),
+        &&v\in V_{\mathrm{lit}},\\
+    \overline{\mathbf m}_{v,\mathrm{LC}}^{(\ell)}
+        &=\frac{1}{|\mathcal N_{\mathrm{LC}}(v)|}\cdot\sum_{u\in \mathcal N_{\mathrm{LC}}(v)}
+        \operatorname{MLP}_{\mathrm{LC},\mathrm{msg}}^{(\ell)}(\mathbf{h}_v^{(\ell-1)},\mathbf{h}_u^{(\ell-1)}),
+        &&v\in V_{\mathrm{cl}},\\
+    \overline{\mathbf m}_{v,\mathrm{neg}}^{(\ell)}
+        &=\operatorname{MLP}_{\mathrm{neg},\mathrm{msg}}^{(\ell)}(\mathbf{h}_v^{(\ell-1)},\mathbf{h}_{\overline v}^{(\ell-1)}),
+        &&v\in V_{\mathrm{lit}}.
 \end{aligned}
 \end{equation}
 The complementary-literal relation has exactly one incoming neighbour. Therefore, its mean is the message from that neighbour.
 
-As clause vertices receive messages through relation $l$ only, while literal vertices receive messages through relations $c$ and $n$, the vertex representation update is defined as
+As clause vertices receive messages through relation $\mathrm{LC}$ only, while literal vertices receive messages through relations $\mathrm{CL}$ and $\mathrm{neg}$, the vertex representation update is defined as
 \begin{equation}
 \label{eq:ch07:grass-update}
-    h_v^{(t)}=
+    \mathbf{h}_v^{(\ell)}=
     \begin{cases}
-        \operatorname{ReLU}\!\bigl(\operatorname{MLP}_{l,\mathrm{upd}}^{(t)}(h_v^{(t-1)},\overline m_{v,l}^{(t)})\bigr),
-            &v\in V_C,\\[4pt]
+        \operatorname{ReLU}\!\bigl(\operatorname{MLP}_{\mathrm{LC},\mathrm{upd}}^{(\ell)}(\mathbf{h}_v^{(\ell-1)},\overline{\mathbf m}_{v,\mathrm{LC}}^{(\ell)})\bigr),
+            &v\in V_{\mathrm{cl}},\\[4pt]
         \begin{aligned}[t]
-        \tfrac12\cdot\bigl(&\operatorname{ReLU}\!\bigl(\operatorname{MLP}_{c,\mathrm{upd}}^{(t)}(h_v^{(t-1)},\overline m_{v,c}^{(t)})\bigr)\\
-            &+\operatorname{ReLU}\!\bigl(\operatorname{MLP}_{n,\mathrm{upd}}^{(t)}(h_v^{(t-1)},\overline m_{v,n}^{(t)})\bigr)\bigr),
+        \tfrac12\cdot\bigl(&\operatorname{ReLU}\!\bigl(\operatorname{MLP}_{\mathrm{CL},\mathrm{upd}}^{(\ell)}(\mathbf{h}_v^{(\ell-1)},\overline{\mathbf m}_{v,\mathrm{CL}}^{(\ell)})\bigr)\\
+            &+\operatorname{ReLU}\!\bigl(\operatorname{MLP}_{\mathrm{neg},\mathrm{upd}}^{(\ell)}(\mathbf{h}_v^{(\ell-1)},\overline{\mathbf m}_{v,\mathrm{neg}}^{(\ell)})\bigr)\bigr),
         \end{aligned}
-            &v\in V_L.
+            &v\in V_{\mathrm{lit}}.
     \end{cases}
 \end{equation}
 
@@ -236,22 +236,22 @@ The first step for relaiable algorithm selection and performance prediciton of S
 We collected all SAT Competition instances via GBD~\citep{IseJab24} and added all SAT instances from the AClib benchmark for algorithm configuration~\citep{HutEtAl14d}. Together, these sources include SAT formulae from diverse real-world applications and synthetically generated instances. To further enrich the dataset, we generated additional formulae using three well-established SAT instance generators, i.e.,
 
 \begin{itemize}
-	\item \new{FuzzSAT}~\citep{BruEtAl10} produces CNF fuzzing instances originally designed to identify issues in digital circuits. It generates random Boolean circuits as DAGs and converts them into CNF via the Tseitin transformation~\citep{Tseitin83}. To construct the DAG, we used $v \in [50,150]$ input variables; we randomly paired and connected operands with randomly chosen operator nodes until each input was referenced at least $t \in [1,5]$ times. Finally, we added random clauses of length $s \in [3,8]$ to increase complexity.
+	\item \new{FuzzSAT}~\citep{BruEtAl10} produces CNF fuzzing instances originally designed to identify issues in digital circuits. It generates random Boolean circuits as DAGs and converts them into CNF via the Tseitin transformation~\citep{Tseitin83}. To construct the DAG, we used $n_{\mathrm{var}}\in[50,150]$ input variables; we randomly paired and connected operands with randomly chosen operator nodes until each input was referenced at least $n_{\mathrm{ref}}\in[1,5]$ times. Finally, we added random clauses of length $n_{\mathrm{lit}}\in[3,8]$ to increase complexity.
 
-	\item \new{Cryptography}~\citep{NejEtAl17,AlaEtAl24} generates SAT instances encoding preimage attacks on MD4, SHA-1, and SHA-256. Each encoding applies multiple \emph{rounds} of operations; higher numbers of rounds yield harder instances. We set the number of rounds to $d \in [16,30]$, which yields formulae that are challenging for modern solvers but not unsolvable. Additionally, we fixed $i \in [0,384]$ of the 512 input bits; fixing more bits results in easier instances.
+	\item \new{Cryptography}~\citep{NejEtAl17,AlaEtAl24} generates SAT instances encoding preimage attacks on MD4, SHA-1, and SHA-256. Each encoding applies multiple \emph{rounds} of operations; higher numbers of rounds yield harder instances. We set the number of rounds to $n_{\mathrm{round}}\in[16,30]$, which yields formulae that are challenging for modern solvers but not unsolvable. Additionally, we fixed $n_{\mathrm{fixed}}\in[0,384]$ of the 512 input bits; fixing more bits results in easier instances.
 
-	\item \new{Community attachment}~\citep{GirLev16} produces pseudo-random SAT formulae with community structure, a property often observed in real-world SAT encodings (e.g., hardware and software verification tasks~\citep{AnsEtAl12}). The generator can create relatively small but difficult instances. We used $n \in [1\,000, 3\,000]$ variables, $c \in [5,100]$ communities, a clause-to-variable ratio of $[3{.}7, 4{.}5]$, and modularity factor $q \in [0{.}3,0{.}9]$. Higher modularity values enforce stronger community structure.
+	\item \new{Community attachment}~\citep{GirLev16} produces pseudo-random SAT formulae with community structure, a property often observed in real-world SAT encodings (e.g., hardware and software verification tasks~\citep{AnsEtAl12}). The generator can create relatively small but difficult instances. We used $n_{\mathrm{var}}\in[1\,000,3\,000]$ variables, $n_{\mathrm{comm}}\in[5,100]$ communities, a clause-to-variable ratio of $[3{.}7, 4{.}5]$, and modularity factor $Q_{\mathrm{mod}}\in[0{.}3,0{.}9]$. Higher modularity values enforce stronger community structure.
 \end{itemize}
 
 For each generator, we chose parameter ranges to yield challenging but still solvable instances.  To ensure this, we excluded ranges that yielded no instances solvable by \solver{Kissat}, the winner of the 2024 SAT Competition, between 1 and 5\,000 seconds. After generation, we applied the \textsc{Satellite} preprocessor to remove redundant clauses and variables. Statistics for all instance sources are provided in \cref{tab:ch07:sat_generatred_instances}.
 
 
 \subsection{Solver portfolio and runtime measurements}
-We pre-selected solvers for the benchmark by constructing a portfolio of $m$ complementary state-of-the-art SAT solvers, based on the results of the 2024 SAT Competition. We built portfolios using beam search to identify the set of $m$ solvers achieving the VBS performance. To determine $m$, we evaluated portfolios of all possible sizes and plotted portfolio size against achieved VBS. We then identified the inflection point (the ``knee'') of this curve using the Kneedle algorithm~\citep{SatEtAl11} and adopted the corresponding portfolio. We used the ASF library\footnote{\url{https://github.com/hadarshavit/asf}} to perform the selection procedure. We repeated the same procedure on the SAT Competition 2023.
+We pre-selected solvers for the benchmark by constructing a portfolio of $K_{\mathrm{port}}$ complementary state-of-the-art SAT solvers, based on the results of the 2024 SAT Competition. We built portfolios using beam search to identify the set of $K_{\mathrm{port}}$ solvers achieving the VBS performance. To determine $K_{\mathrm{port}}$, we evaluated portfolios of all possible sizes and plotted portfolio size against achieved VBS. We then identified the inflection point (the ``knee'') of this curve using the Kneedle algorithm~\citep{SatEtAl11} and adopted the corresponding portfolio. We used the ASF library\footnote{\url{https://github.com/hadarshavit/asf}} to perform the selection procedure. We repeated the same procedure on the SAT Competition 2023.
 
 In total, our dataset includes the following solvers. From the 2024 SAT Competition: Kissat~\citep{BieEtAl24}, BreakIDKissat~\citep{BogEtAl24}, AMSAT~\citep{LiEtAl24d}, and KissatMABDC~\citep{LiuEtAl24b}. From the 2023 SAT Competition: SBVA CadiCal~\citep{HabGre23}, Reencode Kissat~\citep{ReeBry23}, Minisat XOR, KissatMAB Prop PR~\citep{Gao23}, hKissatInc~\citep{TchDja23}, CadiCal vivinst~\citep{BieEtAl23}, and BreakID Kissat~\citep{BogEtAl23}. We measured solver computation times in CPU time using \texttt{runsolver}~\citep{Roussel11c} and generic wrapper tools~\citep{EggEtAl19} to ensure accurate, consistent performance measurements.
 
-Solver runs use a cutoff of $c=5\,000$ seconds on an AMD EPYC 7543 CPU. SATzilla 2024 feature extraction uses a cutoff of 180 seconds per feature group on the same CPU platform.
+Solver runs use a cutoff of $\kappa=5\,000$ seconds on an AMD EPYC 7543 CPU. SATzilla 2024 feature extraction uses a cutoff of 180 seconds per feature group on the same CPU platform.
 
 
 \subsection{Instance statistics and size regimes}
@@ -418,32 +418,32 @@ The graph attributes describe individual vertices and edges; the SATzilla 2024 f
 
 \section{Learning tasks and evaluation metrics}
 \label{sec:ch07:tasks}
-Let $\Pi=\{x_1,\ldots,x_n\}$ be a set of SAT instances and $\{a_1,\ldots,a_K\}$ the solver portfolio. For instance $x_i$ and solver $a_k$, define the penalised running time
+Let $\mathcal I_{\mathrm{eval}}=\{i_1,\ldots,i_n\}$ be a set of SAT instances and $\{a_1,\ldots,a_K\}$ the solver portfolio. For instance $i_j$ and solver $a_k$, define the penalised running time
 \begin{equation}
 \label{eq:ch07:penalised-time}
-    r_i^k=\begin{cases}
-        t_i^k, & \text{if the solver completes within cutoff }c,\\
-        10\cdot c, & \text{otherwise},
+    \tau_{\mathrm{PAR10},j,k}=\begin{cases}
+        \tau_{j,k}, & \text{if the solver completes within cutoff }\kappa,\\
+        10\cdot \kappa, & \text{otherwise},
     \end{cases}
 \end{equation}
-where $t_i^k$ is the measured computation time of a completed run. For a selector $s$ that returns a solver index, the $\mathrm{PAR}_{10}$ score is
+where $\tau_{j,k}$ is the measured computation time of a completed run. For a selector $S_{\mathrm{idx}}$ that returns a solver index, the $\mathrm{PAR}_{10}$ score is
 \begin{equation}
 \label{eq:ch07:par10}
-    \mathrm{PAR}_{10}(s,\Pi)=\frac{1}{n}\cdot\sum_{i=1}^n r_i^{s(x_i)}.
+    \mathrm{PAR}_{10}(S_{\mathrm{idx}},\mathcal I_{\mathrm{eval}})=\frac{1}{n}\cdot\sum_{j=1}^n \tau_{\mathrm{PAR10},j,S_{\mathrm{idx}}(j_j)}.
 \end{equation}
-A fixed solver is the special case in which $s$ returns the same index for every instance. This penalty assigns a finite cost to timeouts; it does not recover their unobserved completion times.
+A fixed solver is the special case in which $S_{\mathrm{idx}}$ returns the same index for every instance. This penalty assigns a finite cost to timeouts; it does not recover their unobserved completion times.
 
 \subsection{Performance prediction}
 The regression task predicts a separate running-time target for each instance--solver pair. We use the base-10 logarithm of the penalised time,
 \begin{equation}
 \label{eq:ch07:runtime-target}
-    y_i^k=\log_{10}(r_i^k),
+    y_{j,k}=\log_{10}(\tau_{\mathrm{PAR10},j,k}),
 \end{equation}
 following the use of log-scaled running times in empirical performance modelling~\citep{HutEtAl14e}. The logarithm reduces the numerical range of the targets. For solver $a_k$, prediction quality is measured by
 \begin{equation}
 \label{eq:ch07:rmse}
-    \mathrm{RMSE}_k=\sqrt{\frac{1}{n}\cdot\sum_{i=1}^n
-        (\widehat y_i^k-y_i^k)^2}.
+    \mathrm{RMSE}_k=\sqrt{\frac{1}{n}\cdot\sum_{j=1}^n
+        (\widehat y_{j,k}-y_{j,k})^2}.
 \end{equation}
 Lower RMSE indicates more accurate predictions on the log-time scale. A relative reduction in this RMSE is not a corresponding percentage reduction in solver running time.
 
@@ -451,18 +451,21 @@ Lower RMSE indicates more accurate predictions on the log-time scale. A relative
 Algorithm selection requires choosing a solver rather than estimating every running time accurately. A regression model can select the solver with the smallest predicted time, but a selector can also be trained directly. For the direct graph selectors, we use the runtime-sensitive objective of~\citet{ZhaEtAl24b}:
 \begin{equation}
 \label{eq:ch07:selection-loss}
-    \mathcal{L}_{\mathrm{AS}}=\frac{1}{N}\cdot\sum_{i=1}^N
-        \left(\sum_{k=1}^K p_i^k\cdot r_i^k-r_i^*\right)^2,
-    \qquad r_i^*=\min_k r_i^k,
+\begin{aligned}
+    \mathcal{L}_{\mathrm{AS}}&=\frac{1}{n_{\mathrm{train}}}\cdot\sum_{j=1}^{n_{\mathrm{train}}}
+        \left(\sum_{k=1}^K \pi_{j,k}\cdot \tau_{\mathrm{PAR10},j,k}-\tau_{\mathrm{VBS},j}\right)^2,
+    \\
+    \tau_{\mathrm{VBS},j}&=\min_k \tau_{\mathrm{PAR10},j,k},
+\end{aligned}
 \end{equation}
-where $N$ is the number of training instances and $p_i^k$ is the predicted probability of selecting solver $a_k$. Unlike a classification objective based only on the identity of the best solver, this loss distinguishes errors by their running-time cost.
+where $n_{\mathrm{train}}$ is the number of training instances and $\pi_{j,k}$ is the predicted probability of selecting solver $a_k$. Unlike a classification objective based only on the identity of the best solver, this loss distinguishes errors by their running-time cost.
 
 We evaluate selectors using the \new{closed gap} (CG), relative to the single best solver (SBS) and the virtual best solver (VBS). The SBS uses one solver for all instances, while the VBS chooses the best solver independently for each instance. The closed gap is
 \begin{equation}
 \label{eq:ch07:closed-gap}
-    \mathrm{CG}(\Pi)=
-    \frac{\mathrm{PAR}_{10}(\mathrm{SBS},\Pi)-\mathrm{PAR}_{10}(s,\Pi)}
-         {\mathrm{PAR}_{10}(\mathrm{SBS},\Pi)-\mathrm{PAR}_{10}(\mathrm{VBS},\Pi)}.
+    \mathrm{CG}(\mathcal I_{\mathrm{eval}})=
+    \frac{\mathrm{PAR}_{10}(\mathrm{SBS},\mathcal I_{\mathrm{eval}})-\mathrm{PAR}_{10}(S_{\mathrm{idx}},\mathcal I_{\mathrm{eval}})}
+         {\mathrm{PAR}_{10}(\mathrm{SBS},\mathcal I_{\mathrm{eval}})-\mathrm{PAR}_{10}(\mathrm{VBS},\mathcal I_{\mathrm{eval}})}.
 \end{equation}
 A value of zero matches the SBS, and a value of one matches the VBS. Negative values indicate performance worse than the SBS. Differences in CG measure fractions of the SBS--VBS performance gap, rather than percentage changes in running time.
 
@@ -471,12 +474,12 @@ A value of zero matches the SBS, and a value of one matches the VBS. Negative va
 \subsection{Graph models and input conditions}
 We evaluate GIN, GCN, GIN+, GCN+, and Gated GCN+ on VG, VCG, and LCG representations. Each architecture is evaluated both with and without the supplied node features. These conditions test whether learned graph representations benefit from the syntactic and positional attributes described in~\cref{sec:ch07:encodings}. \textsc{GraSS} requires node features and is therefore evaluated only on LCGs with node features.
 
-The graph neural networks models follow an encoder-processor-decoder organisation, also used in~\citet{BecEtAl25,StoEtAl25}. The encoder maps input features to a hidden dimension $d\in\mathbb{N}$. When input attributes are absent, learned embeddings provide the initial representations. The processor applies the selected message-passing architecture, with its associated normalisation, residual, and feed-forward components. Writing $H^{(t)}$ for the matrix of vertex representations, this stage has the general form
+The graph neural networks models follow an encoder-processor-decoder organisation, also used in~\citet{BecEtAl25,StoEtAl25}. The encoder maps input features to a hidden dimension $d_{\mathrm{hidden}}\in\mathbb{N}$. When input attributes are absent, learned embeddings provide the initial representations. The processor applies the selected message-passing architecture, with its associated normalisation, residual, and feed-forward components. Writing $\mathbf{H}^{(\ell)}$ for the matrix of vertex representations, this stage has the general form
 \begin{equation}
 \label{eq:ch07:processor_eq}
-    H^{(t)}=\phi^{(t)}(H^{(t-1)},G),
+    \mathbf{H}^{(\ell)}=\operatorname{PROC}^{(\ell)}(\mathbf{H}^{(\ell-1)},G),
 \end{equation}
-where $\phi^{(t)}$ is instantiated by the architecture described in~\cref{sec:ch07:gnn-background}. Its precise aggregation rule and additional blocks therefore depend on the model family.
+where $\operatorname{PROC}^{(\ell)}$ is instantiated by the architecture described in~\cref{sec:ch07:gnn-background}. Its precise aggregation rule and additional blocks therefore depend on the model family.
 
 A graph-level readout supplies a representation to the prediction head. For the general-purpose models, the decoder is a two-layer MLP using GELU activations~\citep{HenGim16}.
 

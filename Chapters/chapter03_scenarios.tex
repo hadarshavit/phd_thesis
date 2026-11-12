@@ -6,11 +6,11 @@ This chapter collects the problem representations and benchmark descriptions use
 
 \section{SAT}
 
-The \new{Boolean satisfiability problem} (\gls{sat}) is a central and longstanding \textsf{NP}-complete problem~\citep{Karp72,BieEtAl21b}. It asks whether there exists a truth assignment that satisfies a Boolean formula $\varphi$ over variables $v_1,\ldots,v_r$, typically expressed in \new{conjunctive normal form} (\gls{cnf}):
+The \new{Boolean satisfiability problem} (\gls{sat}) is a central and longstanding \textsf{NP}-complete problem~\citep{Karp72,BieEtAl21b}. It asks whether there exists a truth assignment that satisfies a Boolean formula $\varphi$ over variables $b_1,\ldots,b_{n_{\mathrm{var}}}$, typically expressed in \new{conjunctive normal form} (\gls{cnf}):
 \begin{equation*}
-	\varphi = \bigwedge_{i=1}^n c_i, \quad \text{where each } c_i = \bigvee_{j=1}^{m_i} l_{i, j}.
+	\varphi = \bigwedge_{q=1}^{n_{\mathrm{cl}}} C_q, \quad \text{where each } C_q = \bigvee_{h=1}^{n_{\mathrm{lit},q}} \ell_{q, h}.
 \end{equation*}
-Here, each $l_{i,j}$ is a literal, i.e., either a variable $v_p$ or its negation $\lnot v_p$. The task is to decide whether there exists an assignment $a$ such that $\varphi(a) = \text{true}$. \Gls{sat} is of significant theoretical importance as one of the first problems proven \textsf{NP}-complete~\citep{Cook71}, and it underpins numerous practical applications in hardware and software verification~\citep{BieEtAl09}, automated planning~\citep{KauSel96}, and operations research~\citep{GomEtAl08}. Its significance has led to the development of a wide range of solvers, systematically benchmarked in annual \gls{sat} competitions (e.g.,~\citep{FroEtAl21,BalEtAl17,HeuEtAl19}).
+Here, each $\ell_{q,h}$ is a literal, i.e., either a variable $b_{h\prime}$ or its negation $\lnot b_{h\prime}$. The task is to decide whether there exists an assignment $\omega$ such that $\varphi(\omega) = \text{true}$. \Gls{sat} is of significant theoretical importance as one of the first problems proven \textsf{NP}-complete~\citep{Cook71}, and it underpins numerous practical applications in hardware and software verification~\citep{BieEtAl09}, automated planning~\citep{KauSel96}, and operations research~\citep{GomEtAl08}. Its significance has led to the development of a wide range of solvers, systematically benchmarked in annual \gls{sat} competitions (e.g.,~\citep{FroEtAl21,BalEtAl17,HeuEtAl19}).
 
 \subsection{Graph representations of SAT}
 \label{sec:ch03:sat-graphs}
@@ -29,7 +29,7 @@ The VG and the unlabelled VCG do not distinguish positive from negative occurren
 \begin{figure}[tbp]
     \centering
     \resizebox{\linewidth}{!}{\input{Chapters/figures/graphbench_sat.tex}}
-    \caption[Graph representations of a SAT formula]{Variable, variable-clause, and literal-clause graphs of the displayed SAT formula. Clause nodes $\mathrm{cl}_1$, $\mathrm{cl}_2$, and $\mathrm{cl}_3$ correspond to the clauses in their displayed order. The VCG shows only variable--clause incidence edges; the LCG shows only literal--clause incidence edges.}
+    \caption[Graph representations of a SAT formula]{Variable, variable-clause, and literal-clause graphs of the displayed SAT formula. Clause nodes $C_1$, $C_2$, and $C_3$ correspond to the clauses in their displayed order. The VCG shows only variable--clause incidence edges; the LCG shows only literal--clause incidence edges.}
     \label{fig:ch03:sat-graphs}
 \end{figure}
 
@@ -52,7 +52,7 @@ We considered the Black-Box Optimisation Benchmark (BBOB) noiseless problem coll
 BBOB is a widely used benchmarking suite for assessing the performance of black-box optimisers, designed to cover a range of representative problems that are
 widely used in scientific studies of  numerical  black-box optimisation;
 for this reason, it is a particularly appropriate choice for our use-case.
-It is composed of 24 continuous, noiseless, single-objective and scalable test functions defined on $[-5,5]^D$, with known difficulty (\emph{e.g.,} nonseparability, ill-conditioning, different levels of multimodality, adequate or weak global structure, etc.).
+It is composed of 24 continuous, noiseless, single-objective and scalable test functions defined on $[-5,5]^{d_{\mathrm{in}}}$, with known difficulty (\emph{e.g.,} nonseparability, ill-conditioning, different levels of multimodality, adequate or weak global structure, etc.).
 For each function, we can generate arbitrarily many different instances by applying transformations (typically translations and rotations) to both the search space and the objective space.
 The BBOB problems are categorised into the following five classes: separable functions (f1-f5), functions with low or moderate conditioning (f6-f9),
 functions with high conditioning and unimodal structure (f10-f14), multimodal functions with appropriate global structure (f15-f19), and multimodal functions with weak global structure (f20-f24).

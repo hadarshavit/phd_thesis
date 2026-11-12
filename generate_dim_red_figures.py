@@ -11,6 +11,7 @@ scripts/collect_dim_red_figure_data.py in the benchmark Python environment.
 Only figures/05 PDFs are replaced; obsolete chapter-5 PDFs are removed.
 """
 import gzip
+import argparse
 import json
 from pathlib import Path
 import re
@@ -35,6 +36,15 @@ SHORT_NAMES = {'Gaussian Random Projection': 'Gaussian RP',
 
 def rank_panel(name):
     return '/heatmap_' in name
+
+
+def notation_label(value):
+    """Change display labels only; keep original category keys and observations."""
+    text = str(value)
+    return re.sub(r'^([DkN])\s*=',
+                  lambda match: {'D': 'd<sub>in</sub>',
+                                 'k': 'd<sub>red</sub>',
+                                 'N': 'n'}[match[1]] + '=', text)
 
 
 def make_figures(data):
@@ -95,6 +105,8 @@ def make_figures(data):
                                  type='category', tickmode='array', tickvals=list(trace.x),
                                  ticktext=list(trace.x))
                 fig.update_yaxes(autorange='reversed', showline=False, ticks='', showgrid=False)
+                fig.update_yaxes(tickmode='array', tickvals=list(trace.y),
+                                 ticktext=[notation_label(v) for v in trace.y])
                 fig.update_layout(height=round((178 + 14 * len(trace.y)) * PX_PER_TEX_PT))
             fig.update_layout(coloraxis=dict(cmin=low, cmax=high, colorscale=colorscale, showscale=False))
             scales[name] = (low, high, colorscale, title)
@@ -153,6 +165,10 @@ def make_figures(data):
 
 
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--notation-only', action='store_true',
+                        help='Export only panels with renamed dimension or sample-size labels.')
+    args = parser.parse_args()
     data = json.loads(gzip.decompress((THESIS / 'scripts/dim_red_figure_data.json.gz').read_bytes()))
     figures = make_figures(data)
     chapter = (THESIS / 'Chapters/Chapter05_dim_red.tex').read_text()
@@ -160,6 +176,12 @@ def main():
     refs = set(re.findall(r'\\includegraphics(?:\[[^]]*\])?\{figures/05/([^}]+)\}', chapter))
     # Commented-out panels can remain in the saved data for later reuse.
     assert refs <= figures.keys(), refs - figures.keys()
+    if args.notation_only:
+        figures = {name: fig for name, fig in figures.items()
+                   if fig.layout.yaxis.ticktext and
+                   any(notation_label(v) != str(v)
+                       for v in fig.layout.yaxis.tickvals)}
+        assert figures, 'No notation-bearing panels found'
     target = THESIS / 'figures/05'
     with tempfile.TemporaryDirectory(prefix='.dim_red_', dir=THESIS) as temporary:
         paths = [Path(temporary) / f'{i}.pdf' for i in range(len(figures))]
@@ -175,9 +197,10 @@ def main():
             dest = target / name
             dest.parent.mkdir(parents=True, exist_ok=True)
             path.replace(dest)
-        for path in target.rglob('*.pdf'):
-            if str(path.relative_to(target)) not in figures:
-                path.unlink()
+        if not args.notation_only:
+            for path in target.rglob('*.pdf'):
+                if str(path.relative_to(target)) not in figures:
+                    path.unlink()
     print(f'Replaced {len(figures)} chapter-5 PDFs in {target}')
 
 

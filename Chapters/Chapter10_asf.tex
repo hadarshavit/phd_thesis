@@ -175,14 +175,14 @@ ASF covers a wide variety of algorithm selection methods. Some return a single s
     \item \textbf{SATzilla}~\citep{XuEtAl08}: Builds per-algorithm empirical performance models, with support for censored running time imputation and optional instance-label conditioning, where the prediction is computed as a mixture of experts.
 
     \item \textbf{ISAC}~\citep{KadEtAl10}: Clusters instances in feature space and assigns each cluster the algorithm with the best training performance inside that cluster. Prediction is fast because a new instance is assigned to a cluster and inherits its best algorithm, with a global-best fallback for outliers.
-    \item \textbf{ISA}~\citep{LinEtAl16}: Finds similar training instances with $k$-nearest neighbours and then runs Aspeed on the neighbourhood to compute an instance-specific schedule. It is designed for running time scenarios where the output can be a schedule rather than a single algorithm.
+    \item \textbf{ISA}~\citep{LinEtAl16}: Finds similar training instances with $K_{\mathrm{port}}$-nearest neighbours and then runs Aspeed on the neighbourhood to compute an instance-specific schedule. It is designed for running time scenarios where the output can be a schedule rather than a single algorithm.
     \item \textbf{SNNAP}~\citep{ColEtAl13}: Trains per-algorithm regressors on row-wise normalised performance and compares instances by Jaccard distance over predicted top algorithms. The selected algorithm is chosen from the best algorithms of the most similar neighbours.
     \item \textbf{Optimistic superset loss linear selector (OSLlinear)}~\citep{HanEtAl21b}: Learns per-algorithm linear running time models with an optimistic superset loss for censored observations. It is intended for running time settings where timeouts provide partial rather than exact performance information.
     \item \textbf{CSHC}~\citep{MalEtAl13}: Uses a primary selector together with guardian models that estimate whether the primary choice is reliable. If confidence is too low, the method switches to a backup selector.
     \item \textbf{Cosine selector}~\citep{WuEtAl24}: Learns neural embeddings for instances and algorithms and uses cosine similarity as part of the matching model. The implementation is algorithm-feature-aware and follows the AS-LLM-style idea of fusing learned and provided algorithm representations.
     \item \textbf{Automatic parallel portfolio selector (APPS)}~\citep{KasKot23}: Trains ensembles of performance models to estimate running time distributions and uncertainty. It selects a parallel portfolio by including algorithms whose predicted distributions sufficiently overlap with the predicted best algorithm.
     \item \textbf{HARRIS}~\citep{FehEtAl22}: Builds hybrid decision-tree ensembles that combine regression loss with ranking loss based on Spearman correlation. The hybrid objective aims to predict useful performance values while preserving the relative ordering of algorithms.
-    \item \textbf{Ranking by pairwise comparison (RPC)}~\citep{HulFur04}: Decomposes label ranking into binary pairwise preference problems and aggregates wins using Copeland-style scores. It can return a single algorithm or a top-$n$ parallel portfolio.
+    \item \textbf{Ranking by pairwise comparison (RPC)}~\citep{HulFur04}: Decomposes label ranking into binary pairwise preference problems and aggregates wins using Copeland-style scores. It can return a single algorithm or a top-$K_{\mathrm{port}}$ parallel portfolio.
     \item \textbf{Meta-selector}~\citep{TorEtAl23}: Uses out-of-fold predictions to measure the performance of several base selectors and trains a meta-selector to choose among them. This treats selector choice itself as an algorithm selection problem.
     \item \textbf{Bagging selector}~\citep{TorEtAl23}: Trains an ensemble of selectors on bootstrap-style resamples and aggregates their predictions. This reduces variance and can make unstable base selectors more robust.
     \item \textbf{Voting selector}~\citep{TorEtAl23}: Combines several selectors by voting over their recommended algorithms. It provides a simple ensemble mechanism when multiple selectors are plausible.
@@ -283,7 +283,7 @@ The ASlib selector benchmark tunes learned selectors with SMAC for 50 trials usi
       Min child weight & 1 \\
       Learning rate & 0.3 \\
       Colsample tree / level & 1.0 / 1.0 \\
-      $\lambda$, $\alpha$ & 1, 0 \\
+      $\lambda_{\mathrm{L2}}$, $\lambda_{\mathrm{L1}}$ & 1, 0 \\
       \bottomrule
     \end{tabular}
   \end{subtable}
@@ -465,8 +465,8 @@ The ASlib selector benchmark tunes learned selectors with SMAC for 50 trials usi
       \toprule
       Hyperparameter & Search space \\
       \midrule
-      Feature group $g$ & true/false for each ASlib feature group \\
-      Max feature time & $[0,\mathrm{budget}]$ \\
+      Feature group $\mathcal H$ & true/false for each ASlib feature group \\
+      Max feature time & $[0,B_{\mathrm{pre}}]$ \\
       \bottomrule
     \end{tabular}}
   \end{subtable}
@@ -499,7 +499,7 @@ The ASlib selector benchmark tunes learned selectors with SMAC for 50 trials usi
       Min child weight & $[1,100]$  \\
       Learning rate & $[10^{-3},10^{-1}]$ \\
       Colsample tree / level & $[0,1]$ \\
-      $\lambda$, $\alpha$ & $[10^{-3},10^3]$ \\
+      $\lambda_{\mathrm{L2}}$, $\lambda_{\mathrm{L1}}$ & $[10^{-3},10^3]$ \\
       \bottomrule
     \end{tabular}\end{subtable}
 \end{table*}
@@ -527,8 +527,8 @@ The ASlib selector benchmark tunes learned selectors with SMAC for 50 trials usi
       \toprule
       Hyperparameter & Search space \\
       \midrule
-      $k$ & $[1,50]$ \\
-      top-$n$ & $[1,20]$\\
+      $K_{\mathrm{port}}$ & $[1,50]$ \\
+      top-$K_{\mathrm{port}}$ & $[1,20]$\\
       \bottomrule
     \end{tabular}\end{subtable}
   \hfill
@@ -540,7 +540,7 @@ The ASlib selector benchmark tunes learned selectors with SMAC for 50 trials usi
       Hyperparameter & Search space \\
       \midrule
       Use v2 & True/False; \\
-      $k$ & $[1,50]$ \\
+      $K_{\mathrm{port}}$ & $[1,50]$ \\
       \bottomrule
     \end{tabular}\end{subtable}
   \begin{subtable}[t]{0.48\textwidth}
@@ -665,7 +665,7 @@ Pre-selecting a small set of algorithm--configuration pairs that perform well ac
 First, such portfolios can initialise hyperparameter optimisation procedures, letting the optimiser exploit known good regions instead of exploring from scratch.
 Second, AutoML systems such as AutoGluon~\citep{EriEtAl20} rely on pre-selected portfolios to build ensemble predictions without performing hyperparameter optimisation on the fly; selecting these portfolios well is therefore an impactful task.
 
-However, brute-force enumeration is infeasible as the candidate set grows: there are $\binom{n}{k}$ possible subsets for $n$ candidates and portfolio size $k$.
+However, brute-force enumeration is infeasible as the candidate set grows: there are $\binom{K}{K_{\mathrm{port}}}$ possible subsets for $K_{\mathrm{port}}$ candidates and portfolio size $K_{\mathrm{port}}$.
 Therefore, efficient search algorithms are required to solve the problem.
 In this section, we benchmark several such methods implemented in ASF.
 
@@ -673,7 +673,7 @@ In this section, we benchmark several such methods implemented in ASF.
 
 We use HPOBench~\citep{EggEtAl21}, which provides performance data for traditional machine learning algorithms on OpenML datasets~\citep{BisEtAl21}. Each candidate algorithm is an algorithm-hyperparameter-configuration pair, and each pre-selector constructs a compact portfolio before being evaluated on the held-out dataset.
 
-\textbf{Evaluation protocol.} We used leave-one-dataset-out evaluation. For each held-out dataset and portfolio size $k\in\{5,10,25\}$, the pre-selector was fitted only on the remaining datasets, and the selected portfolio was evaluated on the held-out dataset. We compared SBS pre-selection, marginal-contribution pre-selection, beam search, random local search, genetic search, and differential-evolution-based optimisation.
+\textbf{Evaluation protocol.} We used leave-one-dataset-out evaluation. For each held-out dataset and portfolio size $K_{\mathrm{port}}\in\{5,10,25\}$, the pre-selector was fitted only on the remaining datasets, and the selected portfolio was evaluated on the held-out dataset. We compared SBS pre-selection, marginal-contribution pre-selection, beam search, random local search, genetic search, and differential-evolution-based optimisation.
 
 \textbf{Performance metric.} Portfolio error is the minimum loss achieved by any configuration in the selected portfolio; lower is better. For visualisation, we report the normalised pre-selection SBS-VBS gap closed by the selected portfolio, where the performance of a portfolio on a dataset is defined by the lowest loss on the dataset of any configuration in the portfolio (\emph{i.e.}, we measure how good the selected portfolio compared to the portfolio consisting of all configurations). In this metric, 0 corresponds to SBS and 1 corresponds to VBS; higher is better. We also report pre-selector running time in seconds.
 
@@ -683,39 +683,39 @@ We use HPOBench~\citep{EggEtAl21}, which provides performance data for tradition
   \begin{subfigure}[t]{0.32\textwidth}
     \centering
     \includegraphics{figures/10/figures/analysis/hpobench_normalized_score_box_k5.pdf}
-    \caption{$k=5$}
+    \caption{$K_{\mathrm{port}}=5$}
   \end{subfigure}
   \begin{subfigure}[t]{0.32\textwidth}
     \centering
     \includegraphics{figures/10/figures/analysis/hpobench_normalized_score_box_k10.pdf}
-    \caption{$k=10$}
+    \caption{$K_{\mathrm{port}}=10$}
   \end{subfigure}
   \begin{subfigure}[t]{0.32\textwidth}
     \centering
     \includegraphics{figures/10/figures/analysis/hpobench_normalized_score_box_k25.pdf}
-    \caption{$k=25$}
+    \caption{$K_{\mathrm{port}}=25$}
   \end{subfigure}
 \par\medskip
   \begin{subfigure}[t]{0.32\textwidth}
     \centering
     \includegraphics{figures/10/figures/analysis/hpobench_runtime_box_k5.pdf}
-    \caption{$k=5$}
+    \caption{$K_{\mathrm{port}}=5$}
   \end{subfigure}
   \begin{subfigure}[t]{0.32\textwidth}
     \centering
     \includegraphics{figures/10/figures/analysis/hpobench_runtime_box_k10.pdf}
-    \caption{$k=10$}
+    \caption{$K_{\mathrm{port}}=10$}
   \end{subfigure}
   \begin{subfigure}[t]{0.32\textwidth}
     \centering
     \includegraphics{figures/10/figures/analysis/hpobench_runtime_box_k25.pdf}
-    \caption{$k=25$}
+    \caption{$K_{\mathrm{port}}=25$}
   \end{subfigure}
   \caption[HPOBench pre-selection quality and running time]{HPOBench portfolio pre-selection by portfolio size. The top row reports normalised pre-selection score over held-out datasets, where 0 corresponds to SBS and 1 corresponds to VBS; higher is better. The score axes are linear between $-1$ and $1$ and logarithmic outside this interval, retaining extreme negative observations. The bottom row reports pre-selector running time in seconds on a logarithmic scale; lower is better.}
   \label{fig:ch10:hpobench_normalized_score_box}
 \end{figure*}
 
-\cref{fig:ch10:hpobench_normalized_score_box} reports normalised pre-selection score in the top row and pre-selector running time in the bottom row. Overall, marginal contribution with forward selection, beam search, and random local search are the strongest methods. Their median scores are close across all portfolio sizes: random local search is strongest for $k=5$ and $k=25$, while beam search and forward marginal contribution are tied for the highest median at $k=10$. Genetic algorithm improves with larger portfolios but remains slightly behind these methods. Backward marginal contribution is much weaker and exhibits large negative outliers, while SBS-based pre-selection performs closely to the SBS (gap closed close to 0) for $k=5,10$. The overall score distributions also improve from $k=5$ to $k=25$, indicating that larger complementary portfolios close more of the gap to the VBS. We note that differential evolution resulted in out-of-memory errors, as the scipy default hyperparameters set the population size based on the solution length, which is long for this benchmark.
+\cref{fig:ch10:hpobench_normalized_score_box} reports normalised pre-selection score in the top row and pre-selector running time in the bottom row. Overall, marginal contribution with forward selection, beam search, and random local search are the strongest methods. Their median scores are close across all portfolio sizes: random local search is strongest for $K_{\mathrm{port}}=5$ and $K_{\mathrm{port}}=25$, while beam search and forward marginal contribution are tied for the highest median at $K_{\mathrm{port}}=10$. Genetic algorithm improves with larger portfolios but remains slightly behind these methods. Backward marginal contribution is much weaker and exhibits large negative outliers, while SBS-based pre-selection performs closely to the SBS (gap closed close to 0) for $K_{\mathrm{port}}=5,10$. The overall score distributions also improve from $K_{\mathrm{port}}=5$ to $K_{\mathrm{port}}=25$, indicating that larger complementary portfolios close more of the gap to the VBS. We note that differential evolution resulted in out-of-memory errors, as the scipy default hyperparameters set the population size based on the solution length, which is long for this benchmark.
 
 The methods with similar portfolio quality have different computational costs. SBS and marginal-contribution methods are very fast, BeamSearch is moderately more expensive, and random local search is the most expensive method. All evaluated pre-selectors run within about 1\,700 seconds on a single CPU core.
 
@@ -728,71 +728,71 @@ We note that we used only running time-based scenarios from ASlib, namely: SAT12
 \subsection{Pre-selection}
 
 \paragraph{Setup of experiments.}
-We evaluated portfolio pre-selectors on each ASlib scenario using the pre-defined 10-fold cross-validation. We created portfolios of requested size $k\in\{2,5,10,15,20,25,30,35,40,45,50\}$; the pre-selector was fitted only on the performance matrix of the training fold and returned $k$ solvers. The selected portfolio was then evaluated on the held-out fold by the running time of its virtual best solver.
+We evaluated portfolio pre-selectors on each ASlib scenario using the pre-defined 10-fold cross-validation. We created portfolios of requested size $K_{\mathrm{port}}\in\{2,5,10,15,20,25,30,35,40,45,50\}$; the pre-selector was fitted only on the performance matrix of the training fold and returned $K_{\mathrm{port}}$ solvers. The selected portfolio was then evaluated on the held-out fold by the running time of its virtual best solver.
 
 \textbf{Performance metric.} We report the normalised held-out pre-selection score. A score of 0 corresponds to selecting the scenario single-best solver, and a score of 1 corresponds to the full virtual best solver over all solvers. Higher values indicate that the selected portfolio preserves more of the scenario-level oracle performance.
 
 \paragraph{Results.}
-\cref{fig:ch10:aslib_preselection_a} shows the distribution of normalised held-out scores across scenarios and folds for each portfolio size. The spread is largest for small portfolios, where selecting complementary solvers is a hard task, and there is a risk of the search process getting stuck in a locally optimal portfolio. By $k=10$, several search-based methods already recover most of the full VBS performance, and increasing $k$ further mainly reduces the differences between methods. Forward marginal contribution, beam search, random local search, and genetic algorithms are consistently competitive, whereas selecting using SBS-based pre-selection or backward marginal contribution is less robust at small and medium portfolio sizes.
+\cref{fig:ch10:aslib_preselection_a} shows the distribution of normalised held-out scores across scenarios and folds for each portfolio size. The spread is largest for small portfolios, where selecting complementary solvers is a hard task, and there is a risk of the search process getting stuck in a locally optimal portfolio. By $K_{\mathrm{port}}=10$, several search-based methods already recover most of the full VBS performance, and increasing $K_{\mathrm{port}}$ further mainly reduces the differences between methods. Forward marginal contribution, beam search, random local search, and genetic algorithms are consistently competitive, whereas selecting using SBS-based pre-selection or backward marginal contribution is less robust at small and medium portfolio sizes.
 
 \begin{figure*}[!htbp]
   \centering
   \begin{subfigure}[t]{0.32\textwidth}
     \centering
     \includegraphics{figures/10/figures/analysis/preselection_normalized_score_k2.pdf}
-    \caption{$k=2$}
+    \caption{$K_{\mathrm{port}}=2$}
   \end{subfigure}
   \begin{subfigure}[t]{0.32\textwidth}
     \centering
     \includegraphics{figures/10/figures/analysis/preselection_normalized_score_k5.pdf}
-    \caption{$k=5$}
+    \caption{$K_{\mathrm{port}}=5$}
   \end{subfigure}
   \begin{subfigure}[t]{0.32\textwidth}
     \centering
     \includegraphics{figures/10/figures/analysis/preselection_normalized_score_k10.pdf}
-    \caption{$k=10$}
+    \caption{$K_{\mathrm{port}}=10$}
   \end{subfigure}
   \begin{subfigure}[t]{0.32\textwidth}
     \centering
     \includegraphics{figures/10/figures/analysis/preselection_normalized_score_k15.pdf}
-    \caption{$k=15$}
+    \caption{$K_{\mathrm{port}}=15$}
   \end{subfigure}
   \begin{subfigure}[t]{0.32\textwidth}
     \centering
     \includegraphics{figures/10/figures/analysis/preselection_normalized_score_k20.pdf}
-    \caption{$k=20$}
+    \caption{$K_{\mathrm{port}}=20$}
   \end{subfigure}
   \begin{subfigure}[t]{0.32\textwidth}
     \centering
     \includegraphics{figures/10/figures/analysis/preselection_normalized_score_k25.pdf}
-    \caption{$k=25$}
+    \caption{$K_{\mathrm{port}}=25$}
   \end{subfigure}
   \begin{subfigure}[t]{0.32\textwidth}
     \centering
     \includegraphics{figures/10/figures/analysis/preselection_normalized_score_k30.pdf}
-    \caption{$k=30$}
+    \caption{$K_{\mathrm{port}}=30$}
   \end{subfigure}
   \begin{subfigure}[t]{0.32\textwidth}
     \centering
     \includegraphics{figures/10/figures/analysis/preselection_normalized_score_k35.pdf}
-    \caption{$k=35$}
+    \caption{$K_{\mathrm{port}}=35$}
   \end{subfigure}
   \begin{subfigure}[t]{0.32\textwidth}
     \centering
     \includegraphics{figures/10/figures/analysis/preselection_normalized_score_k40.pdf}
-    \caption{$k=40$}
+    \caption{$K_{\mathrm{port}}=40$}
   \end{subfigure}
   \begin{subfigure}[t]{0.32\textwidth}
     \centering
     \includegraphics{figures/10/figures/analysis/preselection_normalized_score_k45.pdf}
-    \caption{$k=45$}
+    \caption{$K_{\mathrm{port}}=45$}
   \end{subfigure}
   \begin{subfigure}[t]{0.32\textwidth}
     \centering
     \includegraphics{figures/10/figures/analysis/preselection_normalized_score_k50.pdf}
-    \caption{$k=50$}
+    \caption{$K_{\mathrm{port}}=50$}
   \end{subfigure}
-  \caption[ASlib pre-selection quality by portfolio size]{ASlib pre-selection quality by portfolio size. Each box summarizes normalised held-out pre-selection score over folds and scenarios; higher is better. For $k=2,5$, the score axes are linear between $-1$ and $1$ and logarithmic outside this interval to retain extreme negative observations.}
+  \caption[ASlib pre-selection quality by portfolio size]{ASlib pre-selection quality by portfolio size. Each box summarizes normalised held-out pre-selection score over folds and scenarios; higher is better. For $K_{\mathrm{port}}=2,5$, the score axes are linear between $-1$ and $1$ and logarithmic outside this interval to retain extreme negative observations.}
   \label{fig:ch10:aslib_preselection_a}
 \end{figure*}
 
