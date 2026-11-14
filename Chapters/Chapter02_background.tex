@@ -1,7 +1,7 @@
 
 \chapter{Background}\label{ch:ch02:background}
 
-This chapter establishes the shared foundations for the contribution chapters: empirical performance prediction and its distributional variants, algorithm selection, and Bayesian optimisation. It also collects the SATzilla history used by the SAT chapters. Domain and benchmark descriptions follow in~\cref{ch:ch03:scenarios}, while contribution-specific related work remains with the corresponding methods.
+This chapter establishes the shared foundations for the contribution chapters: empirical performance prediction and its distributional variants, algorithm selection, and Bayesian optimisation. Domain and benchmark descriptions follow in~\cref{ch:ch03:scenarios}, while contribution-specific related work remains with the corresponding methods.
 \section{Empirical performance prediction}
 \label{sec:ch02:empirical_performance_prediction}
 
@@ -35,7 +35,26 @@ EPMs have been developed for a wide range of tasks, including automated algorith
 \subsection{Performance distribution prediction}
 \label{sec:ch02:distribution_prediction}
 
-For stochastic algorithms, the performance of $\algo$ on a fixed instance $\instance$ is a random variable. Traditional EPMs handle this stochasticity by either modelling an aggregate statistic calculated from repeated runs (\emph{e.g.}, the empirical mean or median) or training directly on noisy, single-run observations. In both cases, the EPM outputs a single scalar value, discarding all information about the variance and shape of the underlying distribution.
+For a stochastic solver, repeated runs on a fixed instance need not take the same amount of time. Let $\xi$ denote the random choices made during a run. For a fixed solver $\algo$, configuration $\configuration$, and instance $\instance$, its running time is a random variable
+\begin{equation*}
+    T_{\algo,\configuration,\instance}
+    = \tau(\algo,\configuration,\instance,\xi),
+    \qquad
+    F_{\algo,\configuration,\instance}(u)
+    = \Pr(T_{\algo,\configuration,\instance}\leq u),
+    \quad u\geq 0,
+\end{equation*}
+where $\tau$ is the elapsed time to the solver's termination criterion and $F$ is the cumulative distribution function. A run that never reaches that criterion can be assigned infinite running time. Distribution prediction seeks to estimate this conditional distribution from instance features and, where they vary, algorithm configurations, rather than predicting only an aggregate such as the mean~\citep{EggEtAl18}.
+
+If a run is stopped at a cutoff $\runtimeCutoff$, the recorded observation can be expressed as
+\begin{equation*}
+    \widetilde T = \min\{T_{\algo,\configuration,\instance},\runtimeCutoff\},
+    \qquad
+    \delta = \mathbf 1\{T_{\algo,\configuration,\instance}\leq\runtimeCutoff\}.
+\end{equation*}
+When $\delta=0$, the run is right-censored: its exact running time is unknown, but exceeds the cutoff.
+
+Traditional EPMs handle this stochasticity by either modelling an aggregate statistic calculated from repeated runs (\emph{e.g.}, the empirical mean or median) or training directly on noisy, single-run observations. In both cases, the EPM outputs a single scalar value, discarding all information about the variance and shape of the underlying distribution.
 
 To capture the complete run-to-run variation of stochastic algorithms, \citet{EggEtAl18} introduced \emph{DistNet}, a neural network that predicts the parameters of a per-instance running time distribution (\emph{e.g.}, a log-normal distribution). DistNet is trained by minimising the negative log-likelihood (NLL) of individual run observations, which is more efficient and numerically stable than a two-stage approach that first fits distribution parameters per instance and then regresses on those parameters.
 
@@ -172,21 +191,6 @@ In that case, selecting the second-best algorithm is a reasonable error.
 A plain multi-class classifier, however, treats this outcome as equally wrong as choosing an algorithm that performs very poorly on the instance.
 As we show in our ASlib experiments (\cref{sec:ch10:aslib_appendix}), multi-class classifiers can indeed perform far below the other methods in practice.
 
-\subsection{SATzilla features and their applications}
-\label{sec:ch02:satzilla_features}
-
-The SATZilla features were first introduced by Nudelman~et~al.~\cite{NudEtAl04} to construct EPMs, \emph{i.e.}, machine learning models that predict the running time of various SAT solvers given the features representing SAT instances. The authors identified key features that contribute the most towards having a good EPM prediction.
-Consequently, they used the EPMs as a basis for algorithm selection, in which the algorithm that is selected corresponds to the one with the lowest predicted running time.
-They leveraged the \textit{performance complementarity} phenomenon of SAT solvers, where no SAT solver dominates all others over all instances.
-Therefore, selecting the best solver for each instance results in substantially better performance compared to choosing any standalone solver for all instances.
-The SATZilla features were also successfully used for the satisfiability prediction task for SAT instances from various distributions~\cite{DevOSu08}.
-
-Further developments in algorithm selection led to the 2007 version of the SATZilla algorithm selector~\cite{XuEtAl08}, which combined running time and satisfiability prediction with other improvements. It won multiple medals in the SAT competition. This shows that extracting features from SAT instances can also speed up the solving process, and not only help understanding SAT. A newer version of the SATZilla algorithm selector was introduced in 2012~\cite{XuEtAl12}, winning multiple awards as well. It used a random forest as a predictor, and introduced an ensemble of pairwise classifiers to establish a ranking of the solvers, instead of predicting the running times directly. Additional features were introduced thereafter, revealing further important information about SAT instances.
-
-Another common usage of the SATZilla features is (model-based) algorithm configuration. To this end, the hyperparameters of SAT solvers are optimised such that their performance is as good as possible on all instances. As running SAT solvers is computationally expensive, a surrogate model is employed; it takes as an input a configuration of hyperparameters and instance features and predicts the performance of the SAT solver using a given configuration on a given instance. The instance features boost the accuracy of the surrogate model. An example of that is SMAC~\cite{HutEtAl11}, which successfully used the SATZilla features to optimise the performance of a wide range of SAT solvers on various benchmarks.
-
-Last but not least, feature-based EPMs are proven to be useful for benchmark generation~\cite{LeyEtAl09}. In this context, given a new instance, we compute the features, which is usually cheaper than running a SAT solver, and use the EPM to predict whether the instance is hard (or not) for the solvers at hand.
-
 \subsection{Performance prediction versus ranking}
 
 To model performance, one should account for the distribution of the performance, which can require preprocessing of the labels, such as log-transformation~\citep{HutEtAl14}. However, EPM-based algorithm selection is often not the practically best approach, essentially because accurately predicting exact performance values is generally a harder task than determining the relative ranking of algorithms.
@@ -194,23 +198,40 @@ To model performance, one should account for the distribution of the performance
 \section{Bayesian optimisation}
 \label{sec:ch02:bayesian_optimisation}
 
-This section introduces hyperparameter optimisation and the surrogate-based search framework used in \cref{ch:ch06:dymbo,ch:ch08:noisy_oracle}.
+This section introduces hyperparameter optimisation and Bayesian optimisation as a search framework for black-box objectives used in \cref{ch:ch06:dymbo,ch:ch08:noisy_oracle}.
 
-\subsection{Hyperparameter optimisation} Let $\algo$ be a learning algorithm with $d_c$ hyperparameters, $\mathcal C_{h}$ the domain of the $h$-th hyperparameter, and $\configurationSpace = \mathcal C_{1} \times \mathcal C_{2} \times \dots \mathcal C_{d_c}$ the overall hyperparameter configuration space.
-We denote a hyperparameter configuration by $\configuration \in \configurationSpace$, and the algorithm $\algo$ with its hyperparameters instantiated to $\configuration$ by $\algo_{\configuration}$.
-Given a dataset $\mathcal D$, the objective of HPO is to find a hyperparameter configuration $\configuration^{*}$ that minimises the loss $\mathcal{L}$ of a model fitted by algorithm $\algo$ with hyperparameters $\configuration$ on training data ${\mathcal D}_{train}$, and evaluated on validation data ${\mathcal D}_{validate}$, for a given loss function $\mathcal{L}$, \emph{i.e.},
+\subsection{Hyperparameter optimisation}
+\label{sec:ch02:hpo}
+
+\new{Hyperparameter optimisation} (HPO) seeks settings of a learning algorithm that minimise its validation loss~\citep{BisEtAl23}. Let $\algo$ be a learning algorithm, $\configurationSpace$ its hyperparameter configuration space, and $\mathcal D_{\mathrm{train}}$ and $\mathcal D_{\mathrm{validate}}$ fixed training and validation data. For $\configuration\in\configurationSpace$, let $\algo_{\configuration}$ denote the algorithm with that configuration. The HPO objective is
 \begin{equation}
 \label{eq:ch02:def-hpo}
-\configuration^{*} \in \argmin_{\configuration \in \configurationSpace}
-\mathcal{L}(\algo_{\configuration}, {\mathcal D}_{train}, {\mathcal D}_{validate}) = \argmin_{\configuration \in \configurationSpace} f(\configuration)
+    f(\configuration) =
+    \mathcal L(\algo_{\configuration},\mathcal D_{\mathrm{train}},
+    \mathcal D_{\mathrm{validate}}),
+    \qquad
+    \configuration^* \in \argmin_{\configuration\in\configurationSpace}
+    f(\configuration),
 \end{equation}
-Here, $f(\configuration)$ is a shorthand for the loss function when $\algo_{\configuration}$ and $\mathcal D$ are fixed.
-Note that $f(\configuration)$ is a black-box function, without a closed-form expression nor analytic gradient information.
+where $\mathcal L$ denotes the loss obtained by training on $\mathcal D_{\mathrm{train}}$ and evaluating the fitted model on $\mathcal D_{\mathrm{validate}}$. Cross-validation can replace a single split by averaging this loss over multiple training and validation splits. Randomised training can make evaluations stochastic; an expected validation loss then defines the underlying objective.
+
+Hyperparameters specify choices such as a learning rate, a regularisation strength, or a model family, rather than the model weights fitted during training. Their domains can be continuous, integer-valued, or categorical. A configuration space can also be conditional: a parameter may only be active when a particular model family or component is selected. HPO is therefore a black-box optimisation problem whose search space need not be a simple continuous box. Its evaluations are often expensive because each configuration requires fitting and validating a model.
+
+For $d_c$ hyperparameters with individual domains $\mathcal C_h$, the admissible space satisfies $\configurationSpace\subseteq\mathcal C_1\times\cdots\times\mathcal C_{d_c}$. Equality holds for independent, unconstrained parameters; conditional parameters and constraints restrict the admissible configurations.
 
 \subsection{Bayesian optimisation}
 \label{sec:ch02:bac_bo}
 
 Bayesian optimisation (BO)~\citep{Mockus12b,Garnett23,Frazier18b,Kushner62,Kushner64b} is a family of surrogate-based algorithms for efficient global optimisation of black-box problems.
+Let $f:\configurationSpace\rightarrow\mathbb R$ be the black-box objective to be minimised over the search space $\configurationSpace$. The optimiser can query $f(\configuration)$ at selected configurations, but is not supplied with an analytical expression or derivatives of $f$. Given a budget of $B_{\mathrm{eval}}$ evaluations, it selects $n_{\mathrm{eval}}\leq B_{\mathrm{eval}}$ configurations, potentially using earlier observations to choose later ones, and returns an incumbent. For noiseless evaluations, the best evaluated configuration is
+\begin{equation*}
+    \configuration^{\mathrm{inc}} \in
+    \argmin_{\configuration\in
+    \{\configuration^{(1)},\ldots,\configuration^{(n_{\mathrm{eval}})}\}}
+    f(\configuration).
+\end{equation*}
+In practice, a budget may instead limit wall-clock time. Evaluations may also be noisy, in which case an observed value is a random outcome and the objective can be defined as its expectation. Limited evaluations require a balance between exploring unknown regions and improving on promising configurations~\citep{Garnett23}.
+
 Typically, BO consists of three main components: an \emph{initial design}, \emph{i.e.}, in HPO, a set of candidate hyperparameter configurations $\mathcal C_{\mathrm{obs}} = (\configuration^{(1)},\ldots, \configuration^{(n_0)})$ and their evaluations
 $f(\mathcal C_{\mathrm{obs}}) = (f(\configuration^{(1)}),\ldots, f(\configuration^{(n_0)}))$; a \emph{surrogate model} (fitted to the
 observations) that returns an approximation $\hat{f}(\configuration)$ of the unknown loss function $f(\configuration)$ while capturing the uncertainty in the prediction $\hat{\sigma}(\configuration)$ on unobserved points in the search space; and an \emph{acquisition function}, which is optimised to suggest candidate solutions to be evaluated next, usually balancing exploration and exploitation of the search space.

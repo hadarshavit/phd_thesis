@@ -3,13 +3,28 @@
 \section{Introduction}
 \label{sec:ch04:intro}
 
-The first contribution chapter addresses a prerequisite for empirical performance prediction: informative instance features must be available within a practical computational budget. The SAT problem and its graph representations are introduced in~\cref{ch:ch03:scenarios,sec:ch03:sat-graphs}, and the development and applications of SATzilla features are reviewed in~\cref{sec:ch02:satzilla_features}. Here, we examine whether modernising the feature extraction infrastructure improves both feature availability and the decisions made from those features.
+The first contribution chapter addresses a prerequisite for empirical performance prediction: informative instance features must be available within a practical computational budget. The SAT problem and its graph representations are introduced in~\cref{ch:ch03:scenarios,sec:ch03:sat-graphs}, and the development and applications of SATzilla features are reviewed in~\cref{sec:ch04:satzilla-applications}. Here, we examine whether modernising the feature extraction infrastructure improves both feature availability and the decisions made from those features.
 
 The widely used SATzilla feature extractor had not kept pace with contemporary SAT instances. Its latest version dated from 2012, while growing formula sizes increased preprocessing time and memory requirements. Compilation problems, outdated solver components, and hard-coded time limits could prevent features from being computed at all. These failures affect the inputs available to downstream prediction and selection methods.
 
 In this chapter, we introduce an updated feature extraction tool that replaces the underlying solvers and preprocessor, fixes compilation and memory errors, and exposes feature computation time limits to the user. We compare the updated tool with the 2012 version on instances from the 2022 and 2023 SAT Competitions. The evaluation covers feature extraction time and availability, followed by satisfiability prediction, running-time prediction, and algorithm selection. Across these three downstream tasks, the reported results favour the updated tool.
 
-This chapter establishes the infrastructure perspective on representation quality that begins this part of the thesis. \Cref{sec:ch04:satzilla-features} describes the feature groups and changes to the extractor, \cref{sec:ch04:experiments} presents the evaluation, and \cref{sec:ch04:conclusions} discusses the implications.
+This chapter establishes the infrastructure perspective on representation quality that begins this part of the thesis. \Cref{sec:ch04:satzilla-applications} reviews the development and applications of SATzilla features, \cref{sec:ch04:satzilla-features} describes the feature groups and changes to the extractor, \cref{sec:ch04:experiments} presents the evaluation, and \cref{sec:ch04:conclusions} discusses the implications.
+
+\section{SATzilla features and their applications}
+\label{sec:ch04:satzilla-applications}
+
+The SATZilla features were first introduced by Nudelman~et~al.~\cite{NudEtAl04} to construct EPMs, \emph{i.e.}, machine learning models that predict the running time of various SAT solvers given the features representing SAT instances. The authors identified key features that contribute the most towards having a good EPM prediction.
+Consequently, they used the EPMs as a basis for algorithm selection, in which the algorithm that is selected corresponds to the one with the lowest predicted running time.
+They leveraged the \textit{performance complementarity} phenomenon of SAT solvers, where no SAT solver dominates all others over all instances.
+Therefore, selecting the best solver for each instance results in substantially better performance compared to choosing any standalone solver for all instances.
+The SATZilla features were also successfully used for the satisfiability prediction task for SAT instances from various distributions~\cite{DevOSu08}.
+
+Further developments in algorithm selection led to the 2007 version of the SATZilla algorithm selector~\cite{XuEtAl08}, which combined running time and satisfiability prediction with other improvements. It won multiple medals in the SAT competition. This shows that extracting features from SAT instances can also speed up the solving process, and not only help understanding SAT. A newer version of the SATZilla algorithm selector was introduced in 2012~\cite{XuEtAl12}, winning multiple awards as well. It used a random forest as a predictor, and introduced an ensemble of pairwise classifiers to establish a ranking of the solvers, instead of predicting the running times directly. Additional features were introduced thereafter, revealing further important information about SAT instances.
+
+Another common usage of the SATZilla features is (model-based) algorithm configuration. To this end, the hyperparameters of SAT solvers are optimised such that their performance is as good as possible on all instances. As running SAT solvers is computationally expensive, a surrogate model is employed; it takes as an input a configuration of hyperparameters and instance features and predicts the performance of the SAT solver using a given configuration on a given instance. The instance features boost the accuracy of the surrogate model. An example of that is SMAC~\cite{HutEtAl11}, which successfully used the SATZilla features to optimise the performance of a wide range of SAT solvers on various benchmarks.
+
+Last but not least, feature-based EPMs are proven to be useful for benchmark generation~\cite{LeyEtAl09}. In this context, given a new instance, we compute the features, which is usually cheaper than running a SAT solver, and use the EPM to predict whether the instance is hard (or not) for the solvers at hand.
 
 \section{SATZilla features}
 \label{sec:ch04:satzilla-features}

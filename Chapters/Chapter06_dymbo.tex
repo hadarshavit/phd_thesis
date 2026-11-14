@@ -81,7 +81,7 @@ We provide the code, instructions for reproducibility, as well as all figures in
     \label{fig:ch06:box_plot_mean_rank}
 \end{figure}
 
-\Cref{sec:ch06:back-rw} specifies the local surrogate and HEBO choices and positions DyMBO relative to dynamic BO components and ensembles. \Cref{sec:ch06:method} introduces the weighting and selection mechanism. \Cref{sec:ch06:experiments} describes the experimental protocol, using the benchmark families introduced in~\cref{sec:ch03:hpo_benchmarks}. Results and ablations follow in~\cref{sec:ch06:res}, and \cref{sec:ch06:concl-fw} discusses the conclusions and remaining limitations.
+\Cref{sec:ch06:back-rw} specifies the local surrogate and HEBO choices and positions DyMBO relative to dynamic BO components and ensembles. \Cref{sec:ch06:method} introduces the weighting and selection mechanism. \Cref{sec:ch06:experiments} describes the experimental protocol, using the benchmark families introduced in~\cref{sec:ch03:hpo_benchmarks,sec:ch03:nas_bench301,sec:ch03:jahs_bench201}. Results and ablations follow in~\cref{sec:ch06:res}, and \cref{sec:ch06:concl-fw} discusses the conclusions and remaining limitations.
 
 \section{Background and related work}
 \label{sec:ch06:back-rw}
@@ -348,7 +348,7 @@ For other HPO baselines, which are well-known methods that have been curated to 
 \subsection{Benchmark details}
 \label{sec:ch06:benchs}
 
-The benchmark families and configuration spaces are described in \cref{sec:ch03:hpo_benchmarks}. The following budget calculation applies to the experiments in this chapter.
+The benchmark families and configuration spaces are described in \cref{sec:ch03:hpo_benchmarks,sec:ch03:nas_bench301,sec:ch03:jahs_bench201}. The following budget calculation applies to the experiments in this chapter.
 
 \paragraph{Evaluation budget.}
 All YAHPO Gym and JAHS-Bench-201 surrogates predict the running time required to train and evaluate the model using a specific configuration.

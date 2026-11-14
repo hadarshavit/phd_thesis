@@ -1,8 +1,7 @@
 \chapter{Scenarios and Algorithms}
 \label{ch:ch03:scenarios}
 
-This chapter collects the problem representations and benchmark descriptions used in the contribution chapters. It begins with SAT and its graph representations, then introduces the machine learning, black-box optimisation, and stochastic running-time scenarios. Experimental budgets, model settings, and evaluation procedures are specified in the chapters that use them.
-
+This chapter introduces the problem types, representations, and benchmarks considered in this thesis. It begins with SAT and automated planning, followed by black-box optimisation, hyperparameter optimisation, and neural architecture search. The remaining sections introduce tabular classification datasets, stochastic solver running times, and out-of-distribution generalisation. The problem descriptions are followed by their representations or benchmark collections; the HPO and running-time distribution foundations are given in the background chapter.
 
 \section{SAT}
 
@@ -35,91 +34,135 @@ The VG and the unlabelled VCG do not distinguish positive from negative occurren
 
 These representations support two approaches to empirical performance prediction. The SATzilla features summarise graph structure through hand-crafted statistics, as discussed in~\cref{ch:ch04:rev_SATzilla}. GraphBench instead provides graph representations as inputs to graph neural networks, with application-specific node and edge encodings described in~\cref{ch:ch07:gnns_epms}.
 
-\section{Machine learning datasets}
-\label{sec:ch03:tabular_data}
+\section{Automated planning}
+\label{sec:ch03:planning}
 
-The following collections are used for the dimensionality reduction assessment in \cref{ch:ch05:dim_red}.
+\new{Automated planning} is the task of finding a sequence of actions that transforms an initial state into a state satisfying a goal. In classical propositional planning, a task can be written as
+\begin{equation*}
+    \Pi = (\mathcal P, \mathcal O, s_0, G),
+\end{equation*}
+where $\mathcal P$ is a finite set of propositions, $\mathcal O$ is a finite set of actions, $s_0 \subseteq \mathcal P$ is the initial state, and $G \subseteq \mathcal P$ is the goal. A state $s \subseteq \mathcal P$ contains exactly the propositions that are true. In the STRIPS representation, each action $o \in \mathcal O$ has preconditions $\operatorname{pre}(o)$, add effects $\operatorname{add}(o)$, and delete effects $\operatorname{del}(o)$, all subsets of $\mathcal P$. It is applicable when $\operatorname{pre}(o) \subseteq s$, and its successor state is
+\begin{equation*}
+    \gamma(s,o) = \bigl(s \setminus \operatorname{del}(o)\bigr)
+    \cup \operatorname{add}(o).
+\end{equation*}
+A valid plan is a finite sequence $\pi = (o_1,\ldots,o_{n_{\mathrm{act}}})$ such that every action is applicable in the preceding state and the resulting states satisfy
+\begin{equation*}
+    s_j = \gamma(s_{j-1},o_j)
+    \quad (j=1,\ldots,n_{\mathrm{act}}),
+    \qquad G \subseteq s_{n_{\mathrm{act}}}.
+\end{equation*}
+This formulation assumes deterministic actions and a fully observed state. The task is to find a valid plan; cost-sensitive variants additionally minimise the sum of action costs. Planning formalisms can also express temporal and numerical constraints beyond this propositional setting.
 
-We used the OpenML~CC-18~\citep{BisEtAl21} and the classification datasets from the AutoML Benchmark~\citep{GijEtAl24},
-a well-known dataset collection used for benchmarking tabular machine learning algorithms. The collection contains various tabular classification datasets from different domains, with different sizes, numbers of classes, and other characteristics.
-Each dataset comes with a set of pre-defined splits for $10$-fold cross-validation.
+\subsection{Planning representations and Zenotravel}
 
-\section{Black-box optimisation benchmarks}
+Planning tasks are commonly specified in the Planning Domain Definition Language (PDDL), separating the domain's action schemas from the objects, initial state, and goal of an instance. Their structure can be represented by causal graphs, which describe dependencies between state variables, and domain transition graphs, which describe possible value transitions of individual variables. Feature sets also include syntactic PDDL properties, planning-graph information, and statistics from short probing runs. A bounded planning task can be translated into a SAT formula, making SAT features available as an additional representation~\citep{KauSel96,FawEtAl14}.
+
+We consider LPG--Zenotravel~\citep{EggEtAl18}. Zenotravel tasks involve transporting passengers between cities using aircraft, subject to fuel requirements and refuelling actions. LPG is a planner based on local search over planning graphs~\citep{GerSer02}. Its stochastic search can produce different running times on the same instance, so repeated runs characterise a distribution rather than a single deterministic running time.
+
+\section{Black-box optimisation}
+\label{sec:ch03:bbo}
+
+\new{Black-box optimisation} (BBO) seeks a solution with the best objective value when information about the objective is obtained through evaluations. Let $\configurationSpace$ be a search space and $f:\configurationSpace\rightarrow\mathbb R$ a single-objective function to be minimised. The optimisation problem is
+\begin{equation*}
+    \configuration^* \in \argmin_{\configuration\in\configurationSpace}
+    f(\configuration).
+\end{equation*}
+A search space may be continuous, discrete, or mixed, and may include constraints or conditional parameters. Even for continuous domains, objectives can differ substantially in separability, conditioning, and multimodality. Synthetic benchmarks allow these properties to be varied systematically while keeping the objective and its optimum available to the benchmark designer.
+
 \subsection{BBOB}
 \label{sec:ch03:bbob}
 
-We considered the Black-Box Optimisation Benchmark (BBOB) noiseless problem collection from the COCO framework~\citep{HanEtAl21}, accessible via the IOHprofiler tool~\citep{DoeEtAl18,WanEtAl22,DeNEtAl24}.
-BBOB is a widely used benchmarking suite for assessing the performance of black-box optimisers, designed to cover a range of representative problems that are
-widely used in scientific studies of  numerical  black-box optimisation;
-for this reason, it is a particularly appropriate choice for our use-case.
-It is composed of 24 continuous, noiseless, single-objective and scalable test functions defined on $[-5,5]^{d_{\mathrm{in}}}$, with known difficulty (\emph{e.g.,} nonseparability, ill-conditioning, different levels of multimodality, adequate or weak global structure, etc.).
-For each function, we can generate arbitrarily many different instances by applying transformations (typically translations and rotations) to both the search space and the objective space.
-The BBOB problems are categorised into the following five classes: separable functions (f1-f5), functions with low or moderate conditioning (f6-f9),
-functions with high conditioning and unimodal structure (f10-f14), multimodal functions with appropriate global structure (f15-f19), and multimodal functions with weak global structure (f20-f24).
+The noiseless Black-Box Optimisation Benchmarking (BBOB) suite is part of the COCO framework~\citep{HanEtAl21} and is also accessible through IOHprofiler~\citep{DoeEtAl18,WanEtAl22,DeNEtAl24}. It contains 24 continuous, noiseless, single-objective function families that scale with the search dimension $d_{\mathrm{in}}$. The functions are defined on $\mathbb R^{d_{\mathrm{in}}}$, with $[-5,5]^{d_{\mathrm{in}}}$ serving as the standard region of interest. Their analytical construction makes it possible to control properties that affect optimisation difficulty, including nonseparability, ill-conditioning, and the number and arrangement of local optima.
 
+Different instances of a function family are generated using transformations such as translations and, depending on the function, rotations of the search space, together with transformations of objective values. This varies the location and orientation of a problem while retaining its characteristic structure. The suite groups the functions into five classes:
+\begin{itemize}
+    \item Separable functions ($f_1$--$f_5$).
+    \item Functions with low or moderate conditioning ($f_6$--$f_9$).
+    \item Unimodal functions with high conditioning ($f_{10}$--$f_{14}$).
+    \item Multimodal functions with adequate global structure ($f_{15}$--$f_{19}$).
+    \item Multimodal functions with weak global structure ($f_{20}$--$f_{24}$).
+\end{itemize}
+Separable functions allow coordinates to be optimised independently. Ill-conditioned functions have very different scales of variation in different directions, while multimodal functions contain multiple local optima. Global structure describes how strongly the overall landscape guides a search towards the global optimum.
+
+\section{Hyperparameter optimisation benchmarks}
+\label{sec:ch03:hpo_benchmarks_overview}
+
+Surrogate-based HPO benchmarks replace model training and validation runs with predictions from a model fitted to previously collected evaluations. They approximate the response surface of a real learning task while allowing many optimisation runs at much lower computational cost. Such a benchmark surrogate supplies objective values to the optimiser; it is distinct from a surrogate that the optimiser itself fits to guide its search.
 
 \subsection{PD1}
 \label{sec:ch03:pd1}
 
-The noisy oracle study in \cref{ch:ch08:noisy_oracle} uses the following real-world benchmark.
+PD1 provides deep-learning hyperparameter optimisation tasks, with surrogate-based evaluations available through the benchmark implementation used by~\citet{MalEtAl23}. Each target function fixes a dataset and a neural network architecture, such as a wide ResNet on CIFAR-100, and maps training hyperparameters to a validation error. The PD1 subset used here consists of four target functions with continuous hyperparameters. These four targets are the selected benchmark tasks, rather than the full set of tasks in the original PD1 collection.
 
-We also used the PD1 surrogate-based benchmark~\citep{MalEtAl23}, which is a hyperparameter optimisation benchmark for neural networks.
-In PD1, each target function is a combination of a dataset and a neural network architecture (for example, wide ResNet on CIFAR100).
-PD1 contains four target functions, and the goal is to optimise the hyperparameters of a neural network in order to minimise the error. PD1 contains purely continuous hyperparameters.
+The search parameters control the training procedure, including the learning rate and momentum. The network architecture remains fixed within each task. Unlike BBOB's analytically constructed functions, these surrogate objectives approximate performance surfaces obtained from training neural networks on data.
 
-\subsection{YAHPO Gym and JAHS-Bench-201}
+\subsection{YAHPO Gym}
 \label{sec:ch03:hpo_benchmarks}
 
-The following benchmark descriptions support the DyMBO experiments in \cref{ch:ch06:dymbo}.
+\new{Yet Another HPO Benchmark (YAHPO) Gym}~\citep{PfiEtAl22} is a collection of surrogate-based benchmarks covering multiple learning algorithms, datasets, objectives, and fidelity levels. A scenario specifies a configuration space and the quantities predicted by its surrogate; an instance typically fixes a dataset. The surrogate can predict performance measures such as accuracy, as well as evaluation costs such as training time. Fidelity parameters, such as the fraction of training data or the number of training epochs, allow evaluations at different resource levels.
 
-\textbf{Yet Another HPO Benchmark (YAHPO) Gym}~\citep{PfiEtAl22} is a surrogate-based benchmark for hyperparameter optimisation on tabular machine learning tasks.
-The benchmark consists of multiple datasets from OpenML and various machine learning algorithms.
-The authors provide a surrogate model for each machine learning algorithm and a dataset that predicts different objectives, such as accuracy, training time, and more.
+The rbv2 scenarios cover random forests, decision trees, elastic-net models, support vector machines, gradient boosting, and nearest-neighbour methods~\citep{BinEtAl20}. The iaml scenarios include elastic-net models, decision trees, random forests, and gradient boosting~\citep{PfiEtAl22}. In the rbv2\_super and iaml\_super scenarios, an additional categorical parameter selects the learning algorithm, and its choice activates the corresponding hyperparameters. These scenarios therefore combine algorithm selection and hyperparameter optimisation in a conditional search space.
 
-% YAHPO Gym contains several scenarios.
-% Each scenario has a configuration space and is based on a machine learning algorithm.
-% Each scenario contains multiple datasets, which are called instances.
-% The YAHPO Gym scenarios are: \\
-% \textbf{rbv2\_ranger}~\citep{BinEtAl20}: RF using the ranger R implementation.\\
-%     \textbf{rbv2\_rpart}~\citep{BinEtAl20}: decision tree using the mlr implementation.\\
-%     \textbf{rbv2\_glmnet}~\citep{BinEtAl20}: generalised linear models (GLM) with elastic net regularisation using the mlr implementation.\\
-%     \textbf{rbv2\_svm}~\citep{BinEtAl20}: support vector machine (SVM) with the mlr implementation.\\
-%     \textbf{rbv2\_xgboost}~\citep{BinEtAl20}: gradient boosting using XGBoost.\\
-%     \textbf{rbv2\_aknn}~\citep{BinEtAl20}: k-nearest neighbours using the mlr implementation.\\
-%     \textbf{rbv2\_super}~\citep{BinEtAl20}: a combined algorithm selection and hyperparameter optimisation (CASH) scenario that uses all the above rbv2 scenarios.\\
-%     \textbf{iaml\_glment}~\citep{PfiEtAl22}: generalised linear models (GLM) with elastic net regularisation using the mlr implementation.\\
-%     \textbf{iaml\_rpart}~\citep{PfiEtAl22}: decision tree using the mlr implementation.\\
-%     \textbf{iaml\_ranger}~\citep{PfiEtAl22}: RF using the ranger R implementation.\\
-%     \textbf{iaml\_xgboost}~\citep{PfiEtAl22}: gradient boosting using XGBoost.\\
-%     \textbf{iaml\_super}~\citep{PfiEtAl22}: combined algorithm selection and hyperparameter optimisation (CASH) scenario that uses all the above iaml scenarios.\\
-%     \textbf{LCBench}~\citep{ZimEtAl21b}: optimising the training hyperparameters and architecture of multi-layer perceptron on tabular datasets.\\
-%     \textbf{FCNet}~\citep{FalEtAl18}: hyperparameter optimisation of a fully-connected network for tabular data.\\
-%     \textbf{NAS-Bench-301}~\citep{ZelEtAl22}: neural architecture search (NAS) scenario using a constant set of training hyperparameters. The search space describes a cell of the neural network and the hyperparameters are different operations done in each cell.
+Although the rbv2 and iaml families overlap in their learning algorithms, their configuration spaces differ. For example, rbv2 includes an input-imputation choice that is fixed in iaml, and some hyperparameter ranges differ, including the number of boosting rounds in XGBoost. LCBench and FCNet provide additional neural-network configuration spaces for tabular learning~\citep{ZimEtAl21b,FalEtAl18}. The optimisation experiments considered here use predictive accuracy as their target metric, or its equivalent minimisation form. YAHPO Gym also includes a NAS-Bench-301 scenario; its architecture space is described separately in~\cref{sec:ch03:nas_bench301}.
 
-For details on configuration spaces, we refer the reader to original papers.
-The configuration spaces for the rbv2 scenarios are taken from~\citep{BinEtAl20}.
-For rbv2\_super, the configuration space contains all the configuration spaces of individual algorithms, with an additional hyperparameter which selects the algorithm.
-The configuration spaces for the iaml scenarios are taken from~\citep{PfiEtAl22}; the iaml\_super scenario is similar to rbv2\_super, where there is an additional hyperparameter to select the algorithm.
-While the iaml and rbv2 scenarios look similar, there are a few differences in the configuration space.
-First, the configuration space of rbv2 contains the input imputation used, while in iaml the input imputation is constant.
-Another difference is a different range of hyperparameters (for example, the number of rounds in XGBoost).
-In all scenarios, the target metric is accuracy, as defined in~\citep{PfiEtAl22}.
-The configuration spaces for LCBench, FCNet and NAS-Bench-301 are taken from~\citep{ZimEtAl21b,FalEtAl18,ZelEtAl22}, respectively.
-Additionally, we benchmarked our method on \textbf{JAHS-Bench-201}~\citep{BanEtAl22}: a neural architecture search (NAS) benchmark that optimises both the architecture of the neural network and the training hyperparameters. The benchmark contains three datasets: CIFAR10, Fashion MNIST and Colorectal Histology.
+\section{Neural architecture search}
+\label{sec:ch03:nas}
 
+\new{Neural architecture search} (NAS) optimises the structure of a neural network, including its connectivity and operations~\citep{ElsEtAl19}. Let $\mathcal H$ be a space of architectures and $\eta\in\mathcal H$ an architecture. For fixed training hyperparameters $\configuration_0$, define
+\begin{equation*}
+    f(\eta,\configuration_0) =
+    \mathcal L(\algo_{\eta,\configuration_0},
+    \mathcal D_{\mathrm{train}},\mathcal D_{\mathrm{validate}}),
+    \qquad
+    \eta^*\in\argmin_{\eta\in\mathcal H} f(\eta,\configuration_0),
+\end{equation*}
+where $\algo_{\eta,\configuration_0}$ trains the network specified by $\eta$ using $\configuration_0$. Here, $\mathcal D_{\mathrm{train}}$ and $\mathcal D_{\mathrm{validate}}$ are training and validation data, and $\mathcal L$ measures the validation loss of the trained model. In joint architecture and hyperparameter search, both choices vary:
+\begin{equation*}
+    (\eta^*,\configuration^*)\in
+    \argmin_{\substack{\eta\in\mathcal H,\\
+    \configuration\in\configurationSpace(\eta)}}
+    f(\eta,\configuration).
+\end{equation*}
+Here, $\configurationSpace(\eta)$ permits the admissible training hyperparameters to depend on the architecture. Both formulations treat the weights learned during training as an outcome of an evaluation, rather than as the search variables.
+
+An architecture is commonly represented as a directed acyclic graph, with operations assigned to nodes or edges and connections specifying the flow of intermediate representations. Cell-based spaces search for small computational graphs that are repeated to form a complete network. These structured, largely discrete spaces can be evaluated through surrogate benchmarks, avoiding the cost of training every candidate architecture.
+
+\subsection{NAS-Bench-301}
+\label{sec:ch03:nas_bench301}
+
+NAS-Bench-301~\citep{ZelEtAl22} provides surrogate predictions for architectures in the cell-based DARTS search space on CIFAR-10. An architecture specifies normal and reduction cells through choices of connections and operations. The training hyperparameters are fixed, so the search concerns the architecture itself. Surrogate predictions approximate the validation performance and running time of architectures without requiring a new training run for each evaluation. The YAHPO Gym interface exposes this benchmark as an architecture-search scenario.
+
+\subsection{JAHS-Bench-201}
+\label{sec:ch03:jahs_bench201}
+
+JAHS-Bench-201~\citep{BanEtAl22} is a surrogate-based benchmark for joint architecture and hyperparameter search. It extends the cell-based NAS-Bench-201 architecture space with training hyperparameters, allowing both the network's operations and its training procedure to be optimised. It contains tasks on CIFAR-10, Fashion-MNIST, and Colorectal Histology, and provides predictions of performance and evaluation cost. In contrast to the fixed training settings of NAS-Bench-301, its joint space captures interactions between architectural decisions and hyperparameters such as the learning rate and weight decay.
+
+\section{Machine learning datasets}
+\label{sec:ch03:tabular_data}
+
+The datasets considered here are tabular classification tasks, with numerical or categorical input attributes. They differ in their number of observations, input dimensions, class counts, and class balance.
+
+\subsection{OpenML CC-18 and the AutoML Benchmark}
+
+We use the OpenML CC-18 collection~\citep{BisEtAl21} and the classification datasets from the AutoML Benchmark~\citep{GijEtAl24}. Both provide tabular classification tasks from different domains, covering a range of dataset sizes and characteristics. The tasks supply predefined training and test splits for 10-fold cross-validation, allowing learning algorithms to be evaluated on the same partitions.
 
 \section{Stochastic solver running times}
 \label{sec:ch03:stochastic_solvers}
 
-The distribution prediction and explanation study in \cref{sec:ch09:dist_explain} uses the following scenarios.
-
-We empirically evaluated our approach on seven scenarios introduced by~\citet{EggEtAl18}: six from SAT solving and one from the automated planning domain, each with 2\,000--12\,000 instances and 100 solver runs per instance.
-The performance metric is the running time of the solver; running times, instance features, and preprocessing steps follow~\citet{EggEtAl18}.
+We use seven scenarios introduced by~\citet{EggEtAl18}: six from SAT solving and one from automated planning, LPG--Zenotravel. Each scenario fixes a solver and a problem distribution, with 2\,000--12\,000 instances and 100 solver runs per instance. The performance metric is solver running time; the running-time observations, instance features, and preprocessing follow~\citet{EggEtAl18}.
 
 \section{Out-of-distribution generalisation}
 \label{sec:ch03:ood}
 
-Deep learning models are prone to failure when the distribution of the test data differs from the training data (known as distribution shift; see, \emph{e.g.}, \citet{WilEtAl22}). OOD generalisation aims to train models that are robust to such shifts.
-However, there exist numerous methods for the task, each specialising in different types of distribution-shift settings.
-The OOD-Chameleon framework~\citep{JiaTen25} introduced algorithm selection for OOD generalisation in vision and language tasks, proposing a novel feature set that captures properties such as training-label imbalance.
-The authors showed that algorithm selection can achieve state-of-the-art results, surpassing all single algorithms.
+\new{Out-of-distribution generalisation} concerns predictive performance when training and test data follow different distributions~\citep{WilEtAl22}. Let $P_{\mathrm{train}}$ and $P_{\mathrm{test}}$ be joint distributions over an input space $\mathcal U$ and label space $\mathcal Y$, with $P_{\mathrm{train}}\neq P_{\mathrm{test}}$. Given data drawn from $P_{\mathrm{train}}$, a learning procedure seeks a predictor $h$ with low test risk
+\begin{equation*}
+    R_{P_{\mathrm{test}}}(h) =
+    \mathbb E_{(\mathbf u,y)\sim P_{\mathrm{test}}}
+    [\ell(h(\mathbf u),y)].
+\end{equation*}
+Here, $\ell$ measures prediction error. A difference between the distributions is a distribution shift; it may affect input marginals, label proportions, or the relationship between inputs and labels. Low training risk alone does not guarantee low test risk under such a shift. Meaningful generalisation therefore depends on assumptions about which aspects of the data-generating process can change. In domain generalisation, the predictor is learned without access to labelled target-domain data, often using several source domains.
+
+\subsection{OOD-Chameleon}
+
+The OOD-Chameleon framework~\citep{JiaTen25} studies algorithm selection for OOD generalisation in vision and language tasks. It characterises learning tasks through features that include training-label imbalance, and selects among methods designed for different shift settings. Its benchmarks illustrate that the relative performance of these methods depends on the task and shift, motivating selection rather than a single fixed choice.
