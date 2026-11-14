@@ -1,0 +1,97 @@
+\chapter{Conclusions and Future Directions}
+\label{ch:ch12:conclusions}
+
+Empirical performance prediction supports decisions about which algorithm to run, how to configure it, and where to spend a limited computational budget. Its usefulness depends on the information available to a model, the errors the model makes, and the way its predictions enter a decision procedure. This dissertation investigated these dependencies through feature extraction, dimensionality reduction, adaptive surrogate modelling, graph-based prediction, controlled studies of surrogate accuracy, distributional explanations, and reusable algorithm selection software.
+
+The contributions support a common conclusion: improvements in empirical performance prediction require attention to the complete path from problem representation to algorithmic decisions. Reliable features can improve established predictors; learned representations can expose additional structure; and adapting models to the task can improve how predictions guide search. Distributional explanations and common software interfaces make these improvements easier to inspect and evaluate. The evidence also establishes practical limits: representation and model choices remain dependent on the task, computational overhead can restrict their usefulness, and predictive improvements require validation in the decision process they are intended to support.
+
+\section{Answers to the thesis questions}
+\label{sec:ch12:answers}
+
+The introduction organised the dissertation around three questions concerning representations, predictive models, and the interpretation and use of performance prediction. The following answers bring together the evidence from the contribution chapters.
+
+\subsection{How can we obtain better representations of problem instances and search spaces?}
+
+The representation of a problem determines which distinctions a performance model can learn. \Cref{ch:ch04:rev_SATzilla} showed that improving this representation can begin with maintaining the infrastructure used to compute it. Updating the SATzilla feature extractor made established features more accessible on contemporary SAT instances and improved satisfiability prediction, running-time prediction, and algorithm selection in the evaluated settings. The result connects engineering reliability with modelling quality: a feature description has practical value only when it can be computed within the available resources and captures relevant properties of the instances under consideration.
+
+\Cref{ch:ch05:dim_red} extended the representation question to dimensionality reduction. Across 30 methods and four downstream assessment tasks, the experiments found substantial performance complementarity. A reduced representation that works well for clustering or classification need not preserve the distinctions required for prediction or black-box optimisation. Original dimensionality, target dimensionality, and the available observations also affect the outcome. Consequently, the choice of a dimensionality reduction method should be evaluated against its intended downstream task. These results motivate selecting the representation method itself from empirical evidence.
+
+\Cref{ch:ch07:gnns_epms} provided a complementary approach by learning from graph representations of SAT formulae. On the evaluated small-instance regime, graph neural models improved on the reported tabular baselines for running-time prediction and solver selection. Models without node features also demonstrated that relational structure carries useful predictive information. The strongest overall configurations nevertheless used node features, showing that structural learning and supplied features can complement each other. Memory requirements restricted graph-model evaluation to small instances, while the tabular methods retained a broader demonstrated computational scope.
+
+Together, these chapters answer the representation question through reliability, task-specific evaluation, and structural learning. They do not identify one representation that is preferable throughout. Instead, they establish that representation quality must be assessed jointly with the prediction task, downstream decision, and cost of obtaining the representation.
+
+\subsection{How can we build better predictive models and surrogate models?}
+
+The dissertation studied model quality both by adapting the models used during optimisation and by examining which errors matter for optimisation decisions. \Cref{ch:ch06:dymbo} introduced DyMBO, which uses observed ranking quality to update the influence of complementary surrogates during a Bayesian optimisation run. Its evaluation showed the value of adapting model choice as observations accumulate. In the tested settings, greedy dynamic selection between a Gaussian process and a random forest was particularly effective. The findings support using evidence from the current search trajectory to guide surrogate choice, while the cost of fitting multiple models and sensitivity to unsuitable portfolio members remain constraints.
+
+\Cref{ch:ch08:noisy_oracle} examined a related question: where does a surrogate need accurate predictions? Its controlled noisy-oracle experiments showed that the location of prediction errors matters. Preserving accuracy in regions with good objective values was more effective than concentrating accuracy solely around the optimum according to distance. The theoretical analysis explained how misleading predictions can cause an acquisition function to prefer a suboptimal candidate. These findings connect surrogate evaluation to the consequences of prediction errors for candidate selection.
+
+The scope of that conclusion is important. The chapter's main oracle construction uses controlled mean errors, fixed predictive uncertainty, and predictions that do not learn from accumulated observations. It therefore isolates aspects of spatial mean-prediction accuracy under a simplified model. It does not establish that a particular weighting of training observations will improve a learned surrogate, or that uncertainty calibration is unimportant in practical Bayesian optimisation.
+
+DyMBO and the noisy-oracle study address complementary aspects of adaptation. DyMBO uses observed model quality to choose among available surrogates; the noisy-oracle study asks which aspects of quality can affect the search. Together, they motivate evaluating model adaptation through optimisation outcomes as well as predictive scores. An important next step is to determine whether more decision-sensitive measures of surrogate quality can improve adaptive selection without introducing excessive evaluation cost.
+
+\subsection{How can we make performance prediction easier to understand, compare, and use?}
+
+\Cref{sec:ch09:dist_explain} broadened performance prediction from a typical running time to a distribution over possible running times. Expressing predicted distributions through interpretable statistics made it possible to apply permutation importance and individual conditional expectation analyses to scale, variability, and shape. In the studied SAT and planning scenarios, different instance properties influenced different aspects of the predicted distribution. A feature associated with typical running time need not also explain skewness or kurtosis.
+
+These explanations describe the fitted predictor and remain conditional on the features, distribution family, and observations used to fit it. The comparisons with DistNet also showed why computational efficiency and predictive quality should be considered separately: the tree-based approach reduced fitting time substantially, while relative predictive quality varied with the scenario, observation budget, and distribution family. Distributional modelling is therefore useful both for representing variability and for making the assumptions behind performance predictions explicit.
+
+\Cref{ch:ch10:asf} addressed practical reuse through ASF, a common interface for constructing and evaluating algorithm selection pipelines. It brought together selectors, pre-selection, pre-solving, feature processing, and automated configuration across several application settings. The experiments showed that pre-selection can improve prediction and selection outcomes as well as reduce training cost, and that the best pipeline components vary across scenarios. A shared interface makes these alternatives easier to compare and combine, while representative data and suitable evaluation protocols remain necessary.
+
+The answer to the third question therefore has two parts. Explanations should expose meaningful properties of predicted algorithm behaviour, including its variability. Reusable infrastructure should make competing modelling and selection choices accessible to empirical comparison. Neither removes the need to examine the assumptions and costs of the resulting pipeline.
+
+\section{Lessons across the contributions}
+\label{sec:ch12:synthesis}
+
+A recurring finding is that performance complementarity appears at several levels. Dimensionality reduction methods preserve different information, surrogate models are effective in different search phases, graph and tabular models have different computational strengths, and selection pipelines behave differently across scenarios. This makes empirical performance prediction relevant to its own design: the choice of representation, predictor, or pipeline can itself become an algorithm selection problem. The dissertation demonstrates several instances of this principle, while a system that automatically makes all of these choices remains a research objective.
+
+A second lesson concerns evaluation. Prediction error, optimisation progress, solver-selection performance, and the quality of a distributional explanation answer different questions. The graph-model experiments evaluated both running-time prediction and solver selection; the noisy-oracle study investigated the effect of error location on search; and ASF evaluated complete pipelines. These perspectives show why a model should be assessed in the setting where its predictions will be used. A lower aggregate prediction error alone does not establish a better allocation of computational resources.
+
+A third lesson is that computational feasibility forms part of model quality. Feature extraction, graph construction, model fitting, and candidate selection all consume resources. A representation that improves prediction on small instances may be infeasible on large ones, and an adaptive surrogate may spend additional time fitting models before selecting an evaluation. The practical comparison must therefore consider the resources required to obtain and use a prediction alongside the benefit that prediction provides.
+
+Finally, the contributions show the value of keeping assumptions inspectable. Distributional explanations expose which properties of algorithm behaviour a model represents. Controlled oracle experiments make particular error mechanisms explicit. Common interfaces make alternative pipeline components easier to evaluate under a shared protocol. These mechanisms support scientific understanding as well as practical use, provided that conclusions remain tied to the conditions under which they were established.
+
+\section{Limitations}
+\label{sec:ch12:limitations}
+
+The empirical results cover several domains and benchmark collections, but each contribution has its own data, budgets, baselines, and evaluation protocol. Their numerical improvements cannot be combined into a single overall effect. The chapters also do not evaluate one integrated system containing all proposed components. The synthesis identifies compatible principles and research opportunities; it does not establish that combining every component would improve a complete pipeline.
+
+Generalisation beyond the evaluated distributions remains an open issue. Competition instances, benchmark suites, and fixed data splits provide useful comparisons, but they cannot establish robustness to arbitrary new instance families or solver portfolios. Graph-model results are additionally restricted by the memory requirements of the evaluated architectures. DyMBO depends on a suitable portfolio of surrogates, and its uncertainty combination does not define a single coherent Bayesian posterior. The noisy-oracle construction provides controlled evidence under simplified assumptions rather than a complete model of learned-surrogate behaviour.
+
+Distributional explanations introduce further qualifications. They describe associations in model predictions and do not establish causal effects of instance properties on solver behaviour. Their interpretation depends on the fitted distribution family and the amount of repeated-run data. Similarly, standardised software interfaces improve comparability and reuse, but cannot correct unrepresentative data, leakage, or a mismatch between the evaluation protocol and deployment.
+
+These limitations define the scope of the dissertation's central claim. Reliable representations, adaptive models, decision-sensitive evaluation, and interpretable software pipelines provide ways to improve empirical performance prediction. Their effectiveness must still be demonstrated for the intended task and resource regime.
+
+\section{Future directions}
+\label{sec:ch12:future}
+
+\subsection{Selecting and combining representations}
+
+The complementarity observed among dimensionality reduction methods motivates learning which method to use from dataset properties, the downstream task, and the available budget. Such a selector should account for fitting and transformation costs as well as downstream quality, and should be evaluated on held-out datasets or function families. This would test whether the observed complementarity can be exploited beyond the settings used to develop the selector.
+
+For structured instances, a related direction is to combine scalable learned representations with inexpensive hand-crafted features. Graph sampling, compression, and hierarchical representations could extend graph-based performance models to larger formulae. Their value should be tested through both prediction and solver selection, including graph-construction and inference costs. Source-disjoint evaluation would help distinguish transferable structural information from properties specific to an instance collection.
+
+\subsection{Connecting surrogate assessment to search decisions}
+
+A promising next step is to test whether surrogate training or selection can use measures that reflect the consequences of prediction errors. Value-weighted training losses, local ranking measures, and comparisons of acquisition-induced candidate choices are possible approaches. They require experiments with learned surrogates whose uncertainty and training data change during the search. Such experiments would connect the controlled noisy-oracle findings with the adaptive model choices studied by DyMBO.
+
+Reducing adaptation overhead is equally important. Predicting when a surrogate is worth fitting, temporarily suspending consistently unhelpful models, or choosing a portfolio from task properties could reduce the cost of dynamic model choice. These extensions should be tested with weak portfolio members and under equal total wall-clock budgets. Multi-fidelity optimisation offers another setting in which surrogate suitability may change with the fidelity and quantity of observations.
+
+\subsection{Using distributional predictions in algorithmic decisions}
+
+The distributional explanation framework could be extended to training times, configuration stability, or other stochastic performance measures. Further work should examine whether explanations remain stable across data resampling, correlated features, and alternative distribution families. Better behaviour with few repeated observations is also needed before such models can be used reliably when data collection is expensive.
+
+A further opportunity is to use predicted distributions directly in selection or scheduling decisions. A system could choose algorithms according to a deadline, a tail-risk criterion, or a probability of completion rather than expected running time alone. Evaluating these policies would connect distributional explanation with practical resource allocation. The relevant test is whether the chosen policy improves the intended operational outcome under its data and prediction costs.
+
+\subsection{Evaluating adaptive pipelines across domains}
+
+ASF provides a basis for studying interactions among feature processing, portfolio construction, pre-solving, and selection. Future comparisons could evaluate which combinations remain effective under distribution shift, changes to the algorithm portfolio, or online arrival of instances. Warm-starting and integration with automated machine learning are further directions for reducing the effort required to deploy these pipelines.
+
+Across these extensions, reproducible comparisons should preserve the distinction between component quality and complete pipeline performance. Reporting total computational cost, variability across repetitions, and the provenance of data splits would make it easier to determine when additional modelling complexity is justified. This would also make it possible to test the broader proposition emerging from the dissertation: that adaptation is most useful when the system can identify both the benefit and the cost of changing its representation or model.
+
+\section{Closing perspective}
+\label{sec:ch12:closing}
+
+This dissertation advances empirical performance prediction through improvements to its inputs, modelling mechanisms, interpretation, and software infrastructure. Its contributions show that maintained feature extractors, task-appropriate representations, adaptive surrogate choices, and distributional analyses can each improve how algorithm behaviour is predicted and used. They also show why these choices require empirical evaluation under realistic computational constraints.
+
+The resulting perspective is that performance prediction belongs within the algorithmic decision process it supports. Representations determine what can be learned, models determine how observations become predictions, and selection or optimisation procedures determine which prediction errors have consequences. Studying these connections together provides a foundation for more adaptive algorithmic systems whose choices can be evaluated, explained, and reused.
