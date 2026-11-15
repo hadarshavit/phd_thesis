@@ -8,7 +8,14 @@
 \setcounter{secnumdepth}{3} % <-- 3 numbers up to subsubsections
 \manualmark
 \markboth{\spacedlowsmallcaps{\contentsname}}{\spacedlowsmallcaps{\contentsname}}
-\tableofcontents 
+% Reading moving arguments must not introduce acronyms before the main text.
+\begingroup
+    \let\gls\glsentryshort
+    \let\Gls\glsentryshort
+    \let\glspl\glsentryshortpl
+    \let\Glspl\glsentryshortpl
+    \tableofcontents
+\endgroup
 \automark[section]{chapter}
 \renewcommand{\chaptermark}[1]{\markboth{\spacedlowsmallcaps{#1}}{\spacedlowsmallcaps{#1}}}
 \renewcommand{\sectionmark}[1]{\markright{\thesection\enspace\spacedlowsmallcaps{#1}}}
@@ -18,6 +25,12 @@
 \clearpage
 
 \begingroup 
+    % Captions without an optional short title also appear in these lists.
+    % Show their short forms without changing document-wide first-use flags.
+    \let\gls\glsentryshort
+    \let\Gls\glsentryshort
+    \let\glspl\glsentryshortpl
+    \let\Glspl\glsentryshortpl
     \let\clearpage\relax
     \let\cleardoublepage\relax
     \let\cleardoublepage\relax
@@ -59,41 +72,9 @@
     %*******************************************************
     % Acronyms
     %*******************************************************
+    \cleardoublepage
     %\phantomsection 
     \refstepcounter{dummy}
     \pdfbookmark[1]{Acronyms}{acronyms}
     \markboth{\spacedlowsmallcaps{Acronyms}}{\spacedlowsmallcaps{Acronyms}}
-    \chapter*{Acronyms}
-    \begin{acronym}[AutoML]
-        \acro{ai}[AI]{Artificial Intelligence}
-        \acro{api}[API]{Application Programming Interface}
-        \acro{as}[AS]{Algorithm Selection}
-        \acro{asf}[ASF]{Algorithm Selection Framework}
-        \acro{automl}[AutoML]{Automated Machine Learning}
-        \acro{bbo}[BBO]{Black-Box Optimisation}
-        \acro{bert}[BERT]{Bidirectional Encoder Representations from Transformers}
-        \acro{bertft}[BERT-FT]{fine-tuned BERT}
-        \acro{bo}[BO]{Bayesian Optimisation}
-        \acro{cg}[CG]{Closed Gap}
-        \acro{clg}[CG]{Clause Graph}
-        \acro{ci}[CI]{Continuous Integration}
-        \acro{clip}[CLIP]{Contrastive Language-Image Pre-training}
-        \acro{cnf}[CNF]{Conjunctive Normal Form}
-        \acro{dag}[DAG]{Directed Acyclic Graph}
-        \acro{dpll}[DPLL]{Davis-Putnam-Logemann-Loveland}
-        \acro{epm}[EPM]{Empirical Performance Model}
-        \acro{gnn}[GNN]{Graph Neural Network}
-        \acro{hpo}[HPO]{Hyperparameter Optimisation}
-        \acro{ice}[ICE]{Individual Conditional Expectation}
-        \acro{mit}[MIT]{Massachusetts Institute of Technology}
-        \acro{mlp}[MLP]{Multi-Layer Perceptron}
-        \acro{ood}[OOD]{Out-of-Distribution}
-        \acro{par}[PAR]{Penalised Average Runtime}
-        \acro{pddl}[PDDL]{Planning Domain Definition Language}
-        \acro{pep8}[PEP 8]{Python Enhancement Proposal 8}
-        \acro{rmse}[RMSE]{Root Mean Squared Error}
-        \acro{saps}[SAPS]{Scaling and Parameter Search}
-        \acro{sat}[SAT]{Propositional Satisfiability}
-        \acro{sbs}[SBS]{Single Best Solver}
-        \acro{vbs}[VBS]{Virtual Best Solver}
-    \end{acronym}
+    \printnoidxglossary[type=\acronymtype,style=long,title=Acronyms]

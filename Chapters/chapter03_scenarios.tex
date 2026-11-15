@@ -1,34 +1,34 @@
 \chapter{Scenarios and Algorithms}
 \label{ch:ch03:scenarios}
 
-This chapter introduces the problem types, representations, and benchmarks considered in this thesis. It begins with SAT and automated planning, followed by black-box optimisation, hyperparameter optimisation, and neural architecture search. The remaining sections introduce tabular classification datasets, stochastic solver running times, and out-of-distribution generalisation. The problem descriptions are followed by their representations or benchmark collections; the HPO and running-time distribution foundations are given in the background chapter.
+This chapter introduces the problem types, representations, and benchmarks considered in this thesis. It begins with \gls{sat} and automated planning, followed by black-box optimisation, hyperparameter optimisation, and neural architecture search. The remaining sections introduce tabular classification datasets, stochastic solver running times, and out-of-distribution generalisation. The problem descriptions are followed by their representations or benchmark collections; the \gls{hpo} and running-time distribution foundations are given in the background chapter.
 
-\section{SAT}
+\section{\glsentryshort{sat}}
 
-The \new{Boolean satisfiability problem} (\gls{sat}) is a central and longstanding \textsf{NP}-complete problem~\citep{Karp72,BieEtAl21b}. It asks whether there exists a truth assignment that satisfies a Boolean formula $\varphi$ over variables $b_1,\ldots,b_{n_{\mathrm{var}}}$, typically expressed in \new{conjunctive normal form} (\gls{cnf}):
+The \new{\gls{sat} problem} is a central and longstanding \textsf{NP}-complete problem~\citep{Karp72,BieEtAl21b}. It asks whether there exists a truth assignment that satisfies a Boolean formula $\varphi$ over variables $b_1,\ldots,b_{n_{\mathrm{var}}}$, typically expressed in \new{\gls{cnf}}:
 \begin{equation*}
 	\varphi = \bigwedge_{q=1}^{n_{\mathrm{cl}}} C_q, \quad \text{where each } C_q = \bigvee_{h=1}^{n_{\mathrm{lit},q}} \ell_{q, h}.
 \end{equation*}
 Here, each $\ell_{q,h}$ is a literal, i.e., either a variable $b_{h\prime}$ or its negation $\lnot b_{h\prime}$. The task is to decide whether there exists an assignment $\omega$ such that $\varphi(\omega) = \text{true}$. \Gls{sat} is of significant theoretical importance as one of the first problems proven \textsf{NP}-complete~\citep{Cook71}, and it underpins numerous practical applications in hardware and software verification~\citep{BieEtAl09}, automated planning~\citep{KauSel96}, and operations research~\citep{GomEtAl08}. Its significance has led to the development of a wide range of solvers, systematically benchmarked in annual \gls{sat} competitions (e.g.,~\citep{FroEtAl21,BalEtAl17,HeuEtAl19}).
 
-\subsection{Graph representations of SAT}
+\subsection{Graph representations of \glsentryshort{sat}}
 \label{sec:ch03:sat-graphs}
 
-SAT formulae can be represented as graphs whose structure does not depend on the order of clauses or literals in the CNF representation. The following four representations are used in this thesis~\citep{NudEtAl04b,HutEtAl14e,SelEtAl19}:
+\gls{sat} formulae can be represented as graphs whose structure does not depend on the order of clauses or literals in the \gls{cnf} representation. The following four representations are used in this thesis~\citep{NudEtAl04b,HutEtAl14e,SelEtAl19}:
 \begin{itemize}
-    \item \new{Variable graph} (VG): an undirected graph with one node per variable. Two distinct variables are connected if they occur together in at least one clause, irrespective of their polarity.
-    \item \new{Clause graph} (CG): an undirected graph with one node per clause. Two distinct clauses are connected if they share at least one negated literal.
-    \item \new{Variable-clause graph} (VCG): a bipartite, undirected graph with one node per variable and one node per clause. A variable node is connected to a clause node if the variable occurs in that clause, either positively or negatively.
-    \item \new{Literal-clause graph} (LCG): a bipartite, undirected graph with two literal nodes per variable, one for its positive form and one for its negation, and one node per clause. A literal node is connected to a clause node if that literal occurs in the clause.
+    \item \new{\Gls{vg}}: an undirected graph with one node per variable. Two distinct variables are connected if they occur together in at least one clause, irrespective of their polarity.
+    \item \new{\Gls{clg}}: an undirected graph with one node per clause. Two distinct clauses are connected if they share at least one negated literal.
+    \item \new{\Gls{vcg}}: a bipartite, undirected graph with one node per variable and one node per clause. A variable node is connected to a clause node if the variable occurs in that clause, either positively or negatively.
+    \item \new{\Gls{lcg}}: a bipartite, undirected graph with two literal nodes per variable, one for its positive form and one for its negation, and one node per clause. A literal node is connected to a clause node if that literal occurs in the clause.
 \end{itemize}
 
-The VG and the unlabelled VCG do not distinguish positive from negative occurrences. The LCG preserves this distinction through separate literal nodes. Polarity can also be attached to VCG edges as an attribute. Additional attributes and edges depend on the application; in particular, edges connecting complementary literals extend the bipartite LCG defined above.
-\Cref{fig:ch03:sat-graphs} illustrates the VG, VCG, and LCG for the same formula.
+The \gls{vg} and the unlabelled \gls{vcg} do not distinguish positive from negative occurrences. The \gls{lcg} preserves this distinction through separate literal nodes. Polarity can also be attached to \gls{vcg} edges as an attribute. Additional attributes and edges depend on the application; in particular, edges connecting complementary literals extend the bipartite \gls{lcg} defined above.
+\Cref{fig:ch03:sat-graphs} illustrates the \gls{vg}, \gls{vcg}, and \gls{lcg} for the same formula.
 
 \begin{figure}[tbp]
     \centering
     \resizebox{\linewidth}{!}{\input{Chapters/figures/graphbench_sat.tex}}
-    \caption[Graph representations of a SAT formula]{Variable, variable-clause, and literal-clause graphs of the displayed SAT formula. Clause nodes $C_1$, $C_2$, and $C_3$ correspond to the clauses in their displayed order. The VCG shows only variable--clause incidence edges; the LCG shows only literal--clause incidence edges.}
+    \caption[Graph representations of a \glsentryshort{sat} formula]{Variable, variable-clause, and literal-clause graphs of the displayed \gls{sat} formula. Clause nodes $C_1$, $C_2$, and $C_3$ correspond to the clauses in their displayed order. The \gls{vcg} shows only variable--clause incidence edges; the \gls{lcg} shows only literal--clause incidence edges.}
     \label{fig:ch03:sat-graphs}
 \end{figure}
 
@@ -41,7 +41,7 @@ These representations support two approaches to empirical performance prediction
 \begin{equation*}
     \Pi = (\mathcal P, \mathcal O, s_0, G),
 \end{equation*}
-where $\mathcal P$ is a finite set of propositions, $\mathcal O$ is a finite set of actions, $s_0 \subseteq \mathcal P$ is the initial state, and $G \subseteq \mathcal P$ is the goal. A state $s \subseteq \mathcal P$ contains exactly the propositions that are true. In the STRIPS representation, each action $o \in \mathcal O$ has preconditions $\operatorname{pre}(o)$, add effects $\operatorname{add}(o)$, and delete effects $\operatorname{del}(o)$, all subsets of $\mathcal P$. It is applicable when $\operatorname{pre}(o) \subseteq s$, and its successor state is
+where $\mathcal P$ is a finite set of propositions, $\mathcal O$ is a finite set of actions, $s_0 \subseteq \mathcal P$ is the initial state, and $G \subseteq \mathcal P$ is the goal. A state $s \subseteq \mathcal P$ contains exactly the propositions that are true. In the \gls{strips} representation, each action $o \in \mathcal O$ has preconditions $\operatorname{pre}(o)$, add effects $\operatorname{add}(o)$, and delete effects $\operatorname{del}(o)$, all subsets of $\mathcal P$. It is applicable when $\operatorname{pre}(o) \subseteq s$, and its successor state is
 \begin{equation*}
     \gamma(s,o) = \bigl(s \setminus \operatorname{del}(o)\bigr)
     \cup \operatorname{add}(o).
@@ -56,24 +56,24 @@ This formulation assumes deterministic actions and a fully observed state. The t
 
 \subsection{Planning representations and Zenotravel}
 
-Planning tasks are commonly specified in the Planning Domain Definition Language (PDDL), separating the domain's action schemas from the objects, initial state, and goal of an instance. Their structure can be represented by causal graphs, which describe dependencies between state variables, and domain transition graphs, which describe possible value transitions of individual variables. Feature sets also include syntactic PDDL properties, planning-graph information, and statistics from short probing runs. A bounded planning task can be translated into a SAT formula, making SAT features available as an additional representation~\citep{KauSel96,FawEtAl14}.
+Planning tasks are commonly specified in the \Gls{pddl}, separating the domain's action schemas from the objects, initial state, and goal of an instance. Their structure can be represented by causal graphs, which describe dependencies between state variables, and domain transition graphs, which describe possible value transitions of individual variables. Feature sets also include syntactic \gls{pddl} properties, planning-graph information, and statistics from short probing runs. A bounded planning task can be translated into a \gls{sat} formula, making \gls{sat} features available as an additional representation~\citep{KauSel96,FawEtAl14}.
 
 We consider LPG--Zenotravel~\citep{EggEtAl18}. Zenotravel tasks involve transporting passengers between cities using aircraft, subject to fuel requirements and refuelling actions. LPG is a planner based on local search over planning graphs~\citep{GerSer02}. Its stochastic search can produce different running times on the same instance, so repeated runs characterise a distribution rather than a single deterministic running time.
 
 \section{Black-box optimisation}
 \label{sec:ch03:bbo}
 
-\new{Black-box optimisation} (BBO) seeks a solution with the best objective value when information about the objective is obtained through evaluations. Let $\configurationSpace$ be a search space and $f:\configurationSpace\rightarrow\mathbb R$ a single-objective function to be minimised. The optimisation problem is
+\new{\Gls{bbo}} seeks a solution with the best objective value when information about the objective is obtained through evaluations. Let $\configurationSpace$ be a search space and $f:\configurationSpace\rightarrow\mathbb R$ a single-objective function to be minimised. The optimisation problem is
 \begin{equation*}
     \configuration^* \in \argmin_{\configuration\in\configurationSpace}
     f(\configuration).
 \end{equation*}
 A search space may be continuous, discrete, or mixed, and may include constraints or conditional parameters. Even for continuous domains, objectives can differ substantially in separability, conditioning, and multimodality. Synthetic benchmarks allow these properties to be varied systematically while keeping the objective and its optimum available to the benchmark designer.
 
-\subsection{BBOB}
+\subsection{\glsentryshort{bbob}}
 \label{sec:ch03:bbob}
 
-The noiseless Black-Box Optimisation Benchmarking (BBOB) suite is part of the COCO framework~\citep{HanEtAl21} and is also accessible through IOHprofiler~\citep{DoeEtAl18,WanEtAl22,DeNEtAl24}. It contains 24 continuous, noiseless, single-objective function families that scale with the search dimension $d_{\mathrm{in}}$. The functions are defined on $\mathbb R^{d_{\mathrm{in}}}$, with $[-5,5]^{d_{\mathrm{in}}}$ serving as the standard region of interest. Their analytical construction makes it possible to control properties that affect optimisation difficulty, including nonseparability, ill-conditioning, and the number and arrangement of local optima.
+The noiseless \Gls{bbob} suite is part of the COCO framework~\citep{HanEtAl21} and is also accessible through IOHprofiler~\citep{DoeEtAl18,WanEtAl22,DeNEtAl24}. It contains 24 continuous, noiseless, single-objective function families that scale with the search dimension $d_{\mathrm{in}}$. The functions are defined on $\mathbb R^{d_{\mathrm{in}}}$, with $[-5,5]^{d_{\mathrm{in}}}$ serving as the standard region of interest. Their analytical construction makes it possible to control properties that affect optimisation difficulty, including nonseparability, ill-conditioning, and the number and arrangement of local optima.
 
 Different instances of a function family are generated using transformations such as translations and, depending on the function, rotations of the search space, together with transformations of objective values. This varies the location and orientation of a problem while retaining its characteristic structure. The suite groups the functions into five classes:
 \begin{itemize}
@@ -88,28 +88,28 @@ Separable functions allow coordinates to be optimised independently. Ill-conditi
 \section{Hyperparameter optimisation benchmarks}
 \label{sec:ch03:hpo_benchmarks_overview}
 
-Surrogate-based HPO benchmarks replace model training and validation runs with predictions from a model fitted to previously collected evaluations. They approximate the response surface of a real learning task while allowing many optimisation runs at much lower computational cost. Such a benchmark surrogate supplies objective values to the optimiser; it is distinct from a surrogate that the optimiser itself fits to guide its search.
+Surrogate-based \gls{hpo} benchmarks replace model training and validation runs with predictions from a model fitted to previously collected evaluations. They approximate the response surface of a real learning task while allowing many optimisation runs at much lower computational cost. Such a benchmark surrogate supplies objective values to the optimiser; it is distinct from a surrogate that the optimiser itself fits to guide its search.
 
 \subsection{PD1}
 \label{sec:ch03:pd1}
 
 PD1 provides deep-learning hyperparameter optimisation tasks, with surrogate-based evaluations available through the benchmark implementation used by~\citet{MalEtAl23}. Each target function fixes a dataset and a neural network architecture, such as a wide ResNet on CIFAR-100, and maps training hyperparameters to a validation error. The PD1 subset used here consists of four target functions with continuous hyperparameters. These four targets are the selected benchmark tasks, rather than the full set of tasks in the original PD1 collection.
 
-The search parameters control the training procedure, including the learning rate and momentum. The network architecture remains fixed within each task. Unlike BBOB's analytically constructed functions, these surrogate objectives approximate performance surfaces obtained from training neural networks on data.
+The search parameters control the training procedure, including the learning rate and momentum. The network architecture remains fixed within each task. Unlike \gls{bbob}'s analytically constructed functions, these surrogate objectives approximate performance surfaces obtained from training neural networks on data.
 
-\subsection{YAHPO Gym}
+\subsection{\glsentryshort{yahpo} Gym}
 \label{sec:ch03:hpo_benchmarks}
 
-\new{Yet Another HPO Benchmark (YAHPO) Gym}~\citep{PfiEtAl22} is a collection of surrogate-based benchmarks covering multiple learning algorithms, datasets, objectives, and fidelity levels. A scenario specifies a configuration space and the quantities predicted by its surrogate; an instance typically fixes a dataset. The surrogate can predict performance measures such as accuracy, as well as evaluation costs such as training time. Fidelity parameters, such as the fraction of training data or the number of training epochs, allow evaluations at different resource levels.
+\new{\Gls{yahpo} Gym}~\citep{PfiEtAl22} is a collection of surrogate-based benchmarks covering multiple learning algorithms, datasets, objectives, and fidelity levels. A scenario specifies a configuration space and the quantities predicted by its surrogate; an instance typically fixes a dataset. The surrogate can predict performance measures such as accuracy, as well as evaluation costs such as training time. Fidelity parameters, such as the fraction of training data or the number of training epochs, allow evaluations at different resource levels.
 
 The rbv2 scenarios cover random forests, decision trees, elastic-net models, support vector machines, gradient boosting, and nearest-neighbour methods~\citep{BinEtAl20}. The iaml scenarios include elastic-net models, decision trees, random forests, and gradient boosting~\citep{PfiEtAl22}. In the rbv2\_super and iaml\_super scenarios, an additional categorical parameter selects the learning algorithm, and its choice activates the corresponding hyperparameters. These scenarios therefore combine algorithm selection and hyperparameter optimisation in a conditional search space.
 
-Although the rbv2 and iaml families overlap in their learning algorithms, their configuration spaces differ. For example, rbv2 includes an input-imputation choice that is fixed in iaml, and some hyperparameter ranges differ, including the number of boosting rounds in XGBoost. LCBench and FCNet provide additional neural-network configuration spaces for tabular learning~\citep{ZimEtAl21b,FalEtAl18}. The optimisation experiments considered here use predictive accuracy as their target metric, or its equivalent minimisation form. YAHPO Gym also includes a NAS-Bench-301 scenario; its architecture space is described separately in~\cref{sec:ch03:nas_bench301}.
+Although the rbv2 and iaml families overlap in their learning algorithms, their configuration spaces differ. For example, rbv2 includes an input-imputation choice that is fixed in iaml, and some hyperparameter ranges differ, including the number of boosting rounds in XGBoost. LCBench and FCNet provide additional neural-network configuration spaces for tabular learning~\citep{ZimEtAl21b,FalEtAl18}. The optimisation experiments considered here use predictive accuracy as their target metric, or its equivalent minimisation form. \gls{yahpo} Gym also includes a NAS-Bench-301 scenario; its architecture space is described separately in~\cref{sec:ch03:nas_bench301}.
 
 \section{Neural architecture search}
 \label{sec:ch03:nas}
 
-\new{Neural architecture search} (NAS) optimises the structure of a neural network, including its connectivity and operations~\citep{ElsEtAl19}. Let $\mathcal H$ be a space of architectures and $\eta\in\mathcal H$ an architecture. For fixed training hyperparameters $\configuration_0$, define
+\new{\Gls{nas}} optimises the structure of a neural network, including its connectivity and operations~\citep{ElsEtAl19}. Let $\mathcal H$ be a space of architectures and $\eta\in\mathcal H$ an architecture. For fixed training hyperparameters $\configuration_0$, define
 \begin{equation*}
     f(\eta,\configuration_0) =
     \mathcal L(\algo_{\eta,\configuration_0},
@@ -131,7 +131,7 @@ An architecture is commonly represented as a directed acyclic graph, with operat
 \subsection{NAS-Bench-301}
 \label{sec:ch03:nas_bench301}
 
-NAS-Bench-301~\citep{ZelEtAl22} provides surrogate predictions for architectures in the cell-based DARTS search space on CIFAR-10. An architecture specifies normal and reduction cells through choices of connections and operations. The training hyperparameters are fixed, so the search concerns the architecture itself. Surrogate predictions approximate the validation performance and running time of architectures without requiring a new training run for each evaluation. The YAHPO Gym interface exposes this benchmark as an architecture-search scenario.
+NAS-Bench-301~\citep{ZelEtAl22} provides surrogate predictions for architectures in the cell-based DARTS search space on CIFAR-10. An architecture specifies normal and reduction cells through choices of connections and operations. The training hyperparameters are fixed, so the search concerns the architecture itself. Surrogate predictions approximate the validation performance and running time of architectures without requiring a new training run for each evaluation. The \gls{yahpo} Gym interface exposes this benchmark as an architecture-search scenario.
 
 \subsection{JAHS-Bench-201}
 \label{sec:ch03:jahs_bench201}
@@ -143,14 +143,14 @@ JAHS-Bench-201~\citep{BanEtAl22} is a surrogate-based benchmark for joint archit
 
 The datasets considered here are tabular classification tasks, with numerical or categorical input attributes. They differ in their number of observations, input dimensions, class counts, and class balance.
 
-\subsection{OpenML CC-18 and the AutoML Benchmark}
+\subsection{OpenML CC-18 and the \glsentryshort{automl} Benchmark}
 
-We use the OpenML CC-18 collection~\citep{BisEtAl21} and the classification datasets from the AutoML Benchmark~\citep{GijEtAl24}. Both provide tabular classification tasks from different domains, covering a range of dataset sizes and characteristics. The tasks supply predefined training and test splits for 10-fold cross-validation, allowing learning algorithms to be evaluated on the same partitions.
+We use the OpenML CC-18 collection~\citep{BisEtAl21} and the classification datasets from the \gls{automl} Benchmark~\citep{GijEtAl24}. Both provide tabular classification tasks from different domains, covering a range of dataset sizes and characteristics. The tasks supply predefined training and test splits for 10-fold cross-validation, allowing learning algorithms to be evaluated on the same partitions.
 
 \section{Stochastic solver running times}
 \label{sec:ch03:stochastic_solvers}
 
-We use seven scenarios introduced by~\citet{EggEtAl18}: six from SAT solving and one from automated planning, LPG--Zenotravel. Each scenario fixes a solver and a problem distribution, with 2\,000--12\,000 instances and 100 solver runs per instance. The performance metric is solver running time; the running-time observations, instance features, and preprocessing follow~\citet{EggEtAl18}.
+We use seven scenarios introduced by~\citet{EggEtAl18}: six from \gls{sat} solving and one from automated planning, LPG--Zenotravel. Each scenario fixes a solver and a problem distribution, with 2\,000--12\,000 instances and 100 solver runs per instance. The performance metric is solver running time; the running-time observations, instance features, and preprocessing follow~\citet{EggEtAl18}.
 
 \section{Out-of-distribution generalisation}
 \label{sec:ch03:ood}
@@ -165,4 +165,4 @@ Here, $\ell$ measures prediction error. A difference between the distributions i
 
 \subsection{OOD-Chameleon}
 
-The OOD-Chameleon framework~\citep{JiaTen25} studies algorithm selection for OOD generalisation in vision and language tasks. It characterises learning tasks through features that include training-label imbalance, and selects among methods designed for different shift settings. Its benchmarks illustrate that the relative performance of these methods depends on the task and shift, motivating selection rather than a single fixed choice.
+The OOD-Chameleon framework~\citep{JiaTen25} studies algorithm selection for \gls{ood} generalisation in vision and language tasks. It characterises learning tasks through features that include training-label imbalance, and selects among methods designed for different shift settings. Its benchmarks illustrate that the relative performance of these methods depends on the task and shift, motivating selection rather than a single fixed choice.

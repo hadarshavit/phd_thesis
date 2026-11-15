@@ -27,7 +27,7 @@ This dissertation studies empirical performance prediction through these connect
 
 When empirical performance prediction is applied across problem instances, as in automated algorithm selection and many configuration techniques, a crucial first step is to represent each instance through descriptive numerical features.
 However, extracting high-quality features in practice can be slow, brittle, or impossible for large modern instances.
-Early in this work, we observed this problem in the Boolean satisfiability problem (\gls{sat}), a domain in which empirical performance prediction has been used for many years.
+Early in this work, we observed this problem in the \gls{sat} problem, a domain in which empirical performance prediction has been used for many years.
 The widely used SATzilla feature extraction pipeline had become difficult to apply to contemporary \gls{sat} instances because solvers, preprocessors, instance sizes, and computing systems had changed substantially since the original implementation.
 This creates a direct bottleneck: if the features cannot be computed reliably, downstream performance prediction, algorithm selection, and explainability cannot be used reliably either.
 
@@ -141,7 +141,7 @@ The chapter therefore extends empirical performance prediction from asking only 
     \item \fullcite{ShaHoo25d}
 \end{itemize}
 contributes a unified, problem-agnostic Python library for building, benchmarking, and deploying algorithm selection pipelines.
-ASF provides modular components for selection, pre-selection, pre-solving, feature processing, and automated configuration, and validates these components through case studies in machine learning and artificial intelligence.
+\gls{asf} provides modular components for selection, pre-selection, pre-solving, feature processing, and automated configuration, and validates these components through case studies in machine learning and artificial intelligence.
 This final contribution turns the methodological work of the thesis into reusable infrastructure: empirical performance prediction becomes easier to apply outside the narrow domain in which a method was originally developed.
 
 \section{Structure of the dissertation}
