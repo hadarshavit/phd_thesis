@@ -51,7 +51,24 @@
 /.dblp_cache/
 /biber_cache/
 /chapter_pdfs/
-/tmp
+/work/
+/build/
+/tmp/
+/.vscode/
+/.pytest_cache/
+/.ruff_cache/
 __pycache__/
 *.py[cod]
 .DS_Store
+
+# Generated bibliography candidates and matching reports.
+/Bibliography.dblp.bib
+/dblp_match_report.tsv
+
+# One-off scratch scripts and editor backup files.
+/scratch_*.py
+*.bak
+*.tmp
+*.swp
+*.swo
+*~
