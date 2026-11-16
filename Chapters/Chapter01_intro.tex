@@ -8,7 +8,7 @@ This diversity is important for the perspective taken in this dissertation.
 
 A common feature of these settings is that there are usually many candidate algorithms, and each algorithm often has many hyperparameters that control its behaviour.
 Moreover, the performance of these algorithms can vary significantly across different instances and configurations.
-An algorithm that is performs well on one instance may be weak on another, a configuration that works well for one data set may fail on a different one, and stochastic algorithms may behave differently across repeated runs on the same input.
+An algorithm that performs well on one instance may be weak on another, a configuration that works well for one data set may fail on a different one, and stochastic algorithms may behave differently across repeated runs on the same input.
 These performance variabilities are challenging to model and predict, however, they provide an opportunity to select and configure the best algorithm for a given task.
 
 Empirical performance prediction is predicting the performance of algorithms on unseen problem instances, configurations, or combinations of both.
@@ -21,9 +21,9 @@ Despite the success of empirical performance prediction, these methods are still
 High-quality instance features may be expensive to compute or unavailable, predictive models may not be accurate enough in the parts of the space that matter for decision making and even when predictions are accurate, they may be hard to interpret or deploy in real-world applications.
 This dissertation studies empirical performance prediction through these connected limitations and develops methods, benchmarks, and tools that make performance prediction more useful in practice.
 
-\section{Challenges in the field}
+\section{Challenges in the Field}
 
-\subsection{Features are hard to extract, expensive and not always available}
+\subsection{Features Are Hard to Extract, Expensive and Not Always Available}
 
 When empirical performance prediction is applied across problem instances, as in automated algorithm selection and many configuration techniques, a crucial first step is to represent each instance through descriptive numerical features.
 However, extracting high-quality features in practice can be slow, brittle, or impossible for large modern instances.
@@ -39,7 +39,7 @@ However, many dimensionality reduction methods were originally designed and eval
 It is therefore not obvious whether they preserve the aspects of the search space that matter for optimisation, where target values and landscape geometry can be more important than global variance.
 This motivates a task-driven view of representation quality.
 
-\subsection{Models are not accurate enough}
+\subsection{Models Are Not Accurate Enough}
 
 Even with informative features, the predictive models and surrogate models used in algorithm selection, configuration, and Bayesian optimisation must be accurate enough to guide decisions effectively.
 Standard modelling approaches face several difficulties.
@@ -54,7 +54,7 @@ Moreover, traditional machine learning metrics such as global mean squared error
 A surrogate model does not need to be uniformly accurate everywhere; rather, it needs to be accurate in the regions where prediction errors can mislead the acquisition function.
 Understanding where accuracy matters is therefore central to designing better model-based optimisation methods.
 
-\subsection{Hard to use existing methods and to gain insights}
+\subsection{Hard to Use Existing Methods and to Gain Insights}
 
 Finally, even when features can be computed and models are accurate, using empirical performance prediction in practical workflows and extracting scientific insight from it remain difficult.
 The algorithm selection and configuration communities have historically developed domain-specific tools in isolation, leading to separate pipelines for \gls{sat} solving, automated planning, machine learning, and black-box optimisation.
@@ -67,7 +67,7 @@ Distributional performance models can capture this variation, but explaining the
 Standard explainability techniques are designed for scalar-valued predictions and cannot be applied directly to raw distribution parameters in a way that is immediately meaningful.
 To gain insight, distribution predictions need to be connected to interpretable statistics such as mean, variance, skewness, and tail behaviour.
 
-\section{Contributions of this thesis}
+\section{Contributions of This Thesis}
 
 This dissertation is organised around three connected questions.
 First, how can we obtain better representations of problem instances and search spaces?
@@ -144,7 +144,7 @@ contributes a unified, problem-agnostic Python library for building, benchmarkin
 \gls{asf} provides modular components for selection, pre-selection, pre-solving, feature processing, and automated configuration, and validates these components through case studies in machine learning and artificial intelligence.
 This final contribution turns the methodological work of the thesis into reusable infrastructure: empirical performance prediction becomes easier to apply outside the narrow domain in which a method was originally developed.
 
-\section{Structure of the dissertation}
+\section{Structure of the Dissertation}
 
 The order of the dissertation follows the dependency structure of empirical performance prediction.
 Part~I introduces empirical performance prediction, algorithm selection, Bayesian optimisation, and the problem domains and benchmark scenarios used in the contribution chapters.

@@ -1,5 +1,10 @@
 \providecommand{\Description}[1]{}
-\chapter{Task-driven Assessment of Dimensionality Reduction Methods for Machine Learning and Black-Box Optimisation}\label{ch:ch05:dim_red}
+\chapter{Task-Driven Assessment of Dimensionality Reduction Methods for Machine Learning and Black-Box Optimisation}\label{ch:ch05:dim_red}
+\thesisprovenance{ShaEtAl25}
+  {[To be completed: coauthors and division of responsibilities.]}
+  {[To be completed: my conceptual, methodological, software, experimental, analytical, and writing contributions.]}
+  {[To be completed: additions, revisions, and departures from the publication.]}
+
 \section{Introduction}
 \label{sec:ch05:intro}
 
@@ -77,7 +82,7 @@ In \cref{sec:ch05:tasks}, we outline our methodology and present the four tasks 
 In \cref{sec:ch05:exp_setup}, we introduce the benchmark problem suites used in our empirical investigation and provide details on the setup of the experiments.
 We present our results in \cref{sec:ch05:res}, analyse the running times of dimensionality reduction methods in \cref{sec:ch05:rt}, critically discuss our findings in \cref{sec:ch05:disc}, and provide concluding remarks in \cref{sec:ch05:concl}.
 
-\section{Dimensionality reduction}
+\section{Dimensionality Reduction}
 \label{sec:ch05:dim_red}
 
 This section provides the necessary background of the concept of dimensionality reduction, including related work, descriptions of methods selected for this study, and the transformation scheme used for the optimisation tasks.
@@ -102,7 +107,7 @@ Let $\mathbf X=(\mathbf{x}_1,\ldots,\mathbf{x}_n)$ be observations from a $d_{\m
 In~\cref{tab:ch05:dimensionality reduction-methods}, we list a range of supervised and unsupervised dimensionality reduction methods considered in this work; all of them are based on feature extraction.
 Our criteria for selecting these methods for our study are outlined in \cref{sec:ch05:dimensionality reduction-methods}.
 
-\subsection{Related work}
+\subsection{Background and Related Work}
 \label{sec:ch05:rel-work}
 
 As dimensionality reduction plays an essential role across a wide range of applications, numerous studies have surveyed and compared dimensionality reduction methods from different perspectives. In the following, we present such prior work, distinguishing between publications
@@ -143,7 +148,7 @@ This common protocol allows us to compare method rankings across tasks, dimensio
 To the best of our knowledge,
 ours is the first benchmarking study that assesses and compares a wide range of inherently different dimensionality reduction methods simultaneously in the context of machine learning and black-box optimisation.
 
-\subsubsection{Related work on dimensionality reduction in optimisation}
+\subsubsection{Related Work on Dimensionality Reduction in Optimisation}
 \label{app:ch05:rel-work-dr-opt}
 Bayesian optimisation in high-dimensional spaces has also received considerable attention in recent years. \citet{BinWyc22} have surveyed the structural assumptions used in high-dimensional Gaussian-process modelling and Bayesian optimisation, including variable selection, additive decomposition, and low-dimensional embeddings, and have noted that these assumptions commonly require corresponding changes to acquisition-function optimisation.
 Numerous methods have been proposed to address the curse of dimensionality.
@@ -163,14 +168,17 @@ Here, we emphasise that, despite substantial work on specialised high-dimensiona
 Along these lines,~\citet{RapEtAl25} showed that global sensitivity analysis, when used as a dimensionality reduction technique, might oversimplify the landscape of the optimisation problem at hand, which renders it poorly suitable for these purposes.
 At the same time, they emphasise the importance dimensionality reduction methods might have in the optimisation context.
 
-\subsection{Methods assessed in this work}
+\subsection{Methods Assessed}
 \label{sec:ch05:dimensionality reduction-methods}
 
 \begin{table*}
-    \centering
-    \caption[Dimensionality reduction methods]{Dimensionality reduction methods assessed in this work. All methods are based on feature extraction.
+\caption[Dimensionality reduction methods]{Dimensionality reduction methods assessed in this work. All methods are based on feature extraction.
     }
-    \label{tab:ch05:dimensionality reduction-methods}
+\label{tab:ch05:dimensionality reduction-methods}
+
+    \centering
+
+
     \small{
     \begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}Xll@{}}
         \toprule
@@ -296,7 +304,7 @@ Furthermore, we did not consider linear discriminant analysis, because the targe
 \noindent \textbf{Slipmap}~\citep{BjoEtAl24} is a supervised manifold method that jointly constructs a low-dimensional embedding and a collection of interpretable local models. Prototype observations are associated with local linear or logistic models, and the objective encourages nearby embedded observations to share models that predict their targets accurately. Regularisation of the local coefficients limits spurious explanations and promotes a smoother, more robust representation. Slipmap is a scalable prototype-based development of Slisemap~\citep{BjoEtAl23},
 reducing the number of local models that must be fitted while retaining the link between embedding proximity and similarity of local explanations.
 
-\subsection{Transforming unsupervised into supervised}
+\subsection{Supervised Use of Unsupervised Reducers}
 \label{sec:ch05:transform}
 Considering the goal of evaluating the performance of dimensionality reduction methods on the two black-box optimisation tasks, we are required to operate in a supervised environment.
 In optimisation tasks, the sampled points are typically spread across the search space without carrying intrinsic structure; because of that, unsupervised methods cannot directly learn a meaningful representation of the problem. It is therefore necessary to redistribute the points so that their positions reflect their quality in terms of objective value. This enables unsupervised methods to discover latent patterns that are informative about the objective landscape.
@@ -312,13 +320,13 @@ $\bar{\mathbf x}$ is the centre of mass of the sample and $\mathbf{1}_n$ is the 
 We then adjust each point with the corresponding weight, namely, $\mathbf X' = \bar{\mathbf X}\mathbf w$.
 For each of the unsupervised feature extraction methods that we benchmark, the initial sample on which they are trained first undergoes the rescaling. This means that the mapping is first learned on $\mathbf X'$, and then applied to the centred sample $\bar{\mathbf X}$.
 
-\section{Assessment methodology}
+\section{Assessment Methodology}
 \label{sec:ch05:tasks}
 In this section, we introduce four different tasks to assess the effectiveness of dimensionality reduction methods.
 The tasks are specifically designed to benchmark different aspects of dimensionality reduction methods, offering complementary views into these different use-cases.
 
 \FloatBarrier
-\subsection{Task 1: Clustering ability}
+\subsection{Task 1: Clustering Ability}
 \label{sec:ch05:method-ml-task1}
 In this task, we investigated how the different dimensionality reduction methods affect the clustering of the samples in datasets in the reduced space, \emph{i.e.}, the final performance of an unsupervised machine learning approach.
 By being able to cluster the samples, we verify whether a dimensionality reduction method preserves
@@ -328,7 +336,7 @@ We then transform the test set instances $\mathcal{D}_{\text{test}}$ to the lowe
 We measure the quality of the clusters $C_{\mathrm{cluster}}(\T(\mathcal{D}_{\text{test}}))$ using two well-established clustering metrics~\citep{RosHir07}: homogeneity (which measures whether each cluster contains samples from the same true class) and completeness (which checks that all samples which belong to the same true class are in the same cluster).
 
 \FloatBarrier
-\subsection{Task 2: Tabular classification accuracy}
+\subsection{Task 2: Tabular Classification Accuracy}
 \label{sec:ch05:method-ml-task2}
 In this task, we assessed the effect of
 different dimensionality reduction methods on classification tasks on tabular datasets, \emph{i.e.,} on the final performance of a supervised machine learning approach.
@@ -338,7 +346,7 @@ We evaluate the performance of well-known classical machine learning algorithms 
 Performance is measured using standard metrics such as accuracy, balanced accuracy and F1 score. The last two metrics are robust against imbalanced datasets, as some datasets might have more samples in some classes than others.
 
 \FloatBarrier
-\subsection{Task 3: Target function approximation}
+\subsection{Task 3: Target Function Approximation}
 \label{sec:ch05:method-bbo-task2}
 
 In this task, we measured how much response-relevant information is retained by a reduced representation. We note that this is a numerical regression task and does not assess optimisation performance.
@@ -351,7 +359,7 @@ permits us to perform our tasks in a reduced space, thereby naturally decreasing
 Furthermore, transforming to a lower-dimensional space often leads to additional gains in terms of predictive performance, as the function becomes easier to approximate via the machine learning model.
 
 \FloatBarrier
-\subsection{Task 4: Black-box optimiser performance}
+\subsection{Task 4: Black-Box Optimiser Performance}
 \label{sec:ch05:method-bbo-task3}
 In this task, we assessed how the optimisation process is affected by operating in the reduced space using a Bayesian optimisation algorithm.
 Bayesian optimisation~\citep{Garnett23}
@@ -365,7 +373,7 @@ The selected point and its observed objective value were added to the data, afte
 We iterated this process until a stopping criterion was met.
 We measured the performance of Bayesian optimisation assisted by different dimensionality reduction methods in terms of its efficiency in finding optimal solutions within the given evaluation budget.
 
-\section{Setup of experiments}
+\section{Setup of Experiments}
 \label{sec:ch05:exp_setup}
 We outline the setup used for our experiments, with details on benchmark problems, concrete design choices and implementation details for Tasks 1 and 2 in \cref{sec:ch05:ml_setup}, and for Tasks 3 and 4 in \cref{sec:ch05:bbo_setup}.
 We conducted our experiments on two compute clusters.
@@ -375,7 +383,7 @@ The code to reproduce our experiments, including the analysis, is available in o
 
 For Bernoulli \gls{rbm}, we apply feature-wise min--max scaling fitted on the training inputs and clip transformed values to $[0,1]$, allowing the method to process real-valued tabular and continuous optimisation data.
 
-\subsection{Main experiments}
+\subsection{Main Experiments}
 
 For all benchmarks, we considered four different target dimensionalities, $d_{\mathrm{red}} \in \{5,10,20,40\}$, and retained only feasible configurations for which the target dimensionality is smaller than the original dimensionality, $d_{\mathrm{red}} < d_{\mathrm{in}}$.
 Because of its computational requirements, Slipmap was evaluated only for $d_{\mathrm{red}}=5$; for Tasks 1 and 2, it was additionally restricted to datasets with at most 1000 instances, as its training time on these datasets reached more than 500 seconds per training run.
@@ -391,12 +399,12 @@ For computational reasons, we used datasets with up to 20\,000 samples.
 For Tasks 1 and 2, we trained the dimensionality reduction methods on the training folds.
 We then evaluated on the test folds the clustering performance in Task 1 and the classifier performance in Task 2.
 
-\paragraph*{Task 1: Clustering ability.}
+\paragraph*{Task 1: Clustering Ability.}
 As a clustering algorithm, we used \gls{hdbscan}~\citep{CamEtAl13}, a hierarchical density-based clustering algorithm that allows for creation of clusters of varying densities and is more robust to parameter selection than other clustering algorithms such as $k_{\mathrm{cluster}}$-means~\citep{KanEtAl02} and \gls{dbscan}~\citep{EstEtAl96}.
 We used the default implementation and default hyperparameter values of \gls{hdbscan}.
 We provide results for other clustering metrics such as \gls{ami}, \gls{ari} and V-measure in the repository.
 Due to limited additional insight they bring, we do not discuss them in detail in this study.
-\paragraph*{Task 2: Tabular classification accuracy.}
+\paragraph*{Task 2: Tabular Classification Accuracy.}
 We considered the following three classification algorithms that are traditionally used for tabular data~\citep{GriEtAl22}: random forest, gradient boosting and \gls{mlp}, all in their scikit-learn~\citep{PedEtAl11} implementations.
 We optimised all classifiers using SMAC3~\citep{LinEtAl22b}, a popular hyperparameter optimiser, with a budget of 30 evaluations.
 %  We provide the configuration spaces in~\cref{app:ch05:config-spaces}.
@@ -454,13 +462,13 @@ We optimised all classifiers using SMAC3~\citep{LinEtAl22b}, a popular hyperpara
 \subsubsection{Experiments for Tasks 3 and 4}
 \label{sec:ch05:bbo_setup}
 
-\paragraph*{Synthetic benchmarks}
+\paragraph*{Synthetic Benchmarks}
 The \gls{bbob} collection is described in \cref{sec:ch03:bbob}.
 
 In this work, we focussed on the first 31 instances of each \gls{bbob} problem
 in seven different original dimensionalities, $d_{\mathrm{in}} \in \{ 20,40,60,120,240,500,1000 \}$.
 Full documentation on the \gls{bbob} problem collection (with definitions, visualisations and practical considerations) is available in the technical report by~\citet{FinEtAl09}.
-\paragraph*{Real-world benchmarks}
+\paragraph*{Real-World Benchmarks}
 We also considered the following real-world benchmarks with different domains and dimensionalities:
 \begin{itemize}
     \item Rover trajectory planning ($100\mathrm{D}$)~\citep{WanEtAl18} is an optimisation problem, where the goal is to find an optimal trajectory between two given points in a $2\mathrm{D}$ environment. A trajectory is determined by fitting a B-spline to a set of points.
@@ -471,7 +479,7 @@ We also considered the following real-world benchmarks with different domains an
 \end{itemize}
 
 For all black-box optimisation benchmarks (both synthetic and real-world), we considered four different initial sample sizes to train the dimensionality reduction methods, $n \in \{100,200,500,1000 \}$.
-\paragraph*{Task 3: Target function approximation.}
+\paragraph*{Task 3: Target Function Approximation.}
 To build the surrogate, we sampled $\min\{50 \cdot d_{\mathrm{in}}, 5000\}$ using Sobol sampling.
 We employed a random forest regressor as a surrogate model, specifically using the scikit-learn implementation.
 We used log-transformation for the target values and optimised
@@ -479,7 +487,7 @@ the hyperparameter settings of the random forest using SMAC3~\citep{LinEtAl22b}.
 We used five outer cross-validation folds. Within each outer training fold, SMAC3 performed 30 trials, and each candidate configuration was evaluated using three-fold shuffled inner cross-validation.
 To aggregate the results, we used min-max normalisation per function.
 
-\paragraph*{Task 4: Black-box optimiser performance.}
+\paragraph*{Task 4: Black-Box Optimiser Performance.}
 We used BoTorch~\citep{BalEtAl20} for the implementation of the \gls{ei} acquisition function and the Gaussian process surrogate model.
 To optimise the acquisition function, we used a genetic algorithm, similarly to the one used as a baseline in \gls{hebo}~\citep{CowEtAl22}. Unless stated otherwise, this \gls{ga} used a population size of 100 and 100 generations. To reduce the cost of repeatedly transforming acquisition-function candidates, the synthetic experiments used a population size of 30 and 30 generations for \gls{umap}, unsupervised \gls{umap}, LocalMAP, PaCMAP and ParamPaCMAP. For the real-world experiments, this reduced setting was used for \gls{umap}, unsupervised \gls{umap} and ParamPaCMAP. All remaining methods, including Ivis and both parametric \gls{umap} variants, used the full $100 \times 100$ setting.
 As an initial design, we evaluated 30 points sampled via a Sobol sequence. The synthetic experiments used the fixed Sobol seed 111, whereas the real-world experiments used the benchmark repetition seed offset by $5000$.
@@ -500,13 +508,13 @@ The total Bayesian optimisation budget was set at $300$ evaluations including th
 %     \item OpenML version 0.15.0
 % \end{itemize}
 
-\subsection{Effect of tuning}
+\subsection{Effect of Tuning}
 
 In addition to the main experiments which use the default hyperparameter settings for each considered dimensionality reduction method, here we assess
 
 whether task-specific hyperparameter optimisation changes the relative performance of the dimensionality reduction methods. Due to the computational cost of tuning, we focus on the 24 synthetic \gls{bbob} functions with \(n=100\), \(d_{\mathrm{red}}=10\), and \(d_{\mathrm{in}}\in\{120,240\}\) for the black-box optimisation tasks. For the machine learning tasks, we consider \(d_{\mathrm{red}}\in\{5,10,20,40\}\).
 
-\subsubsection{Tuning protocol}
+\subsubsection{Tuning Protocol}
 \label{app:ch05:cs}
 \label{app:ch05:tuning-protocol}
 
@@ -568,7 +576,7 @@ For target function approximation and Bayesian optimisation, one configuration i
 % \end{table*}
 
 \FloatBarrier
-\section{Main experimental results}
+\section{Main Results}
 \label{sec:ch05:res}
 
 Figure labels use \gls{ae}, \gls{rp}, 2L for two layers, and unsup. for unsupervised; Param. abbreviates parametric.
@@ -585,7 +593,7 @@ We present and discuss selected results from our experiments for the four assess
 % For Task 4, we additionally report the mean rank trajectories over the complete optimisation process, while the main text reports final performance only.
 
 \FloatBarrier
-\subsection{Task 1: Clustering ability}
+\subsection{Task 1: Clustering Ability}
 \label{sec:ch05:res-ml-task1}
 
 For the data clustering task, we show the results aggregated over all datasets for the two metrics (homogeneity and completeness) with different target dimensionalities $d_{\mathrm{red}}$ in~\cref{fig:ch05:cluster_all_agg}.
@@ -614,9 +622,11 @@ As these methods simultaneously exhibit low homogeneity, as seen in~\cref{fig:ch
 \par\vspace{6pt}
 \includegraphics{figures/05/ml/summary_k_homogeneity_colorbar.pdf}
 
-    \caption[Clustering performance across target dimensionalities]{Mean performance of dimensionality reduction methods aggregated across all OpenML~CC-18 datasets for different target dimensionalities $d_{\mathrm{red}}$ on \textbf{Task 1: clustering ability}. The upper and lower panels show homogeneity and completeness, respectively; higher values are better. }
-    \label{fig:ch05:cluster_all_agg}
+
+
 \Description{Mean performance of dimensionality reduction methods aggregated across all OpenML~CC-18 datasets for different target dimensionalities $d_{\mathrm{red}}$ on \textbf{Task 1: clustering ability}. The upper and lower panels show homogeneity and completeness, respectively; higher values are better. }
+\caption[Clustering performance across target dimensionalities]{Mean performance of dimensionality reduction methods aggregated across all OpenML~CC-18 datasets for different target dimensionalities $d_{\mathrm{red}}$ on \textbf{Task 1: clustering ability}. The upper and lower panels show homogeneity and completeness, respectively; higher values are better. }
+\label{fig:ch05:cluster_all_agg}
 \end{figure}
 
 We now investigate the effect of input dimensionality by grouping the datasets into three categories based on their number of features: low- (up to 60 features, $d_{\mathrm{in}}\leq60$), medium- (60–200 features, $60<d_{\mathrm{in}}\leq200$), and high-dimensional datasets (more than 200 features, $d_{\mathrm{in}}>200$). The results are presented in \cref{fig:ch05:cluster_homogeneity_dataset_sizes}.
@@ -639,9 +649,11 @@ With respect to cluster completeness (\cref{fig:ch05:cluster_homogeneity_dataset
 \par\vspace{6pt}
 \includegraphics{figures/05/ml/summary_size_homogeneity_colorbar.pdf}
 
-    \caption[Clustering performance by input dimensionality]{Mean performance of dimensionality reduction methods on low-, medium- and high-dimensional OpenML~CC-18 datasets for $d_{\mathrm{red}}=5$ on \textbf{Task 1: clustering ability}. The upper and lower panels show homogeneity and completeness, respectively; higher values are better. }
-    \label{fig:ch05:cluster_homogeneity_dataset_sizes}
+
+
 \Description{Mean performance of dimensionality reduction methods on low-, medium- and high-dimensional OpenML~CC-18 datasets for $d_{\mathrm{red}}=5$ on \textbf{Task 1: clustering ability}. The upper and lower panels show homogeneity and completeness, respectively; higher values are better. }
+\caption[Clustering performance by input dimensionality]{Mean performance of dimensionality reduction methods on low-, medium- and high-dimensional OpenML~CC-18 datasets for $d_{\mathrm{red}}=5$ on \textbf{Task 1: clustering ability}. The upper and lower panels show homogeneity and completeness, respectively; higher values are better. }
+\label{fig:ch05:cluster_homogeneity_dataset_sizes}
 \end{figure}
 
 % \subsection{Task 1: Clustering ability}
@@ -819,7 +831,7 @@ With respect to cluster completeness (\cref{fig:ch05:cluster_homogeneity_dataset
 % \clearpage
 % \clearpage
 \FloatBarrier
-\subsection{Task 2: Tabular classification accuracy}
+\subsection{Task 2: Tabular Classification Accuracy}
 \label{sec:ch05:res-ml-task2}
 
 For the tabular classification accuracy task,
@@ -847,9 +859,11 @@ Overall, while most methods achieve comparable accuracy, Ivis consistently perfo
 \par\vspace{6pt}
 \includegraphics{figures/05/ml/summary_k_rf_acc_colorbar.pdf}
 
-    \caption[Classification accuracy across target dimensionalities]{Mean classification accuracy of dimensionality reduction methods across OpenML~CC-18 datasets for different target dimensionalities $d_{\mathrm{red}}$ on \textbf{Task 2: tabular classification accuracy}. From top to bottom, the panels show random forest, gradient boosting and \gls{mlp} results; higher values are better.}
-    \label{fig:ch05:ml_pred_all}
+
+
 \Description{Mean classification accuracy of dimensionality reduction methods across OpenML~CC-18 datasets for different target dimensionalities $d_{\mathrm{red}}$ on \textbf{Task 2: tabular classification accuracy}. From top to bottom, the panels show random forest, gradient boosting and \gls{mlp} results; higher values are better.}
+\caption[Classification accuracy across target dimensionalities]{Mean classification accuracy of dimensionality reduction methods across OpenML~CC-18 datasets for different target dimensionalities $d_{\mathrm{red}}$ on \textbf{Task 2: tabular classification accuracy}. From top to bottom, the panels show random forest, gradient boosting and \gls{mlp} results; higher values are better.}
+\label{fig:ch05:ml_pred_all}
 \end{figure}
 \begin{figure}[!htbp]
 \ContinuedFloat
@@ -862,9 +876,10 @@ Overall, while most methods achieve comparable accuracy, Ivis consistently perfo
 \par\vspace{6pt}
 \includegraphics{figures/05/ml/summary_k_mlp_acc_colorbar.pdf}
 
-    \caption[]{\textit{Continued.} Mean classification accuracy of dimensionality reduction methods across OpenML~CC-18 datasets for different target dimensionalities $d_{\mathrm{red}}$ on \textbf{Task 2: tabular classification accuracy}. From top to bottom, the panels show random forest, gradient boosting and \gls{mlp} results; higher values are better.}
+
 
 \Description{\textit{Continued.} Mean classification accuracy of dimensionality reduction methods across OpenML~CC-18 datasets for different target dimensionalities $d_{\mathrm{red}}$ on \textbf{Task 2: tabular classification accuracy}. From top to bottom, the panels show random forest, gradient boosting and \gls{mlp} results; higher values are better.}
+\caption[]{\textit{Continued.} Mean classification accuracy of dimensionality reduction methods across OpenML~CC-18 datasets for different target dimensionalities $d_{\mathrm{red}}$ on \textbf{Task 2: tabular classification accuracy}. From top to bottom, the panels show random forest, gradient boosting and \gls{mlp} results; higher values are better.}
 \end{figure}
 
 We conclude our analysis by examining the results of the classification task across different dataset sizes, following the same procedure as for the clustering task, with the target dimensionality fixed to $d_{\mathrm{red}}=5$.
@@ -890,9 +905,11 @@ The comparison in~\cref{fig:ch05:ml_pred_le1000} (see Appendix) includes Slipmap
 \par\vspace{6pt}
 \includegraphics{figures/05/ml/summary_size_rf_acc_colorbar.pdf}
 
-    \caption[Classification accuracy by input dimensionality]{Mean classification accuracy of dimensionality reduction methods on low-, medium- and high-dimensional OpenML~CC-18 datasets for $d_{\mathrm{red}}=5$ on \textbf{Task 2: tabular classification accuracy}. From top to bottom, the panels show random forest, gradient boosting and \gls{mlp} results; higher values are better. }
-    \label{fig:ch05:ml_pred_sizes}
+
+
 \Description{Mean classification accuracy of dimensionality reduction methods on low-, medium- and high-dimensional OpenML~CC-18 datasets for $d_{\mathrm{red}}=5$ on \textbf{Task 2: tabular classification accuracy}. From top to bottom, the panels show random forest, gradient boosting and \gls{mlp} results; higher values are better. }
+\caption[Classification accuracy by input dimensionality]{Mean classification accuracy of dimensionality reduction methods on low-, medium- and high-dimensional OpenML~CC-18 datasets for $d_{\mathrm{red}}=5$ on \textbf{Task 2: tabular classification accuracy}. From top to bottom, the panels show random forest, gradient boosting and \gls{mlp} results; higher values are better. }
+\label{fig:ch05:ml_pred_sizes}
 \end{figure}
 \begin{figure}[!htbp]
 \ContinuedFloat
@@ -905,9 +922,10 @@ The comparison in~\cref{fig:ch05:ml_pred_le1000} (see Appendix) includes Slipmap
 \par\vspace{6pt}
 \includegraphics{figures/05/ml/summary_size_mlp_acc_colorbar.pdf}
 
-    \caption[]{\textit{Continued.} Mean classification accuracy of dimensionality reduction methods on low-, medium- and high-dimensional OpenML~CC-18 datasets for $d_{\mathrm{red}}=5$ on \textbf{Task 2: tabular classification accuracy}. From top to bottom, the panels show random forest, gradient boosting and \gls{mlp} results; higher values are better. }
+
 
 \Description{\textit{Continued.} Mean classification accuracy of dimensionality reduction methods on low-, medium- and high-dimensional OpenML~CC-18 datasets for $d_{\mathrm{red}}=5$ on \textbf{Task 2: tabular classification accuracy}. From top to bottom, the panels show random forest, gradient boosting and \gls{mlp} results; higher values are better. }
+\caption[]{\textit{Continued.} Mean classification accuracy of dimensionality reduction methods on low-, medium- and high-dimensional OpenML~CC-18 datasets for $d_{\mathrm{red}}=5$ on \textbf{Task 2: tabular classification accuracy}. From top to bottom, the panels show random forest, gradient boosting and \gls{mlp} results; higher values are better. }
 \end{figure}
 
 % \subsection{Task 2: Tabular classification accuracy}
@@ -1175,7 +1193,7 @@ The comparison in~\cref{fig:ch05:ml_pred_le1000} (see Appendix) includes Slipmap
 % \clearpage
 % \clearpage
 \FloatBarrier
-\subsection{Task 3: Target function approximation}
+\subsection{Task 3: Target Function Approximation}
 \label{sec:ch05:res-bbo-task1}
 
 We start by looking into the results on synthetic benchmarks for the target function approximation task.
@@ -1190,9 +1208,11 @@ This aligns with expectations, as \gls{pls} components are explicitly optimised 
 \par\vspace{6pt}
 \includegraphics{figures/05/epm/summary_red_dim_100_120_colorbar.pdf}
 
-    \caption[Function approximation across target dimensionalities]{Mean normalised \gls{rmse} of dimensionality reduction methods across synthetic benchmark problems for varying target dimensionality $d_{\mathrm{red}}$, with $d_{\mathrm{in}}=120$ and $n=100$, on \textbf{Task 3: target function approximation}; lower is better.}
-    \label{fig:ch05:res-bbo-task1_red_dim_inpt_dim}
+
+
 \Description{Mean normalised \gls{rmse} of dimensionality reduction methods across synthetic benchmark problems for varying target dimensionality $d_{\mathrm{red}}$, with $d_{\mathrm{in}}=120$ and $n=100$, on \textbf{Task 3: target function approximation}; lower is better.}
+\caption[Function approximation across target dimensionalities]{Mean normalised \gls{rmse} of dimensionality reduction methods across synthetic benchmark problems for varying target dimensionality $d_{\mathrm{red}}$, with $d_{\mathrm{in}}=120$ and $n=100$, on \textbf{Task 3: target function approximation}; lower is better.}
+\label{fig:ch05:res-bbo-task1_red_dim_inpt_dim}
 \end{figure}
 
 Second, we look into the effect of varying the input dimensionality $d_{\mathrm{in}}$, keeping the target dimensionality fixed at $d_{\mathrm{red}} = 20$ and the initial sample size at $n = 100$. This is illustrated in~\cref{fig:ch05:res-bbo-task1_inpt_dim}.
@@ -1204,9 +1224,11 @@ The mean normalised errors of the methods exhibit less variance at lower input d
 \par\vspace{6pt}
 \includegraphics{figures/05/epm/summary_inpt_dim_100_20_colorbar.pdf}
 
-    \caption[Function approximation across input dimensionalities]{Mean normalised \gls{rmse} of dimensionality reduction methods across synthetic benchmark problems for varying input dimensionality $d_{\mathrm{in}}$, with $d_{\mathrm{red}}=20$ and $n=100$, on \textbf{Task 3: target function approximation}; lower is better.}
-    \label{fig:ch05:res-bbo-task1_inpt_dim}
+
+
 \Description{Mean normalised \gls{rmse} of dimensionality reduction methods across synthetic benchmark problems for varying input dimensionality $d_{\mathrm{in}}$, with $d_{\mathrm{red}}=20$ and $n=100$, on \textbf{Task 3: target function approximation}; lower is better.}
+\caption[Function approximation across input dimensionalities]{Mean normalised \gls{rmse} of dimensionality reduction methods across synthetic benchmark problems for varying input dimensionality $d_{\mathrm{in}}$, with $d_{\mathrm{red}}=20$ and $n=100$, on \textbf{Task 3: target function approximation}; lower is better.}
+\label{fig:ch05:res-bbo-task1_inpt_dim}
 \end{figure}
 
 We now analyse the effect of varying initial sample sizes for training dimensionality reduction methods. \cref{fig:ch05:res-bbo-task2_samp_sizes} shows the results for different initial sample sizes ($n \in \{100, 200, 500, 1000\}$) for two settings: low-dimensional inputs ($d_{\mathrm{in}} = 40$, target dimensionality $d_{\mathrm{red}} = 5$;~\cref{fig:ch05:res-bbo-task2_samp_sizes-40-5}) and high-dimensional inputs ($d_{\mathrm{in}} = 1000$, target dimensionality $d_{\mathrm{red}} = 40$;~\cref{fig:ch05:res-bbo-task2_samp_sizes-1000-40}).
@@ -1229,9 +1251,11 @@ For high-dimensional inputs ($d_{\mathrm{in}} = 1000$,~\cref{fig:ch05:res-bbo-ta
 \par\vspace{6pt}
 \includegraphics{figures/05/epm/summary_sample_40_5_colorbar.pdf}
 
-    \caption[Function approximation across training sample sizes]{Mean normalised \gls{rmse} of dimensionality reduction methods across synthetic benchmark problems for varying initial sample size $n$. The upper panel shows $d_{\mathrm{in}}=40$, $d_{\mathrm{red}}=5$; the lower panel shows $d_{\mathrm{in}}=1000$, $d_{\mathrm{red}}=40$; lower is better.}
-    \label{fig:ch05:res-bbo-task2_samp_sizes}
+
+
 \Description{Mean normalised \gls{rmse} of dimensionality reduction methods across synthetic benchmark problems for varying initial sample size $n$. The upper panel shows $d_{\mathrm{in}}=40$, $d_{\mathrm{red}}=5$; the lower panel shows $d_{\mathrm{in}}=1000$, $d_{\mathrm{red}}=40$; lower is better.}
+\caption[Function approximation across training sample sizes]{Mean normalised \gls{rmse} of dimensionality reduction methods across synthetic benchmark problems for varying initial sample size $n$. The upper panel shows $d_{\mathrm{in}}=40$, $d_{\mathrm{red}}=5$; the lower panel shows $d_{\mathrm{in}}=1000$, $d_{\mathrm{red}}=40$; lower is better.}
+\label{fig:ch05:res-bbo-task2_samp_sizes}
 \end{figure}
 
 So far, our assessment has focussed on synthetic benchmarks for black-box optimisation. \cref{fig:ch05:res-bbo-task1_real} shows the results on real-world benchmarks.~\cref{fig:ch05:res-bbo-task1_real-k} illustrates performance across varying target dimensionalities, with the initial sample size fixed at $n = 1000$ (note that input dimensionality is determined by the benchmark and cannot be controlled). Across all target dimensionalities, \gls{pls} regression consistently outperforms other methods, reflecting its ability to extract components that are directly predictive of the target variables. Ivis and parametric \gls{umap} closely follow in performance, although their ordering varies with $d_{\mathrm{red}}$.~\cref{fig:ch05:res-bbo-task1_real-n} shows the effect of varying the initial sample size while keeping the target dimensionality fixed at $d_{\mathrm{red}} = 5$. \gls{pls} regression is strongest throughout, including at $n=100$, while Ivis and parametric \gls{umap} again provide the closest alternatives. Increasing the sample size generally strengthens Ivis, but does not change the overall advantage of \gls{pls} regression on these real-world target function approximation problems.
@@ -1252,9 +1276,11 @@ So far, our assessment has focussed on synthetic benchmarks for black-box optimi
 \par\vspace{6pt}
 \includegraphics{figures/05/epm/summary_real_red_dim_1000_colorbar.pdf}
 
-    \caption[Function approximation on real-world benchmarks]{Mean normalised \gls{rmse} of dimensionality reduction methods across real-world benchmark problems on \textbf{Task 3: target function approximation}. The upper panel varies $d_{\mathrm{red}}$ with $n=1000$; the lower panel varies $n$ with $d_{\mathrm{red}}=5$; lower is better.}
-    \label{fig:ch05:res-bbo-task1_real}
+
+
 \Description{Mean normalised \gls{rmse} of dimensionality reduction methods across real-world benchmark problems on \textbf{Task 3: target function approximation}. The upper panel varies $d_{\mathrm{red}}$ with $n=1000$; the lower panel varies $n$ with $d_{\mathrm{red}}=5$; lower is better.}
+\caption[Function approximation on real-world benchmarks]{Mean normalised \gls{rmse} of dimensionality reduction methods across real-world benchmark problems on \textbf{Task 3: target function approximation}. The upper panel varies $d_{\mathrm{red}}$ with $n=1000$; the lower panel varies $n$ with $d_{\mathrm{red}}=5$; lower is better.}
+\label{fig:ch05:res-bbo-task1_real}
 \end{figure}
 
 A possible explanation is that \gls{pls} regression concentrates the limited embedding capacity on directions that covary with the objective value, whereas preserving input-space neighbourhoods or reconstruction accuracy need not retain the information most useful for regression. Its comparatively constrained linear mapping may also be easier to estimate from small samples than a flexible neural embedding, which could help explain its advantage already at $n=100$. The improvement of Ivis with increasing $n$ is consistent with its learned non-linear mapping benefiting from additional observations, while its supervised regression loss helps retain target-relevant information. Nevertheless, the continued advantage of \gls{pls} regression suggests that additional embedding flexibility is not necessarily beneficial for these benchmarks under the evaluated sample sizes and settings. This does not imply that the objective functions themselves are linear: a non-linear predictor can still exploit a representation obtained by a linear mapping. These are plausible interpretations of the aggregate results; our experiments do not isolate the effects of representation capacity, estimation error and objective alignment.
@@ -1537,7 +1563,7 @@ A possible explanation is that \gls{pls} regression concentrates the limited emb
 % \clearpage
 % \clearpage
 \FloatBarrier
-\subsection{Task 4: Black-box optimiser performance}
+\subsection{Task 4: Black-Box Optimiser Performance}
 \label{sec:ch05:res-bbo-task2}
 
 We now focus on the results of the black-box optimiser performance task, where Bayesian optimisation is assisted by the dimensionality reduction methods. As in the previous task, we varied the target dimensionality $d_{\mathrm{red}}$, while fixing both the initial sample size to $n = 100$ and the original input dimensionality to $d_{\mathrm{in}} = 120$. The aggregated results across all synthetic benchmark problems are shown in \cref{fig:ch05:res-bbo-task2_red_dim}.
@@ -1549,9 +1575,11 @@ In contrast to Task 3, \gls{pca} (\gls{rbf}) consistently exhibits the best perf
 \par\vspace{6pt}
 \includegraphics{figures/05/bop/summary_red_dim_100_120_colorbar.pdf}
 
-    \caption[Optimisation performance across target dimensionalities]{Mean final performance across synthetic benchmark problems for varying target dimensionality $d_{\mathrm{red}}$, with $d_{\mathrm{in}}=120$ and $n=100$, on \textbf{Task 4: black-box optimiser performance}. Values are min--max normalised within each function; lower is better.}
-    \label{fig:ch05:res-bbo-task2_red_dim}
+
+
 \Description{Mean final performance across synthetic benchmark problems for varying target dimensionality $d_{\mathrm{red}}$, with $d_{\mathrm{in}}=120$ and $n=100$, on \textbf{Task 4: black-box optimiser performance}. Values are min--max normalised within each function; lower is better.}
+\caption[Optimisation performance across target dimensionalities]{Mean final performance across synthetic benchmark problems for varying target dimensionality $d_{\mathrm{red}}$, with $d_{\mathrm{in}}=120$ and $n=100$, on \textbf{Task 4: black-box optimiser performance}. Values are min--max normalised within each function; lower is better.}
+\label{fig:ch05:res-bbo-task2_red_dim}
 \end{figure}
 
 Next, we analyse the effect of varying input dimensionalities $d_{\mathrm{in}}$ while fixing the initial sample size at $n = 100$ and the target dimensionality at $d_{\mathrm{red}} = 20$.~\cref{fig:ch05:res-bbo-task2_diff_dims} shows the results aggregated across all synthetic benchmark problems. \gls{pca} (\gls{rbf}) has the lowest mean normalised final value across all input dimensionalities.
@@ -1563,9 +1591,11 @@ Ivis is second at $d_{\mathrm{in}}=40$ and $d_{\mathrm{in}}=60$, and remains amo
 \par\vspace{6pt}
 \includegraphics{figures/05/bop/summary_inpt_dim_100_20_colorbar.pdf}
 
-    \caption[Optimisation performance across input dimensionalities]{Mean final performance across synthetic benchmark problems for varying input dimensionality $d_{\mathrm{in}}$, with $d_{\mathrm{red}}=20$ and $n=100$, on \textbf{Task 4: black-box optimiser performance}. Values are min--max normalised within each function; lower is better.}
-    \label{fig:ch05:res-bbo-task2_diff_dims}
+
+
 \Description{Mean final performance across synthetic benchmark problems for varying input dimensionality $d_{\mathrm{in}}$, with $d_{\mathrm{red}}=20$ and $n=100$, on \textbf{Task 4: black-box optimiser performance}. Values are min--max normalised within each function; lower is better.}
+\caption[Optimisation performance across input dimensionalities]{Mean final performance across synthetic benchmark problems for varying input dimensionality $d_{\mathrm{in}}$, with $d_{\mathrm{red}}=20$ and $n=100$, on \textbf{Task 4: black-box optimiser performance}. Values are min--max normalised within each function; lower is better.}
+\label{fig:ch05:res-bbo-task2_diff_dims}
 \end{figure}
 
 We further examined the effect of varying initial sample sizes $n$ on performance, as shown in \cref{fig:ch05:res-bbo-task2_samples}.~\cref{fig:ch05:res-bbo-task2_samples-40-5} corresponds to low-dimensional inputs ($d_{\mathrm{in}} = 40$) with target dimensionality fixed at $d_{\mathrm{red}} = 5$. \gls{pca} (\gls{rbf}) has the lowest mean normalised final value at all four sample sizes, followed by Ivis. \gls{lle} remains competitive, particularly for $n\leq500$. The identity of the best method therefore varies with the reducer training sample even in this comparatively low-dimensional setting.~\cref{fig:ch05:res-bbo-task2_samples-1000-40} shows the results for high-dimensional inputs ($d_{\mathrm{in}} = 1000$) with target dimensionality fixed at $d_{\mathrm{red}} = 40$. \gls{pca} (\gls{rbf}) leads at every sample size. LatentDA is second for $n\in\{100,200\}$, whereas \gls{pls} regression becomes the closest alternative for $n\in\{500,1000\}$.
@@ -1586,9 +1616,11 @@ We further examined the effect of varying initial sample sizes $n$ on performanc
 \par\vspace{6pt}
 \includegraphics{figures/05/bop/summary_sample_40_5_colorbar.pdf}
 
-    \caption[Optimisation performance across training sample sizes]{Mean final performance across synthetic benchmark problems for varying initial sample size $n$. The upper panel shows $d_{\mathrm{in}}=40$, $d_{\mathrm{red}}=5$; the lower panel shows $d_{\mathrm{in}}=1000$, $d_{\mathrm{red}}=40$. Values are min--max normalised within each function; lower is better.}
-    \label{fig:ch05:res-bbo-task2_samples}
+
+
 \Description{Mean final performance across synthetic benchmark problems for varying initial sample size $n$. The upper panel shows $d_{\mathrm{in}}=40$, $d_{\mathrm{red}}=5$; the lower panel shows $d_{\mathrm{in}}=1000$, $d_{\mathrm{red}}=40$. Values are min--max normalised within each function; lower is better.}
+\caption[Optimisation performance across training sample sizes]{Mean final performance across synthetic benchmark problems for varying initial sample size $n$. The upper panel shows $d_{\mathrm{in}}=40$, $d_{\mathrm{red}}=5$; the lower panel shows $d_{\mathrm{in}}=1000$, $d_{\mathrm{red}}=40$. Values are min--max normalised within each function; lower is better.}
+\label{fig:ch05:res-bbo-task2_samples}
 \end{figure}
 
 Finally, we consider results from experiments on real-world benchmark problems in~\cref{fig:ch05:res-bbo-task2-real-world}, whose method ordering differs considerably from that on synthetic benchmarks.
@@ -1627,9 +1659,11 @@ on every individual problem.
 \par\vspace{6pt}
 \includegraphics{figures/05/bop/summary_real_red_dim_100_colorbar.pdf}
 
-    \caption[Optimisation performance on real-world benchmarks]{Mean final performance across real-world benchmark problems on \textbf{Task 4: black-box optimiser performance}. The upper panel varies $d_{\mathrm{red}}$ with $n=100$; the lower panel varies $n$ with $d_{\mathrm{red}}=5$. Values are min--max normalised within each function; lower is better.}
-    \label{fig:ch05:res-bbo-task2-real-world}
+
+
 \Description{Mean final performance across real-world benchmark problems on \textbf{Task 4: black-box optimiser performance}. The upper panel varies $d_{\mathrm{red}}$ with $n=100$; the lower panel varies $n$ with $d_{\mathrm{red}}=5$. Values are min--max normalised within each function; lower is better.}
+\caption[Optimisation performance on real-world benchmarks]{Mean final performance across real-world benchmark problems on \textbf{Task 4: black-box optimiser performance}. The upper panel varies $d_{\mathrm{red}}$ with $n=100$; the lower panel varies $n$ with $d_{\mathrm{red}}=5$. Values are min--max normalised within each function; lower is better.}
+\label{fig:ch05:res-bbo-task2-real-world}
 \end{figure}
 
 % \subsection{Task 4: Black-box optimiser performance}
@@ -1901,11 +1935,11 @@ on every individual problem.
 
 % \clearpage
 \FloatBarrier
-\section{Effect of tuning}
+\section{Effect of Tuning}
 \label{app:ch05:tuned-results}
 
 \FloatBarrier
-\subsection{Task 1: Clustering ability}
+\subsection{Task 1: Clustering Ability}
 
 
 
@@ -1927,9 +1961,11 @@ For Task 1, we tune hyperparameters of dimensionality reduction methods independ
 \end{subfigure}
 \par\vspace{6pt}
 
-    \caption[Homogeneity after tuning for homogeneity]{Homogeneity after tuning reducer hyperparameters for homogeneity; higher is better.}
-    \label{fig:ch05:tuned-ml-cluster-hh}
+
+
 \Description{Homogeneity after tuning reducer hyperparameters for homogeneity; higher is better.}
+\caption[Homogeneity after tuning for homogeneity]{Homogeneity after tuning reducer hyperparameters for homogeneity; higher is better.}
+\label{fig:ch05:tuned-ml-cluster-hh}
 \end{figure}
 
 \begin{figure}[!htbp]
@@ -1948,9 +1984,10 @@ For Task 1, we tune hyperparameters of dimensionality reduction methods independ
 \end{subfigure}
 \par\vspace{6pt}
 
-    \caption[]{\textit{Continued.} Homogeneity after tuning reducer hyperparameters for homogeneity; higher is better.}
+
 
 \Description{\textit{Continued.} Homogeneity after tuning reducer hyperparameters for homogeneity; higher is better.}
+\caption[]{\textit{Continued.} Homogeneity after tuning reducer hyperparameters for homogeneity; higher is better.}
 \end{figure}
 
 \FloatBarrier
@@ -1971,9 +2008,11 @@ The ordering for completeness is less stable: \gls{umap} has the highest mean co
 \end{subfigure}
 \par\vspace{6pt}
 
-    \caption[Completeness after tuning for completeness]{Completeness after tuning reducer hyperparameters for completeness; higher is better.}
-    \label{fig:ch05:tuned-ml-cluster-cc}
+
+
 \Description{Completeness after tuning reducer hyperparameters for completeness; higher is better.}
+\caption[Completeness after tuning for completeness]{Completeness after tuning reducer hyperparameters for completeness; higher is better.}
+\label{fig:ch05:tuned-ml-cluster-cc}
 \end{figure}
 
 \begin{figure}[!htbp]
@@ -1992,9 +2031,10 @@ The ordering for completeness is less stable: \gls{umap} has the highest mean co
 \end{subfigure}
 \par\vspace{6pt}
 
-    \caption[]{\textit{Continued.} Completeness after tuning reducer hyperparameters for completeness; higher is better.}
+
 
 \Description{\textit{Continued.} Completeness after tuning reducer hyperparameters for completeness; higher is better.}
+\caption[]{\textit{Continued.} Completeness after tuning reducer hyperparameters for completeness; higher is better.}
 \end{figure}
 
 \FloatBarrier
@@ -2015,9 +2055,11 @@ The matched-objective results are shown in~\cref{fig:ch05:tuned-ml-cluster-hh,fi
 \end{subfigure}
 \par\vspace{6pt}
 
-    \caption[Completeness after tuning for homogeneity]{Completeness obtained when reducer hyperparameters are tuned for homogeneity; higher is better.}
-    \label{fig:ch05:tuned-ml-cluster-hc}
+
+
 \Description{Completeness obtained when reducer hyperparameters are tuned for homogeneity; higher is better.}
+\caption[Completeness after tuning for homogeneity]{Completeness obtained when reducer hyperparameters are tuned for homogeneity; higher is better.}
+\label{fig:ch05:tuned-ml-cluster-hc}
 \end{figure}
 
 \begin{figure}[!htbp]
@@ -2036,9 +2078,10 @@ The matched-objective results are shown in~\cref{fig:ch05:tuned-ml-cluster-hh,fi
 \end{subfigure}
 \par\vspace{6pt}
 
-    \caption[]{\textit{Continued.} Completeness obtained when reducer hyperparameters are tuned for homogeneity; higher is better.}
+
 
 \Description{\textit{Continued.} Completeness obtained when reducer hyperparameters are tuned for homogeneity; higher is better.}
+\caption[]{\textit{Continued.} Completeness obtained when reducer hyperparameters are tuned for homogeneity; higher is better.}
 \end{figure}
 
 \begin{figure}[!htbp]
@@ -2056,9 +2099,11 @@ The matched-objective results are shown in~\cref{fig:ch05:tuned-ml-cluster-hh,fi
 \end{subfigure}
 \par\vspace{6pt}
 
-    \caption[Homogeneity after tuning for completeness]{Homogeneity obtained when reducer hyperparameters are tuned for completeness; higher is better.}
-    \label{fig:ch05:tuned-ml-cluster-ch}
+
+
 \Description{Homogeneity obtained when reducer hyperparameters are tuned for completeness; higher is better.}
+\caption[Homogeneity after tuning for completeness]{Homogeneity obtained when reducer hyperparameters are tuned for completeness; higher is better.}
+\label{fig:ch05:tuned-ml-cluster-ch}
 \end{figure}
 
 \begin{figure}[!htbp]
@@ -2077,13 +2122,14 @@ The matched-objective results are shown in~\cref{fig:ch05:tuned-ml-cluster-hh,fi
 \end{subfigure}
 \par\vspace{6pt}
 
-    \caption[]{\textit{Continued.} Homogeneity obtained when reducer hyperparameters are tuned for completeness; higher is better.}
+
 
 \Description{\textit{Continued.} Homogeneity obtained when reducer hyperparameters are tuned for completeness; higher is better.}
+\caption[]{\textit{Continued.} Homogeneity obtained when reducer hyperparameters are tuned for completeness; higher is better.}
 \end{figure}
 
 \FloatBarrier
-\subsection{Task 2: Tabular classification accuracy}
+\subsection{Task 2: Tabular Classification Accuracy}
 
 
 
@@ -2105,9 +2151,11 @@ For Task 2, we analyse classification accuracy on ten held-out OpenML tasks in~\
 \end{subfigure}
 \par\vspace{6pt}
 
-    \caption[Random forest accuracy with tuned reducers]{Classification accuracy with tuned reducers and random forests on ten held-out OpenML tasks; higher is better.}
-    \label{fig:ch05:tuned-ml-pred-rf}
+
+
 \Description{Classification accuracy with tuned reducers and random forests on ten held-out OpenML tasks; higher is better.}
+\caption[Random forest accuracy with tuned reducers]{Classification accuracy with tuned reducers and random forests on ten held-out OpenML tasks; higher is better.}
+\label{fig:ch05:tuned-ml-pred-rf}
 \end{figure}
 
 \begin{figure}[!htbp]
@@ -2126,9 +2174,10 @@ For Task 2, we analyse classification accuracy on ten held-out OpenML tasks in~\
 \end{subfigure}
 \par\vspace{6pt}
 
-    \caption[]{\textit{Continued.} Classification accuracy with tuned reducers and random forests on ten held-out OpenML tasks; higher is better.}
+
 
 \Description{\textit{Continued.} Classification accuracy with tuned reducers and random forests on ten held-out OpenML tasks; higher is better.}
+\caption[]{\textit{Continued.} Classification accuracy with tuned reducers and random forests on ten held-out OpenML tasks; higher is better.}
 \end{figure}
 
 \begin{figure}[!htbp]
@@ -2146,9 +2195,11 @@ For Task 2, we analyse classification accuracy on ten held-out OpenML tasks in~\
 \end{subfigure}
 \par\vspace{6pt}
 
-    \caption[Gradient boosting accuracy with tuned reducers]{Classification accuracy with tuned reducers and gradient boosting on ten held-out OpenML tasks; higher is better.}
-    \label{fig:ch05:tuned-ml-pred-gb}
+
+
 \Description{Classification accuracy with tuned reducers and gradient boosting on ten held-out OpenML tasks; higher is better.}
+\caption[Gradient boosting accuracy with tuned reducers]{Classification accuracy with tuned reducers and gradient boosting on ten held-out OpenML tasks; higher is better.}
+\label{fig:ch05:tuned-ml-pred-gb}
 \end{figure}
 
 \begin{figure}[!htbp]
@@ -2167,9 +2218,10 @@ For Task 2, we analyse classification accuracy on ten held-out OpenML tasks in~\
 \end{subfigure}
 \par\vspace{6pt}
 
-    \caption[]{\textit{Continued.} Classification accuracy with tuned reducers and gradient boosting on ten held-out OpenML tasks; higher is better.}
+
 
 \Description{\textit{Continued.} Classification accuracy with tuned reducers and gradient boosting on ten held-out OpenML tasks; higher is better.}
+\caption[]{\textit{Continued.} Classification accuracy with tuned reducers and gradient boosting on ten held-out OpenML tasks; higher is better.}
 \end{figure}
 
 \FloatBarrier
@@ -2190,9 +2242,11 @@ At larger target dimensionalities, the linear methods become more competitive fo
 \end{subfigure}
 \par\vspace{6pt}
 
-    \caption[\glsentryshort{mlp} accuracy with tuned reducers]{Classification accuracy with tuned reducers and \gls{mlp} classifiers on ten held-out OpenML tasks; higher is better.}
-    \label{fig:ch05:tuned-ml-pred-mlp}
+
+
 \Description{Classification accuracy with tuned reducers and \gls{mlp} classifiers on ten held-out OpenML tasks; higher is better.}
+\caption[\glsentryshort{mlp} accuracy with tuned reducers]{Classification accuracy with tuned reducers and \gls{mlp} classifiers on ten held-out OpenML tasks; higher is better.}
+\label{fig:ch05:tuned-ml-pred-mlp}
 \end{figure}
 
 \begin{figure}[!htbp]
@@ -2211,13 +2265,14 @@ At larger target dimensionalities, the linear methods become more competitive fo
 \end{subfigure}
 \par\vspace{6pt}
 
-    \caption[]{\textit{Continued.} Classification accuracy with tuned reducers and \gls{mlp} classifiers on ten held-out OpenML tasks; higher is better.}
+
 
 \Description{\textit{Continued.} Classification accuracy with tuned reducers and \gls{mlp} classifiers on ten held-out OpenML tasks; higher is better.}
+\caption[]{\textit{Continued.} Classification accuracy with tuned reducers and \gls{mlp} classifiers on ten held-out OpenML tasks; higher is better.}
 \end{figure}
 
 \FloatBarrier
-\subsection{Task 3: Target function approximation}
+\subsection{Task 3: Target Function Approximation}
 
 For Task 3, we report the results obtained with task-specific reducer configurations in~\cref{fig:ch05:tuned-epm}. At the lower input dimensionality, \gls{pls} regression has the lowest median normalised \gls{rmse}, followed by parametric \gls{umap} and \gls{pca} (\gls{rbf}). At the higher input dimensionality, \gls{pca} (\gls{rbf}) is strongest, followed by \gls{pls} regression and parametric \gls{umap}. This is consistent with the default-configuration results: \gls{pls} regression is strongest at moderate input dimensionality, whereas \gls{pca} (\gls{rbf}) takes the lead as the input dimensionality $d_{\mathrm{in}}$ increases.
 
@@ -2236,13 +2291,15 @@ For Task 3, we report the results obtained with task-specific reducer configurat
 \end{subfigure}
 \par\vspace{6pt}
 
-    \caption[Function approximation with task-specifically tuned reducers]{Target function approximation with task-specifically tuned reducers for the initial sample size \(n=100\) and target dimensionality \(d_{\mathrm{red}}=10\). The boxes show min--max normalised \gls{rmse} over synthetic \gls{bbob} functions and cross-validation folds; lower is better.}
-    \label{fig:ch05:tuned-epm}
+
+
 \Description{Target function approximation with task-specifically tuned reducers for \(n=100\) and \(d_{\mathrm{red}}=10\). The boxes show min--max normalised \gls{rmse} over synthetic \gls{bbob} functions and cross-validation folds; lower is better.}
+\caption[Function approximation with task-specifically tuned reducers]{Target function approximation with task-specifically tuned reducers for the initial sample size \(n=100\) and target dimensionality \(d_{\mathrm{red}}=10\). The boxes show min--max normalised \gls{rmse} over synthetic \gls{bbob} functions and cross-validation folds; lower is better.}
+\label{fig:ch05:tuned-epm}
 \end{figure}
 
 \FloatBarrier
-\subsection{Task 4: Black-box optimiser performance}
+\subsection{Task 4: Black-Box Optimiser Performance}
 
 For Task 4, the tuned Bayesian optimisation results in~\cref{fig:ch05:tuned-bop} identify \gls{pca} (\gls{rbf}) as the most consistently strong method across both input dimensionalities. At the lower input dimensionality, LocalMAP and Ivis form the next group, while Ivis, \gls{nmf}, and PaCMAP provide the strongest alternatives at the higher input dimensionality.
 
@@ -2262,9 +2319,11 @@ For Task 4, the tuned Bayesian optimisation results in~\cref{fig:ch05:tuned-bop}
 \par\vspace{6pt}
 \includegraphics{figures/05/bop_tuning/heatmap_100_120_10_colorbar.pdf}
 
-    \caption[Optimisation ranks with task-specifically tuned reducers]{Mean ranks during Bayesian optimisation with task-specifically tuned reducers for the initial sample size \(n=100\) and target dimensionality \(d_{\mathrm{red}}=10\). Rank 1 is best.}
-    \label{fig:ch05:tuned-bop}
+
+
 \Description{Mean ranks during Bayesian optimisation with task-specifically tuned reducers for \(n=100\) and \(d_{\mathrm{red}}=10\). Rank 1 is best.}
+\caption[Optimisation ranks with task-specifically tuned reducers]{Mean ranks during Bayesian optimisation with task-specifically tuned reducers for the initial sample size \(n=100\) and target dimensionality \(d_{\mathrm{red}}=10\). Rank 1 is best.}
+\label{fig:ch05:tuned-bop}
 \end{figure}
 
 % \FloatBarrier
@@ -2296,7 +2355,7 @@ For Task 4, the tuned Bayesian optimisation results in~\cref{fig:ch05:tuned-bop}
 
 % With reuse, Ivis has the best final mean rank at $D=120$, closely followed by PCA (RBF); at $D=240$, PCA (RBF) leads, followed by LLE and Ivis. Thus, PCA (RBF) remains competitive under this alternative initialisation, although the ordering is not identical. These rank trajectories do not establish an absolute performance gain from reuse.
 \FloatBarrier
-\section{Running times}
+\section{Running Times}
 \label{sec:ch05:rt}
 
 In~\cref{fig:ch05:res-rt} we present the training and transformation running times of the dimensionality reduction methods for two selected OpenML datasets
@@ -2332,9 +2391,11 @@ We found that Gaussian and sparse random projections consistently incur low runn
 \end{subfigure}
 \par\vspace{6pt}
 
-    \caption[Training and transformation times of dimensionality reduction methods]{Running times in terms of \gls{cpu} hours for dimensionality reduction training (a, c) and transformation (b, d) of OpenML datasets 9985 (51 features and 6618 elements) and 9981 (856 features and 1080 elements).}
-    \label{fig:ch05:res-rt}
+
+
 \Description{Running times in terms of \gls{cpu} hours for dimensionality reduction training (a, c) and transformation (b, d) of OpenML datasets 9985 (51 features and 6618 elements) and 9981 (856 features and 1080 elements).}
+\caption[Training and transformation times of dimensionality reduction methods]{Running times in terms of \gls{cpu} hours for dimensionality reduction training (a, c) and transformation (b, d) of OpenML datasets 9985 (51 features and 6618 elements) and 9981 (856 features and 1080 elements).}
+\label{fig:ch05:res-rt}
 \end{figure}
 \begin{figure}[!htbp]
 \ContinuedFloat
@@ -2352,8 +2413,9 @@ We found that Gaussian and sparse random projections consistently incur low runn
 \end{subfigure}
 \par\vspace{6pt}
 
-    \caption[]{\textit{Continued.} Running times in terms of \gls{cpu} hours for dimensionality reduction training (a, c) and transformation (b, d) of OpenML datasets 9985 (51 features and 6618 elements) and 9981 (856 features and 1080 elements).}
+
 \Description{\textit{Continued.} Running times in terms of \gls{cpu} hours for dimensionality reduction training (a, c) and transformation (b, d) of OpenML datasets 9985 (51 features and 6618 elements) and 9981 (856 features and 1080 elements).}
+\caption[]{\textit{Continued.} Running times in terms of \gls{cpu} hours for dimensionality reduction training (a, c) and transformation (b, d) of OpenML datasets 9985 (51 features and 6618 elements) and 9981 (856 features and 1080 elements).}
 \end{figure}
 
 \FloatBarrier
@@ -2393,7 +2455,7 @@ Results from the tuning experiments in~\cref{app:ch05:tuned-results} broadly ret
 
 Taken together, these findings suggest that the task objective strongly shapes which dimensionality reduction method is most effective. Supervision is advantageous for target function approximation, manifold preservation is particularly valuable for clustering and low-dimensional classification, and Bayesian optimisation depends on an interaction between geometry, sample size and reducer configuration.
 
-\section{Conclusions and future work}
+\section{Conclusions and Future Directions}
 \label{sec:ch05:concl}
 
 This chapter assessed 30 feature-extraction-based dimensionality reduction methods across four downstream tasks in machine learning and black-box optimisation. Varying the original and target dimensionalities and the training budget allowed us to assess their suitability for different uses.

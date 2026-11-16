@@ -1,6 +1,11 @@
 \chapter{Understanding Surrogate Model Accuracy in Bayesian Optimisation}
 \label{ch:ch08:noisy_oracle}
 
+\thesisprovenance{ShaHoo25}
+  {[To be completed: coauthors and division of responsibilities.]}
+  {[To be completed: my conceptual, methodological, software, experimental, analytical, and writing contributions.]}
+  {[To be completed: additions, revisions, and departures from the publication.]}
+
 \section{Introduction}
 
 The previous chapter evaluated predictive models through running-time prediction and solver selection. This chapter examines a different connection between prediction and decisions: the effect of surrogate-model accuracy on \Gls{bo}. It also returns to the modelling choices of~\cref{ch:ch06:dymbo}. Whereas DyMBO adapts the influence of complementary surrogates, the present chapter asks where their predictions need to be accurate to guide optimisation effectively.
@@ -18,10 +23,10 @@ We note that, while real surrogate models might suffer from problems such as ove
 
 Building on the shared acquisition-function definitions, we first review existing approaches to surrogate-model evaluation and related assumptions regarding surrogate model accuracy. We then formalise the noisy oracle framework and introduce the weighting schemes used in our experiments. Next, we present an empirical evaluation of how these different accuracy patterns affect optimisation performance, followed by an analysis of how a \gls{gp} and a random forest behave on a real optimisation trajectory. We then provide theoretical analysis of the noisy oracle framework. Finally, we conclude with implications for the design of Bayesian optimisation algorithms and surrogate models.
 
-\section{Related Work}
+\section{Background and Related Work}
 In this section, we cover existing work related to our goal of assessing where surrogate models need to be accurate. We first look at local Bayesian optimisation approaches and then discuss several metrics for surrogate models.
 
-\subsection{Local Bayesian optimisation}
+\subsection{Local Bayesian Optimisation}
 Traditionally, Bayesian optimisation performed a global search over the entire search space. However, when the search space is large and high-dimensional, global search can be expensive. Local Bayesian optimisation methods have been introduced to solve this problem~\citep{EriEtAl19,NguEtAl22,PapEtAl22}.
 These methods focus on identifying candidates that are close to the current best
 solution. Most notably, TuRBO~\citep{EriEtAl19} uses \textit{trust regions} to limit the search space to a small region around the known best solutions. It then changes the size of the trust region based on the performance of the new solutions sampled.
@@ -30,10 +35,10 @@ The success of such methods is due to their focus on the local region around the
 A potential downside of local Bayesian optimisation methods is that they may continue exploring around a local optima, potentially missing better solutions elsewhere.
 The success of local-Bayesian optimisation suggest that a surrogate model should have accurate predictions only around the optimum, an assumption we will check in the following sections.
 
-\subsection{Surrogate model evaluation}
+\subsection{Surrogate Model Evaluation}
 Several metrics have been proposed to evaluate the quality of surrogate models. These include traditional regression metrics as well as metrics that are more specific to optimisation. In the following subsections, we review representative examples and highlight why they do not directly answer our question about where surrogate models need to be accurate for \gls{bo}.
 
-\subsubsection{Mean squared error}
+\subsubsection{Mean Squared Error}
 \Gls{mse} is one of the most widely used regression metrics~\citep{EimEtAl25,GijEtAl24}; it summarises the squares of the errors for all samples in the test set.
 Formally, \gls{mse} is defined as:
 \begin{equation*}
@@ -41,7 +46,7 @@ Formally, \gls{mse} is defined as:
 \end{equation*}
 \gls{mse} can also be weighted by assigning different weights to individual points. Such weighting is performed in machine learning when dealing with unbalanced datasets or in cases where the domain expert determines that specific samples are more important. However, for Bayesian optimisation, there is no known weighting mechanism, and therefore all points are treated equally (for example in~\citet{SanEtAl24}).
 
-\subsubsection{Ranking score}
+\subsubsection{Ranking Score}
 Proposed by~\citet{FeuEtAl18b} to create a weighted ensemble of pre-trained \glspl{gp}, the ranking loss is based on the observation that the exact values of the configurations are less important in the optimisation context. Instead, we are interested in the best point, and therefore, the rank of the points is more important. The ranking loss is defined as:
 \begin{equation*}
     \begin{aligned}
@@ -54,7 +59,7 @@ where $\oplus$ is the exclusive-or operation.
 
 However, the ranking loss also treats all configurations equally. While we are interested in preserving the ranking of the points around the optimum, their rank far from the optimum has less impact. For example, given two configurations that are far from the optimum, we are only interested in knowing that they are far from it. The exact rank between these points is not important in the optimisation context. However, an error in ranking between these points will be taken into account in the same way as incorrect ranking between two points close to the optimum.
 
-\subsubsection{Uncertainty evaluation}
+\subsubsection{Uncertainty Evaluation}
 While in this work we put an emphasis on predicting the values obtained from the surrogate model, previous work has already researched the uncertainty of the model, as well as its expected calibration~\cite{FolEtAl23b,KulEtAl18}, which is defined as:
 
 \begin{equation*}
@@ -69,7 +74,8 @@ is the quantile function; this means that in a well-calibrated surrogate model, 
 
 While other metrics to quantify surrogate models exist, such as log-likelihood and $R^2$ score, they all treat all samples equally, similarly to the other metrics we covered in this section.
 
-\section{The noisy oracle surrogate model}
+\section{The Noisy Oracle Surrogate Model}
+\label{sec:ch08:oracle}
 \begin{figure}
     \centering
     \hfill
@@ -92,8 +98,8 @@ While other metrics to quantify surrogate models exist, such as log-likelihood a
 
     \end{subfigure}
     \hfill
-    \caption[Original noise functions and schedules]{(a) Original noise functions. Note that different noise functions have different areas under the curve; hence, we normalise the different functions by dividing by their integral. (b) Normalised noise functions with equal area under the curve.}
-    \label{fig:ch08:sched_funcs}
+\caption[Original noise functions and schedules]{(a) Original noise functions. Note that different noise functions have different areas under the curve; hence, we normalise the different functions by dividing by their integral. (b) Normalised noise functions with equal area under the curve.}
+\label{fig:ch08:sched_funcs}
 \end{figure}
 We construct a noisy oracle surrogate model to assess where surrogate models need to be accurate. The noisy oracle is parameterised by a noise function $s:\sR\rightarrow\sR$ and a base noise level $N_\text{base}$. Like other surrogate models in Bayesian optimisation, the noisy oracle produces a predictive mean and variance for each candidate. The predictive mean returned for a candidate solution $x$ is
 \begin{equation}
@@ -163,6 +169,7 @@ We study two ways of constructing the metric $m(x)$. First, we use the distance 
 These two constructions let us separate two competing notions of importance in \gls{bo}: geometric proximity to the optimum versus objective quality.
 
 \section{Experimental Evaluation}
+\label{sec:ch08:experimental-evaluation}
 
 We present the results of our experiments with the noisy oracle in several stages. We begin by exploring value-based noise functions across different noise levels. We then turn to distance-based noise functions and compare their behaviour to the value-based variants. Next, we directly contrast the two noise types within each schedule family. We conclude the experimental section with checks over acquisition functions, acquisition function optimisers, and dimensionalities. Throughout, we report results on both the synthetic \gls{bbob} suite and the real-world PD1 benchmark.
 
@@ -181,7 +188,7 @@ We implemented the noisy oracle surrogate model within the highly flexible SMAC3
 
 We performed our experiments on a compute cluster with 19 nodes; each node is equipped with two AMD EPYC 7543 32-Core processors with 512MB of L3 cache and 1TB of \gls{ram} running Rocky Linux 9.
 
-\subsection{Value-based noise functions}
+\subsection{Value-Based Noise Functions}
 
 \begin{figure}
     \centering
@@ -215,8 +222,8 @@ We performed our experiments on a compute cluster with 19 nodes; each node is eq
         \centering
         \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_2_0.3_ei_rank_legend.pdf}
     \end{subfigure}
-    \caption[Value-based noise ranks on \glsentryshort{bbob}]{Mean ranks of regret resulting from running Bayesian optimisation with different value-based noise functions over different noise levels on the \gls{bbob} functions. For noise levels up to $0.1$, noise functions that give an advantage to larger areas around the optimum, at the expense of being more inaccurate far from it perform best. For higher noise levels, constant noise performs better.}
-    \label{fig:ch08:value_based}
+\caption[Value-based noise ranks on \glsentryshort{bbob}]{Mean ranks of regret resulting from running Bayesian optimisation with different value-based noise functions over different noise levels on the \gls{bbob} functions. For noise levels up to $0.1$, noise functions that give an advantage to larger areas around the optimum, at the expense of being more inaccurate far from it perform best. For higher noise levels, constant noise performs better. Lower ranks are better.}
+\label{fig:ch08:value_based}
 \end{figure}
 
 We begin by examining the performance of the value-based noise functions.
@@ -260,13 +267,13 @@ As the noise level increases ($0.2$--$0.5$), constant noise becomes the best noi
         \centering
         \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_0.3_ei_rank_pd1_legend.pdf}
     \end{subfigure}
-    \caption[Value-based noise ranks on PD1]{Mean ranks of regret resulting from running Bayesian optimisation with different value-based noise functions over different noise levels on the real-world PD1 benchmark. Similar to the synthetic benchmark results, polynomial noise functions perform well at lower noise levels, whereas constant noise struggles significantly.}
-    \label{fig:ch08:value_based_pd1}
+\caption[Value-based noise ranks on PD1]{Mean ranks of regret resulting from running Bayesian optimisation with different value-based noise functions over different noise levels on the real-world PD1 benchmark. Similar to the synthetic benchmark results, polynomial noise functions perform well at lower noise levels, whereas constant noise struggles significantly. Lower ranks are better.}
+\label{fig:ch08:value_based_pd1}
 \end{figure}
 
 The PD1 results in \cref{fig:ch08:value_based_pd1} show a similar transition. At low-to-moderate noise levels, non-constant value-based schedules dominate: the cosine and tanh schedules perform very well, whereas overly aggressive or uniform schedules fare worse. The regime shift from non-constant to constant noise occurs at roughly the same noise level as on \gls{bbob}, despite the fact that PD1 contains only four target functions (compared to 24 for \gls{bbob}), suggesting that the transition is not an artefact of aggregation over many benchmarks. For higher noise levels, the less aggressive exponential schedules outperform the more aggressive non-constant schedules, while constant noise dominates overall.
 
-\subsection{Distance-based noise}
+\subsection{Distance-Based Noise}
 \begin{figure}
     \centering
     \begin{subfigure}{0.32\textwidth}
@@ -299,9 +306,9 @@ The PD1 results in \cref{fig:ch08:value_based_pd1} show a similar transition. At
         \centering
         \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/rs_BBOBDistanceToOptimum_2_0.5_ei_rank_legend.pdf}
     \end{subfigure}
-    \caption[Distance-based noise ranks on \glsentryshort{bbob}]{Mean ranks of regret resulting from running Bayesian optimisation with different distance-based noise functions over different noise levels. For all noise levels, constant noise
-    gives the best performance, with the margin increasing with the noise level.}
-    \label{fig:ch08:dist_opt}
+\caption[Distance-based noise ranks on \glsentryshort{bbob}]{Mean ranks of regret resulting from running Bayesian optimisation with different distance-based noise functions over different noise levels. For all noise levels, constant noise
+    gives the best performance, with the margin increasing with the noise level. Lower ranks are better.}
+\label{fig:ch08:dist_opt}
 \end{figure}
 
 \begin{figure}
@@ -336,8 +343,8 @@ The PD1 results in \cref{fig:ch08:value_based_pd1} show a similar transition. At
         \centering
         \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/rs_BBOBDistanceToOptimum_0.5_ei_rank_pd1_legend.pdf}
     \end{subfigure}
-    \caption[Distance-based noise ranks on PD1]{Mean ranks of regret resulting from running Bayesian optimisation with different distance-based noise functions over different noise levels on the PD1 benchmark. Constant noise achieves best performance, unless the noise level is minimal.}
-    \label{fig:ch08:dist_opt_pd1}
+\caption[Distance-based noise ranks on PD1]{Mean ranks of regret resulting from running Bayesian optimisation with different distance-based noise functions over different noise levels on the PD1 benchmark. Constant noise achieves best performance, unless the noise level is minimal. Lower ranks are better.}
+\label{fig:ch08:dist_opt_pd1}
 \end{figure}
 Next, we evaluate noise functions based on the distance from the optimum. The results are presented in \cref{fig:ch08:dist_opt}. Similarly to the value-based noise functions, we look at all \gls{bbob} functions and use the optimisation with the \gls{ei} acquisition function. Compared with value-based noise, distance-based noise exhibits markedly different behaviour with the noise schedules. Constant noise is consistently the strongest schedule; the performance gap widens with each increase in noise level. The exponential noise schedules follow the constant noise.
 
@@ -379,8 +386,8 @@ Taken together with the results from the previous sub-section, these results ind
         \includegraphics[width=\linewidth]{figures/08/figures/conv/20_rs_BBOBDistanceToOptimum_2_0.1_ei_cov_legend.pdf}
 
     \end{subfigure}
-    \caption[Convergence plots with distance-based noise]{Convergence plots of \gls{bbob} functions 1 (a-c) and 20 (d-f) with noise levels ($0.01, 0.05, 0.1$), different noise schedules using distance-based noise. On function 1 and lower noise levels, it is better to be accurate around the optimum. For function 20, constant noise dominates, followed by more benign noise functions that give only modest advantage to solutions around the optimum.}
-    \label{fig:ch08:conv_sample}
+\caption[Convergence plots with distance-based noise]{Convergence plots of \gls{bbob} functions 1 (a-c) and 20 (d-f) with noise levels ($0.01, 0.05, 0.1$), different noise schedules using distance-based noise. On function 1 and lower noise levels, it is better to be accurate around the optimum. For function 20, constant noise dominates, followed by more benign noise functions that give only modest advantage to solutions around the optimum.}
+\label{fig:ch08:conv_sample}
 \end{figure}
 
 We show convergence plots of \gls{bbob} functions 1 and 20 with different noise functions and levels in \cref{fig:ch08:conv_sample}. These results use distance-based noise. Function 1 is the Sphere function, a simple unimodal function with no local optima. Function 20, on the other hand, is the Schwefel function, which has multiple local optima, including some that are relatively close in value to the optimum but far from it in distance.
@@ -390,7 +397,7 @@ The trajectories make the difference between the two functions particularly clea
 
 These results challenge the common assumption that being accurate around the optimum is sufficient for a good surrogate. Furthermore, being accurate only around the optimum, and not around other areas of good value, can be seen as providing an additional ``oracle'' hint. However, in practice, the optimiser confuses poorly predicted solutions with good ones, while neglecting the real optimum.
 
-\subsection{Comparing value-based and distance-based noise within each schedule}
+\subsection{Comparing Value-Based and Distance-Based Noise within Each Schedule}
 \begin{figure}[!htbp]
     \centering
     \begin{subfigure}{0.32\textwidth}
@@ -436,8 +443,8 @@ These results challenge the common assumption that being accurate around the opt
         \includegraphics[width=\linewidth]{figures/08/figures/noise_type_comp/rs_tanh_2_ei_rank_legend.pdf}
 
     \end{subfigure}
-    \caption[Noise type and level comparison on \glsentryshort{bbob}]{Mean ranks of the regret resulting from running Bayesian optimisation with different noise types and levels. Each plot represents one noise function. For polynomial noise functions, value-based noise is superior to distance-based noise.}
-    \label{fig:ch08:function_types}
+\caption[Noise type and level comparison on \glsentryshort{bbob}]{Mean ranks of the regret resulting from running Bayesian optimisation with different noise types and levels. Each plot represents one noise function. For polynomial noise functions, value-based noise is superior to distance-based noise. Lower ranks are better.}
+\label{fig:ch08:function_types}
 \end{figure}
 
 We compare value-based and distance-based noise within each schedule family. In \cref{fig:ch08:function_types,fig:ch08:function_types_pd1}, each sub-figure shows one noise schedule, with lines for value-based and distance-based variants across all tested noise levels. This experiment was conducted using \gls{ei} as the acquisition function and random search for acquisition function optimisation on dimension 2.
@@ -487,13 +494,13 @@ We compare value-based and distance-based noise within each schedule family. In 
         \includegraphics[width=\linewidth]{figures/08/figures/noise_type_comp/rs_tanh_ei_rank_pd1_legend.pdf}
 
     \end{subfigure}
-    \caption[Noise type and level comparison on PD1]{Mean ranks of regret resulting from evaluating different noise types and levels on the PD1 benchmark. Each plot represents a specific noise function, comparing its value-based and distance-based variants across noise levels.}
-    \label{fig:ch08:function_types_pd1}
+\caption[Noise type and level comparison on PD1]{Mean ranks of regret resulting from evaluating different noise types and levels on the PD1 benchmark. Each plot represents a specific noise function, comparing its value-based and distance-based variants across noise levels. Lower ranks are better.}
+\label{fig:ch08:function_types_pd1}
 \end{figure}
 
 \cref{fig:ch08:function_types,fig:ch08:function_types_pd1} show that for smooth noise functions such as linear, cosine and tanh, the value-based variant is superior, but the distance-based variant with low noise remains competitive; in contrast, sharper families (notably higher-order polynomial and steep exponential variants) are more sensitive and expose clearer differences between the two formulations. This is consistent with the idea that steep schedules amplify inductive bias: if the bias is aligned with objective quality, performance can improve, but if aligned only with distance, the optimiser is more easily led astray.
 
-\subsection{Different acquisition functions}
+\subsection{Different Acquisition Functions}
 We now check whether different acquisition functions require a different accuracy focus from the surrogate model. We evaluate \gls{pi} and \gls{lcb} in addition to the \gls{ei} results presented earlier, using a noise level of $0.1$ and the 24 \gls{bbob} functions on dimension 2.
 The results are shown in \cref{fig:ch08:diff_acqs}.
 
@@ -512,8 +519,8 @@ The results are shown in \cref{fig:ch08:diff_acqs}.
         \centering
         \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_2_0.1_lcb_rank_legend.pdf}
     \end{subfigure}
-    \caption[Acquisition function comparison on \glsentryshort{bbob}]{Mean ranks of regret resulting from running Bayesian optimisation with value-based noise functions with different acquisition functions and noise level of $0.1$. (a) \gls{pi}. (b) \gls{lcb}. The best performing noise functions remain similar to using \gls{ei} as an acquisition.}
-    \label{fig:ch08:diff_acqs}
+\caption[Acquisition function comparison on \glsentryshort{bbob}]{Mean ranks of regret resulting from running Bayesian optimisation with value-based noise functions with different acquisition functions and noise level of $0.1$. (a) \gls{pi}. (b) \gls{lcb}. The best performing noise functions remain similar to using \gls{ei} as an acquisition. Lower ranks are better.}
+\label{fig:ch08:diff_acqs}
 \end{figure}
 
 \begin{figure}
@@ -531,13 +538,13 @@ The results are shown in \cref{fig:ch08:diff_acqs}.
         \centering
         \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_0.1_lcb_rank_pd1_legend.pdf}
     \end{subfigure}
-    \caption[Acquisition function comparison on PD1]{Mean ranks of regret on the PD1 benchmark using value-based noise with (a) \gls{pi} and (b) \gls{lcb} acquisition functions at a noise level of $0.1$. The relative performance of the noise functions remains consistent with \gls{ei}.}
-    \label{fig:ch08:diff_acqs_pd1}
+\caption[Acquisition function comparison on PD1]{Mean ranks of regret on the PD1 benchmark using value-based noise with (a) \gls{pi} and (b) \gls{lcb} acquisition functions at a noise level of $0.1$. The relative performance of the noise functions remains consistent with \gls{ei}. Lower ranks are better.}
+\label{fig:ch08:diff_acqs_pd1}
 \end{figure}
 
 The rankings under \gls{pi} and \gls{lcb} (\cref{fig:ch08:diff_acqs,fig:ch08:diff_acqs_pd1}) closely mirror the \gls{ei} case, with only minor swaps among similarly performing schedules. In particular, the cosine and polynomial schedules that perform well under \gls{ei} remain among the top schedules under \gls{pi} and \gls{lcb}, whereas constant noise occupies a similar mid-range position. \gls{pi}, being a greedier acquisition function, might be expected to be more sensitive to prediction accuracy near the incumbent, but we do not observe a qualitatively different pattern. This indicates that our conclusions about useful noise allocation are not tied to a specific acquisition criterion.
 
-\subsection{Different acquisition optimisers}
+\subsection{Different Acquisition Optimisers}
 In the next step, we also check whether different acquisition function optimisers are required. We compare local and random search as acquisition optimisers on \gls{bbob} in \cref{fig:ch08:acq_opts}.
 \begin{figure}
     \centering
@@ -552,8 +559,8 @@ In the next step, we also check whether different acquisition function optimiser
         \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/default_BBOBValueBased_2_0.1_ei_rank_legend.pdf}
 
     \end{subfigure}
-    \caption[Local search optimisation comparison on \glsentryshort{bbob}]{Mean ranks of regret resulting from running Bayesian optimisation with value-based noise functions using different acquisition function optimisers: local search and random search, at a noise level of $0.1$. The best-performing noise functions remain similar to the random search case.}
-    \label{fig:ch08:acq_opts}
+\caption[Local search optimisation comparison on \glsentryshort{bbob}]{Mean ranks of regret resulting from running Bayesian optimisation with value-based noise functions using different acquisition function optimisers: local search and random search, at a noise level of $0.1$. The best-performing noise functions remain similar to the random search case. Lower ranks are better.}
+\label{fig:ch08:acq_opts}
 \end{figure}
 
 \begin{figure}
@@ -566,8 +573,8 @@ In the next step, we also check whether different acquisition function optimiser
         \centering
         \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/default_BBOBValueBased_0.1_ei_rank_pd1_legend.pdf}
     \end{subfigure}
-    \caption[Local search optimisation comparison on PD1]{Mean ranks of regret on the PD1 benchmark using value-based noise and local search for acquisition function optimisation at a noise level of $0.1$.}
-    \label{fig:ch08:acq_opts_pd1}
+\caption[Local search optimisation comparison on PD1]{Mean ranks of regret on the PD1 benchmark using value-based noise and local search for acquisition function optimisation at a noise level of $0.1$. Lower ranks are better.}
+\label{fig:ch08:acq_opts_pd1}
 \end{figure}
 
 Changing the acquisition optimiser from random search to local search (\cref{fig:ch08:acq_opts,fig:ch08:acq_opts_pd1}) leaves the qualitative ordering largely unchanged. In particular, schedules that perform well with random search remain competitive with local search, indicating that the observed trends are driven primarily by surrogate-noise design rather than by the particular search dynamics of the optimiser. We note that \cref{fig:ch08:acq_opts_pd1} shows results only with local search on PD1, as the random search baseline is already reported in \cref{fig:ch08:value_based_pd1}.
@@ -589,19 +596,20 @@ We check whether our results hold across different dimensionalities of the \gls{
         \centering
         \includegraphics[width=\linewidth]{figures/08/figures/noise_types_levels/rs_BBOBValueBased_8_0.1_ei_rank_legend.pdf}
     \end{subfigure}
-    \caption[Combined noise analysis on \glsentryshort{bbob}]{Mean ranks of resulting regrets of running Bayesian optimisation with \gls{ei} as an acquisition function with different value-based noise functions over different noise levels. With a noise level of $0.1$ on dimensions 4 and 8. With higher dimensions, more noise functions perform well. However, constant noise performs worse than other noise levels for both cases.}
-    \label{fig:ch08:dims}
+\caption[Combined noise analysis on \glsentryshort{bbob}]{Mean ranks of resulting regrets of running Bayesian optimisation with \gls{ei} as an acquisition function with different value-based noise functions over different noise levels. With a noise level of $0.1$ on dimensions 4 and 8. With higher dimensions, more noise functions perform well. However, constant noise performs worse than other noise levels for both cases. Lower ranks are better.}
+\label{fig:ch08:dims}
 \end{figure}
 
 \cref{fig:ch08:dims} suggests that increasing dimensionality compresses differences among the better non-constant schedules, but does not reverse the main conclusion. Several value-based schedules remain strong in both $d=4$ and $d=8$, while constant noise is still typically among the weaker options. This indicates that the benefit of allocating fidelity by objective quality is not limited to the lowest-dimensional setting tested.
 
-\subsection{Summary of experimental findings}
+\subsection{Summary of Experimental Findings}
 Taken together, the experiments indicate a consistent pattern. In a low-to-moderate noise regime, \gls{bo} benefits from non-uniform, value-based fidelity allocation; in a high-noise regime, the advantage of strong non-uniformity shrinks and simpler schedules become more competitive. Importantly, this pattern remains visible when changing acquisition function, acquisition optimiser, and dimensionality, suggesting that it reflects a structural property of how \gls{bo} reacts to surrogate distortion rather than a setup-specific artifact.
 We also observed that in general, value-based noise functions are superior to distance based ones.
 
 The convergence comparison on F1 versus F20 further suggests that landscape structure modulates this trade-off. On smoother landscapes, non-uniform schedules can remain beneficial for longer. Other the other hand, on multimodal landscapes, schedules that heavily degrade distant points are riskier because the optimiser encounters more suboptimal-but-competitive regions that can be over-promoted by distorted predictions.
 
-\section{Comparison to real-world surrogate models}
+\section{Comparison to Real-World Surrogate Models}
+\label{sec:ch08:learned-surrogates}
 \begin{figure}[tbp]
     \centering
     \begin{subfigure}{0.24\textwidth}
@@ -625,8 +633,8 @@ The convergence comparison on F1 versus F20 further suggests that landscape stru
         \includegraphics[width=\linewidth]{figures/08/figures/contours/ground_truth.pdf}
         \caption{Ground truth}
     \end{subfigure}
-    \caption[\glsentryshort{gp} error analysis on \glsentryshort{bbob} F3]{Error of \gls{gp} trained on different subsets of solutions from a trajectory of \gls{bo} on \gls{bbob} F3 (a-d). (e) ground truth values of the function. When the optimisation progresses, better predictions are made in high-performance regions, at the expense of low-performance regions.}
-    \label{fig:ch08:gps_accs}
+\caption[\glsentryshort{gp} error analysis on \glsentryshort{bbob} F3]{Error of \gls{gp} trained on different subsets of solutions from a trajectory of \gls{bo} on \gls{bbob} F3 (a-d). (e) ground truth values of the function. When the optimisation progresses, better predictions are made in high-performance regions, at the expense of low-performance regions.}
+\label{fig:ch08:gps_accs}
 \end{figure}
 
 Following the noisy-oracle experiments, we examine how real surrogate models behave on an actual \gls{bo} trajectory. The goal of this section is not to reproduce the earlier controlled setup exactly, but to check whether the qualitative pattern suggested by the noisy oracle can also be seen in standard surrogate models.
@@ -658,18 +666,18 @@ The results are presented in \cref{fig:ch08:gps_accs}, together with the ground-
         \includegraphics[width=\linewidth]{figures/08/figures/contours/ground_truth.pdf}
         \caption{Ground truth}
     \end{subfigure}
-    \caption[Random forest error analysis on \glsentryshort{bbob} F3]{Error of random forest trained on different subsets of solutions from a trajectory of \gls{bo} on \gls{bbob} F3 (a-d). (e) ground truth values of the function. When the optimisation progresses, better predictions are made in high-performance regions, at the expense of low-performance regions.}
-    \label{fig:ch08:rfs_accs}
+\caption[Random forest error analysis on \glsentryshort{bbob} F3]{Error of random forest trained on different subsets of solutions from a trajectory of \gls{bo} on \gls{bbob} F3 (a-d). (e) ground truth values of the function. When the optimisation progresses, better predictions are made in high-performance regions, at the expense of low-performance regions.}
+\label{fig:ch08:rfs_accs}
 \end{figure}
 
-\section{Theoretical analysis}
+\section{Theoretical Analysis}
 \label{sec:ch08:theoretical-analysis}
 Our empirical results with the noisy oracle (e.g., \cref{fig:ch08:value_based,fig:ch08:dist_opt}) suggest that substantial surrogate-model inaccuracy can be detrimental, especially when it makes suboptimal points appear unrealistically attractive. In this section, we study a deterministic analogue of this phenomenon to better understand when such misleading behaviour can occur.
 
 We provide a theoretical analysis of a deterministic version of the noisy oracle surrogate model. The purpose of this analysis is to derive simple, conditions under which the acquisition function prefers a suboptimal point to the optimum because the surrogate prediction is distorted.
 
 We note that the choice to analyse a deterministic surrogate rather than the stochastic oracle used in the experiments for two reasons. First, a stochastic oracle produces different predictions at each query, so the event ``the acquisition function is misled'' becomes a probabilistic statement that depends on the joint distribution of all noise draws across all evaluated candidates within an iteration. Deriving tight, interpretable bounds in this setting would require additional assumptions about the number of candidates, the correlation structure of queries, and the acquisition optimiser search strategy, which would obscure the core message. Second, we define the deterministic model represents a pessimistic, worst-case, scenario in which the surrogate consistently predicts values that are better than the truth by exactly the assigned noise magnitude. If the acquisition function can be misled under this deterministic bias, then it can certainly be misled by the stochastic oracle whenever a noise draw happens to produce a similarly large deviation, which occurs with non-negligible probability when $N(x_L)$ is large. In other words, the deterministic thresholds serve as sufficient conditions for the possibility of misleading behaviour under the stochastic oracle as they identify the noise magnitudes at which the risk of being misled becomes structurally unavoidable rather than merely a rare tail event.
-\subsection{General definitions}
+\subsection{General Definitions}
 \label{sec:ch08:gen_defs}
 We define $x_L\in \sR^n$ as a suboptimal point such that $f(x_L) = f(x^*) + l$, where $l > 0$. Thus, $l$ measures the objective gap between the optimum and the suboptimal point.
 
@@ -943,7 +951,8 @@ The additional empirical patterns can also be interpreted through these bounds. 
 Moreover, our empirical results showed that the behaviour of the noisy oracle does not substantially change when changing the acquisition function from \gls{ei} to \gls{pi} or \gls{lcb}. This goes in line with our theoretical findings as all derived conditions are driven by the same core quantities ($l$, $N_{\min}$, $\sigma$, and especially $N(x_L)$). Changing the optimisation mechanics can affect details of trajectories, but it does not remove the underlying mechanism by which distorted predictions at  suboptimal points can be selected over the optimal point.
 
 Furthermore, the worse performance that aggressive noise scheduled showed on multimodal functions is also aligned with the theoretical analysis. Multimodality increases the chance of encountering points with small $l$ but misleadingly high predicted utility. These are exactly the points for which large induced $N(x_L)$ can trigger the misleading conditions. Thus, the theory and experiments jointly suggest that keeping error a small error on suboptimal regions is particularly important in rugged landscapes.
-\section{Chapter conclusion}
+\section{Conclusions and Future Directions}
+\label{sec:ch08:conclusion}
 
 This chapter aimed to understand how surrogate model predictions can be made effective for Bayesian optimisation.
 To achieve this, we constructed a noisy oracle surrogate model that samples from the target function and then adds noise to the predicted value according to different noise functions.

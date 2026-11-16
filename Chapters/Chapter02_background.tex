@@ -2,7 +2,7 @@
 \chapter{Background}\label{ch:ch02:background}
 
 This chapter establishes the shared foundations for the contribution chapters: empirical performance prediction and its distributional variants, algorithm selection, and Bayesian optimisation. Domain and benchmark descriptions follow in~\cref{ch:ch03:scenarios}, while contribution-specific related work remains with the corresponding methods.
-\section{Empirical performance prediction}
+\section{Empirical Performance Prediction}
 \label{sec:ch02:empirical_performance_prediction}
 
 Let $\algo$ denote a parameterised algorithm drawn from an algorithm space $\algorithmSpace$, and let $\configuration \in \configurationSpace$ be a configuration, \emph{i.e.}, an assignment of values to the parameters of $\algo$. Let $\instance\in \instanceSpace$ denote a problem instance out of the instance space $\instanceSpace$. $\instance$ is characterised by a feature vector $\instanceFeatures = [\instanceFeature_1, \ldots, \instanceFeature_{d_z}]^{\top} \in \mathbb{R}^{d_z}$. The performance of $\algo$ using configuration $\configuration$ on $\instance$ is denoted by $\performanceVector \in \mathbb{R}^{d_p}$, $d_p \in \mathbb{N}$. Note that, $\performanceVector$ can be have a single element, if there is only one performance metric of interest (for example, the running time of a \gls{sat} solver), or, have multiple, potentially competing performance metrics (for example, accuracy and inference speed of a neural network).
@@ -28,11 +28,11 @@ Finally, across different scenarios, the scale of the performance target can var
 
 
 The predict performance can be a single number per metric, showing the mean or median value. Alternatively, it is also possible to predict the full performance distribution distribution $\rho(y \mid \modelInput)$ rather than a single value to obtain a distributional \gls{epm}~\citep{EggEtAl18a}, which is particularly valuable for capturing more subtle details of the performance of the algorithm, such as its variance and skewness.
-\subsection{Applications and instance features}
+\subsection{Applications and Instance Features}
 
 \glspl{epm} have been developed for a wide range of tasks, including automated algorithm selection~\citep{XuEtAl08, Kotthoff16}, algorithm configuration and parameter tuning~\citep{HutEtAl12, HutEtAl06}, data centre and cloud scheduling~\citep{LeeEtAl25, IslEtAl12, SaxEtAl23, PhaEtAl20}, compiler optimisation~\citep{YotEtAl03, AshEtAl19}, and database query optimisation~\citep{WuEtAl13}. \glspl{epm} require a set of features describing instances as an input to the model. For $\mathcal{NP}$-complete problems, high-level properties of instances are encoded to serve as an instance identifier, such as the SATzilla features for \gls{sat}~\citep{HutEtAl14,ShaHoo24} and causal-graph or planning-graph features for automated planning~\citep{FawEtAl14}.
 
-\subsection{Performance distribution prediction}
+\subsection{Performance Distribution Prediction}
 \label{sec:ch02:distribution_prediction}
 
 For a stochastic solver, repeated runs on a fixed instance need not take the same amount of time. Let $\xi$ denote the random choices made during a run. For a fixed solver $\algo$, configuration $\configuration$, and instance $\instance$, its running time is a random variable
@@ -60,18 +60,18 @@ To capture the complete run-to-run variation of stochastic algorithms, \citet{Eg
 
 To improve predictive quality in data-scarce regimes, \emph{BayesDistNet}~\citep{TueBur21} replaces the deterministic network with a \Gls{bnn}. During inference, BayesDistNet generates running-time samples by repeatedly evaluating the \gls{bnn} with different weight samples, subsequently fitting a parametric distribution post-hoc. While effective with few training runs, this sampling-based inference introduces substantial computational overhead. Furthermore, because \gls{bnn} predictions rely on stochastic weight samples, feature attribution becomes unstable and computationally prohibitive, making it ill-suited for explainability.
 
-\section{Algorithm selection}
+\section{Algorithm Selection}
 \label{sec:ch02:algorithm_selection}
 
 In this section, we introduce the algorithm selection problem and its components, including a formal definition, common baselines and use cases. We also relate it to multi-class classification and empirical performance prediction.
 
-\subsection{Formal definition}
+\subsection{Formal Definition}
 Given a set of problem instances $\instanceSpace$ (which can be, for example, datasets), instance features $\featureSpace$, a set of algorithms $\algorithmSpace$ and a performance metric $p:\algorithmSpace \times \instanceSpace \rightarrow \mathbb{R}$ (for example, predictive accuracy or running time), the algorithm selection problem~\citep{Rice76} seeks to find a selector $S:\featureSpace\rightarrow\algorithmSpace$ such that the performance of $S$ on the instances $\instanceSpace$ is optimal according to $p$~\citep{KerEtAl19}.
 
 Extensions include the use of \textit{algorithm features}, which are combined with the instance features to predict the best algorithm for each problem instance. For simplicity, for the remainder of the section, we assume that the goal is to minimise $p$.
 In algorithm selection, the ideal goal is to reach the performance of the \gls{vbs} (\emph{i.e.}, perfect selector). Furthermore, the selection must be better than the \gls{sbs} in order to make the use of algorithm selection worthwhile.
 
-\subsection{Algorithm selection pipelines}
+\subsection{Algorithm Selection Pipelines}
 \begin{figure}[tbp]
     \centering
     \begin{tikzpicture}[
@@ -155,10 +155,10 @@ In algorithm selection, the ideal goal is to reach the performance of the \gls{v
         \draw[arrow] (selector) -- (perf_selector);
         \draw[arrow] (eval_metric) -- (perf_selector);
     \end{tikzpicture}
-    \caption[Algorithm selection pipeline]{Algorithm selection pipeline. A portfolio of complementary algorithms can first be chosen by pre-selection. In running-time scenarios, a short pre-solving schedule may solve easy instances before feature computation or before invoking the learned selector. Instance features, optional algorithm features, and performance data are then used to train and evaluate the algorithm selector. Dashed arrows indicate optional components. The same performance metric is used to generate performance data and evaluate the selector.
+\caption[Algorithm selection pipeline]{Algorithm selection pipeline. A portfolio of complementary algorithms can first be chosen by pre-selection. In running-time scenarios, a short pre-solving schedule may solve easy instances before feature computation or before invoking the learned selector. Instance features, optional algorithm features, and performance data are then used to train and evaluate the algorithm selector. Dashed arrows indicate optional components. The same performance metric is used to generate performance data and evaluate the selector.
 
     }
-    \label{fig:ch02:asf_pipeline}
+\label{fig:ch02:asf_pipeline}
 \end{figure}
 
 Algorithm selection methods are integrated into \textit{algorithm selection pipelines}, which include several components:
@@ -180,7 +180,7 @@ Additionally, for algorithm selection, there is a need for two additional, probl
 \end{itemize}
 An overview of the algorithm selection pipeline is presented in~\cref{fig:ch02:asf_pipeline}.
 
-\subsection{Algorithm selection versus multi-class classification}
+\subsection{Algorithm Selection versus Multi-Class Classification}
 A common mistake among newcomers to algorithm selection is to treat it as a standard multi-class classification problem.
 Although an algorithm selector predicts one algorithm from a finite set and
 
@@ -191,16 +191,16 @@ In that case, selecting the second-best algorithm is a reasonable error.
 A plain multi-class classifier, however, treats this outcome as equally wrong as choosing an algorithm that performs very poorly on the instance.
 As we show in our ASlib experiments (\cref{sec:ch10:aslib_appendix}), multi-class classifiers can indeed perform far below the other methods in practice.
 
-\subsection{Performance prediction versus ranking}
+\subsection{Performance Prediction versus Ranking}
 
 To model performance, one should account for the distribution of the performance, which can require preprocessing of the labels, such as log-transformation~\citep{HutEtAl14}. However, \gls{epm}-based algorithm selection is often not the practically best approach, essentially because accurately predicting exact performance values is generally a harder task than determining the relative ranking of algorithms.
 
-\section{Bayesian optimisation}
+\section{Bayesian Optimisation}
 \label{sec:ch02:bayesian_optimisation}
 
 This section introduces hyperparameter optimisation and Bayesian optimisation as a search framework for black-box objectives used in \cref{ch:ch06:dymbo,ch:ch08:noisy_oracle}.
 
-\subsection{Hyperparameter optimisation}
+\subsection{Hyperparameter Optimisation}
 \label{sec:ch02:hpo}
 
 \new{\Gls{hpo}} seeks settings of a learning algorithm that minimise its validation loss~\citep{BisEtAl23}. Let $\algo$ be a learning algorithm, $\configurationSpace$ its hyperparameter configuration space, and $\mathcal D_{\mathrm{train}}$ and $\mathcal D_{\mathrm{validate}}$ fixed training and validation data. For $\configuration\in\configurationSpace$, let $\algo_{\configuration}$ denote the algorithm with that configuration. The \gls{hpo} objective is
@@ -219,7 +219,7 @@ Hyperparameters specify choices such as a learning rate, a regularisation streng
 
 For $d_c$ hyperparameters with individual domains $\mathcal C_h$, the admissible space satisfies $\configurationSpace\subseteq\mathcal C_1\times\cdots\times\mathcal C_{d_c}$. Equality holds for independent, unconstrained parameters; conditional parameters and constraints restrict the admissible configurations.
 
-\subsection{Bayesian optimisation}
+\subsection{Bayesian Optimisation}
 \label{sec:ch02:bac_bo}
 
 \Gls{bo}~\citep{Mockus12b,Garnett23,Frazier18b,Kushner62,Kushner64b} is a family of surrogate-based algorithms for efficient global optimisation of black-box problems.
@@ -264,7 +264,7 @@ With $e_{\mathrm{RF}}(\configuration)$ being the prediction of a tree $e_{\mathr
 \gls{bo} proceeds iteratively until a termination criterion is met. In each iteration, it optimises the acquisition function by repeatedly querying the surrogate model to generate a pool of candidate solutions. It then evaluates the most high-potential solutions (\emph{i.e.}, the solutions that maximise the acquisition function) from this pool,
 refines the surrogate model based on the new observations, and updates the optimum if the new point improves upon the true function value of the best observation so far.
 
-\subsection{Acquisition functions}
+\subsection{Acquisition Functions}
 \label{sec:ch02:acquisition_functions}
 
 For the acquisition functions below, we use the notation of \cref{ch:ch08:noisy_oracle}.

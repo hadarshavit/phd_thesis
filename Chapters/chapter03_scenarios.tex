@@ -11,7 +11,7 @@ The \new{\gls{sat} problem} is a central and longstanding \textsf{NP}-complete p
 \end{equation*}
 Here, each $\ell_{q,h}$ is a literal, i.e., either a variable $b_{h\prime}$ or its negation $\lnot b_{h\prime}$. The task is to decide whether there exists an assignment $\omega$ such that $\varphi(\omega) = \text{true}$. \Gls{sat} is of significant theoretical importance as one of the first problems proven \textsf{NP}-complete~\citep{Cook71}, and it underpins numerous practical applications in hardware and software verification~\citep{BieEtAl09}, automated planning~\citep{KauSel96}, and operations research~\citep{GomEtAl08}. Its significance has led to the development of a wide range of solvers, systematically benchmarked in annual \gls{sat} competitions (e.g.,~\citep{FroEtAl21,BalEtAl17,HeuEtAl19}).
 
-\subsection{Graph representations of \glsentryshort{sat}}
+\subsection{Graph Representations of \glsentryshort{sat}}
 \label{sec:ch03:sat-graphs}
 
 \gls{sat} formulae can be represented as graphs whose structure does not depend on the order of clauses or literals in the \gls{cnf} representation. The following four representations are used in this thesis~\citep{NudEtAl04b,HutEtAl14e,SelEtAl19}:
@@ -28,13 +28,13 @@ The \gls{vg} and the unlabelled \gls{vcg} do not distinguish positive from negat
 \begin{figure}[tbp]
     \centering
     \resizebox{\linewidth}{!}{\input{Chapters/figures/graphbench_sat.tex}}
-    \caption[Graph representations of a \glsentryshort{sat} formula]{Variable, variable-clause, and literal-clause graphs of the displayed \gls{sat} formula. Clause nodes $C_1$, $C_2$, and $C_3$ correspond to the clauses in their displayed order. The \gls{vcg} shows only variable--clause incidence edges; the \gls{lcg} shows only literal--clause incidence edges.}
-    \label{fig:ch03:sat-graphs}
+\caption[Graph representations of a \glsentryshort{sat} formula]{Variable, variable-clause, and literal-clause graphs of the displayed \gls{sat} formula. Clause nodes $C_1$, $C_2$, and $C_3$ correspond to the clauses in their displayed order. The \gls{vcg} shows only variable--clause incidence edges; the \gls{lcg} shows only literal--clause incidence edges.}
+\label{fig:ch03:sat-graphs}
 \end{figure}
 
 These representations support two approaches to empirical performance prediction. The SATzilla features summarise graph structure through hand-crafted statistics, as discussed in~\cref{ch:ch04:rev_SATzilla}. GraphBench instead provides graph representations as inputs to graph neural networks, with application-specific node and edge encodings described in~\cref{ch:ch07:gnns_epms}.
 
-\section{Automated planning}
+\section{Automated Planning}
 \label{sec:ch03:planning}
 
 \new{Automated planning} is the task of finding a sequence of actions that transforms an initial state into a state satisfying a goal. In classical propositional planning, a task can be written as
@@ -54,13 +54,13 @@ A valid plan is a finite sequence $\pi = (o_1,\ldots,o_{n_{\mathrm{act}}})$ such
 \end{equation*}
 This formulation assumes deterministic actions and a fully observed state. The task is to find a valid plan; cost-sensitive variants additionally minimise the sum of action costs. Planning formalisms can also express temporal and numerical constraints beyond this propositional setting.
 
-\subsection{Planning representations and Zenotravel}
+\subsection{Planning Representations and Zenotravel}
 
 Planning tasks are commonly specified in the \Gls{pddl}, separating the domain's action schemas from the objects, initial state, and goal of an instance. Their structure can be represented by causal graphs, which describe dependencies between state variables, and domain transition graphs, which describe possible value transitions of individual variables. Feature sets also include syntactic \gls{pddl} properties, planning-graph information, and statistics from short probing runs. A bounded planning task can be translated into a \gls{sat} formula, making \gls{sat} features available as an additional representation~\citep{KauSel96,FawEtAl14}.
 
 We consider LPG--Zenotravel~\citep{EggEtAl18}. Zenotravel tasks involve transporting passengers between cities using aircraft, subject to fuel requirements and refuelling actions. LPG is a planner based on local search over planning graphs~\citep{GerSer02}. Its stochastic search can produce different running times on the same instance, so repeated runs characterise a distribution rather than a single deterministic running time.
 
-\section{Black-box optimisation}
+\section{Black-Box Optimisation}
 \label{sec:ch03:bbo}
 
 \new{\Gls{bbo}} seeks a solution with the best objective value when information about the objective is obtained through evaluations. Let $\configurationSpace$ be a search space and $f:\configurationSpace\rightarrow\mathbb R$ a single-objective function to be minimised. The optimisation problem is
@@ -85,7 +85,7 @@ Different instances of a function family are generated using transformations suc
 \end{itemize}
 Separable functions allow coordinates to be optimised independently. Ill-conditioned functions have very different scales of variation in different directions, while multimodal functions contain multiple local optima. Global structure describes how strongly the overall landscape guides a search towards the global optimum.
 
-\section{Hyperparameter optimisation benchmarks}
+\section{Hyperparameter Optimisation Benchmarks}
 \label{sec:ch03:hpo_benchmarks_overview}
 
 Surrogate-based \gls{hpo} benchmarks replace model training and validation runs with predictions from a model fitted to previously collected evaluations. They approximate the response surface of a real learning task while allowing many optimisation runs at much lower computational cost. Such a benchmark surrogate supplies objective values to the optimiser; it is distinct from a surrogate that the optimiser itself fits to guide its search.
@@ -106,7 +106,7 @@ The rbv2 scenarios cover random forests, decision trees, elastic-net models, sup
 
 Although the rbv2 and iaml families overlap in their learning algorithms, their configuration spaces differ. For example, rbv2 includes an input-imputation choice that is fixed in iaml, and some hyperparameter ranges differ, including the number of boosting rounds in XGBoost. LCBench and FCNet provide additional neural-network configuration spaces for tabular learning~\citep{ZimEtAl21b,FalEtAl18}. The optimisation experiments considered here use predictive accuracy as their target metric, or its equivalent minimisation form. \gls{yahpo} Gym also includes a NAS-Bench-301 scenario; its architecture space is described separately in~\cref{sec:ch03:nas_bench301}.
 
-\section{Neural architecture search}
+\section{Neural Architecture Search}
 \label{sec:ch03:nas}
 
 \new{\Gls{nas}} optimises the structure of a neural network, including its connectivity and operations~\citep{ElsEtAl19}. Let $\mathcal H$ be a space of architectures and $\eta\in\mathcal H$ an architecture. For fixed training hyperparameters $\configuration_0$, define
@@ -138,7 +138,7 @@ NAS-Bench-301~\citep{ZelEtAl22} provides surrogate predictions for architectures
 
 JAHS-Bench-201~\citep{BanEtAl22} is a surrogate-based benchmark for joint architecture and hyperparameter search. It extends the cell-based NAS-Bench-201 architecture space with training hyperparameters, allowing both the network's operations and its training procedure to be optimised. It contains tasks on CIFAR-10, Fashion-MNIST, and Colorectal Histology, and provides predictions of performance and evaluation cost. In contrast to the fixed training settings of NAS-Bench-301, its joint space captures interactions between architectural decisions and hyperparameters such as the learning rate and weight decay.
 
-\section{Machine learning datasets}
+\section{Machine Learning Datasets}
 \label{sec:ch03:tabular_data}
 
 The datasets considered here are tabular classification tasks, with numerical or categorical input attributes. They differ in their number of observations, input dimensions, class counts, and class balance.
@@ -147,12 +147,12 @@ The datasets considered here are tabular classification tasks, with numerical or
 
 We use the OpenML CC-18 collection~\citep{BisEtAl21} and the classification datasets from the \gls{automl} Benchmark~\citep{GijEtAl24}. Both provide tabular classification tasks from different domains, covering a range of dataset sizes and characteristics. The tasks supply predefined training and test splits for 10-fold cross-validation, allowing learning algorithms to be evaluated on the same partitions.
 
-\section{Stochastic solver running times}
+\section{Stochastic Solver Running Times}
 \label{sec:ch03:stochastic_solvers}
 
 We use seven scenarios introduced by~\citet{EggEtAl18}: six from \gls{sat} solving and one from automated planning, LPG--Zenotravel. Each scenario fixes a solver and a problem distribution, with 2\,000--12\,000 instances and 100 solver runs per instance. The performance metric is solver running time; the running-time observations, instance features, and preprocessing follow~\citet{EggEtAl18}.
 
-\section{Out-of-distribution generalisation}
+\section{Out-of-Distribution Generalisation}
 \label{sec:ch03:ood}
 
 \new{Out-of-distribution generalisation} concerns predictive performance when training and test data follow different distributions~\citep{WilEtAl22}. Let $P_{\mathrm{train}}$ and $P_{\mathrm{test}}$ be joint distributions over an input space $\mathcal U$ and label space $\mathcal Y$, with $P_{\mathrm{train}}\neq P_{\mathrm{test}}$. Given data drawn from $P_{\mathrm{train}}$, a learning procedure seeks a predictor $h$ with low test risk

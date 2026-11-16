@@ -1,6 +1,11 @@
 \chapter{\glsentryshort{asf}: A Library for Automated Algorithm Selection}
 \label{ch:ch10:asf}
 
+\thesisprovenance{ShaHoo25d}
+  {[To be completed: coauthors and division of responsibilities.]}
+  {[To be completed: my conceptual, methodological, software, experimental, analytical, and writing contributions.]}
+  {[To be completed: additions, revisions, and departures from the publication.]}
+
 \section{Introduction}
 The preceding chapter made performance predictions more informative by explaining their distributions. This final contribution chapter turns to practical use: how can algorithm selection methods be assembled, compared, and applied across problem domains through a common interface? It brings together the thesis's concerns with informative features, predictive models, and decisions in reusable software infrastructure.
 
@@ -68,11 +73,11 @@ The chapter first compares \gls{asf} with related software, then presents the fr
     \draw[->, ultra thick, draw=orange!80!black] (asf-core.east |- out-bbo.west) -- (out-bbo.west) node[midway, above, font=\tiny, text=black!80] {Assessment};
 
 \end{tikzpicture}
-  \caption[Overview of the \glsentryshort{asf} library]{Overview of the \gls{asf} library which provides problem-agnostic implementations of algorithm selection methods, which can be used for various domains, such as \gls{automl}, \gls{bbo}, \gls{sat}, and others.
+\caption[Overview of the \glsentryshort{asf} library]{Overview of the \gls{asf} library which provides problem-agnostic implementations of algorithm selection methods, which can be used for various domains, such as \gls{automl}, \gls{bbo}, \gls{sat}, and others.
   }
 \end{figure}
 
-\section{Related work}
+\section{Background and Related Work}
 
 Here, we provide additional discussion related to \gls{asf}. First, we cover the differences between \gls{asf} and LLAMA~\citep{Kotthoff13}, then we cover how \gls{asf} relates to methods submitted to the algorithm selection competitions.
 \subsection{LLAMA}
@@ -83,7 +88,7 @@ Additionally, while \gls{asf} supports a wide variety of methods and pipelines, 
 \subsection{AutoFolio and FlexFolio}
 AutoFolio~\citep{LinEtAl15} is an automatic configuration system for algorithm-selection pipelines, originally designed to configure FlexFolio, a collection of algorithm-selection methods. FlexFolio was an important tool for benchmarking algorithm selectors, but it appears to be no longer actively maintained, as its implementation targets the deprecated Python 2 ecosystem. Moreover, FlexFolio focuses primarily on the selector stage and does not provide the same modular support for preprocessing, pre-solving, pre-selection, and end-to-end pipeline construction as \gls{asf}.
 A newer Python 3 version of AutoFolio exists, but it supports only a restricted set of selector types, such as pairwise regression, pairwise classification, and multi-class classification. These selectors are not exposed as independently reusable Python components in the same way as in \gls{asf}. AutoFolio also supports pre-solving through Aspeed, but does not support portfolio pre-selection. Finally, AutoFolio and FlexFolio are primarily used through command-line interfaces based on the ASlib format, whereas \gls{asf} exposes a Python \gls{api} that directly accepts feature and performance matrices, while also supporting command-line use.
-\subsection{Methods from the algorithm selection competitions}
+\subsection{Methods from the Algorithm Selection Competitions}
 In the past, there have been two algorithm selection competitions~\citep{LinEtAl19b}. These competitions were heavily focussed on algorithm selection problems in $\mathcal{NP}$-complete
 domains, such as \gls{sat}, \gls{mip}, and \gls{tsp}, while there was only a single machine learning selection scenario.
 We note that the methods evaluated in these competitions are full algorithm selection pipelines, which can be easily constructed using \gls{asf} components. In the future, we plan to add pre-defined selection pipelines to \gls{asf}, which will allow users to easily use these methods. However, as these methods were developed for $\mathcal{NP}$-complete problems, they are not directly applicable to machine learning or other types of problems. As our priority is to provide a flexible framework for algorithm selection, which is applicable to any problem domain, we focussed on implementing as many components as possible, rather than implementing a small number of narrowly focussed full pipelines.
@@ -116,11 +121,11 @@ Pipelines and selectors can be automatically tuned using SMAC3~\citep{HutEtAl11,
 
 For every method component (selection, pre-selection, etc.), \gls{asf} provides an abstract class responsible for handling data preprocessing and more. For algorithm selection, there exists an additional abstract class responsible for handling the models used by the selectors (if applicable). We provide an example of how to use \gls{asf} for algorithm selection in \cref{sec:ch10:asf_usage_appendix}.
 
-\paragraph{Example use of \glsentryshort{asf}.}
+\paragraph{Example Use of \glsentryshort{asf}.}
 \label{sec:ch10:asf_usage_appendix}
 In \cref{lst:ch10:asf_usage} we show a simple example of how to use \gls{asf} to construct a pipeline for algorithm selection. In a few lines of code, it is possible to construct a complex algorithm selection pipeline, which can then be used to solve algorithm selection problems. The example shows the structure used in the experiments below: a marginal-contribution pre-selector first reduces the candidate algorithm set, and a pairwise classifier then learns to choose among the remaining candidates from instance features.
 
-\begin{figure*}[]
+\begin{figure*}[tbp]
 \captionsetup{type=lstlisting}
 \begin{minipage}{\textwidth}
 \begin{lstlisting}[
@@ -155,7 +160,7 @@ predictions = pipeline.predict(features)
 \label{lst:ch10:asf_usage}
 \end{figure*}
 
-\section{Methods implemented in \glsentryshort{asf}}
+\section{Methods Implemented in \glsentryshort{asf}}
 \label{sec:ch10:methods_implemented}
 
 \gls{asf} covers a wide variety of algorithm selection methods. Some return a single solver, while others produce a portfolio or schedule, allowing \gls{asf} to support both classical per-instance selection and richer budget-aware decision rules.
@@ -189,7 +194,7 @@ predictions = pipeline.predict(features)
     \item \textbf{Stacking selector}~\citep{TorEtAl23}: Uses predictions from base selectors as features for a meta-level selector. This allows the framework to learn how to combine heterogeneous selectors from data.
 \end{itemize}
 
-\subsection{Pre-selection}
+\subsection{Pre-Selection}
 \begin{itemize}
     \item \textbf{Marginal-contribution pre-selection}~\citep{XuEtAl08}: Selects algorithms according to their contribution to the portfolio objective. \gls{asf} supports both backward removal from the full set and greedy forward construction.
     \item \textbf{Optimization-based pre-selection}: Treats portfolio construction as a continuous or combinatorial optimisation problem over algorithm subsets. The implementation can use differential evolution or other SciPy optimisers. This is a new method implemented in \gls{asf}.
@@ -201,7 +206,7 @@ predictions = pipeline.predict(features)
     \item \textbf{Genetic-algorithm pre-selection}: Evolves a population of candidate portfolios using mutation, crossover, and selection. This gives a flexible global-search heuristic for portfolio construction. This is a new method implemented in \gls{asf}.
 \end{itemize}
 
-\subsection{Pre-solving}
+\subsection{Pre-Solving}
 \begin{itemize}
     \item \textbf{Aspeed}~\citep{HooEtAl12}: Computes a pre-solving schedule using answer-set programming. The schedule allocates a fixed pre-solving budget across algorithms to solve easy instances before full selection.
     \item \textbf{ASAPv2}~\citep{GonEtAl17}: Optimises a preschedule over selected algorithms and time allocations. \gls{asf} implements this as a differential-evolution-based presolver.
@@ -211,23 +216,26 @@ predictions = pipeline.predict(features)
     \item \textbf{Submodular presolver}~\citep{StrGol08}: Constructs schedules using a submodular-style objective over solved instances and allocated time. It is intended to exploit diminishing returns in pre-solving coverage.
 \end{itemize}
 
-\subsection{Performance prediction}
+\subsection{Performance Prediction}
 \begin{itemize}
     \item \textbf{\Gls{epm}}: Wraps a regression model with feature preprocessing, target normalization, optional imputation, and inverse transformation. It is used directly for performance prediction and internally by several selectors.
     \item \textbf{\gls{epm} tuning}: Tunes empirical-performance-model hyperparameters and target transformations by validation performance. This supports scenario-specific performance predictors for selectors such as SATzilla and performance-model selection.
 \end{itemize}
 
-\section{Additional details about the setup of experiments}
+\section{Setup of Experiments}
 \label{sec:ch10:additional_experiment_details}
 
-\paragraph{Hardware and launcher setup.}
+\paragraph{Hardware and Launcher Setup.}
 Experiments were executed on a compute cluster where each \gls{cpu} node is equipped with two Intel Xeon 8468 Sapphire Rapids processors, providing 96 \gls{cpu} cores per node, with 256, 512, or 1024 GB main-memory configurations. The \gls{gpu} nodes use the same \gls{cpu}, 512 GB main memory, and four NVIDIA H100 \glspl{gpu} with 94 GB HBM2e each.
 We used Python version 3.10.8, clingo version 5.8.0, SMAC3 version 2.3.1, scikit-learn version 1.7.2, PyTorch version 2.9.0, XGBoost version 3.2.0. The hardware details per experiment are shown in~\cref{tab:ch10:experiment_hardware}. Additionally, the ZAP experiment used 1 H100 \gls{gpu}.
 
 \begin{table*}[!htbp]
+\caption[Experimental compute resources]{Compute resources used for the experiments}
+\label{tab:ch10:experiment_hardware}
+
   \centering
-  \caption[Experimental compute resources]{Compute resources used for the experiments}
-  \label{tab:ch10:experiment_hardware}
+
+
   \begin{tabular}{lll}
     \toprule
     Experiment &  \acrshortpl{cpu} per task & Memory allocated \\
@@ -241,21 +249,24 @@ We used Python version 3.10.8, clingo version 5.8.0, SMAC3 version 2.3.1, scikit
     \bottomrule
   \end{tabular}\end{table*}
 
-\paragraph{Hyperparameter settings.}
+\paragraph{Hyperparameter Settings.}
 We present the hyperparameter settings used in our experiments in~\cref{tab:ch10:zap_hyperparameters} to \cref{tab:ch10:aslib_presolving_hyperparameters}.
 The ASlib selector benchmark tunes learned selectors with \gls{smac} for 50 trials using 10-fold cross-validation on the training fold (\emph{i.e.}, there is an outer cross validation used for evaluation and inner cross validation for tuning, as done by~\citealp{LinEtAl15}). The tuning objective is the running-time closed gap. The configuration spaces are presented in~\cref{tab:ch10:shared_configuration_spaces,tab:ch10:selector_configuration_spaces}.
 
 \begin{table*}[!htbp]
+\caption[ZAP selector hyperparameters]{Hyperparameters used in the ZAP selector experiment. Both JointRanking variants use identical hyperparameters and differ only in whether the 525 configurations are pre-selected to 10. Since PairwiseClassifier, PairwiseRegressor, PerformanceModel and SimpleRanking have only the hyperparameters of XGBoost, we listed only them.}
+\label{tab:ch10:zap_hyperparameters}
+
   \centering
-  \caption[ZAP selector hyperparameters]{Hyperparameters used in the ZAP selector experiment. Both JointRanking variants use identical hyperparameters and differ only in whether the 525 configurations are pre-selected to 10. Since PairwiseClassifier, PairwiseRegressor, PerformanceModel and SimpleRanking have only the hyperparameters of XGBoost, we listed only them.}
-  \label{tab:ch10:zap_hyperparameters}
+
+
   \scriptsize
   \begin{subtable}[t]{0.48\textwidth}
     \centering
     \caption{JointRanking}
-    \begin{tabular}{ll}
+    \begin{tabularx}{\linewidth}{@{}>{\RaggedRight\arraybackslash}X>{\RaggedRight\arraybackslash}p{.40\linewidth}@{}}
       \toprule
-      Hyperparameter & Value \\
+      Parameter & Value \\
       \midrule
       Epochs & 400 \\
       Batch size & 1024 \\
@@ -265,16 +276,14 @@ The ASlib selector benchmark tunes learned selectors with \gls{smac} for 50 tria
       Hidden sizes & $(256,256,256)$ \\
       Dropout & 0.1\\
       \bottomrule
-    \end{tabular}
-  \end{subtable}
-
-\hfill
-  \begin{subtable}[t]{0.48\textwidth}
+    \end{tabularx}
+  \end{subtable}\hfill
+\begin{subtable}[t]{0.48\textwidth}
     \centering
     \caption{XGBoost}
-    \begin{tabular}{ll}
+    \begin{tabularx}{\linewidth}{@{}>{\RaggedRight\arraybackslash}X>{\RaggedRight\arraybackslash}p{.40\linewidth}@{}}
       \toprule
-      Hyperparameter & Value \\
+      Parameter & Value \\
       \midrule
       Predictor & XGBoost classifier \\
       Use weights & false \\
@@ -285,34 +294,37 @@ The ASlib selector benchmark tunes learned selectors with \gls{smac} for 50 tria
       Colsample tree / level & 1.0 / 1.0 \\
       $\lambda_{\mathrm{L2}}$, $\lambda_{\mathrm{L1}}$ & 1, 0 \\
       \bottomrule
-    \end{tabular}
+    \end{tabularx}
   \end{subtable}
-    \hfill
-  \begin{subtable}[t]{0.48\textwidth}
+\par\medskip
+\begin{subtable}[t]{0.48\textwidth}
     \centering
     \caption{CosineSelector}
-    \begin{tabular}{ll}
+    \begin{tabularx}{\linewidth}{@{}>{\RaggedRight\arraybackslash}X>{\RaggedRight\arraybackslash}p{.40\linewidth}@{}}
       \toprule
-      Hyperparameter & Value \\
+      Parameter & Value \\
       \midrule
       model & neural cosine model \\
       Epochs & 200 \\
       Embedded size & 50 \\
       \# hidden layers & 2 \\
       \bottomrule
-    \end{tabular}\end{subtable}
+    \end{tabularx}\end{subtable}
 \end{table*}
 
 \begin{table*}[!htbp]
+\caption[OOD-Chameleon selector hyperparameters]{Hyperparameters used in the OOD-Chameleon selector experiment. Each subtable gives the settings for one selector. The \gls{asf} selectors (PairwiseClassifier, PairwiseRegressor and PerformanceModel) are based on random forest.}
+\label{tab:ch10:ood_hyperparameters}
+
   \centering
-  \caption[OOD-Chameleon selector hyperparameters]{Hyperparameters used in the OOD-Chameleon selector experiment. Each subtable gives the settings for one selector. The \gls{asf} selectors (PairwiseClassifier, PairwiseRegressor and PerformanceModel) are based on random forest.}
-  \label{tab:ch10:ood_hyperparameters}
+
+
   \begin{subtable}[t]{0.48\textwidth}
     \centering
     \caption{\gls{mlp}}
-    \begin{tabular}{ll}
+    \begin{tabularx}{\linewidth}{@{}>{\RaggedRight\arraybackslash}X>{\RaggedRight\arraybackslash}p{.40\linewidth}@{}}
       \toprule
-      Hyperparameter & Value \\
+      Parameter & Value \\
       \midrule
       Hidden size & 100 \\
       \# Hidden layers & 1 \\
@@ -321,91 +333,93 @@ The ASlib selector benchmark tunes learned selectors with \gls{smac} for 50 tria
       weight decay  & $10^{-4}$ \\
       Epochs & 800 \\
       \bottomrule
-    \end{tabular}\end{subtable}
-  \hfill
-
-  \begin{subtable}[t]{0.48\textwidth}
+    \end{tabularx}\end{subtable}\hfill
+\begin{subtable}[t]{0.48\textwidth}
     \centering
     \caption{Random forest}
-    \begin{tabular}{ll}
+    \begin{tabularx}{\linewidth}{@{}>{\RaggedRight\arraybackslash}X>{\RaggedRight\arraybackslash}p{.40\linewidth}@{}}
       \toprule
-      Hyperparameter & Value \\
+      Parameter & Value \\
       \midrule
       Trees & 100 \\
       Max depth & None \\
       min samples split  & 2  \\
       Min samples leaf & 1 \\
       \bottomrule
-    \end{tabular}\end{subtable}
+    \end{tabularx}\end{subtable}
 
 \end{table*}
 
 \begin{table*}[!htbp]
+\caption[HPOBench and ASlib pre-selection parameters]{Parameters used in the HPOBench and ASlib pre-selection experiments. Each pre-selector is shown in a separate subtable. Both benchmarks use the \gls{vbs} objective on the training matrix. MarginalContribution, \gls{sbs} and beam search have no parameters}
+\label{tab:ch10:aslib_preselection_hyperparameters}
+
   \centering
-  \caption[HPOBench and ASlib pre-selection parameters]{Parameters used in the HPOBench and ASlib pre-selection experiments. Each pre-selector is shown in a separate subtable. Both benchmarks use the \gls{vbs} objective on the training matrix. MarginalContribution, \gls{sbs} and beam search have no parameters}
-  \label{tab:ch10:aslib_preselection_hyperparameters}
+
+
 
   \begin{subtable}[t]{0.48\textwidth}
     \centering
     \caption{RandomLocalSearch}
-    \begin{tabular}{ll}
+    \begin{tabularx}{\linewidth}{@{}>{\RaggedRight\arraybackslash}X>{\RaggedRight\arraybackslash}p{.40\linewidth}@{}}
       \toprule
-      Hyperparameter & Value \\
+      Parameter & Value \\
       \midrule
       \# Restarts &  10 \\
       \# Iterations & 100 \\
       \bottomrule
-    \end{tabular}\end{subtable}
-  \hfill
-  \begin{subtable}[t]{0.48\textwidth}
+    \end{tabularx}\end{subtable}\hfill
+\begin{subtable}[t]{0.48\textwidth}
     \centering
     \caption{GeneticAlgorithm}
-    \begin{tabular}{ll}
+    \begin{tabularx}{\linewidth}{@{}>{\RaggedRight\arraybackslash}X>{\RaggedRight\arraybackslash}p{.40\linewidth}@{}}
       \toprule
-      Hyperparameter & Value \\
+      Parameter & Value \\
       \midrule
       Population size & 50 \\
       \# Generation & 100 \\
       Crossover rate & 0.8 \\
       Mutation rate & 0.1 \\
       \bottomrule
-    \end{tabular}\end{subtable}
-  \hfill
-  \begin{subtable}[t]{0.30\textwidth}
+    \end{tabularx}\end{subtable}
+\par\medskip
+\begin{subtable}[t]{0.48\textwidth}
     \centering
     \caption{OptimizeDE}
-    \begin{tabular}{ll}
+    \begin{tabularx}{\linewidth}{@{}>{\RaggedRight\arraybackslash}X>{\RaggedRight\arraybackslash}p{.40\linewidth}@{}}
       \toprule
-      Hyperparameter & Value \\
+      Parameter & Value \\
       \midrule
       Population size & 15 \\
       Max iter & 1000\\
       Population rate & (0.5, 1.0) \\
       Recombination rate & 0.7 \\
       \bottomrule
-    \end{tabular}\end{subtable}
+    \end{tabularx}\end{subtable}
 \end{table*}
 
 \begin{table*}[!htbp]
+\caption[ASlib pre-solving parameters]{Parameters used in the ASlib pre-solving experiment. Greedy presolver has no parameters.}
+\label{tab:ch10:aslib_presolving_hyperparameters}
+
   \centering
-  \caption[ASlib pre-solving parameters]{Parameters used in the ASlib pre-solving experiment. Greedy presolver has no parameters.}
-  \label{tab:ch10:aslib_presolving_hyperparameters}
+
+
     \begin{subtable}[t]{0.48\textwidth}
     \centering
     \caption{Submodular schedules}
-    \begin{tabular}{ll}
+    \begin{tabularx}{\linewidth}{@{}>{\RaggedRight\arraybackslash}X>{\RaggedRight\arraybackslash}p{.40\linewidth}@{}}
       \toprule
       Parameter & Value \\
       \midrule
       time grids & $(5,10,20)$ \\
       Max actions &  5 \\
       \bottomrule
-    \end{tabular}\end{subtable}
-  \hfill
-  \begin{subtable}[t]{0.48\textwidth}
+    \end{tabularx}\end{subtable}\hfill
+\begin{subtable}[t]{0.48\textwidth}
     \centering
     \caption{ASAPv2}
-    \begin{tabular}{ll}
+    \begin{tabularx}{\linewidth}{@{}>{\RaggedRight\arraybackslash}X>{\RaggedRight\arraybackslash}p{.40\linewidth}@{}}
       \toprule
       Parameter & Value \\
       \midrule
@@ -414,70 +428,72 @@ The ASlib selector benchmark tunes learned selectors with \gls{smac} for 50 tria
       Population rate & (0.5, 1.0) \\
       Recombination rate & 0.7 \\
       \bottomrule
-    \end{tabular}\end{subtable}
-  \begin{subtable}[t]{0.48\textwidth}
+    \end{tabularx}\end{subtable}
+\par\medskip
+\begin{subtable}[t]{0.48\textwidth}
     \centering
     \caption{Static3S}
-    \begin{tabular}{ll}
+    \begin{tabularx}{\linewidth}{@{}>{\RaggedRight\arraybackslash}X>{\RaggedRight\arraybackslash}p{.40\linewidth}@{}}
       \toprule
-      Hyperparameter & Value \\
+      Parameter & Value \\
       \midrule
       Max cand. sched.  &  50 \\
       \bottomrule
-    \end{tabular}\end{subtable}
-  \hfill
-  \begin{subtable}[t]{0.48\textwidth}
+    \end{tabularx}\end{subtable}\hfill
+\begin{subtable}[t]{0.48\textwidth}
     \centering
     \caption{Aspeed}
-    \begin{tabular}{ll}
+    \begin{tabularx}{\linewidth}{@{}>{\RaggedRight\arraybackslash}X>{\RaggedRight\arraybackslash}p{.40\linewidth}@{}}
       \toprule
-      Hyperparameter & Value \\
+      Parameter & Value \\
       \midrule
       Clingo cutoff & 60 s \\
       cores & 1 \\
       \bottomrule
-    \end{tabular}\end{subtable}
+    \end{tabularx}\end{subtable}
 \end{table*}
 
 \begin{table*}[!htbp]
+\caption[Shared configuration spaces for selector tuning]{Shared configuration-space components used by selector tuning. These subspaces are reused by the selector-specific spaces in \cref{tab:ch10:selector_configuration_spaces}.}
+\label{tab:ch10:shared_configuration_spaces}
+
   \centering
-  \caption[Shared configuration spaces for selector tuning]{Shared configuration-space components used by selector tuning. These subspaces are reused by the selector-specific spaces in \cref{tab:ch10:selector_configuration_spaces}.}
-  \label{tab:ch10:shared_configuration_spaces}
+
+
   \scriptsize
   \begin{subtable}[t]{0.48\textwidth}
     \centering
     \caption{Selector pipeline}
-    \resizebox{\linewidth}{!}{\begin{tabular}{ll}
+    \resizebox{\linewidth}{!}{\begin{tabularx}{\linewidth}{@{}>{\RaggedRight\arraybackslash}X>{\RaggedRight\arraybackslash}p{.40\linewidth}@{}}
       \toprule
-      Hyperparameter & Search space \\
+      Parameter & Search space \\
       \midrule
       Use presolver & Yes/No \\
       Presolver & 3S \\
-      Algorithm pre-selector & MarginalContribution (forward)\\
+      Algorithm pre-selector & Marginal\allowbreak{}Contribution (forward)\\
       \bottomrule
-    \end{tabular}}
-  \end{subtable}
-  \hfill
-  \begin{subtable}[t]{0.48\textwidth}
+    \end{tabularx}}
+  \end{subtable}\hfill
+\begin{subtable}[t]{0.48\textwidth}
     \centering
     \caption{Feature processing}
-    \resizebox{\linewidth}{!}{\begin{tabular}{ll}
+    \resizebox{\linewidth}{!}{\begin{tabularx}{\linewidth}{@{}>{\RaggedRight\arraybackslash}X>{\RaggedRight\arraybackslash}p{.40\linewidth}@{}}
       \toprule
-      Hyperparameter & Search space \\
+      Parameter & Search space \\
       \midrule
       Feature group $\mathcal H$ & true/false for each ASlib feature group \\
       Max feature time & $[0,B_{\mathrm{pre}}]$ \\
       \bottomrule
-    \end{tabular}}
+    \end{tabularx}}
   \end{subtable}
 
   \medskip
   \begin{subtable}[t]{0.48\textwidth}
     \centering
     \caption{\gls{rf} classifier/regressor}
-    \begin{tabular}{ll}
+    \begin{tabularx}{\linewidth}{@{}>{\RaggedRight\arraybackslash}X>{\RaggedRight\arraybackslash}p{.40\linewidth}@{}}
       \toprule
-      Hyperparameter & Search space \\
+      Parameter & Search space \\
       \midrule
       \# Trees &  $[16,128]$\\
       Min samples split & $[2,20]$ \\
@@ -485,14 +501,13 @@ The ASlib selector benchmark tunes learned selectors with \gls{smac} for 50 tria
       Max features & continuous $[0.1,1.0]$ \\
       Bootstrap & true/false \\
       \bottomrule
-    \end{tabular}\end{subtable}
-  \hfill
-  \begin{subtable}[t]{0.48\textwidth}
+    \end{tabularx}\end{subtable}\hfill
+\begin{subtable}[t]{0.48\textwidth}
     \centering
     \caption{XGBoost classifier/regressor/ranker}
-    \begin{tabular}{ll}
+    \begin{tabularx}{\linewidth}{@{}>{\RaggedRight\arraybackslash}X>{\RaggedRight\arraybackslash}p{.40\linewidth}@{}}
       \toprule
-      Hyperparameter & Search space \\
+      Parameter & Search space \\
       \midrule
       \# Trees &  2000  \\
       Max depth & $[1,11]$ \\
@@ -501,71 +516,73 @@ The ASlib selector benchmark tunes learned selectors with \gls{smac} for 50 tria
       Colsample tree / level & $[0,1]$ \\
       $\lambda_{\mathrm{L2}}$, $\lambda_{\mathrm{L1}}$ & $[10^{-3},10^3]$ \\
       \bottomrule
-    \end{tabular}\end{subtable}
+    \end{tabularx}\end{subtable}
 \end{table*}
 
 \begin{table*}[!htbp]
+\caption[Selector-specific configuration spaces]{Selector-specific configuration spaces. Each selector is shown in a separate subtable; model-class choices recurse into the shared model spaces in \cref{tab:ch10:shared_configuration_spaces}.}
+\label{tab:ch10:selector_configuration_spaces}
+
   \centering
-  \caption[Selector-specific configuration spaces]{Selector-specific configuration spaces. Each selector is shown in a separate subtable; model-class choices recurse into the shared model spaces in \cref{tab:ch10:shared_configuration_spaces}.}
-  \label{tab:ch10:selector_configuration_spaces}
+
+
   \begin{subtable}[t]{0.48\textwidth}
     \centering
     \caption{ISAC}
-    \begin{tabular}{ll}
+    \begin{tabularx}{\linewidth}{@{}>{\RaggedRight\arraybackslash}X>{\RaggedRight\arraybackslash}p{.40\linewidth}@{}}
       \toprule
-      Hyperparameter & Search space \\
+      Parameter & Search space \\
       \midrule
       clusterer & GMeans or KMeans \\
       KMeans clusters & $[2,20]$ \\
       \bottomrule
-    \end{tabular}\end{subtable}
-
-  \begin{subtable}[t]{0.48\textwidth}
+    \end{tabularx}\end{subtable}\hfill
+\begin{subtable}[t]{0.48\textwidth}
     \centering
     \caption{SNNAP}
-    \begin{tabular}{ll}
+    \begin{tabularx}{\linewidth}{@{}>{\RaggedRight\arraybackslash}X>{\RaggedRight\arraybackslash}p{.40\linewidth}@{}}
       \toprule
-      Hyperparameter & Search space \\
+      Parameter & Search space \\
       \midrule
       $K_{\mathrm{port}}$ & $[1,50]$ \\
       top-$K_{\mathrm{port}}$ & $[1,20]$\\
       \bottomrule
-    \end{tabular}\end{subtable}
-  \hfill
-  \begin{subtable}[t]{0.48\textwidth}
+    \end{tabularx}\end{subtable}
+\par\medskip
+\begin{subtable}[t]{0.48\textwidth}
     \centering
     \caption{SUNNY}
-    \begin{tabular}{ll}
+    \begin{tabularx}{\linewidth}{@{}>{\RaggedRight\arraybackslash}X>{\RaggedRight\arraybackslash}p{.40\linewidth}@{}}
       \toprule
-      Hyperparameter & Search space \\
+      Parameter & Search space \\
       \midrule
       Use v2 & True/False; \\
       $K_{\mathrm{port}}$ & $[1,50]$ \\
       \bottomrule
-    \end{tabular}\end{subtable}
-  \begin{subtable}[t]{0.48\textwidth}
+    \end{tabularx}\end{subtable}\hfill
+\begin{subtable}[t]{0.48\textwidth}
     \centering
     \caption{OSLLinearSelector}
-    \begin{tabular}{ll}
+    \begin{tabularx}{\linewidth}{@{}>{\RaggedRight\arraybackslash}X>{\RaggedRight\arraybackslash}p{.40\linewidth}@{}}
       \toprule
-      Hyperparameter & Search space \\
+      Parameter & Search space \\
       \midrule
       Regularisation & $[0,10]$;  \\
-      optimizer & [L-BFGS-B, \acrshort{cg}, BFGS, TNC, SLSQP] \\
+      optimizer & [L-BFGS-B, \texttt{CG}, BFGS, TNC, SLSQP] \\
       max iterations & $[100,5000]$\\
       tolerance & $[10^{-6},10^{-2}]$ \\
       \bottomrule
-    \end{tabular}\end{subtable}
+    \end{tabularx}\end{subtable}
 
 \end{table*}
 
 
-\section{Case studies for algorithm selection in \glsentryshort{ml}}
+\section{Case Studies for Algorithm Selection in \glsentryshort{ml}}
 \label{sec:ch10:experiments}
 In this section, we demonstrate the application of \gls{asf} to three machine learning tasks: zero-shot hyperparameter optimisation in deep learning, selection of \gls{ood} generalisation algorithms, and pre-selection of algorithm portfolios of traditional machine learning algorithms.
 Additional experiments on the well-known ASlib~\citep{BisEtAl16} are available in~\cref{sec:ch10:aslib_appendix}.
 
-\subsection{Zero-shot portfolio selection for \glsentryshort{automl}}
+\subsection{Zero-Shot Portfolio Selection for \glsentryshort{automl}}
 \label{sec:ch10:zap}
 
 Training deep learning models typically requires substantial computational resources and large training datasets~\citep{SchEtAl20}. A common strategy to mitigate these requirements is fine-tuning, where a pre-trained neural network is adapted to a target task using a relatively limited amount of computation and data.
@@ -581,7 +598,7 @@ Finally, many methods (including that of \citet{OztEtAl22}) have training and in
 Our goal in this experiment is to use the pre-selection and selector pipeline of \gls{asf} to test whether pre-selection can improve downstream selection quality while reducing the training resources required.
 Concretely, we first reduce the candidate configuration set to a compact portfolio and then train selectors on this reduced space. This uses less data per training run and decreases the chance of severe selection errors caused by many weak or redundant candidates.
 
-\subsubsection{Setup of experiments}
+\subsubsection{Setup of Experiments}
 We used the scenario and meta-data supplied by~\citet{OztEtAl22}, preserving the original dataset meta-features, candidate configurations, and five-fold cross-validation protocol. For every cross-validation fold, marginal-contribution pre-selection~\citep{XuEtAl08} was fitted only on the training fold before the selector was trained on the reduced portfolio.
 
 \textbf{Compared selectors.} We compared the joint-ranking model of~\citet{OztEtAl22}, the same model after pre-selection, and \gls{asf} selectors based on pairwise classification~\citep{XuEtAl12}, pairwise regression~\citep{KerEtAl18}, empirical performance models, and simple ranking. The \gls{asf} selectors used XGBoost as the underlying tabular model. For the \gls{asf} models, we always used pre-selection. Each model was trained on a single H100 \gls{gpu} with the settings reported in the experiment setup appendix, \cref{sec:ch10:additional_experiment_details}.
@@ -594,11 +611,12 @@ We used the scenario and meta-data supplied by~\citet{OztEtAl22}, preserving the
   \begin{center}
 
   \includegraphics{figures/10/figures/analysis/zap_preselection_vbs_box.pdf}
-  \caption[ZAP pre-selection quality by portfolio size]{ZAP pre-selection quality.
-  Each box reports held-out \gls{vbs} accuracy, after marginal-contribution pre-selection was fitted on the corresponding training fold; higher is better.}
-  \label{fig:ch10:zap_preselection_vbs}
-    \end{center}
 
+
+    \end{center}
+\caption[ZAP pre-selection quality by portfolio size]{ZAP pre-selection quality.
+  Each box reports held-out \gls{vbs} accuracy, after marginal-contribution pre-selection was fitted on the corresponding training fold; higher is better.}
+\label{fig:ch10:zap_preselection_vbs}
 \end{figure}
 
 \cref{fig:ch10:zap_preselection_vbs} shows the \gls{vbs} accuracy achieved using different portfolio sizes, compared to using all 525 configurations. Much of the \gls{vbs} performance is retained even by small portfolios.
@@ -609,7 +627,7 @@ We can see that selector-based pre-selection turns the original large configurat
 
 Notably, with JointRanking's hyperparameters held fixed, pre-selection improves mean accuracy by 3.35 percentage points while reducing mean training time by a factor of 4.6. The finding that SimpleRanking matches the accuracy of the neural pre-selected JointRanking model at a fraction of the cost indicates that, for this meta-feature space, simple tabular methods with proper pre-selection suffice.
 
-\begin{figure*}[]
+\begin{figure*}[tbp]
   \centering
   \begin{subfigure}[t]{0.49\textwidth}
     \centering
@@ -622,12 +640,12 @@ Notably, with JointRanking's hyperparameters held fixed, pre-selection improves 
     \includegraphics{figures/10/figures/analysis/zap_runtime_box.pdf}
     \caption{Running time}
   \end{subfigure}
-  \caption[ZAP selector accuracy and training time]{ZAP selector comparison. JointRank-All and JointRank-10 use identical hyperparameters and select from all 525 or 10 pre-selected configurations, respectively. The left panel reports per-dataset accuracy distributions and the right panel reports per-fold training time in seconds on a logarithmic scale. Higher accuracy and lower running time are better.
+\caption[ZAP selector accuracy and training time]{ZAP selector comparison. JointRank-All and JointRank-10 use identical hyperparameters and select from all 525 or 10 pre-selected configurations, respectively. The left panel reports per-dataset accuracy distributions and the right panel reports per-fold training time in seconds on a logarithmic scale. Higher accuracy and lower running time are better.
   }
-  \label{fig:ch10:zap_accuracy_runtime}
+\label{fig:ch10:zap_accuracy_runtime}
 \end{figure*}
 
-\subsection{Algorithm selection for \glsentryshort{ood} generalisation}
+\subsection{Algorithm Selection for \glsentryshort{ood} Generalisation}
 \label{sec:ch10:ood}
 
 The \gls{ood} generalisation setting and OOD-Chameleon framework are introduced in \cref{sec:ch03:ood}.
@@ -635,7 +653,7 @@ The \gls{ood} generalisation setting and OOD-Chameleon framework are introduced 
 While \citet{JiaTen25} introduced algorithm selection to \gls{ood} generalisation, they did not compare against well-known algorithm selection methods and instead used an \gls{mlp}-based multi-label classifier.
 We therefore investigate whether established algorithm selection methods, as implemented in \gls{asf}, can improve upon their results.
 
-\subsubsection{Setup of experiments}
+\subsubsection{Setup of Experiments}
 We used the OOD-Chameleon meta-dataset~\citep{JiaTen25}, which provides dataset features and algorithm performance values. We followed the original evaluation protocol for the cross-domain and in-domain transfer settings: CelebA~\citep{LiuEtAl15}/MetaShift~\citep{LiaZou22} for vision and CivilComments~\citep{BorEtAl19}/MultiNLI~\citep{WilEtAl18} for language. The base model backbones, which are the architectures to which \gls{ood} generalisation was applied, were pre-trained \gls{clip}~\citep{RadEtAl21}/ResNet~\citep{HeEtAl16}, \gls{bert}, and \gls{bertft}~\citep{DevEtAl19}. Cross-domain transfer means that the meta-learning tasks are sampled from different source datasets, whereas in-domain transfer means that the training and evaluation tasks are disjoint tasks sampled from the same source dataset.
 
 \textbf{Compared selectors.} We compared the \gls{mlp} multi-label classifier from OOD-Chameleon with PairwiseClassifier, PairwiseRegressor, and PerformanceModel selectors from \gls{asf}, using random forests as the underlying machine learning models for the \gls{asf} selectors.
@@ -650,15 +668,18 @@ The results show that pairwise regression and classification perform best in in-
 Importantly, \gls{asf} enables this systematic comparison with minimal implementation effort: the same selector classes used for the ZAP experiment above are applied here with a different performance metric and feature set. At least one \gls{asf} selector improved over the OOD-Chameleon \gls{mlp} baseline in five of the eight training/evaluation/model combinations, including all four in-domain settings. For the other three settings, \gls{asf} selectors are on-par with the \gls{mlp} baseline.
 
 \begin{table*}[t]
-  \centering
-    \caption[OOD-Chameleon selector errors]{OOD-Chameleon selector matrix. Rows represent training/evaluation/model combinations, columns correspond to selectors, and cells report mean worst-group error $\pm$ standard deviation over the five seeds, in percentage points. Lower is better; bold entries mark the lowest value in a row or values within 0.5 percentage points of it.
+\caption[OOD-Chameleon selector errors]{OOD-Chameleon selector matrix. Rows represent training/evaluation/model combinations, columns correspond to selectors, and cells report mean worst-group error $\pm$ standard deviation over the five seeds, in percentage points. Lower is better; bold entries mark the lowest value in a row or values within 0.5 percentage points of it.
     }
-  \label{tab:ch10:ood_selector_by_scenario}
+\label{tab:ch10:ood_selector_by_scenario}
+
+  \centering
+
+
   \resizebox{\textwidth}{!}{\input{figures/10/figures/tables/ood_selector_error_by_scenario.tex}}
 
 \end{table*}
 
-\subsection{Portfolio pre-selection}
+\subsection{Portfolio Pre-Selection}
 
 For a given task, multiple machine learning algorithms exist, each with its own hyperparameters that must be tuned.
 Pre-selecting a small set of algorithm--configuration pairs that perform well across many datasets has two important use cases.
@@ -669,7 +690,7 @@ However, brute-force enumeration is infeasible as the candidate set grows: there
 Therefore, efficient search algorithms are required to solve the problem.
 In this section, we benchmark several such methods implemented in \gls{asf}.
 
-\subsubsection{Setup of experiments}
+\subsubsection{Setup of Experiments}
 
 We use HPOBench~\citep{EggEtAl21}, which provides performance data for traditional machine learning algorithms on OpenML datasets~\citep{BisEtAl21}. Each candidate algorithm is an algorithm-hyperparameter-configuration pair, and each pre-selector constructs a compact portfolio before being evaluated on the held-out dataset.
 
@@ -711,23 +732,23 @@ We use HPOBench~\citep{EggEtAl21}, which provides performance data for tradition
     \includegraphics{figures/10/figures/analysis/hpobench_runtime_box_k25.pdf}
     \caption{$K_{\mathrm{port}}=25$}
   \end{subfigure}
-  \caption[HPOBench pre-selection quality and running time]{HPOBench portfolio pre-selection by portfolio size. The top row reports normalised pre-selection score over held-out datasets, where 0 corresponds to \gls{sbs} and 1 corresponds to \gls{vbs}; higher is better. The score axes are linear between $-1$ and $1$ and logarithmic outside this interval, retaining extreme negative observations. The bottom row reports pre-selector running time in seconds on a logarithmic scale; lower is better.}
-  \label{fig:ch10:hpobench_normalized_score_box}
+\caption[HPOBench pre-selection quality and running time]{HPOBench portfolio pre-selection by portfolio size. The top row reports normalised pre-selection score over held-out datasets, where 0 corresponds to \gls{sbs} and 1 corresponds to \gls{vbs}; higher is better. The score axes are linear between $-1$ and $1$ and logarithmic outside this interval, retaining extreme negative observations. The bottom row reports pre-selector running time in seconds on a logarithmic scale; lower is better.}
+\label{fig:ch10:hpobench_normalized_score_box}
 \end{figure*}
 
 \cref{fig:ch10:hpobench_normalized_score_box} reports normalised pre-selection score in the top row and pre-selector running time in the bottom row. Overall, marginal contribution with forward selection, beam search, and random local search are the strongest methods. Their median scores are close across all portfolio sizes: random local search is strongest for $K_{\mathrm{port}}=5$ and $K_{\mathrm{port}}=25$, while beam search and forward marginal contribution are tied for the highest median at $K_{\mathrm{port}}=10$. Genetic algorithm improves with larger portfolios but remains slightly behind these methods. Backward marginal contribution is much weaker and exhibits large negative outliers, while \gls{sbs}-based pre-selection performs closely to the \gls{sbs} (gap closed close to 0) for $K_{\mathrm{port}}=5,10$. The overall score distributions also improve from $K_{\mathrm{port}}=5$ to $K_{\mathrm{port}}=25$, indicating that larger complementary portfolios close more of the gap to the \gls{vbs}. We note that differential evolution resulted in out-of-memory errors, as the scipy default hyperparameters set the population size based on the solution length, which is long for this benchmark.
 
 The methods with similar portfolio quality have different computational costs. \gls{sbs} and marginal-contribution methods are very fast, BeamSearch is moderately more expensive, and random local search is the most expensive method. All evaluated pre-selectors run within about 1\,700 seconds on a single \gls{cpu} core.
 
-\section{ASlib benchmark}
+\section{ASlib Benchmark}
 \label{sec:ch10:aslib_appendix}
 
 We provide a benchmark of pre-selection, pre-solving, and algorithm selection based on ASlib~\citep{BisEtAl16}. Due to the large number of existing methods and the dependency of some methods on additional information (such as algorithm features, satisfiability status, and more), we selected a representative subset of methods.
 We note that we used only running time-based scenarios from ASlib, namely: SAT12-INDU, SAT20-MAIN, TSP-LION2015, QBF-2016, MIP-2016, MAXSAT19-UCMS, CSP-Minizinc-Time-2016, ASP-POTASSCO, BNSL-2016, and IPC2018.
 
-\subsection{Pre-selection}
+\subsection{Pre-Selection}
 
-\paragraph{Setup of experiments.}
+\paragraph{Setup of Experiments.}
 We evaluated portfolio pre-selectors on each ASlib scenario using the pre-defined 10-fold cross-validation. We created portfolios of requested size $K_{\mathrm{port}}\in\{2,5,10,15,20,25,30,35,40,45,50\}$; the pre-selector was fitted only on the performance matrix of the training fold and returned $K_{\mathrm{port}}$ solvers. The selected portfolio was then evaluated on the held-out fold by the running time of its virtual best solver.
 
 \textbf{Performance metric.} We report the normalised held-out pre-selection score. A score of 0 corresponds to selecting the scenario single-best solver, and a score of 1 corresponds to the full virtual best solver over all solvers. Higher values indicate that the selected portfolio preserves more of the scenario-level oracle performance.
@@ -735,93 +756,104 @@ We evaluated portfolio pre-selectors on each ASlib scenario using the pre-define
 \paragraph{Results.}
 \cref{fig:ch10:aslib_preselection_a} shows the distribution of normalised held-out scores across scenarios and folds for each portfolio size. The spread is largest for small portfolios, where selecting complementary solvers is a hard task, and there is a risk of the search process getting stuck in a locally optimal portfolio. By $K_{\mathrm{port}}=10$, several search-based methods already recover most of the full \gls{vbs} performance, and increasing $K_{\mathrm{port}}$ further mainly reduces the differences between methods. Forward marginal contribution, beam search, random local search, and genetic algorithms are consistently competitive, whereas selecting using \gls{sbs}-based pre-selection or backward marginal contribution is less robust at small and medium portfolio sizes.
 
-\begin{figure*}[!htbp]
-  \centering
-  \begin{subfigure}[t]{0.32\textwidth}
+\begin{figure}[p]
+\centering
+\begin{subfigure}[t]{0.49\textwidth}
     \centering
     \includegraphics{figures/10/figures/analysis/preselection_normalized_score_k2.pdf}
     \caption{$K_{\mathrm{port}}=2$}
-  \end{subfigure}
-  \begin{subfigure}[t]{0.32\textwidth}
+  \end{subfigure}\hfill
+\begin{subfigure}[t]{0.49\textwidth}
     \centering
     \includegraphics{figures/10/figures/analysis/preselection_normalized_score_k5.pdf}
     \caption{$K_{\mathrm{port}}=5$}
   \end{subfigure}
-  \begin{subfigure}[t]{0.32\textwidth}
+\par\medskip
+\begin{subfigure}[t]{0.49\textwidth}
     \centering
     \includegraphics{figures/10/figures/analysis/preselection_normalized_score_k10.pdf}
     \caption{$K_{\mathrm{port}}=10$}
-  \end{subfigure}
-  \begin{subfigure}[t]{0.32\textwidth}
+  \end{subfigure}\hfill
+\begin{subfigure}[t]{0.49\textwidth}
     \centering
     \includegraphics{figures/10/figures/analysis/preselection_normalized_score_k15.pdf}
     \caption{$K_{\mathrm{port}}=15$}
   \end{subfigure}
-  \begin{subfigure}[t]{0.32\textwidth}
+\par\medskip
+\caption[ASlib pre-selection quality by portfolio size]{ASlib pre-selection quality by portfolio size. Each box summarizes normalised held-out pre-selection score over folds and scenarios; higher is better. For $K_{\mathrm{port}}=2,5$, the score axes are linear between $-1$ and $1$ and logarithmic outside this interval to retain extreme negative observations.}
+\label{fig:ch10:aslib_preselection_a}
+\end{figure}
+\begin{figure}[p]
+\ContinuedFloat
+\centering
+\begin{subfigure}[t]{0.49\textwidth}
     \centering
     \includegraphics{figures/10/figures/analysis/preselection_normalized_score_k20.pdf}
     \caption{$K_{\mathrm{port}}=20$}
-  \end{subfigure}
-  \begin{subfigure}[t]{0.32\textwidth}
+  \end{subfigure}\hfill
+\begin{subfigure}[t]{0.49\textwidth}
     \centering
     \includegraphics{figures/10/figures/analysis/preselection_normalized_score_k25.pdf}
     \caption{$K_{\mathrm{port}}=25$}
   \end{subfigure}
-  \begin{subfigure}[t]{0.32\textwidth}
+\par\medskip
+\begin{subfigure}[t]{0.49\textwidth}
     \centering
     \includegraphics{figures/10/figures/analysis/preselection_normalized_score_k30.pdf}
     \caption{$K_{\mathrm{port}}=30$}
-  \end{subfigure}
-  \begin{subfigure}[t]{0.32\textwidth}
+  \end{subfigure}\hfill
+\begin{subfigure}[t]{0.49\textwidth}
     \centering
     \includegraphics{figures/10/figures/analysis/preselection_normalized_score_k35.pdf}
     \caption{$K_{\mathrm{port}}=35$}
   \end{subfigure}
-  \begin{subfigure}[t]{0.32\textwidth}
+\par\medskip
+\caption[]{\textit{Continued.} ASlib pre-selection quality by portfolio size. Each box summarizes normalised held-out pre-selection score over folds and scenarios; higher is better. For $K_{\mathrm{port}}=2,5$, the score axes are linear between $-1$ and $1$ and logarithmic outside this interval to retain extreme negative observations.}
+\end{figure}
+\begin{figure}[p]
+\ContinuedFloat
+\centering
+\begin{subfigure}[t]{0.49\textwidth}
     \centering
     \includegraphics{figures/10/figures/analysis/preselection_normalized_score_k40.pdf}
     \caption{$K_{\mathrm{port}}=40$}
-  \end{subfigure}
-  \begin{subfigure}[t]{0.32\textwidth}
+  \end{subfigure}\hfill
+\begin{subfigure}[t]{0.49\textwidth}
     \centering
     \includegraphics{figures/10/figures/analysis/preselection_normalized_score_k45.pdf}
     \caption{$K_{\mathrm{port}}=45$}
   \end{subfigure}
-  \begin{subfigure}[t]{0.32\textwidth}
+\par\medskip
+\begin{subfigure}[t]{0.49\textwidth}
     \centering
     \includegraphics{figures/10/figures/analysis/preselection_normalized_score_k50.pdf}
     \caption{$K_{\mathrm{port}}=50$}
-  \end{subfigure}
-  \caption[ASlib pre-selection quality by portfolio size]{ASlib pre-selection quality by portfolio size. Each box summarizes normalised held-out pre-selection score over folds and scenarios; higher is better. For $K_{\mathrm{port}}=2,5$, the score axes are linear between $-1$ and $1$ and logarithmic outside this interval to retain extreme negative observations.}
-  \label{fig:ch10:aslib_preselection_a}
-\end{figure*}
+  \end{subfigure}\hfill
+\caption[]{\textit{Continued.} ASlib pre-selection quality by portfolio size. Each box summarizes normalised held-out pre-selection score over folds and scenarios; higher is better. For $K_{\mathrm{port}}=2,5$, the score axes are linear between $-1$ and $1$ and logarithmic outside this interval to retain extreme negative observations.}
+\end{figure}
+
 
 \clearpage
 
-\subsection{Pre-solving}
+\subsection{Pre-Solving}
 
-\paragraph{Setup of experiments.}
+\paragraph{Setup of Experiments.}
 We evaluated schedule-based presolvers on the same ASlib running time scenarios and predefined folds. For each pre-solving budget in $\{10,20,30,50,100\}$ seconds, each method was used to construct an ordered schedule of solver/time allocations on the training fold. The schedule was then tested on each held-out instance.
 
-\paragraph{Performance metric.} We report the number of held-out instances solved within the pre-solving budget. Higher counts are better.
+\paragraph{Performance Metric.} We report the number of held-out instances solved within the pre-solving budget. Higher counts are better.
 
 \paragraph{Results.}
 \cref{tab:ch10:aslib_presolving_counts} reports solved-instance counts for every scenario, budget, and presolver. 3S is the best method across most scenarios and budgets; when it is not the best, it solves only a few instances less than the best method.
 
-\begin{table*}[!htbp]
-  \centering
-  \caption[ASlib instances solved by pre-solving methods]{ASlib pre-solving solved-instance counts. Rows are grouped by pre-solving budget and ASlib scenario; columns are pre-solving methods. Higher is better, and bold entries mark the highest count in each row.}
-  {\input{figures/10/figures/tables/presolving_solved_counts_by_budget.tex}}
-  \label{tab:ch10:aslib_presolving_counts}
-\end{table*}
+\input{Chapters/asf_presolving_tables}
 \clearpage
 
-\subsection{Algorithm selection}
+\subsection{Algorithm Selection}
 
-\paragraph{Setup of experiments. }
+\paragraph{Setup of Experiments.}
 We evaluated learned per-instance selectors on the ASlib scenarios with predefined folds. Every learned selector first received the same fold-local forward marginal-contribution pre-selection step, retaining at most 10 solvers from the training fold. The selector was then tuned using \gls{smac} for 50 trials using 10-fold cross-validation on the training fold and evaluated once on the held-out ASlib fold. The selector set consists of PerformanceModel, MultiClassClassifier, PairwiseClassifier, PairwiseRegressor, SimpleRanking, ISAC, SNNAP, SUNNY, and OSLLinearSelector.
 
-\paragraph{Performance metric.} We report the percentage of the \gls{sbs}--\gls{vbs} gap closed using PAR10 solver runtimes. A value of 0 matches \gls{sbs} and 100 matches \gls{vbs}. Negative displayed values were clipped at $-100\%$ for readability.
+\paragraph{Performance Metric.} We report the percentage of the \gls{sbs}--\gls{vbs} gap closed using PAR10 solver runtimes. A value of 0 matches \gls{sbs} and 100 matches \gls{vbs}. Negative displayed values were clipped at $-100\%$ for readability.
 
 \paragraph{Results.}
 \cref{fig:ch10:aslib_selection_gap_a,fig:ch10:aslib_selection_gap_b,fig:ch10:aslib_selection_gap_c} show that the best selector varies by scenario. PairwiseClassifier, PairwiseRegressor, SimpleRanking, and SNNAP are frequently among the stronger selectors. Several selectors close a large fraction of the gap on BNSL-2016 and QBF-2016, whereas the improvements on SAT20-MAIN are small. MIP-2016 is mixed, with some selectors closing nearly half the gap and others performing worse than \gls{sbs}. On TSP-LION2015, every plotted selector performs worse than the solver-only \gls{sbs} once feature computation time is included. MultiClassClassifier is competitive on some scenarios but less stable overall, supporting the observation made in \cref{sec:ch10:experiments} that methods exploiting pairwise or ranking information are often better suited for selection than plain multi-class classification.
@@ -848,8 +880,8 @@ We evaluated learned per-instance selectors on the ASlib scenarios with predefin
     \includegraphics{figures/10/figures/analysis/selection_closed_gap_ipc2018.pdf}
     \caption{IPC2018}
   \end{subfigure}
-  \caption[ASlib algorithm-selection closed gap, part 1]{ASlib algorithm-selection closed gap by scenario and selector, part 1. Bars show the percentage of the \gls{sbs}--\gls{vbs} gap closed by each selector; higher is better. Negative displayed values are clipped at $-100\%$.}
-  \label{fig:ch10:aslib_selection_gap_a}
+\caption[ASlib algorithm-selection closed gap, part 1]{ASlib algorithm-selection closed gap by scenario and selector, part 1. Bars show the percentage of the \gls{sbs}--\gls{vbs} gap closed by each selector; higher is better. Negative displayed values are clipped at $-100\%$.}
+\label{fig:ch10:aslib_selection_gap_a}
 \end{figure*}
 
 \begin{figure*}[!htbp]
@@ -874,8 +906,8 @@ We evaluated learned per-instance selectors on the ASlib scenarios with predefin
     \includegraphics{figures/10/figures/analysis/selection_closed_gap_sat12_indu.pdf}
     \caption{SAT12-INDU}
   \end{subfigure}
-  \caption[ASlib algorithm-selection closed gap, part 2]{ASlib algorithm-selection closed gap by scenario and selector, part 2. Bars show the percentage of the \gls{sbs}--\gls{vbs} gap closed by each selector; higher is better. Negative displayed values are clipped at $-100\%$.}
-  \label{fig:ch10:aslib_selection_gap_b}
+\caption[ASlib algorithm-selection closed gap, part 2]{ASlib algorithm-selection closed gap by scenario and selector, part 2. Bars show the percentage of the \gls{sbs}--\gls{vbs} gap closed by each selector; higher is better. Negative displayed values are clipped at $-100\%$.}
+\label{fig:ch10:aslib_selection_gap_b}
 \end{figure*}
 
 \begin{figure*}[!htbp]
@@ -890,24 +922,40 @@ We evaluated learned per-instance selectors on the ASlib scenarios with predefin
     \includegraphics{figures/10/figures/analysis/selection_closed_gap_tsp_lion2015.pdf}
     \caption{TSP-LION2015}
   \end{subfigure}
-  \caption[ASlib algorithm-selection closed gap, part 3]{ASlib algorithm-selection closed gap by scenario and selector, part 3. Bars show the percentage of the \gls{sbs}--\gls{vbs} gap closed by each selector; higher is better. Negative displayed values are clipped at $-100\%$.}
-  \label{fig:ch10:aslib_selection_gap_c}
+\caption[ASlib algorithm-selection closed gap, part 3]{ASlib algorithm-selection closed gap by scenario and selector, part 3. Bars show the percentage of the \gls{sbs}--\gls{vbs} gap closed by each selector; higher is better. Negative displayed values are clipped at $-100\%$.}
+\label{fig:ch10:aslib_selection_gap_c}
 \end{figure*}
 
-\section{Broader impact}
+\section{Practical Use and Reproducibility}
+\label{sec:ch10:availability}
+
+\subsection{Software Availability and Maintenance}
+
+The ASF library is released under the MIT licence. Its public repository is
+\url{https://github.com/hadarshavit/asf}, and the experiment archive supplied
+with the study is \url{https://anonymous.4open.science/r/asf_paper-2A6C/}.
+The software versions, configuration spaces, and computational resources used
+in the case studies are reported in
+\cref{sec:ch10:additional_experiment_details}.
+
+The modular interface supports adding new selection methods and pipeline
+components. The software uses continuous integration, Ruff formatting checks,
+PyTest tests, and coverage checks. These mechanisms support maintenance and
+comparison, while experimental validity still depends on data provenance,
+appropriate splits, and the evaluation protocol.
+
+\subsection{Scope and Responsible Use}
 \label{sec:ch10:imapct}
-Our work introduces a problem-agnostic framework for algorithm selection, with the goal of advancing research related to automated algorithm selection. In the experiments we performed and the current use cases of algorithm selection, there exist no negative societal impacts, as they are all related to foundational solutions to problems from machine learning and \gls{ai}.
 
-\section{Licensing, availability and maintenance}
-\gls{asf} is open source and is available on (deleted for anonymous submission) with \gls{mit} licence.
-The authors will continue to maintain the package with newly introduced methods. Additionally, we encourage authors of newly created algorithm selection methods to implement them initially within \gls{asf}, and to submit a pull request to contribute their implementation to \gls{asf}. The authors of \gls{asf} hereby undertake the responsibility to approve any such pull request within 3 months, as long as it adheres to the \gls{asf} code standards and structure. The authors of \gls{asf} will support authors of new algorithm selection methods in implementing their methods within \gls{asf}.
+The experiments concern performance-based choices in the reported machine
+learning and algorithmic scenarios. They evaluate predictive quality,
+selection outcomes, and computational cost. Applying the framework in another
+domain requires choosing performance criteria and constraints appropriate to
+that setting, including any consequences not represented by the benchmark
+objective. The case studies do not constitute an assessment of every possible
+application of algorithm selection.
 
-\gls{asf} includes a \gls{ci} to ensure that all new code pushed to the library is formatted according to the PEP8 guidelines using the Ruff linter. Additionally, \gls{asf} includes comprehensive PyTests, which are also required to pass for every new code added. Furthermore, there are code coverage checks, which are used to ensure that every new code is accompanied with proper tests.
-
-The anonymous code of \gls{asf} is available at \url{https://anonymous.4open.science/r/asf-660A/README.md} and of the experiments in the paper at
-\url{https://anonymous.4open.science/r/asf_paper-2A6C/}.
-
-\section{Conclusions}
+\section{Conclusions and Future Directions}
 \label{sec:ch10:conclusion}
 This chapter presented \gls{asf}, a Python framework for automated algorithm selection that brings together methods from different research communities, such as classical selectors, pairwise and ranking-based approaches, empirical performance models, pre-selection, pre-solving, and tunable end-to-end pipelines, under a single, problem-agnostic \gls{api}.
 

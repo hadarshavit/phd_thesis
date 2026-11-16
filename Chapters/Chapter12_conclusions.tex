@@ -5,12 +5,12 @@ Empirical performance prediction supports decisions about which algorithm to run
 
 The contributions support a common conclusion: improvements in empirical performance prediction require attention to the complete path from problem representation to algorithmic decisions. Reliable features can improve established predictors; learned representations can expose additional structure; and adapting models to the task can improve how predictions guide search. Distributional explanations and common software interfaces make these improvements easier to inspect and evaluate. The evidence also establishes practical limits: representation and model choices remain dependent on the task, computational overhead can restrict their usefulness, and predictive improvements require validation in the decision process they are intended to support.
 
-\section{Answers to the thesis questions}
+\section{Answers to the Thesis Questions}
 \label{sec:ch12:answers}
 
 The introduction organised the dissertation around three questions concerning representations, predictive models, and the interpretation and use of performance prediction. The following answers bring together the evidence from the contribution chapters.
 
-\subsection{How can we obtain better representations of problem instances and search spaces?}
+\subsection{How Can We Obtain Better Representations of Problem Instances and Search Spaces?}
 
 The representation of a problem determines which distinctions a performance model can learn. \Cref{ch:ch04:rev_SATzilla} showed that improving this representation can begin with maintaining the infrastructure used to compute it. Updating the SATzilla feature extractor made established features more accessible on contemporary \gls{sat} instances and improved satisfiability prediction, running-time prediction, and algorithm selection in the evaluated settings. The result connects engineering reliability with modelling quality: a feature description has practical value only when it can be computed within the available resources and captures relevant properties of the instances under consideration.
 
@@ -20,7 +20,7 @@ The representation of a problem determines which distinctions a performance mode
 
 Together, these chapters answer the representation question through reliability, task-specific evaluation, and structural learning. They do not identify one representation that is preferable throughout. Instead, they establish that representation quality must be assessed jointly with the prediction task, downstream decision, and cost of obtaining the representation.
 
-\subsection{How can we build better predictive models and surrogate models?}
+\subsection{How Can We Build Better Predictive Models and Surrogate Models?}
 
 The dissertation studied model quality both by adapting the models used during optimisation and by examining which errors matter for optimisation decisions. \Cref{ch:ch06:dymbo} introduced DyMBO, which uses observed ranking quality to update the influence of complementary surrogates during a Bayesian optimisation run. Its evaluation showed the value of adapting model choice as observations accumulate. In the tested settings, greedy dynamic selection between a Gaussian process and a random forest was particularly effective. The findings support using evidence from the current search trajectory to guide surrogate choice, while the cost of fitting multiple models and sensitivity to unsuitable portfolio members remain constraints.
 
@@ -30,7 +30,7 @@ The scope of that conclusion is important. The chapter's main oracle constructio
 
 DyMBO and the noisy-oracle study address complementary aspects of adaptation. DyMBO uses observed model quality to choose among available surrogates; the noisy-oracle study asks which aspects of quality can affect the search. Together, they motivate evaluating model adaptation through optimisation outcomes as well as predictive scores. An important next step is to determine whether more decision-sensitive measures of surrogate quality can improve adaptive selection without introducing excessive evaluation cost.
 
-\subsection{How can we make performance prediction easier to understand, compare, and use?}
+\subsection{How Can We Make Performance Prediction Easier to Understand, Compare, and Use?}
 
 \Cref{sec:ch09:dist_explain} broadened performance prediction from a typical running time to a distribution over possible running times. Expressing predicted distributions through interpretable statistics made it possible to apply permutation importance and individual conditional expectation analyses to scale, variability, and shape. In the studied \gls{sat} and planning scenarios, different instance properties influenced different aspects of the predicted distribution. A feature associated with typical running time need not also explain skewness or kurtosis.
 
@@ -40,7 +40,7 @@ These explanations describe the fitted predictor and remain conditional on the f
 
 The answer to the third question therefore has two parts. Explanations should expose meaningful properties of predicted algorithm behaviour, including its variability. Reusable infrastructure should make competing modelling and selection choices accessible to empirical comparison. Neither removes the need to examine the assumptions and costs of the resulting pipeline.
 
-\section{Lessons across the contributions}
+\section{Lessons Across the Contributions}
 \label{sec:ch12:synthesis}
 
 A recurring finding is that performance complementarity appears at several levels. Dimensionality reduction methods preserve different information, surrogate models are effective in different search phases, graph and tabular models have different computational strengths, and selection pipelines behave differently across scenarios. This makes empirical performance prediction relevant to its own design: the choice of representation, predictor, or pipeline can itself become an algorithm selection problem. The dissertation demonstrates several instances of this principle, while a system that automatically makes all of these choices remains a research objective.
@@ -62,34 +62,34 @@ Distributional explanations introduce further qualifications. They describe asso
 
 These limitations define the scope of the dissertation's central claim. Reliable representations, adaptive models, decision-sensitive evaluation, and interpretable software pipelines provide ways to improve empirical performance prediction. Their effectiveness must still be demonstrated for the intended task and resource regime.
 
-\section{Future directions}
+\section{Future Directions}
 \label{sec:ch12:future}
 
-\subsection{Selecting and combining representations}
+\subsection{Selecting and Combining Representations}
 
 The complementarity observed among dimensionality reduction methods motivates learning which method to use from dataset properties, the downstream task, and the available budget. Such a selector should account for fitting and transformation costs as well as downstream quality, and should be evaluated on held-out datasets or function families. This would test whether the observed complementarity can be exploited beyond the settings used to develop the selector.
 
 For structured instances, a related direction is to combine scalable learned representations with inexpensive hand-crafted features. Graph sampling, compression, and hierarchical representations could extend graph-based performance models to larger formulae. Their value should be tested through both prediction and solver selection, including graph-construction and inference costs. Source-disjoint evaluation would help distinguish transferable structural information from properties specific to an instance collection.
 
-\subsection{Connecting surrogate assessment to search decisions}
+\subsection{Connecting Surrogate Assessment to Search Decisions}
 
 A promising next step is to test whether surrogate training or selection can use measures that reflect the consequences of prediction errors. Value-weighted training losses, local ranking measures, and comparisons of acquisition-induced candidate choices are possible approaches. They require experiments with learned surrogates whose uncertainty and training data change during the search. Such experiments would connect the controlled noisy-oracle findings with the adaptive model choices studied by DyMBO.
 
 Reducing adaptation overhead is equally important. Predicting when a surrogate is worth fitting, temporarily suspending consistently unhelpful models, or choosing a portfolio from task properties could reduce the cost of dynamic model choice. These extensions should be tested with weak portfolio members and under equal total wall-clock budgets. Multi-fidelity optimisation offers another setting in which surrogate suitability may change with the fidelity and quantity of observations.
 
-\subsection{Using distributional predictions in algorithmic decisions}
+\subsection{Using Distributional Predictions in Algorithmic Decisions}
 
 The distributional explanation framework could be extended to training times, configuration stability, or other stochastic performance measures. Further work should examine whether explanations remain stable across data resampling, correlated features, and alternative distribution families. Better behaviour with few repeated observations is also needed before such models can be used reliably when data collection is expensive.
 
 A further opportunity is to use predicted distributions directly in selection or scheduling decisions. A system could choose algorithms according to a deadline, a tail-risk criterion, or a probability of completion rather than expected running time alone. Evaluating these policies would connect distributional explanation with practical resource allocation. The relevant test is whether the chosen policy improves the intended operational outcome under its data and prediction costs.
 
-\subsection{Evaluating adaptive pipelines across domains}
+\subsection{Evaluating Adaptive Pipelines Across Domains}
 
 \gls{asf} provides a basis for studying interactions among feature processing, portfolio construction, pre-solving, and selection. Future comparisons could evaluate which combinations remain effective under distribution shift, changes to the algorithm portfolio, or online arrival of instances. Warm-starting and integration with automated machine learning are further directions for reducing the effort required to deploy these pipelines.
 
 Across these extensions, reproducible comparisons should preserve the distinction between component quality and complete pipeline performance. Reporting total computational cost, variability across repetitions, and the provenance of data splits would make it easier to determine when additional modelling complexity is justified. This would also make it possible to test the broader proposition emerging from the dissertation: that adaptation is most useful when the system can identify both the benefit and the cost of changing its representation or model.
 
-\section{Closing perspective}
+\section{Closing Perspective}
 \label{sec:ch12:closing}
 
 This dissertation advances empirical performance prediction through improvements to its inputs, modelling mechanisms, interpretation, and software infrastructure. Its contributions show that maintained feature extractors, task-appropriate representations, adaptive surrogate choices, and distributional analyses can each improve how algorithm behaviour is predicted and used. They also show why these choices require empirical evaluation under realistic computational constraints.
