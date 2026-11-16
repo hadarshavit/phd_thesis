@@ -1,23 +1,21 @@
 
 \chapter{Introduction}\label{ch:ch01:introduction}
 
-\Gls{ai} has made substantial progress in recent decades, both in research and in practice.
-Modern \gls{ai} methods solve problems across a growing range of domains: they classify images, process natural language, support automated reasoning, verify hardware and software systems, and search for high-quality solutions to difficult optimisation problems.
-This diversity is important for the perspective taken in this dissertation.
+\Gls{ai} has made substantial progress in recent decades. Modern \gls{ai} methods solve problems across a wide range of domains: they classify images~\citep{}, process natural language~\citep{}, performs automated reasoning, verify hardware and software systems, and search for high-quality solutions to difficult optimisation problems.
 \Gls{ai} is not a single algorithmic technology, but a broad collection of methods whose behaviour depends strongly on the problem instances, data sets, configurations, and computational budgets to which they are applied.
 
-A common feature of these settings is that there are usually many candidate algorithms, and each algorithm often has many hyperparameters that control its behaviour.
+A common feature of these settings is that there are usually many candidate algorithms, and each algorithm often has many (hyper)parameters that control its behaviour.
 Moreover, the performance of these algorithms can vary significantly across different instances and configurations.
 An algorithm that performs well on one instance may be weak on another, a configuration that works well for one data set may fail on a different one, and stochastic algorithms may behave differently across repeated runs on the same input.
 These performance variabilities are challenging to model and predict, however, they provide an opportunity to select and configure the best algorithm for a given task.
 
-Empirical performance prediction is predicting the performance of algorithms on unseen problem instances, configurations, or combinations of both.
-In automated algorithm selection, such predictions support choosing an algorithm for a given instance.
-In automated algorithm configuration and hyperparameter optimisation, they support searching for high-performing configurations.
-In explainability-oriented settings, they support understanding which instance properties, configuration choices, or regions of the search space drive algorithm behaviour.
-Although these uses differ in detail, they share the same underlying question: how can we learn useful models of algorithm performance from empirical observations?
+Empirical performance prediction is the task of predicting the performance of algorithms on unseen problem instances, configurations, or combinations of both. This task has various use-cases.
+In automated algorithm selection, such predictions support selecting an algorithm for a given instance.
+In model-based automated algorithm configuration and hyperparameter optimisation, they support searching for high-performing configurations.
+They also support understanding which instance properties, configuration choices, or regions of the search space drive algorithm behaviour.
+Although these uses differ, they share the same underlying mechanism to solve them: how can we learn useful models of algorithm performance from empirical observations?
 
-Despite the success of empirical performance prediction, these methods are still difficult to use robustly in many settings.
+Despite the success of empirical performance prediction, these methods are still difficult to use in many settings.
 High-quality instance features may be expensive to compute or unavailable, predictive models may not be accurate enough in the parts of the space that matter for decision making and even when predictions are accurate, they may be hard to interpret or deploy in real-world applications.
 This dissertation studies empirical performance prediction through these connected limitations and develops methods, benchmarks, and tools that make performance prediction more useful in practice.
 
@@ -27,7 +25,7 @@ This dissertation studies empirical performance prediction through these connect
 
 When empirical performance prediction is applied across problem instances, as in automated algorithm selection and many configuration techniques, a crucial first step is to represent each instance through descriptive numerical features.
 However, extracting high-quality features in practice can be slow, brittle, or impossible for large modern instances.
-Early in this work, we observed this problem in the \gls{sat} problem, a domain in which empirical performance prediction has been used for many years.
+We observed this problem in the \gls{sat} problem, a domain in which empirical performance prediction has been used for many years (see, e.g., \citealp{NudEtAl04,XuEtAl08,HutEtAl11,HutEtAl14}).
 The widely used SATzilla feature extraction pipeline had become difficult to apply to contemporary \gls{sat} instances because solvers, preprocessors, instance sizes, and computing systems had changed substantially since the original implementation.
 This creates a direct bottleneck: if the features cannot be computed reliably, downstream performance prediction, algorithm selection, and explainability cannot be used reliably either.
 
