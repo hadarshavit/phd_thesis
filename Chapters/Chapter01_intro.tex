@@ -1,27 +1,37 @@
 
 \chapter{Introduction}\label{ch:ch01:introduction}
 
-\Gls{ai} has made substantial progress in recent decades. Modern \gls{ai} methods solve problems across a wide range of domains: they classify images~\citep{}, process natural language~\citep{}, performs automated reasoning, verify hardware and software systems, and search for high-quality solutions to difficult optimisation problems.
-\Gls{ai} is not a single algorithmic technology, but a broad collection of methods whose behaviour depends strongly on the problem instances, data sets, configurations, and computational budgets to which they are applied.
+\Gls{ai} has made substantial progress in recent decades. Modern \gls{ai} methods solve problems across a wide range of domains: they classify images~\citep{}, process natural language~\citep{}, plan sequences of actions to achieve goals~\citep{}, verify hardware and software systems~\citep{}, and search for high-quality solutions to difficult optimisation problems~\citep{}.
+More recently, large language models (LLMs) have revolutionaised the world with their ability to solve complex tasks, such as automated coding~\citep{}.
+Algorithms that solve these problems are highly sophisticated, based on decades of human research. This thesis is concerned about empirical performance prediction of AI algorithms. The task might be unfamilliar to many people. However, is plays an important role in the unseen background of many real-world applications. In the following, we will explain the meaning of the sentence by first understanding the meaning of the terms, understanding the settings of the task (the inputs and outputs) and explore use-cases.
 
-A common feature of these settings is that there are usually many candidate algorithms, and each algorithm often has many (hyper)parameters that control its behaviour.
-Moreover, the performance of these algorithms can vary significantly across different instances and configurations.
-An algorithm that performs well on one instance may be weak on another, a configuration that works well for one data set may fail on a different one, and stochastic algorithms may behave differently across repeated runs on the same input.
-These performance variabilities are challenging to model and predict, however, they provide an opportunity to select and configure the best algorithm for a given task.
+Empirical performance prediction is an important task on the meta-algorithmic level. The term has three components, each important in its own right. First, ``empirical'' means that the task is based on observations and real-world measurements rather than theoretical analysis. As such, factors such as algorithmic stochasticity and hardware dependencies are part of the problem. Second, ``performance'' refers to a metric that measures how well an algorithm solves a task. For example, accuracy measures how well a machine learning model performs on a classification task, while running time is a common performance metric for solvers of hard computational problems. The choice of metric is crucial as it should capture what the user cares about and be measurable through empirical trials. Finally, ``prediction'' means estimating an performance of an algorithm on a given task without actually running it on that task. This is done using features that describe the problem.
 
-Empirical performance prediction is the task of predicting the performance of algorithms on unseen problem instances, configurations, or combinations of both. This task has various use-cases.
-In automated algorithm selection, such predictions support selecting an algorithm for a given instance.
-In model-based automated algorithm configuration and hyperparameter optimisation, they support searching for high-performing configurations.
-They also support understanding which instance properties, configuration choices, or regions of the search space drive algorithm behaviour.
-Although these uses differ, they share the same underlying mechanism to solve them: how can we learn useful models of algorithm performance from empirical observations?
+Next, we explore the settings of empirical performance prediction. In general, the task involves a target algorithm that we aim to predict its performance. The algorithm operates on \textit{problem instances}, which are intialisations of the problem the algorithm solves (such as datasets for a machine learning algorithm). Each instance can have \textit{instance features}, which are (cheaply) computed features that can be computed to describe the instance. Based on these features, an empirical performance model (EPM) can predict the performance of an algorithm on the instance. However, performance prediction is not limited to this setting. In many cases, (AI) algorithms are parametarised, \emph{i.e.}, they have (hyper)parameters that control their behviour, for example, how fast the a machine learning model learns from the data, or which heuristic to use to solve a problem. Therefore, another possibility is to use the (hyper)parameter configurations of the algorithm as an input to the EPM in order to predict the performance on unseen configurations. An additional setting uses a combination of the instance features and configurations as an input.
 
-Despite the success of empirical performance prediction, these methods are still difficult to use in many settings.
-High-quality instance features may be expensive to compute or unavailable, predictive models may not be accurate enough in the parts of the space that matter for decision making and even when predictions are accurate, they may be hard to interpret or deploy in real-world applications.
-This dissertation studies empirical performance prediction through these connected limitations and develops methods, benchmarks, and tools that make performance prediction more useful in practice.
+At this stage, we understand the meaning of empirical performance prediction. Therefore the next task is to explore how it is used. 
+As previously mentioned, there are many algorithms that can solve each problem.
+An example is the Boolean satisfiability problem (SAT), where many solvers participate each year in the SAT competiotion, aiming to be the fastest SAT solver on a set of several hundreds of instances. Examining the 2026 SAT competition, 33 solvers were submitted, while the single best solver was the fastest only on $9.8\%$ of the instances, and selecting the best algorithm for every instance would yield performance more than $2.8 \times$ faster than the single best solver (full details of the analysis is available in Appendix \todo{}).
+Therefore, automatically selecting the best solver for each problem instance is an important task. In fact, algorithm selection-based solvers have won multiple SAT competitions in the past.
+Algorithm selectors usually work by extracting features of the problem instance and giving them as an input to an EPM, based on its prediction the algorithm is chosen.
 
-\section{Challenges in the Field}
+Additional use-case of EPMs is to tune parametrised algorithms. As previously introduced, algorithms depend on (hyper)parameters that affect their performance. Careful tuning of these parameters for the use case can substantially improve the performance of algorithms. To show the importance of tuning, we use data from TabArena~\citep{}, a large scale benchmark of machine learning methods for tabular data. TabArena contains the performance various models on multiple datasets, including the performance of verious hyperperameter configurations. We analysed this data and found that the popular LightGBM model can have more than $40\%$ better performance using a tuned configuration compared to the default one. Therefore, tuning algorithms for the given tasks is an important field of research. A common procedure for tuning algorithms is to use EPMs to predict the performance of the algorithms on unseen configurations and using these predictions to decide which configuration to sample next.
 
-\subsection{Features Are Hard to Extract, Expensive and Not Always Available}
+The final use-case we will dive to in this thesis is explainability of algorithms. There, EPMs are used to predict the performance of the algorithms on configurations and/or instances, and, based on these, calculating which (hyper)parameters and features are more important, which values lead to good performance and more.
+
+We note that, in this thesis, we have a relatively wide view on what EPMs are. While a narrow definition can classify EPMs as only models that predict the actual, numerical metric value of the algorithm, we have a broader view that includes indirect predictions as EPMs as well. For example, in algorithm selection \textit{pairwise classifier} does not predict the performance of the algorithms but rather has a few models that classify between pairs of algorithms which one is better. We view such models as performance predictors as they are still used to predict which algorithm has better performance, thus indirectly predicting the performance of the algorithms.
+
+By this point, we hope that we convinced the reader regarding the importance of EPMs in research and practice. In the following sections, we will explore shortcomings of EPMs and overview the contributions of thesis.
+
+% \Gls{ai} is not a single algorithmic methodology, but rather a broad collection of techniques that can solve such problems. 
+% The behaviour of these methods depends strongly on the problem instances (\emph{i.e.}, which X are we solving), configurations, and computational budgets to which they are applied.
+% A common feature of these scenarios is that there are (usually) many algorithms to solve each problem. 
+% Every algorithm is taking a different approach to solve it. For example, in the field of tabular classification, one approach can use an enesemble of traditional methods, such as random forest and SVMs, while other approaches can use foundation models. Choosing the right algorithm for the task depends on the dataset in hand, the available computational resources and other considerations that the user chooses.
+
+
+% \section{Challenges in the Field}
+
+\section{Features Are Hard to Extract, Expensive and Not Always Available}
 
 When empirical performance prediction is applied across problem instances, as in automated algorithm selection and many configuration techniques, a crucial first step is to represent each instance through descriptive numerical features.
 However, extracting high-quality features in practice can be slow, brittle, or impossible for large modern instances.
@@ -37,7 +47,7 @@ However, many dimensionality reduction methods were originally designed and eval
 It is therefore not obvious whether they preserve the aspects of the search space that matter for optimisation, where target values and landscape geometry can be more important than global variance.
 This motivates a task-driven view of representation quality.
 
-\subsection{Models Are Not Accurate Enough}
+\section{Models Are Not Accurate Enough}
 
 Even with informative features, the predictive models and surrogate models used in algorithm selection, configuration, and Bayesian optimisation must be accurate enough to guide decisions effectively.
 Standard modelling approaches face several difficulties.
@@ -52,7 +62,7 @@ Moreover, traditional machine learning metrics such as global mean squared error
 A surrogate model does not need to be uniformly accurate everywhere; rather, it needs to be accurate in the regions where prediction errors can mislead the acquisition function.
 Understanding where accuracy matters is therefore central to designing better model-based optimisation methods.
 
-\subsection{Hard to Use Existing Methods and to Gain Insights}
+\section{Hard to Use Existing Methods and to Gain Insights}
 
 Finally, even when features can be computed and models are accurate, using empirical performance prediction in practical workflows and extracting scientific insight from it remain difficult.
 The algorithm selection and configuration communities have historically developed domain-specific tools in isolation, leading to separate pipelines for \gls{sat} solving, automated planning, machine learning, and black-box optimisation.
