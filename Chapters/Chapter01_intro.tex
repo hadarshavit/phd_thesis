@@ -1,25 +1,25 @@
 
 \chapter{Introduction}\label{ch:ch01:introduction}
 
-\Gls{ai} has made substantial progress in recent decades. Modern \gls{ai} methods solve problems across a wide range of domains: they classify images~\citep{}, process natural language~\citep{}, plan sequences of actions to achieve goals~\citep{}, verify hardware and software systems~\citep{}, and search for high-quality solutions to difficult optimisation problems~\citep{}.
-More recently, large language models (LLMs) have revolutionaised the world with their ability to solve complex tasks, such as automated coding~\citep{}.
+\Gls{ai} has made substantial progress in recent decades. Modern \gls{ai} methods solve problems across a wide range of domains: they classify images~\citep{HeEtAl16}, process natural language~\citep{DevEtAl19}, plan sequences of actions to achieve goals~\citep{GerSer02}, verify hardware and software systems~\citep{BraMis10,ClaEtAl04}, and search for high-quality solutions to difficult optimisation problems~\citep{KhaEtAl17}.
+More recently, large language models (LLMs) have revolutionaised the world with their ability to solve complex tasks, such as automated coding~\citep{CheEtAl21}.
 Algorithms that solve these problems are highly sophisticated, based on decades of human research. This thesis is concerned about empirical performance prediction of AI algorithms. The task might be unfamilliar to many people. However, is plays an important role in the unseen background of many real-world applications. In the following, we will explain the meaning of the sentence by first understanding the meaning of the terms, understanding the settings of the task (the inputs and outputs) and explore use-cases.
 
-Empirical performance prediction is an important task on the meta-algorithmic level. The term has three components, each important in its own right. First, ``empirical'' means that the task is based on observations and real-world measurements rather than theoretical analysis. As such, factors such as algorithmic stochasticity and hardware dependencies are part of the problem. Second, ``performance'' refers to a metric that measures how well an algorithm solves a task. For example, accuracy measures how well a machine learning model performs on a classification task, while running time is a common performance metric for solvers of hard computational problems. The choice of metric is crucial as it should capture what the user cares about and be measurable through empirical trials. Finally, ``prediction'' means estimating an performance of an algorithm on a given task without actually running it on that task. This is done using features that describe the problem.
+Empirical performance prediction is an important task on the meta-algorithmic level~\citep{HutEtAl14}. The term has three components, each important in its own right. First, ``empirical'' means that the task is based on observations and real-world measurements rather than theoretical analysis. As such, factors such as algorithmic stochasticity and hardware dependencies are part of the problem. Second, ``performance'' refers to a metric that measures how well an algorithm solves a task. For example, accuracy measures how well a machine learning model performs on a classification task, while running time is a common performance metric for solvers of hard computational problems. The choice of metric is crucial as it should capture what the user cares about and be measurable through empirical trials. Finally, ``prediction'' means estimating an performance of an algorithm on a given task without actually running it on that task. This is done using features that describe the problem.
 
-Next, we explore the settings of empirical performance prediction. In general, the task involves a target algorithm that we aim to predict its performance. The algorithm operates on \textit{problem instances}, which are intialisations of the problem the algorithm solves (such as datasets for a machine learning algorithm). Each instance can have \textit{instance features}, which are (cheaply) computed features that can be computed to describe the instance. Based on these features, an empirical performance model (EPM) can predict the performance of an algorithm on the instance. However, performance prediction is not limited to this setting. In many cases, (AI) algorithms are parametarised, \emph{i.e.}, they have (hyper)parameters that control their behviour, for example, how fast the a machine learning model learns from the data, or which heuristic to use to solve a problem. Therefore, another possibility is to use the (hyper)parameter configurations of the algorithm as an input to the EPM in order to predict the performance on unseen configurations. An additional setting uses a combination of the instance features and configurations as an input.
+Next, we explore the settings of empirical performance prediction. In general, the task involves a target algorithm that we aim to predict its performance. The algorithm operates on \textit{problem instances}, which are intialisations of the problem the algorithm solves (such as datasets for a machine learning algorithm). Each instance can have \textit{instance features}, which are (cheaply) computed features that can be computed to describe the instance. Based on these features, an empirical performance model (EPM) can predict the performance of an algorithm on the instance. However, performance prediction is not limited to this setting. In many cases, (AI) algorithms are parametarised, \emph{i.e.}, they have (hyper)parameters that control their behviour, for example, how fast the a machine learning model learns from the data, or which heuristic to use to solve a problem. Therefore, another possibility is to use the (hyper)parameter configurations of the algorithm as an input to the EPM in order to predict the performance on unseen configurations. An additional setting uses a combination of the instance features and configurations as an input~\citep{HutEtAl14}.
 
 At this stage, we understand the meaning of empirical performance prediction. Therefore the next task is to explore how it is used. 
 As previously mentioned, there are many algorithms that can solve each problem.
 An example is the Boolean satisfiability problem (SAT), where many solvers participate each year in the SAT competiotion, aiming to be the fastest SAT solver on a set of several hundreds of instances. Examining the 2026 SAT competition, 33 solvers were submitted, while the single best solver was the fastest only on $9.8\%$ of the instances, and selecting the best algorithm for every instance would yield performance more than $2.8 \times$ faster than the single best solver (full details of the analysis is available in Appendix \todo{}).
-Therefore, automatically selecting the best solver for each problem instance is an important task. In fact, algorithm selection-based solvers have won multiple SAT competitions in the past.
-Algorithm selectors usually work by extracting features of the problem instance and giving them as an input to an EPM, based on its prediction the algorithm is chosen.
+Therefore, automatically selecting the best solver for each problem instance is an important task. In fact, algorithm selection-based solvers have won multiple SAT competitions~\citep{XuEtAl08,KadEtAl11}.
+Algorithm selectors usually work by extracting features of the problem instance and giving them as an input to an EPM, based on its prediction the algorithm is chosen~\citep{XuEtAl08}.
 
-Additional use-case of EPMs is to tune parametrised algorithms. As previously introduced, algorithms depend on (hyper)parameters that affect their performance. Careful tuning of these parameters for the use case can substantially improve the performance of algorithms. To show the importance of tuning, we use data from TabArena~\citep{}, a large scale benchmark of machine learning methods for tabular data. TabArena contains the performance various models on multiple datasets, including the performance of verious hyperperameter configurations. We analysed this data and found that the popular LightGBM model can have more than $40\%$ better performance using a tuned configuration compared to the default one. Therefore, tuning algorithms for the given tasks is an important field of research. A common procedure for tuning algorithms is to use EPMs to predict the performance of the algorithms on unseen configurations and using these predictions to decide which configuration to sample next.
+Additional use-case of EPMs is to tune parametrised algorithms. As previously introduced, algorithms depend on (hyper)parameters that affect their performance. Careful tuning of these parameters for the use case can substantially improve the performance of algorithms~\citep{HutEtAl06,HutEtAl11}. To show the importance of tuning, we use data from TabArena~\citep{EriEtAl25}, a large scale benchmark of machine learning methods for tabular data. TabArena contains the performance various models on multiple datasets, including the performance of verious hyperperameter configurations. We analysed this data and found that the popular LightGBM~\citep{KeEtAl17} model can have more than $40\%$ better performance using a tuned configuration compared to the default one. Therefore, tuning algorithms for the given tasks is an important field of research. A common procedure for tuning algorithms is to use EPMs to predict the performance of the algorithms on unseen configurations and using these predictions to decide which configuration to sample next~\citep{HutEtAl11,SnoEtAl12}.
 
-The final use-case we will dive to in this thesis is explainability of algorithms. There, EPMs are used to predict the performance of the algorithms on configurations and/or instances, and, based on these, calculating which (hyper)parameters and features are more important, which values lead to good performance and more.
+The final use-case we will dive to in this thesis is explainability of algorithms. There, EPMs are used to predict the performance of the algorithms on configurations and/or instances, and, based on these, calculating which (hyper)parameters and features are more important, which values lead to good performance and more~\citep{HutEtAl14b,MooEtAl21}.
 
-We note that, in this thesis, we have a relatively wide view on what EPMs are. While a narrow definition can classify EPMs as only models that predict the actual, numerical metric value of the algorithm, we have a broader view that includes indirect predictions as EPMs as well. For example, in algorithm selection \textit{pairwise classifier} does not predict the performance of the algorithms but rather has a few models that classify between pairs of algorithms which one is better. We view such models as performance predictors as they are still used to predict which algorithm has better performance, thus indirectly predicting the performance of the algorithms.
+We note that, in this thesis, we have a relatively wide view on what EPMs are. While a narrow definition can classify EPMs as only models that predict the actual, numerical metric value of the algorithm, we have a broader view that includes indirect predictions as EPMs as well. For example, in algorithm selection \textit{pairwise classifier} does not predict the performance of the algorithms but rather has a few models that classify between pairs of algorithms which one is better~\citep{XuEtAl12b}. We view such models as performance predictors as they are still used to predict which algorithm has better performance, thus indirectly predicting the performance of the algorithms.
 
 By this point, we hope that we convinced the reader regarding the importance of EPMs in research and practice. In the following sections, we will explore shortcomings of EPMs and overview the contributions of thesis.
 
@@ -31,126 +31,61 @@ By this point, we hope that we convinced the reader regarding the importance of 
 
 % \section{Challenges in the Field}
 
-\section{Features Are Hard to Extract, Expensive and Not Always Available}
+\section{Obtaining Better Representations of Problem Instances and Search Spaces}
+\sectionmark{Representations of Instances and Search Spaces}
 
-When empirical performance prediction is applied across problem instances, as in automated algorithm selection and many configuration techniques, a crucial first step is to represent each instance through descriptive numerical features.
-However, extracting high-quality features in practice can be slow, brittle, or impossible for large modern instances.
-We observed this problem in the \gls{sat} problem, a domain in which empirical performance prediction has been used for many years (see, e.g., \citealp{NudEtAl04,XuEtAl08,HutEtAl11,HutEtAl14}).
-The widely used SATzilla feature extraction pipeline had become difficult to apply to contemporary \gls{sat} instances because solvers, preprocessors, instance sizes, and computing systems had changed substantially since the original implementation.
-This creates a direct bottleneck: if the features cannot be computed reliably, downstream performance prediction, algorithm selection, and explainability cannot be used reliably either.
+As previously introduced, an EPM uses information about problem instances and algorithm configurations to predict performance. When predictions are made across instances, descriptive features provide this information. Such features have supported performance prediction, algorithm selection and configuration in \gls{sat} for many years (see, e.g., \citealp{NudEtAl04,XuEtAl08,HutEtAl11,HutEtAl14}). However, their usefulness depends on whether they can be computed reliably within the available budget. The widely used SATzilla feature extractor had become difficult to apply to contemporary instances: solvers, preprocessors, instance sizes and computing systems had changed substantially since its implementation. Compilation problems, memory requirements and hard-coded time limits could prevent features from being computed at all~\citep{ShaHoo24}. This limits the information available for prediction, selection and explainability.
 
-Feature representation also matters in high-dimensional optimisation and machine learning settings.
-Many real-world problems are high-dimensional, which can lead to severe scalability and performance degradation.
-In black-box optimisation, the volume of the search space grows quickly with dimensionality, making useful observations sparse and locating high-performing solutions expensive.
-Dimensionality reduction is one way to alleviate this problem by projecting high-dimensional spaces onto lower-dimensional representations.
-However, many dimensionality reduction methods were originally designed and evaluated for classical machine learning tasks, such as clustering or classification.
-It is therefore not obvious whether they preserve the aspects of the search space that matter for optimisation, where target values and landscape geometry can be more important than global variance.
-This motivates a task-driven view of representation quality.
+An additional representation problem arises with high-dimensional data and search spaces. Dimensionality reduction can make learning and optimisation more tractable by mapping inputs to a lower-dimensional space~\citep{CunGha15,LetEtAl20}. However, information useful for clustering or classification need not support objective-value prediction or search. In black-box optimisation, this matters when few observations are available and evaluations are expensive. Furthermore, different surrogate models provide different approximations of the same search space, and their suitability can change as observations accumulate~\citep{HofEtAl11}. Choosing one approximation in advance may fail to exploit these differences. These issues motivate our first question: \emph{How can we obtain better representations of problem instances and search spaces?}
 
-\section{Models Are Not Accurate Enough}
-
-Even with informative features, the predictive models and surrogate models used in algorithm selection, configuration, and Bayesian optimisation must be accurate enough to guide decisions effectively.
-Standard modelling approaches face several difficulties.
-Tabular empirical performance models depend heavily on hand-crafted features, which may fail to capture the global structure of complex objects such as Boolean formulae.
-Algorithmic performance, especially for randomised solvers, is often stochastic, so a single scalar target can hide important variation between runs.
-Performance data can also be right-censored when solvers are stopped at a cutoff time, which makes the true runtime of unsolved instances unknown.
-
-In Bayesian optimisation, the role of accuracy is even more subtle.
-Different surrogate models, such as Gaussian processes, random forests, and gradient-boosted trees, have complementary strengths depending on the search space and the phase of the optimisation trajectory.
-Choosing one surrogate model statically can therefore be limiting.
-Moreover, traditional machine learning metrics such as global mean squared error do not necessarily explain optimisation success.
-A surrogate model does not need to be uniformly accurate everywhere; rather, it needs to be accurate in the regions where prediction errors can mislead the acquisition function.
-Understanding where accuracy matters is therefore central to designing better model-based optimisation methods.
-
-\section{Hard to Use Existing Methods and to Gain Insights}
-
-Finally, even when features can be computed and models are accurate, using empirical performance prediction in practical workflows and extracting scientific insight from it remain difficult.
-The algorithm selection and configuration communities have historically developed domain-specific tools in isolation, leading to separate pipelines for \gls{sat} solving, automated planning, machine learning, and black-box optimisation.
-The lack of a unified, problem-agnostic software interface makes it harder to apply methods across domains, compare them fairly, and reproduce results.
-
-There is also an explainability barrier.
-Most empirical performance models predict a single statistic, such as mean runtime, and therefore treat algorithm performance as if it were deterministic.
-For randomised algorithms, this misses run-to-run variation that may be crucial in risk-sensitive settings.
-Distributional performance models can capture this variation, but explaining their predictions is not straightforward.
-Standard explainability techniques are designed for scalar-valued predictions and cannot be applied directly to raw distribution parameters in a way that is immediately meaningful.
-To gain insight, distribution predictions need to be connected to interpretable statistics such as mean, variance, skewness, and tail behaviour.
-
-\section{Contributions of This Thesis}
-
-This dissertation is organised around three connected questions.
-First, how can we obtain better representations of problem instances and search spaces?
-Second, how can we build better predictive models and surrogate models once those representations are available?
-Third, how can we make the resulting methods easier to understand, compare, and use?
-The chapters answer these questions in sequence.
-
-\subsection{Better Features}
-
-The first part of the dissertation focuses on the representations that make empirical performance prediction possible.
-\cref{ch:ch04:rev_SATzilla}, based on
+To address this question, we first revisit the infrastructure used to compute SATzilla features. We introduce a modernised feature extraction tool that replaces outdated preprocessors and solvers, resolves compilation and memory issues, and allows the user to set feature computation time limits. We evaluate both the availability of the resulting features and their usefulness for satisfiability prediction, running time prediction and algorithm selection. On the evaluated instances from the 2022 and 2023 \gls{sat} Competitions, the updated features improve the reported results on all three downstream tasks. The cost of extraction nevertheless remains dependent on the feature group and instance. This contribution shows that improving the inputs to an EPM can begin with making established features more accessible and informative. We present this work in \cref{ch:ch04:rev_SATzilla}, based on
 \begin{itemize}
     \item \fullcite{ShaHoo24}
 \end{itemize}
-contributes a modernised feature extraction tool that replaces outdated preprocessors and solvers, resolves compilation and memory issues encountered on contemporary \gls{sat} instances, and introduces a configurable feature computation timeout.
-The chapter shows that this infrastructure work is not merely engineering maintenance: updating the feature extractor leads to better downstream performance in satisfiability prediction, runtime prediction, and automated algorithm selection.
-In this sense, the chapter establishes a central theme of the dissertation: better empirical performance prediction often begins with making the inputs to the model reliable and informative.
 
-\cref{ch:ch05:dim_red}, based on
+Next, we assess which information should be retained when reducing the dimensionality of data or a search space. We benchmark dimensionality reduction methods through four downstream tasks: clustering, tabular classification, target function approximation and black-box optimisation. By varying the original and target dimensionalities and the observations available to learn a representation, we evaluate its usefulness under different conditions. The results show substantial performance complementarity: success on one task or in one data regime does not establish suitability for another. This makes the choice of dimensionality reduction method itself an algorithm selection problem and motivates evaluating representations through the task they are intended to support. We present this study in \cref{ch:ch05:dim_red}, based on
 \begin{itemize}
     \item \fullcite{ShaEtAl25}
 \end{itemize}
-contributes a systematic benchmark of dimensionality reduction methods across machine learning and black-box optimisation tasks.
-Rather than judging dimensionality reduction only by generic reconstruction or variance-preservation criteria, the chapter evaluates whether reduced representations preserve the information needed for specific downstream tasks.
-The results show strong performance complementarity: methods that work well for one task, dimensionality, or data regime may be poor choices for another.
-This makes dimensionality reduction itself an algorithm selection problem and motivates task-aware representation choices.
 
-\cref{ch:ch06:dymbo}, based on
+Finally, we investigate how the approximation of a search space can adapt during optimisation. Here, the connection to representations is through the surrogate model: it describes how configurations relate to performance, and different model families capture different aspects of that relationship. We introduce DyMBO, which dynamically combines or selects complementary surrogates using their ranking quality on all observations accumulated so far. An exponential moving average controls how the history of model weights affects subsequent choices; its greedy selection variant retains only the currently preferred surrogate. In the tested hyperparameter optimisation settings, adapting surrogate choice improves average performance over static choices and the compared optimisation frameworks, with greedy selection between a Gaussian process and a random forest particularly effective. These results depend on a suitable portfolio, and fitting multiple models adds computational cost. DyMBO thus contributes a method for adapting the surrogate-based approximation of the search space, extending the task-dependent representation perspective of the preceding work. We present it in \cref{ch:ch06:dymbo}, based on
 \begin{itemize}
     \item \fullcite{ShaEtAl25d}
 \end{itemize}
-connects representation quality to model-based optimisation.
-Although the chapter primarily develops a modelling method, it appears in this part because its central mechanism depends on representing the changing suitability of surrogate models during an optimisation run.
-DyMBO contributes a dynamic ensembling strategy that evaluates the recent ranking quality of candidate surrogate models and uses a memory-aware exponential moving average to update their weights.
-The resulting optimiser adapts to different search phases and improves over static surrogate choices and competing hyperparameter optimisation frameworks.
-Together with the preceding chapters, this shows that empirical performance prediction benefits not only from better instance features, but also from better representations of which modelling assumptions are appropriate at a given moment.
 
-\subsection{Better Models}
+\section{Building and Assessing Predictive Models and Surrogate Models}
+\sectionmark{Predictive Models and Surrogate Models}
 
-The second part turns from representation to predictive modelling.
-\cref{ch:ch07:gnns_epms}, based on
+Once a representation is available, a predictive model can use it to estimate performance and support algorithmic decisions. Established tabular EPMs can learn from hand-crafted instance features~\citep{HutEtAl14}, while surrogate models can guide the choice of configurations in Bayesian optimisation~\citep{Garnett23}. However, a tabular model receives summaries of an instance rather than the relationships from which those summaries were derived. For a Boolean formula, for example, statistics of variables and clauses may omit information that could be learned directly from their connections~\citep{SelEtAl19}. Developing predictive models that use this structure is therefore one way to improve performance prediction.
+
+A separate issue is how to assess whether predictions are useful for the decision they support. Lower aggregate prediction error does not necessarily lead to better algorithm selection or optimisation~\citep{XuEtAl12b,ShaHoo25}. In Bayesian optimisation, the acquisition function uses predictions to decide which configuration to evaluate next~\citep{Garnett23}. An error that makes a suboptimal configuration appear promising can affect that decision more than a similar error elsewhere. This raises a question beyond the choice of model architecture: which aspects of predictive accuracy matter for the search? We therefore ask: \emph{How can we build better predictive models and surrogate models?} We approach this question both by developing predictors and by investigating the consequences of their errors.
+
+First, we study graph neural networks as EPMs for \gls{sat} solvers. We construct a benchmark for running time prediction and algorithm selection, and compare several graph representations and neural architectures with tabular models using SATzilla features. Models with and without supplied node features allow us to examine the information learned from relational structure. On the evaluated small instances, the strongest graph configurations improve both running time prediction and solver selection over the reported tabular baselines. The strongest overall results use node features, showing that learned structure and hand-crafted information can complement each other. However, memory requirements restrict the graph-model evaluation to small instances. Moreover, timeouts are represented by penalised running times; these targets do not recover the unknown completion times of right-censored runs. The contribution establishes the usefulness of graph-based prediction within this scope, while leaving scalability and broader generalisation open. We present this work in \cref{ch:ch07:gnns_epms}, based on
 \begin{itemize}
     \item \fullcite{ShaHoo25b}
 \end{itemize}
-contributes a benchmark for graph-based \gls{sat} empirical performance prediction and compares multiple graph representations and neural architectures against standard tabular models trained on hand-crafted SATzilla features.
-Its main contribution is to show that learned graph representations can be competitive for performance prediction and algorithm selection, and can in some settings outperform hand-crafted features.
-This provides a complementary answer to the feature-engineering work in \cref{ch:ch04:rev_SATzilla}: instead of only improving hand-crafted features, we can also learn representations from the structure of the instance itself.
 
-\cref{ch:ch08:noisy_oracle}, based on
+Next, we investigate where surrogate predictions need to be accurate for Bayesian optimisation. We introduce a noisy-oracle framework that controls mean-prediction errors in different regions of the search space. This allows us to study their effect on optimisation while holding other aspects of the surrogate fixed. The experiments provide evidence that accuracy in regions with good objective values is more useful than concentrating accuracy solely around the optimum according to distance. At the same time, errors elsewhere must not make suboptimal configurations appear misleadingly good. A theoretical analysis derives conditions under which such errors cause the considered acquisition functions to prefer a suboptimal point. This provides a more precise account of why global error alone does not explain optimisation success. The study is a first step: its main oracle uses fixed predictive uncertainty and does not learn from accumulated observations, so it does not establish how a particular training procedure will improve a learned surrogate. We present this work in \cref{ch:ch08:noisy_oracle}, based on
 \begin{itemize}
     \item \fullcite{ShaHoo25}
 \end{itemize}
-contributes a noisy-oracle framework that systematically controls prediction error across the search space, making it possible to isolate the effect of localised surrogate accuracy from other modelling confounders.
-The empirical and theoretical results show that accuracy in regions with good objective values is more important than accuracy defined purely by distance to the optimum.
-This gives a more precise design principle for surrogate modelling: models should not simply minimise global error, but should avoid errors that make poor or merely competitive regions appear better than they are.
 
-\subsection{Better Insights}
+\section{Making Performance Prediction Easier to Understand, Compare, and Use}
+\sectionmark{Understanding, Comparing, and Using Predictions}
 
-The third part addresses the interpretability and usability of empirical performance prediction.
-\cref{sec:ch09:dist_explain}, based on
+As discussed in the opening of this chapter, EPMs can also help us understand algorithm behaviour. Explaining which features affect a prediction can reveal properties associated with good or poor performance. However, predicting and explaining a single statistic, such as mean running time, leaves out run-to-run variation. For randomised algorithms, this variation can matter when users care about consistency or the risk of a long run. Distributional predictors can capture it~\citep{EggEtAl18,TueBur21}, but their parameters are not always directly interpretable. We therefore need explanations that relate instance features to meaningful properties of the predicted distribution, including its scale, variability and tail behaviour.
+
+There is also a practical barrier to using and comparing performance prediction methods. Algorithm selection and configuration methods have often been developed in separate communities, with implementations tailored to \gls{sat}, planning, machine learning or black-box optimisation. Existing tools support parts of these workflows~\citep{Kotthoff13b,LinEtAl15,LinEtAl22b}, but combining methods through a common interface and applying them to another domain can require substantial implementation effort. This makes comparisons and reproduction more difficult. These interpretability and software issues motivate our third question: \emph{How can we make performance prediction easier to understand, compare, and use?}
+
+To gain insight into randomised algorithm behaviour, we introduce a framework for explaining full running time distribution predictions through interpretable statistics. We use mean, variance, interquartile range, skewness and kurtosis to connect distributional predictions to permutation importance and individual conditional expectation analyses. We also introduce a tree-based XGBoost approach to parametric distribution prediction. Its evaluation against DistNet~\citep{EggEtAl18} shows lower final-fit computational cost, while relative predictive quality depends on the scenario, observation budget and distribution family. In the studied \gls{sat} and planning scenarios, the explanations show that features associated with typical running time need not also explain variability or distribution shape. These explanations concern the fitted predictor and remain conditional on the features, distribution family and available observations; they do not establish causal effects on solver behaviour. We present this work in \cref{sec:ch09:dist_explain}, based on
 \begin{itemize}
     \item \fullcite{ShaHoo25c}
 \end{itemize}
-contributes a framework for predicting and explaining full runtime distributions of randomised algorithms.
-It introduces a tree-based XGBoost approach for parametric distribution prediction and explains the resulting distributions through interpretable statistics such as mean, variance, interquartile range, skewness, and kurtosis.
-This makes it possible to identify which instance features affect the scale of algorithm performance and which affect the shape and tail behaviour of the distribution.
-The chapter therefore extends empirical performance prediction from asking only how long an algorithm is expected to run to asking how uncertain, variable, and risky its behaviour may be.
 
-\cref{ch:ch10:asf}, based on
+To make methods easier to compare and apply, we introduce \gls{asf}, a problem-agnostic Python library for constructing, benchmarking and applying algorithm selection pipelines. Its common interface operates on instance features and algorithm performance data, bringing together selectors, portfolio pre-selection, pre-solving, feature processing and automated configuration. We evaluate these components through machine learning case studies and ASlib scenarios~\citep{BisEtAl16}. The results show that pre-selection can improve selection quality as well as reduce training cost, and that the best pipeline components vary across scenarios. Making these alternatives available as reusable components supports comparisons across domains and reduces the effort required to apply established methods to a new task. It still requires informative features, representative data and an appropriate evaluation protocol. We present this contribution in \cref{ch:ch10:asf}, based on
 \begin{itemize}
     \item \fullcite{ShaHoo25d}
 \end{itemize}
-contributes a unified, problem-agnostic Python library for building, benchmarking, and deploying algorithm selection pipelines.
-\gls{asf} provides modular components for selection, pre-selection, pre-solving, feature processing, and automated configuration, and validates these components through case studies in machine learning and artificial intelligence.
-This final contribution turns the methodological work of the thesis into reusable infrastructure: empirical performance prediction becomes easier to apply outside the narrow domain in which a method was originally developed.
 
 \section{Structure of the Dissertation}
 
