@@ -1,33 +1,33 @@
 
 \chapter{Background}\label{ch:ch02:background}
 
-This chapter establishes the shared foundations for the contribution chapters: empirical performance prediction and its distributional variants, algorithm selection, and Bayesian optimisation. Domain and benchmark descriptions follow in~\cref{ch:ch03:scenarios}, while contribution-specific related work remains with the corresponding methods.
+In the introduction, we discussed what empirical performance prediction means and gave examples of how it is used. In this chapter, we first look more closely at what goes into a performance model and what it can predict. We then introduce two of its use cases, algorithm selection and Bayesian optimisation. The problems and benchmarks on which we study these methods are introduced in~\cref{ch:ch03:scenarios}.
+
 \section{Empirical Performance Prediction}
 \label{sec:ch02:empirical_performance_prediction}
 
-Let $\algo$ denote a parameterised algorithm drawn from an algorithm space $\algorithmSpace$, and let $\configuration \in \configurationSpace$ be a configuration, \emph{i.e.}, an assignment of values to the parameters of $\algo$. Let $\instance\in \instanceSpace$ denote a problem instance out of the instance space $\instanceSpace$. $\instance$ is characterised by a feature vector $\instanceFeatures = [\instanceFeature_1, \ldots, \instanceFeature_{d_z}]^{\top} \in \mathbb{R}^{d_z}$. The performance of $\algo$ using configuration $\configuration$ on $\instance$ is denoted by $\performanceVector \in \mathbb{R}^{d_p}$, $d_p \in \mathbb{N}$. Note that, $\performanceVector$ can be have a single element, if there is only one performance metric of interest (for example, the running time of a \gls{sat} solver), or, have multiple, potentially competing performance metrics (for example, accuracy and inference speed of a neural network).
+First, we need to specify whose performance we wish to predict and on which problem. Let $\algo$ be a parameterised algorithm from a set of algorithms $\algorithmSpace$. A configuration $\configuration\in\configurationSpace$ assigns values to the parameters of $\algo$. For an instance $\instance\in\instanceSpace$, we write its features as $\instanceFeatures = [\instanceFeature_1, \ldots, \instanceFeature_{d_z}]^{\top} \in \mathbb{R}^{d_z}$. These features describe the instance to the model.
 
-An \gls{epm} is a learned function
+We denote the performance of $\algo$ with configuration $\configuration$ on $\instance$ by $\performanceVector \in \mathbb R^{d_p}$, where $d_p \in \mathbb N$ is the number of metrics we measure. For example, if we care only about the running time of a \gls{sat} solver, this vector has one element. If we care about both the accuracy and the inference speed of a neural network, it has two. In the latter case, a configuration that improves one metric may come at the cost of the other.
+
+For a single metric $\performance$, we write an \gls{epm} as a learned function
 \begin{equation}
-  \hat{f} : \modelInput \mapsto \performance,
+  \hat{f} : \modelInput \mapsto \performance.
 \end{equation}
-where the input $\modelInput$ depends on the observation type. There are three common types of inputs to and \gls{epm}:
+As discussed in the introduction, the input $\modelInput$ depends on which quantities vary across observations. We distinguish three common settings.
 
 \begin{itemize}
-  \item \textbf{Per-instance.} The algorithm is executed with a fixed (usually the default) configuration, and performance is predicted from instance features alone: $\modelInput = \instanceFeatures$. Such setting is commonly is in algorithm selectors such as SATzilla~\citep{XuEtAl08}.
-  \item \textbf{Per-configuration.} The algorithm is evaluated on a fixed instance or a fixed set of instances, and performance is predicted from the configuration parameters: $\modelInput = \configuration$. This is the case in \gls{hpo}~\citep{FeuEtAl19} and \gls{nas}~\citep{ElsEtAl19}.
-  \item \textbf{Per-configuration-and-instance.} The input for the model consists of both configuration and instance features: $\modelInput = (\configuration, \instanceFeatures)$. This most general setting and is used, for example, in algorithm configuration~\citep{HutEtAl14,EggEtAl18}.
+  \item \textbf{Per-instance.} We keep the configuration fixed, usually at its default, and use instance features as the input, $\modelInput = \instanceFeatures$. For example, a selector such as SATzilla can use these features to predict how long a solver will take on a new instance~\citep{XuEtAl08}.
+  \item \textbf{Per-configuration.} We keep the instance or set of instances fixed and vary the configuration, so $\modelInput = \configuration$. This setting is common in \gls{hpo}~\citep{FeuEtAl19} and \gls{nas}~\citep{ElsEtAl19}.
+  \item \textbf{Per-configuration-and-instance.} When both vary, we give the model both inputs, $\modelInput = (\configuration, \instanceFeatures)$. This is useful, for example, when configuring an algorithm for a set of instances with different properties~\citep{HutEtAl14,EggEtAl18}.
 \end{itemize}
-A key challenge that distinguishes \glspl{epm} from standard regression problems is the structure of the observed data. Performance observations are usually not independent: multiple configurations may be evaluated on the same problem instance (or vice versa), introducing group structure that violates the i.i.d.\ assumption. Additionally, a common performance metric, running time, frequently exhibit heavy-tailed, right-skewed distributions, requiring special treatment.
-The problem becomes more severe, as running time observations have a cutoff, meaning that the algorithms are ran until a certain time limit. 
-This means that, for some runs of the algorithm, we don't know the exact running time, but simply that it is larger than the cutoff.
-Moreover, performance data is usually noisy, as many algorithms use randomness, and, as data is scarce, it is necessary to learn a meaningful predictor from few observations. Performance observations are usually not independent: multiple configurations may be evaluated on the same problem instance (or vice versa), introducing group structure that violates the i.i.d.\ assumption. 
-Finally, across different scenarios, the scale of the performance target can vary by many orders of magnitude, so preprocessing choices that are beneficial in one scenario may be harmful in another. 
 
+In practice, collecting performance data introduces several difficulties. First, we may evaluate several configurations on the same instance or run one configuration across several instances. Observations that share an instance or a configuration may be related, so treating all observations as independent can be misleading. Second, running times can vary by orders of magnitude and can have a long right tail. If we stop a run at a time limit, we only know that its running time exceeds that limit.
 
+Finally, when an algorithm uses randomness, repeated runs with the same inputs can give different outcomes. We may have only a few observations from which to learn, particularly when each run is expensive. The scale of the target can also vary across scenarios, which affects whether a transformation such as taking the logarithm is useful.
 
+So far, we have treated the prediction as a single number for each metric, such as the mean or median running time. If we also want to know how much the running time varies or how often very long runs occur, we can predict a conditional distribution $\rho(y \mid \modelInput)$~\citep{EggEtAl18a}. We describe this setting below.
 
-The predict performance can be a single number per metric, showing the mean or median value. Alternatively, it is also possible to predict the full performance distribution distribution $\rho(y \mid \modelInput)$ rather than a single value to obtain a distributional \gls{epm}~\citep{EggEtAl18a}, which is particularly valuable for capturing more subtle details of the performance of the algorithm, such as its variance and skewness.
 \subsection{Applications and Instance Features}
 
 \glspl{epm} have been developed for a wide range of tasks, including automated algorithm selection~\citep{XuEtAl08, Kotthoff16}, algorithm configuration and parameter tuning~\citep{HutEtAl12, HutEtAl06}, data centre and cloud scheduling~\citep{LeeEtAl25, IslEtAl12, SaxEtAl23, PhaEtAl20}, compiler optimisation~\citep{YotEtAl03, AshEtAl19}, and database query optimisation~\citep{WuEtAl13}. \glspl{epm} require a set of features describing instances as an input to the model. For $\mathcal{NP}$-complete problems, high-level properties of instances are encoded to serve as an instance identifier, such as the SATzilla features for \gls{sat}~\citep{HutEtAl14,ShaHoo24} and causal-graph or planning-graph features for automated planning~\citep{FawEtAl14}.
@@ -35,24 +35,24 @@ The predict performance can be a single number per metric, showing the mean or m
 \subsection{Performance Distribution Prediction}
 \label{sec:ch02:distribution_prediction}
 
-For a stochastic solver, repeated runs on a fixed instance need not take the same amount of time. Let $\xi$ denote the random choices made during a run. For a fixed solver $\algo$, configuration $\configuration$, and instance $\instance$, its running time is a random variable
+Consider running the same stochastic solver more than once on a given instance. Even with the same configuration, different random choices can lead to different running times. Let $\xi$ denote the random choices made during a run. Once we fix the solver $\algo$, configuration $\configuration$, and instance $\instance$, we can write the running time and the probability of finishing by time $u$ as
 \begin{equation*}
     T_{\algo,\configuration,\instance}
     = \tau(\algo,\configuration,\instance,\xi),
     \qquad
     F_{\algo,\configuration,\instance}(u)
     = \Pr(T_{\algo,\configuration,\instance}\leq u),
-    \quad u\geq 0,
+    \quad u\geq 0.
 \end{equation*}
-where $\tau$ is the elapsed time to the solver's termination criterion and $F$ is the cumulative distribution function. A run that never reaches that criterion can be assigned infinite running time. Distribution prediction seeks to estimate this conditional distribution from instance features and, where they vary, algorithm configurations, rather than predicting only an aggregate such as the mean~\citep{EggEtAl18}.
+Here, $\tau$ measures the elapsed time until the solver reaches its termination criterion. If the solver never reaches it, we can assign that run infinite running time. The cumulative distribution function $F$ then tells us the probability that the solver finishes within $u$ units of time. A distributional \gls{epm} estimates this distribution from instance features and, when the configuration varies, from the configuration as well~\citep{EggEtAl18}.
 
-If a run is stopped at a cutoff $\runtimeCutoff$, the recorded observation can be expressed as
+As previously mentioned, we often stop a solver after a time limit $\runtimeCutoff$. In that case, we record both the time spent on the run and whether the solver finished. We write these observations as
 \begin{equation*}
     \widetilde T = \min\{T_{\algo,\configuration,\instance},\runtimeCutoff\},
     \qquad
     \delta = \mathbf 1\{T_{\algo,\configuration,\instance}\leq\runtimeCutoff\}.
 \end{equation*}
-When $\delta=0$, the run is right-censored: its exact running time is unknown, but exceeds the cutoff.
+When $\delta=0$, we only know that the running time exceeds $\runtimeCutoff$. We refer to such an observation as \emph{right-censored}.
 
 Traditional \glspl{epm} handle this stochasticity by either modelling an aggregate statistic calculated from repeated runs (\emph{e.g.}, the empirical mean or median) or training directly on noisy, single-run observations. In both cases, the \gls{epm} outputs a single scalar value, discarding all information about the variance and shape of the underlying distribution.
 
@@ -198,12 +198,12 @@ To model performance, one should account for the distribution of the performance
 \section{Bayesian Optimisation}
 \label{sec:ch02:bayesian_optimisation}
 
-This section introduces hyperparameter optimisation and Bayesian optimisation as a search framework for black-box objectives used in \cref{ch:ch06:dymbo,ch:ch08:noisy_oracle}.
+In the introduction, we saw that tuning a learning algorithm can improve its performance. We will now define the tuning problem and show how Bayesian optimisation uses predictions to choose which configuration to try next. We use this setting in~\cref{ch:ch06:dymbo,ch:ch08:noisy_oracle}.
 
 \subsection{Hyperparameter Optimisation}
 \label{sec:ch02:hpo}
 
-\new{\Gls{hpo}} seeks settings of a learning algorithm that minimise its validation loss~\citep{BisEtAl23}. Let $\algo$ be a learning algorithm, $\configurationSpace$ its hyperparameter configuration space, and $\mathcal D_{\mathrm{train}}$ and $\mathcal D_{\mathrm{validate}}$ fixed training and validation data. For $\configuration\in\configurationSpace$, let $\algo_{\configuration}$ denote the algorithm with that configuration. The \gls{hpo} objective is
+The goal of \new{\gls{hpo}} is to find the settings of a learning algorithm that give the lowest validation loss~\citep{BisEtAl23}. To define this task, let $\algo$ be the learning algorithm and $\configurationSpace$ its hyperparameter configuration space. We fix the training data $\mathcal D_{\mathrm{train}}$ and the validation data $\mathcal D_{\mathrm{validate}}$. For a configuration $\configuration\in\configurationSpace$, we denote the algorithm with those settings by $\algo_{\configuration}$. The objective and its minimiser are given by
 \begin{equation}
 \label{eq:ch02:def-hpo}
     f(\configuration) =
@@ -211,26 +211,26 @@ This section introduces hyperparameter optimisation and Bayesian optimisation as
     \mathcal D_{\mathrm{validate}}),
     \qquad
     \configuration^* \in \argmin_{\configuration\in\configurationSpace}
-    f(\configuration),
+    f(\configuration).
 \end{equation}
-where $\mathcal L$ denotes the loss obtained by training on $\mathcal D_{\mathrm{train}}$ and evaluating the fitted model on $\mathcal D_{\mathrm{validate}}$. Cross-validation can replace a single split by averaging this loss over multiple training and validation splits. Randomised training can make evaluations stochastic; an expected validation loss then defines the underlying objective.
+Here, $\mathcal L$ is the loss we obtain by training on $\mathcal D_{\mathrm{train}}$ and evaluating the fitted model on $\mathcal D_{\mathrm{validate}}$. If we use cross-validation, we average the loss over multiple training and validation splits. If training uses randomness, different runs with the same configuration can produce different losses. In this case, we can optimise the expected validation loss.
 
-Hyperparameters specify choices such as a learning rate, a regularisation strength, or a model family, rather than the model weights fitted during training. Their domains can be continuous, integer-valued, or categorical. A configuration space can also be conditional: a parameter may only be active when a particular model family or component is selected. \gls{hpo} is therefore a black-box optimisation problem whose search space need not be a simple continuous box. Its evaluations are often expensive because each configuration requires fitting and validating a model.
+What does a configuration contain? For example, it can specify a continuous learning rate, an integer number of trees, or a categorical choice of model family. The choice of family can affect which other hyperparameters are active. For $d_c$ hyperparameters with domains $\mathcal C_h$, we therefore have $\configurationSpace\subseteq\mathcal C_1\times\cdots\times\mathcal C_{d_c}$. For independent, unconstrained parameters, the space is the full product. Conditions and constraints can restrict which configurations are admissible.
 
-For $d_c$ hyperparameters with individual domains $\mathcal C_h$, the admissible space satisfies $\configurationSpace\subseteq\mathcal C_1\times\cdots\times\mathcal C_{d_c}$. Equality holds for independent, unconstrained parameters; conditional parameters and constraints restrict the admissible configurations.
+For each configuration we try, we usually have to train and validate a model. This can make a single evaluation expensive and motivates using the results of previous evaluations to choose which configuration to try next.
 
 \subsection{Bayesian Optimisation}
 \label{sec:ch02:bac_bo}
 
 \Gls{bo}~\citep{Mockus12b,Garnett23,Frazier18b,Kushner62,Kushner64b} is a family of surrogate-based algorithms for efficient global optimisation of black-box problems.
-Let $f:\configurationSpace\rightarrow\mathbb R$ be the black-box objective to be minimised over the search space $\configurationSpace$. The optimiser can query $f(\configuration)$ at selected configurations, but is not supplied with an analytical expression or derivatives of $f$. Given a budget of $B_{\mathrm{eval}}$ evaluations, it selects $n_{\mathrm{eval}}\leq B_{\mathrm{eval}}$ configurations, potentially using earlier observations to choose later ones, and returns an incumbent. For noiseless evaluations, the best evaluated configuration is
+As in \gls{hpo}, we want to minimise an objective $f:\configurationSpace\rightarrow\mathbb R$ over $\configurationSpace$. We can evaluate $f$ at configurations of our choice. The optimiser has access to these evaluations and works without an analytical expression or derivatives of $f$. With a budget of $B_{\mathrm{eval}}$ evaluations, it can try $n_{\mathrm{eval}}\leq B_{\mathrm{eval}}$ configurations and use earlier observations to choose later ones. When the evaluations are noiseless, we call the best configuration observed so far the \emph{incumbent} and write it as
 \begin{equation*}
     \configuration^{\mathrm{inc}} \in
     \argmin_{\configuration\in
     \{\configuration^{(1)},\ldots,\configuration^{(n_{\mathrm{eval}})}\}}
     f(\configuration).
 \end{equation*}
-In practice, a budget may instead limit wall-clock time. Evaluations may also be noisy, in which case an observed value is a random outcome and the objective can be defined as its expectation. Limited evaluations require a balance between exploring unknown regions and improving on promising configurations~\citep{Garnett23}.
+In practice, we might have a limit on wall-clock time instead of a fixed number of evaluations. If evaluations are noisy, the value we observe is one random outcome and we can define the objective as its expectation. In either case, we have to decide how much of the budget to spend exploring unfamiliar regions and how much to spend near configurations that already look promising~\citep{Garnett23}.
 
 Typically, \gls{bo} consists of three main components: an \emph{initial design}, \emph{i.e.}, in \gls{hpo}, a set of candidate hyperparameter configurations $\mathcal C_{\mathrm{obs}} = (\configuration^{(1)},\ldots, \configuration^{(n_0)})$ and their evaluations
 $f(\mathcal C_{\mathrm{obs}}) = (f(\configuration^{(1)}),\ldots, f(\configuration^{(n_0)}))$; a \emph{surrogate model} (fitted to the
@@ -267,7 +267,7 @@ refines the surrogate model based on the new observations, and updates the optim
 \subsection{Acquisition Functions}
 \label{sec:ch02:acquisition_functions}
 
-For the acquisition functions below, we use the notation of \cref{ch:ch08:noisy_oracle}.
+We now look at how an acquisition function turns the predictions of a surrogate into a decision about where to sample next. We use the notation of~\cref{ch:ch08:noisy_oracle}.
 
 Given a black-box function $f:\sR^{d_c}\rightarrow\sR$, the goal of an optimiser is to find its minimum, denoted by $\configuration^*$, such that $f(\configuration^*)\leq f(\configuration)$ for every $\configuration\in\sR^{d_c}$. The optimiser iteratively samples configurations $\configuration_1, \configuration_2, ..., \configuration_n$, where $\configuration_t$ is the configuration sampled at iteration $t$.
 At each iteration, the optimiser observes the performance $f(\configuration_t)$, producing the set of observations $\train=\{(\configuration_1, f(\configuration_1)), (\configuration_2, f(\configuration_2)),..., (\configuration_n, f(\configuration_n))\}$.

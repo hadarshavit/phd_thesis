@@ -325,10 +325,12 @@
 % ********************************************************************
 % Changing the text area
 % ********************************************************************
-%\linespread{1.05} % a bit more for Palatino
-%\areaset[current]{312pt}{761pt} % 686 (factor 2.2) + 33 head + 42 head \the\footskip
-%\setlength{\marginparwidth}{7em}%
-%\setlength{\marginparsep}{2em}%
+% Match the 30 mm side margins in Müller's thesis.
+\setlength{\textwidth}{\dimexpr\paperwidth-60mm\relax}
+\setlength{\oddsidemargin}{\dimexpr30mm-1in\relax}
+\setlength{\evensidemargin}{\oddsidemargin}
+\setlength{\marginparwidth}{27.5mm}
+\setlength{\marginparsep}{2.5mm}
 
 % ********************************************************************
 % Using different fonts
@@ -344,7 +346,7 @@
 %\usepackage[sfdefault]{FiraSans}
 % ****************************************************************************************************
 
-% Keep prose and running marks inside the thesis's narrow text block.
+% Keep running marks inside the text block.
 \AtBeginDocument{%
   \setlength{\emergencystretch}{3em}%
   \KOMAoptions{headheight=32pt}%

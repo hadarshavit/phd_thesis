@@ -1,7 +1,7 @@
 \chapter{Scenarios and Algorithms}
 \label{ch:ch03:scenarios}
 
-This chapter introduces the problem types, representations, and benchmarks considered in this thesis. It begins with \gls{sat} and automated planning, followed by black-box optimisation, hyperparameter optimisation, and neural architecture search. The remaining sections introduce tabular classification datasets, stochastic solver running times, and out-of-distribution generalisation. The problem descriptions are followed by their representations or benchmark collections; the \gls{hpo} and running-time distribution foundations are given in the background chapter.
+In the previous chapter, we discussed how performance predictions can be used to select or configure an algorithm. We will now look at the problems on which we study these ideas. First, we introduce \gls{sat} and automated planning. In these settings, an instance can be a Boolean formula or a planning task. Next, we discuss black-box optimisation, including benchmarks where the task is to find good hyperparameters or a good neural network architecture. Finally, we introduce the datasets for tabular classification, the scenarios with repeated solver runs, and the setting where a model has to generalise to a different distribution.
 
 \section{\glsentryshort{sat}}
 
@@ -14,7 +14,7 @@ Here, each $\ell_{q,h}$ is a literal, i.e., either a variable $b_{h\prime}$ or i
 \subsection{Graph Representations of \glsentryshort{sat}}
 \label{sec:ch03:sat-graphs}
 
-\gls{sat} formulae can be represented as graphs whose structure does not depend on the order of clauses or literals in the \gls{cnf} representation. The following four representations are used in this thesis~\citep{NudEtAl04b,HutEtAl14e,SelEtAl19}:
+As we saw above, a \gls{cnf} formula consists of clauses and literals. We can also represent their relationships as a graph. This is useful because changing the order of the clauses or the literals leaves the graph structure unchanged. In this thesis, we use four such representations~\citep{NudEtAl04b,HutEtAl14e,SelEtAl19}.
 \begin{itemize}
     \item \new{\Gls{vg}}: an undirected graph with one node per variable. Two distinct variables are connected if they occur together in at least one clause, irrespective of their polarity.
     \item \new{\Gls{clg}}: an undirected graph with one node per clause. Two distinct clauses are connected if they share at least one negated literal.
@@ -22,60 +22,59 @@ Here, each $\ell_{q,h}$ is a literal, i.e., either a variable $b_{h\prime}$ or i
     \item \new{\Gls{lcg}}: a bipartite, undirected graph with two literal nodes per variable, one for its positive form and one for its negation, and one node per clause. A literal node is connected to a clause node if that literal occurs in the clause.
 \end{itemize}
 
-The \gls{vg} and the unlabelled \gls{vcg} do not distinguish positive from negative occurrences. The \gls{lcg} preserves this distinction through separate literal nodes. Polarity can also be attached to \gls{vcg} edges as an attribute. Additional attributes and edges depend on the application; in particular, edges connecting complementary literals extend the bipartite \gls{lcg} defined above.
-\Cref{fig:ch03:sat-graphs} illustrates the \gls{vg}, \gls{vcg}, and \gls{lcg} for the same formula.
+These graphs differ in what they tell us about a formula. For example, in a \gls{lcg}, a variable and its negation are two different nodes. In a \gls{vg} or an unlabelled \gls{vcg}, they are represented by the same node. If we want to keep this information in a \gls{vcg}, we can record polarity on each edge. We can also extend a \gls{lcg} by adding edges between complementary literals. To see how the choice of representation affects the graph, \cref{fig:ch03:sat-graphs} shows the \gls{vg}, \gls{vcg}, and \gls{lcg} for the same formula.
 
 \begin{figure}[tbp]
     \centering
     \resizebox{\linewidth}{!}{\input{Chapters/figures/graphbench_sat.tex}}
-\caption[Graph representations of a \glsentryshort{sat} formula]{Variable, variable-clause, and literal-clause graphs of the displayed \gls{sat} formula. Clause nodes $C_1$, $C_2$, and $C_3$ correspond to the clauses in their displayed order. The \gls{vcg} shows only variable--clause incidence edges; the \gls{lcg} shows only literal--clause incidence edges.}
+\caption[Graph representations of a \glsentryshort{sat} formula]{Three graphs of the same \gls{sat} formula. The clause nodes $C_1$, $C_2$, and $C_3$ follow the order of the displayed clauses. The \gls{vcg} connects variables to the clauses in which they appear, and the \gls{lcg} does the same for individual literals.}
 \label{fig:ch03:sat-graphs}
 \end{figure}
 
-These representations support two approaches to empirical performance prediction. The SATzilla features summarise graph structure through hand-crafted statistics, as discussed in~\cref{ch:ch04:rev_SATzilla}. GraphBench instead provides graph representations as inputs to graph neural networks, with application-specific node and edge encodings described in~\cref{ch:ch07:gnns_epms}.
+In this thesis, we use these graphs in two ways. First, we can compute statistics of the graph and give them as features to an \gls{epm}. The SATzilla features discussed in~\cref{ch:ch04:rev_SATzilla} use this approach. Second, we can give the graph itself to a graph neural network and let it learn from the connections. We take this approach in GraphBench and describe the node and edge encodings in~\cref{ch:ch07:gnns_epms}.
 
 \section{Automated Planning}
 \label{sec:ch03:planning}
 
-\new{Automated planning} is the task of finding a sequence of actions that transforms an initial state into a state satisfying a goal. In classical propositional planning, a task can be written as
+In \new{automated planning}, we start with an initial state and a goal. The task is to find a sequence of actions that takes us from the initial state to a state that satisfies the goal. In classical propositional planning, we describe the task by
 \begin{equation*}
-    \Pi = (\mathcal P, \mathcal O, s_0, G),
+    \Pi = (\mathcal P, \mathcal O, s_0, G).
 \end{equation*}
-where $\mathcal P$ is a finite set of propositions, $\mathcal O$ is a finite set of actions, $s_0 \subseteq \mathcal P$ is the initial state, and $G \subseteq \mathcal P$ is the goal. A state $s \subseteq \mathcal P$ contains exactly the propositions that are true. In the \gls{strips} representation, each action $o \in \mathcal O$ has preconditions $\operatorname{pre}(o)$, add effects $\operatorname{add}(o)$, and delete effects $\operatorname{del}(o)$, all subsets of $\mathcal P$. It is applicable when $\operatorname{pre}(o) \subseteq s$, and its successor state is
+Here, $\mathcal P$ is a finite set of propositions and $\mathcal O$ is a finite set of actions. The initial state $s_0\subseteq\mathcal P$ contains the propositions that are true at the start, and the goal $G\subseteq\mathcal P$ contains those that must be true at the end. More generally, a state $s\subseteq\mathcal P$ contains exactly the propositions that are true at that point. In the \gls{strips} representation, an action $o\in\mathcal O$ has preconditions $\operatorname{pre}(o)$, add effects $\operatorname{add}(o)$, and delete effects $\operatorname{del}(o)$, all subsets of $\mathcal P$. We can apply the action if $\operatorname{pre}(o)\subseteq s$. It then removes the delete effects and adds the add effects to obtain
 \begin{equation*}
     \gamma(s,o) = \bigl(s \setminus \operatorname{del}(o)\bigr)
     \cup \operatorname{add}(o).
 \end{equation*}
-A valid plan is a finite sequence $\pi = (o_1,\ldots,o_{n_{\mathrm{act}}})$ such that every action is applicable in the preceding state and the resulting states satisfy
+A plan $\pi=(o_1,\ldots,o_{n_{\mathrm{act}}})$ is valid if we can apply each action in the state reached by the previous one and the final state contains the goal propositions. Formally, we require each action to be applicable and
 \begin{equation*}
     s_j = \gamma(s_{j-1},o_j)
     \quad (j=1,\ldots,n_{\mathrm{act}}),
     \qquad G \subseteq s_{n_{\mathrm{act}}}.
 \end{equation*}
-This formulation assumes deterministic actions and a fully observed state. The task is to find a valid plan; cost-sensitive variants additionally minimise the sum of action costs. Planning formalisms can also express temporal and numerical constraints beyond this propositional setting.
+In this setting, actions are deterministic and we know the full state. If actions have costs, we can also ask for a valid plan with the lowest total cost. Other planning formalisms allow us to specify requirements such as temporal and numerical constraints.
 
 \subsection{Planning Representations and Zenotravel}
 
-Planning tasks are commonly specified in the \Gls{pddl}, separating the domain's action schemas from the objects, initial state, and goal of an instance. Their structure can be represented by causal graphs, which describe dependencies between state variables, and domain transition graphs, which describe possible value transitions of individual variables. Feature sets also include syntactic \gls{pddl} properties, planning-graph information, and statistics from short probing runs. A bounded planning task can be translated into a \gls{sat} formula, making \gls{sat} features available as an additional representation~\citep{KauSel96,FawEtAl14}.
+We commonly specify planning tasks in the \Gls{pddl}. It lets us describe the actions once for the domain and then give the objects, initial state, and goal separately for each instance. How can we represent these tasks for performance prediction? One possibility is to use causal graphs, which describe dependencies between state variables, or domain transition graphs, which describe the possible changes to each variable. We can also compute features from the \gls{pddl} description, a planning graph, or a short probing run. Finally, if we put a bound on the plan length, we can translate the task into a \gls{sat} formula and use \gls{sat} features~\citep{KauSel96,FawEtAl14}.
 
-We consider LPG--Zenotravel~\citep{EggEtAl18}. Zenotravel tasks involve transporting passengers between cities using aircraft, subject to fuel requirements and refuelling actions. LPG is a planner based on local search over planning graphs~\citep{GerSer02}. Its stochastic search can produce different running times on the same instance, so repeated runs characterise a distribution rather than a single deterministic running time.
+The planning scenario we use is LPG--Zenotravel~\citep{EggEtAl18}. In Zenotravel, the goal is to transport passengers between cities by aircraft. A plan must account for fuel and include refuelling actions when needed. LPG searches for a plan using local search over planning graphs~\citep{GerSer02}. Since this search uses randomness, repeated runs on the same Zenotravel instance allow us to study the distribution of running times.
 
 \section{Black-Box Optimisation}
 \label{sec:ch03:bbo}
 
-\new{\Gls{bbo}} seeks a solution with the best objective value when information about the objective is obtained through evaluations. Let $\configurationSpace$ be a search space and $f:\configurationSpace\rightarrow\mathbb R$ a single-objective function to be minimised. The optimisation problem is
+As discussed in the background chapter, in \new{\gls{bbo}} we learn about the objective by evaluating configurations. Let $\configurationSpace$ be the search space and $f:\configurationSpace\rightarrow\mathbb R$ the objective. We seek a configuration with the lowest objective value
 \begin{equation*}
     \configuration^* \in \argmin_{\configuration\in\configurationSpace}
     f(\configuration).
 \end{equation*}
-A search space may be continuous, discrete, or mixed, and may include constraints or conditional parameters. Even for continuous domains, objectives can differ substantially in separability, conditioning, and multimodality. Synthetic benchmarks allow these properties to be varied systematically while keeping the objective and its optimum available to the benchmark designer.
+The search space can contain continuous or discrete variables, or a combination of both. It can also contain constraints or parameters that are active only for certain configurations. Even when all variables are continuous, the objective can vary greatly from one problem to another. For example, it can have many local optima, or changing one variable can affect how we should set another. Synthetic benchmarks let us vary these properties while keeping the function and its optimum known to the benchmark designer.
 
 \subsection{\glsentryshort{bbob}}
 \label{sec:ch03:bbob}
 
-The noiseless \Gls{bbob} suite is part of the COCO framework~\citep{HanEtAl21} and is also accessible through IOHprofiler~\citep{DoeEtAl18,WanEtAl22,DeNEtAl24}. It contains 24 continuous, noiseless, single-objective function families that scale with the search dimension $d_{\mathrm{in}}$. The functions are defined on $\mathbb R^{d_{\mathrm{in}}}$, with $[-5,5]^{d_{\mathrm{in}}}$ serving as the standard region of interest. Their analytical construction makes it possible to control properties that affect optimisation difficulty, including nonseparability, ill-conditioning, and the number and arrangement of local optima.
+One example is the noiseless \Gls{bbob} suite, which is part of COCO~\citep{HanEtAl21} and is also available through IOHprofiler~\citep{DoeEtAl18,WanEtAl22,DeNEtAl24}. It contains 24 continuous, noiseless, single-objective function families that can be evaluated in different search dimensions $d_{\mathrm{in}}$. The functions are defined on $\mathbb R^{d_{\mathrm{in}}}$, and the standard search region is $[-5,5]^{d_{\mathrm{in}}}$. Their analytical construction lets us study how properties such as nonseparability, ill-conditioning, or the arrangement of local optima affect optimisation.
 
-Different instances of a function family are generated using transformations such as translations and, depending on the function, rotations of the search space, together with transformations of objective values. This varies the location and orientation of a problem while retaining its characteristic structure. The suite groups the functions into five classes:
+To obtain different instances from the same family, the benchmark shifts the search space and, for some functions, rotates it. It also transforms the objective values. This gives us different problems with the same characteristic structure. The suite groups the functions into five classes.
 \begin{itemize}
     \item Separable functions ($f_1$--$f_5$).
     \item Functions with low or moderate conditioning ($f_6$--$f_9$).
@@ -83,69 +82,67 @@ Different instances of a function family are generated using transformations suc
     \item Multimodal functions with adequate global structure ($f_{15}$--$f_{19}$).
     \item Multimodal functions with weak global structure ($f_{20}$--$f_{24}$).
 \end{itemize}
-Separable functions allow coordinates to be optimised independently. Ill-conditioned functions have very different scales of variation in different directions, while multimodal functions contain multiple local optima. Global structure describes how strongly the overall landscape guides a search towards the global optimum.
+For example, we can optimise each coordinate independently in a separable function. In an ill-conditioned function, a step of the same size can change the objective by very different amounts depending on the direction. A multimodal function has several local optima. In that case, global structure describes how much the overall landscape helps an optimiser find the global optimum.
 
 \section{Hyperparameter Optimisation Benchmarks}
 \label{sec:ch03:hpo_benchmarks_overview}
 
-Surrogate-based \gls{hpo} benchmarks replace model training and validation runs with predictions from a model fitted to previously collected evaluations. They approximate the response surface of a real learning task while allowing many optimisation runs at much lower computational cost. Such a benchmark surrogate supplies objective values to the optimiser; it is distinct from a surrogate that the optimiser itself fits to guide its search.
+In \gls{hpo}, evaluating a configuration usually means training a model and measuring its performance. Doing this for every configuration in every run can be expensive. A surrogate-based benchmark fits a model to evaluations collected in advance and uses its predictions as objective values. This lets us repeat optimisation runs at a much lower cost. There can therefore be two surrogates in one experiment. The benchmark uses one to answer queries, and the optimiser may fit another to decide which configuration to query next.
 
 \subsection{PD1}
 \label{sec:ch03:pd1}
 
-PD1 provides deep-learning hyperparameter optimisation tasks, with surrogate-based evaluations available through the benchmark implementation used by~\citet{MalEtAl23}. Each target function fixes a dataset and a neural network architecture, such as a wide ResNet on CIFAR-100, and maps training hyperparameters to a validation error. The PD1 subset used here consists of four target functions with continuous hyperparameters. These four targets are the selected benchmark tasks, rather than the full set of tasks in the original PD1 collection.
-
-The search parameters control the training procedure, including the learning rate and momentum. The network architecture remains fixed within each task. Unlike \gls{bbob}'s analytically constructed functions, these surrogate objectives approximate performance surfaces obtained from training neural networks on data.
+A PD1 task fixes what we train and which data we train on. For example, one task uses a wide ResNet on CIFAR-100. The search varies continuous training hyperparameters, such as the learning rate and momentum, and the objective is the validation error. We use four such target functions from the surrogate-based benchmark implementation used by~\citet{MalEtAl23}. In \gls{bbob}, the objective comes from an analytical expression. Here, the surrogate approximates validation errors obtained by training neural networks on data.
 
 \subsection{\glsentryshort{yahpo} Gym}
 \label{sec:ch03:hpo_benchmarks}
 
-\new{\Gls{yahpo} Gym}~\citep{PfiEtAl22} is a collection of surrogate-based benchmarks covering multiple learning algorithms, datasets, objectives, and fidelity levels. A scenario specifies a configuration space and the quantities predicted by its surrogate; an instance typically fixes a dataset. The surrogate can predict performance measures such as accuracy, as well as evaluation costs such as training time. Fidelity parameters, such as the fraction of training data or the number of training epochs, allow evaluations at different resource levels.
+\new{\Gls{yahpo} Gym}~\citep{PfiEtAl22} gives us another way to evaluate an \gls{hpo} method. Each scenario defines the configurations we can try and the quantities its surrogate predicts. An instance usually fixes the dataset. We can ask the surrogate for predictive performance, such as accuracy, or for a cost, such as training time. Some parameters let us change how many resources an evaluation uses. For example, we can vary the fraction of training data or the number of epochs.
 
-The rbv2 scenarios cover random forests, decision trees, elastic-net models, support vector machines, gradient boosting, and nearest-neighbour methods~\citep{BinEtAl20}. The iaml scenarios include elastic-net models, decision trees, random forests, and gradient boosting~\citep{PfiEtAl22}. In the rbv2\_super and iaml\_super scenarios, an additional categorical parameter selects the learning algorithm, and its choice activates the corresponding hyperparameters. These scenarios therefore combine algorithm selection and hyperparameter optimisation in a conditional search space.
+The rbv2 scenarios cover random forests, decision trees, elastic-net models, support vector machines, gradient boosting, and nearest-neighbour methods~\citep{BinEtAl20}. The iaml scenarios cover elastic-net models, decision trees, random forests, and gradient boosting~\citep{PfiEtAl22}. In rbv2\_super and iaml\_super, we also choose which learning algorithm to use. This choice activates the hyperparameters for that algorithm, so these two scenarios combine algorithm selection with \gls{hpo}.
 
-Although the rbv2 and iaml families overlap in their learning algorithms, their configuration spaces differ. For example, rbv2 includes an input-imputation choice that is fixed in iaml, and some hyperparameter ranges differ, including the number of boosting rounds in XGBoost. LCBench and FCNet provide additional neural-network configuration spaces for tabular learning~\citep{ZimEtAl21b,FalEtAl18}. The optimisation experiments considered here use predictive accuracy as their target metric, or its equivalent minimisation form. \gls{yahpo} Gym also includes a NAS-Bench-301 scenario; its architecture space is described separately in~\cref{sec:ch03:nas_bench301}.
+Even for the same learning algorithm, rbv2 and iaml can give the optimiser different choices. For example, rbv2 allows it to choose an input-imputation method, which is fixed in iaml. Some ranges also differ, such as the number of boosting rounds for XGBoost. LCBench and FCNet provide additional spaces for tuning neural networks on tabular data~\citep{ZimEtAl21b,FalEtAl18}. In the experiments discussed here, we optimise predictive accuracy or express it as an equivalent loss. \Gls{yahpo} Gym also includes NAS-Bench-301, whose search space we describe in~\cref{sec:ch03:nas_bench301}.
 
 \section{Neural Architecture Search}
 \label{sec:ch03:nas}
 
-\new{\Gls{nas}} optimises the structure of a neural network, including its connectivity and operations~\citep{ElsEtAl19}. Let $\mathcal H$ be a space of architectures and $\eta\in\mathcal H$ an architecture. For fixed training hyperparameters $\configuration_0$, define
+So far, we have mostly considered tuning the settings of a given learning algorithm. In \new{\gls{nas}}, we search over the structure of a neural network, including which operations it uses and how they are connected~\citep{ElsEtAl19}. Let $\mathcal H$ be the space of architectures and let $\eta\in\mathcal H$ be one architecture. If we fix the training hyperparameters at $\configuration_0$, the objective and the best architecture are given by
 \begin{equation*}
     f(\eta,\configuration_0) =
     \mathcal L(\algo_{\eta,\configuration_0},
     \mathcal D_{\mathrm{train}},\mathcal D_{\mathrm{validate}}),
     \qquad
-    \eta^*\in\argmin_{\eta\in\mathcal H} f(\eta,\configuration_0),
+    \eta^*\in\argmin_{\eta\in\mathcal H} f(\eta,\configuration_0).
 \end{equation*}
-where $\algo_{\eta,\configuration_0}$ trains the network specified by $\eta$ using $\configuration_0$. Here, $\mathcal D_{\mathrm{train}}$ and $\mathcal D_{\mathrm{validate}}$ are training and validation data, and $\mathcal L$ measures the validation loss of the trained model. In joint architecture and hyperparameter search, both choices vary:
+Here, $\algo_{\eta,\configuration_0}$ trains architecture $\eta$ with settings $\configuration_0$. As in \gls{hpo}, we train on $\mathcal D_{\mathrm{train}}$ and use $\mathcal L$ to measure the loss on $\mathcal D_{\mathrm{validate}}$. We can also choose both the architecture and the training settings. This gives us the joint search problem
 \begin{equation*}
     (\eta^*,\configuration^*)\in
     \argmin_{\substack{\eta\in\mathcal H,\\
     \configuration\in\configurationSpace(\eta)}}
     f(\eta,\configuration).
 \end{equation*}
-Here, $\configurationSpace(\eta)$ permits the admissible training hyperparameters to depend on the architecture. Both formulations treat the weights learned during training as an outcome of an evaluation, rather than as the search variables.
+The notation $\configurationSpace(\eta)$ allows different architectures to have different admissible training settings. In both settings, we learn the network weights during the evaluation of each candidate.
 
-An architecture is commonly represented as a directed acyclic graph, with operations assigned to nodes or edges and connections specifying the flow of intermediate representations. Cell-based spaces search for small computational graphs that are repeated to form a complete network. These structured, largely discrete spaces can be evaluated through surrogate benchmarks, avoiding the cost of training every candidate architecture.
+One way to describe an architecture is to use a directed acyclic graph. Operations are assigned to nodes or edges, and the connections describe how intermediate representations pass through the network. In a cell-based space, the search chooses smaller graphs that are repeated to build the whole network. As with the \gls{hpo} benchmarks above, we can use a surrogate to evaluate candidates in these largely discrete spaces without training each network from scratch.
 
 \subsection{NAS-Bench-301}
 \label{sec:ch03:nas_bench301}
 
-NAS-Bench-301~\citep{ZelEtAl22} provides surrogate predictions for architectures in the cell-based DARTS search space on CIFAR-10. An architecture specifies normal and reduction cells through choices of connections and operations. The training hyperparameters are fixed, so the search concerns the architecture itself. Surrogate predictions approximate the validation performance and running time of architectures without requiring a new training run for each evaluation. The \gls{yahpo} Gym interface exposes this benchmark as an architecture-search scenario.
+NAS-Bench-301~\citep{ZelEtAl22} is an example of the fixed-hyperparameter setting. It uses the cell-based DARTS search space on CIFAR-10. To specify an architecture, we choose the operations and connections in the normal and reduction cells. A surrogate predicts validation performance and running time without a new training run. We can access this benchmark as a scenario in \gls{yahpo} Gym.
 
 \subsection{JAHS-Bench-201}
 \label{sec:ch03:jahs_bench201}
 
-JAHS-Bench-201~\citep{BanEtAl22} is a surrogate-based benchmark for joint architecture and hyperparameter search. It extends the cell-based NAS-Bench-201 architecture space with training hyperparameters, allowing both the network's operations and its training procedure to be optimised. It contains tasks on CIFAR-10, Fashion-MNIST, and Colorectal Histology, and provides predictions of performance and evaluation cost. In contrast to the fixed training settings of NAS-Bench-301, its joint space captures interactions between architectural decisions and hyperparameters such as the learning rate and weight decay.
+JAHS-Bench-201~\citep{BanEtAl22} gives an example of joint search. It adds training hyperparameters to the cell-based NAS-Bench-201 space, so we can vary choices such as the learning rate and weight decay together with the network operations. This lets us study how the architecture and its training settings interact. The benchmark uses surrogates to predict performance and evaluation cost on CIFAR-10, Fashion-MNIST, and Colorectal Histology.
 
 \section{Machine Learning Datasets}
 \label{sec:ch03:tabular_data}
 
-The datasets considered here are tabular classification tasks, with numerical or categorical input attributes. They differ in their number of observations, input dimensions, class counts, and class balance.
+When we select an algorithm for a tabular classification task, the dataset is the problem instance. Its inputs are numerical or categorical attributes. For example, two datasets can differ in how many observations or attributes they contain, how many classes they have, or how evenly observations are distributed among those classes.
 
 \subsection{OpenML CC-18 and the \glsentryshort{automl} Benchmark}
 
-We use the OpenML CC-18 collection~\citep{BisEtAl21} and the classification datasets from the \gls{automl} Benchmark~\citep{GijEtAl24}. Both provide tabular classification tasks from different domains, covering a range of dataset sizes and characteristics. The tasks supply predefined training and test splits for 10-fold cross-validation, allowing learning algorithms to be evaluated on the same partitions.
+We use datasets from OpenML CC-18~\citep{BisEtAl21} and the classification tasks of the \gls{automl} Benchmark~\citep{GijEtAl24}. These collections give us tabular datasets from different domains and of different sizes. The tasks also provide predefined training and test splits for 10-fold cross-validation, so we can evaluate different learning algorithms on the same partitions.
 
 \section{Stochastic Solver Running Times}
 \label{sec:ch03:stochastic_solvers}
@@ -155,14 +152,14 @@ We use seven scenarios introduced by~\citet{EggEtAl18}: six from \gls{sat} solvi
 \section{Out-of-Distribution Generalisation}
 \label{sec:ch03:ood}
 
-\new{Out-of-distribution generalisation} concerns predictive performance when training and test data follow different distributions~\citep{WilEtAl22}. Let $P_{\mathrm{train}}$ and $P_{\mathrm{test}}$ be joint distributions over an input space $\mathcal U$ and label space $\mathcal Y$, with $P_{\mathrm{train}}\neq P_{\mathrm{test}}$. Given data drawn from $P_{\mathrm{train}}$, a learning procedure seeks a predictor $h$ with low test risk
+So far, we have discussed how to compare methods on a collection of problems. A further question is how well a predictor works when its test data differ systematically from its training data. This is the setting of \new{out-of-distribution generalisation}~\citep{WilEtAl22}. Let $P_{\mathrm{train}}$ and $P_{\mathrm{test}}$ be different joint distributions over an input space $\mathcal U$ and a label space $\mathcal Y$. We learn a predictor $h$ from samples drawn from $P_{\mathrm{train}}$ and aim for a small expected prediction error under $P_{\mathrm{test}}$, given by
 \begin{equation*}
     R_{P_{\mathrm{test}}}(h) =
     \mathbb E_{(\mathbf u,y)\sim P_{\mathrm{test}}}
     [\ell(h(\mathbf u),y)].
 \end{equation*}
-Here, $\ell$ measures prediction error. A difference between the distributions is a distribution shift; it may affect input marginals, label proportions, or the relationship between inputs and labels. Low training risk alone does not guarantee low test risk under such a shift. Meaningful generalisation therefore depends on assumptions about which aspects of the data-generating process can change. In domain generalisation, the predictor is learned without access to labelled target-domain data, often using several source domains.
+Here, $\ell$ measures the prediction error on one example. We call the difference between the distributions a \emph{distribution shift}. For example, some inputs or labels may become more common, or the relationship between an input and its label may change. Therefore, a predictor that works well on the training distribution may perform poorly on the test distribution. What we can expect the predictor to generalise to depends on which changes we allow. In domain generalisation, we train without labelled data from the target domain, often using data from several source domains.
 
 \subsection{OOD-Chameleon}
 
-The OOD-Chameleon framework~\citep{JiaTen25} studies algorithm selection for \gls{ood} generalisation in vision and language tasks. It characterises learning tasks through features that include training-label imbalance, and selects among methods designed for different shift settings. Its benchmarks illustrate that the relative performance of these methods depends on the task and shift, motivating selection rather than a single fixed choice.
+OOD-Chameleon~\citep{JiaTen25} studies how to select a method for \gls{ood} generalisation in vision and language tasks. For example, the selector can use the imbalance of training labels as a feature of the task. It uses these features to select among methods designed for different kinds of shift. The benchmark shows that their relative performance varies with the task and the shift. This gives us another use case for algorithm selection.
